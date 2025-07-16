@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./dist",
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "src"
