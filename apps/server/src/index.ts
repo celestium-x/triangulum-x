@@ -1,5 +1,8 @@
 import http from "http"
 import dotenv from "dotenv"
+import express from 'express'
+import prisma from '@repo/database'
+
 
 dotenv.config();
 
@@ -8,9 +11,10 @@ if (!PORT) {
     console.log("port is not defined");
 };
 
-const server = http.createServer();
+const app = express();
+const server = http.createServer(app);
 
 
-server.listen(8080, () => {
+server.listen(PORT, () => {
     console.log("server running on port 8080")
 })
