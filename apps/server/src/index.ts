@@ -1,6 +1,6 @@
 import express from "express";
-import router from "./routes/auth-route/auth.ts";
 import dotenv from "dotenv"
+import router from "./routes/index.ts";
 
 dotenv.config();
 
@@ -11,11 +11,7 @@ if (!PORT) {
 }
 
 app.use(express.json());
-
-
-// auth-route (next-auth)
-app.use("/auth", router);
-
+app.use('/api/v1', router);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
