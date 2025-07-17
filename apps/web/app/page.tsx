@@ -1,8 +1,6 @@
 import Navbar from "../src/components/navbars/Navbar";
 import { cn } from "@/lib/utils";
 import LandingPage from "@/components/base/LandingPage";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import JoinQuizBar from "@/components/base/JoinQuizBar";
 
 export default function Home() {
