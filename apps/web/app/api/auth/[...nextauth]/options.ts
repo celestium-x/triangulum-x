@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import axios from "axios";
 import { prisma } from "@repo/database"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { SIGNIN_URL } from "routes/api_routes";
 
 declare module "next-auth" {
     interface User {
@@ -18,7 +19,6 @@ declare module "next-auth" {
     }
 }
 
-
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     providers: [
@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
         async signIn({ user, account }) {
             try {
                 if (account?.provider === "google") {
-                    await axios.post(`${process.env.NEXTAUTH_URL}/auth/signup`, {
+                    await axios.post(`${SIGNIN_URL}`, {
                         email: user.email,
                         name: user.name,
                         image: user.image,

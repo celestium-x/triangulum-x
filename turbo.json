@@ -29,14 +29,5 @@
       "cache": false,
       "persistent": true
     }
-  },
-  "packages": {
-    "apps/web": {
-      "env": [
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "NEXTAUTH_URL"
-      ]
-    }
   }
 }

@@ -1,10 +1,8 @@
 import { prisma } from "@repo/database";
-import express, { Request, Response } from "express"
-
-const router = express.Router();
+import { Request, Response } from "express"
 
 
-router.post("/signup", async (req: Request, res: Response) => {
+export default async function authMiddleware(req: Request, res: Response) {
     const { name, email, image } = req.body;
 
     if (!email) {
@@ -34,6 +32,4 @@ router.post("/signup", async (req: Request, res: Response) => {
         res.status(500).json({ message: "Internal server error" });
         return;
     }
-});
-
-export default router;
+};
