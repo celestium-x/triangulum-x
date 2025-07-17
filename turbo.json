@@ -3,12 +3,12 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
-        ".env*"
+        "apps/web/.env*",
+        "apps/server/.env*",
+        "packages/database/.env*"
       ],
       "outputs": [
         ".next/**",
@@ -16,14 +16,10 @@
       ]
     },
     "lint": {
-      "dependsOn": [
-        "^lint"
-      ]
+      "dependsOn": ["^lint"]
     },
     "check-types": {
-      "dependsOn": [
-        "^check-types"
-      ]
+      "dependsOn": ["^check-types"]
     },
     "dev": {
       "cache": false,
