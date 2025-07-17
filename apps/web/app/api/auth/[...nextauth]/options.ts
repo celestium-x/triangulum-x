@@ -1,66 +1,75 @@
-import { NextAuthOptions } from "next-auth";
+import { Account, AuthOptions, ISODateString } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { JWT } from "next-auth/jwt";
 import axios from "axios";
-import { prisma } from "@repo/database"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { SIGNIN_URL } from "routes/api_routes";
 
-declare module "next-auth" {
-    interface User {
-        id: string;
-    }
-    interface Session {
-        user: {
-            id: string;
-            name?: string | null;
-            email?: string | null;
-            image?: string | null;
-        }
-    }
+export interface UserType {
+    id?: string | null;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    provider?: string | null;
+    token?: string | null;
+    username?: string | null
 }
 
-export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(prisma),
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        }),
-    ],
+export interface CustomSession {
+    user?: UserType;
+    expires: ISODateString;
+}
+
+export const authOption: AuthOptions = {
+    pages: {
+        signIn: "/",
+    },
     callbacks: {
-        async signIn({ user, account }) {
+        async signIn({ user, account }: { user: UserType; account: Account | null }) {
             try {
                 if (account?.provider === "google") {
-                    await axios.post(`${SIGNIN_URL}`, {
-                        email: user.email,
-                        name: user.name,
-                        image: user.image,
+                    const response = await axios.post(`${SIGNIN_URL}/auth/login`, {
+                        user,
+                        account
                     });
+
+                    const result = response.data;
+
+                    if (result?.success) {
+                        user.id = result.user.id.toString();
+                        user.token = result.token;
+                        return true;
+                    }
                 }
-                return true;
-            } catch (error) {
-                console.error("Error in signIn callback:", error);
+                return false;
+            } catch (err) {
+                console.error(err);
                 return false;
             }
         },
-        async session({ session, user }) {
-            if (session.user) {
-                session.user.id = user.id;
-            }
-            return session;
-        },
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
+                token.user = user as UserType;
             }
             return token;
         },
+        async session({ session, token }: {
+            session: CustomSession; token: JWT;
+        }) {
+            session.user = token.user as UserType;
+            return session;
+        },
     },
-    pages: {
-        signIn: "/auth/signin",
-        error: "/auth/error",
-    },
-    session: {
-        strategy: "database",
-    },
+    providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code",
+                },
+            },
+        }),
+    ],
 };
