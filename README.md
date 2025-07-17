@@ -75,7 +75,7 @@ git rebase --continue
 ### 6. Push your feature branch to GitHub
 
 ```bash
-git push origin feature/your-feature-name
+git push -u origin feature/your-feature-name
 ```
 
 ✅ Sends your feature branch to GitHub.
@@ -135,3 +135,10 @@ Cancels the rebase if it goes wrong. Start again.
 This file is for internal use by the dev team. Keep it open while working.
 
 **Stay clean. Stay synced. Avoid conflicts.** 💪
+
+
+## Contributors
+
+<a href="https://github.com/celestium-x/triangulum-x/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=celestium-x/triangulum-x&max=400&columns=20" />
+</a>
