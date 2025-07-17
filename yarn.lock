@@ -378,7 +378,7 @@
 
 "@prisma/client@^6.12.0":
   version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/client/-/client-6.12.0.tgz"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-6.12.0.tgz#e855c76fbad75b9b28ce7879be47bfeaba8ff588"
   integrity sha512-wn98bJ3Cj6edlF4jjpgXwbnQIo/fQLqqQHPk2POrZPxTlhY3+n90SSIF3LMRVa8VzRFC/Gec3YKJRxRu+AIGVA==
 
 "@prisma/config@6.12.0":
@@ -2615,7 +2615,7 @@ prettier@^3.6.2:
 
 prisma@^6.12.0:
   version "6.12.0"
-  resolved "https://registry.npmjs.org/prisma/-/prisma-6.12.0.tgz"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-6.12.0.tgz#4f5416c27b6f18df89c6fe42c9fb0e52f8fedc9a"
   integrity sha512-pmV7NEqQej9WjizN6RSNIwf7Y+jeh9mY1JEX2WjGxJi4YZWexClhde1yz/FuvAM+cTwzchcMytu2m4I6wPkIzg==
   dependencies:
     "@prisma/config" "6.12.0"
