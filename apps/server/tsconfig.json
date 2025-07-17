@@ -4,7 +4,9 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "moduleResolution": "nodenext",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": [
     "src"

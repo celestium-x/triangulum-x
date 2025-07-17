@@ -1,20 +1,22 @@
-import http from "http"
+import express from "express";
+import router from "./routes/auth-route/auth.ts";
 import dotenv from "dotenv"
-import express from 'express'
-import prisma from '@repo/database'
-
 
 dotenv.config();
 
+const app = express();
 const PORT = process.env.PORT;
 if (!PORT) {
-    console.log("port is not defined");
-};
+    console.log("port not found")
+}
 
-const app = express();
-const server = http.createServer(app);
+app.use(express.json());
 
 
-server.listen(PORT, () => {
-    console.log("server running on port 8080")
-})
+// auth-route (next-auth)
+app.use("/auth", router);
+
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});
