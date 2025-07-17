@@ -30,11 +30,11 @@ jobs:
       # - name: Run tests
       #   run: npm test
 
-      - name: Checkout main branch
+      - name: Checkout main branch and merge
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git fetch origin main
           git checkout main
-          git merge origin/feature --no-ff --commit -m "Auto-merged feature into main [CI]"
+          git merge origin/feature --allow-unrelated-histories --no-ff --commit -m "Auto-merged feature into main [CI]"
           git push origin main
