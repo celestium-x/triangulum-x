@@ -31,8 +31,8 @@ export default function Navbar() {
                     <NavItems items={navItems}></NavItems>
                 </div>
 
-                <Button className={cn("font-light text-sm tracking-wider  flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10]",
-                    "bg-dark-base dark:bg-light-base"
+                <Button className={cn("font-normal text-sm tracking-wider flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10]",
+                    "bg-dark-base dark:bg-light-base dark:hover:bg-light-base hover:bg-dark-base"
                 )}>
 
                     <span>Sign in</span>

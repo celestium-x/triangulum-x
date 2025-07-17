@@ -15,7 +15,7 @@ export default function LandingPage() {
     return (
         <div className="h-full flex items-center">
             <section className="mx-[12rem] w-full">
-                <div className="flex items-center justify-between -mt-8">
+                <div className="flex items-center justify-between -mt-16">
                     {/* left section */}
                     <div className="flex-1 max-w-2xl">
                         <div className="mb-8">
