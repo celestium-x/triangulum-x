@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT;
 if (!PORT) {
-    console.log("port not found")
+    console.error("port not found")
 }
 
 app.use(express.json());
