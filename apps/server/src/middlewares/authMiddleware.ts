@@ -1,5 +1,5 @@
-import { prisma } from "@repo/database";
 import { Request, Response } from "express"
+import prisma from "@repo/db/client"
 
 
 export default async function authMiddleware(req: Request, res: Response) {
