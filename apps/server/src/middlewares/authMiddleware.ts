@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import prisma from '@repo/database'
->>>>>>> acc651c (signin-feature)
 import { Request, Response } from "express"
 import prisma from "@repo/db/client"
 
