@@ -6,13 +6,13 @@ import { useState } from "react";
 interface NavItemsProps {
     items: {
         name: string;
-        link: string;
+        link?: string;
+        onClick?: () => void
     }[];
     className?: string;
-    onItemClick?: () => void;
 }
 
-export default function NavItems({ items, className, onItemClick }: NavItemsProps) {
+export default function NavItems({ items, className }: NavItemsProps) {
     const [hovered, setHovered] = useState<number | null>(null);
 
     return (
@@ -26,7 +26,7 @@ export default function NavItems({ items, className, onItemClick }: NavItemsProp
             {items.map((item, idx) => (
                 <a
                     onMouseEnter={() => setHovered(idx)}
-                    onClick={onItemClick}
+                    onClick={item.onClick}
                     className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
                     key={`link-${idx}`}
                     href={item.link}
@@ -34,7 +34,7 @@ export default function NavItems({ items, className, onItemClick }: NavItemsProp
                     {hovered === idx && (
                         <motion.div
                             layoutId="hovered"
-                            className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+                            className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-900"
                         />
                     )}
                     <span className="relative z-20">{item.name}</span>

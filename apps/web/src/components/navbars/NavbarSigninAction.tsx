@@ -1,21 +1,23 @@
 'use client'
-
 import { MdChevronRight } from "react-icons/md"
 import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 import { useState } from "react";
 import LoginModal from "../utility/LoginModal";
 import { useUserSessionStore } from "@/store/user/useUserSessionStore";
+import { useRouter } from "next/navigation";
 
 
 export default function NavbarSigninAction() {
     const { session } = useUserSessionStore();
-
+    const router = useRouter();
     const [opensignInModal, setOpenSignInModal] = useState<boolean>(false);
 
     function handler() {
         if (!session?.user.token) {
             setOpenSignInModal(true)
+        } else {
+            router.push("/home");
         }
     }
 
