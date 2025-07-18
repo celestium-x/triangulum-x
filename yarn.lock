@@ -526,37 +526,15 @@
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-5.22.0.tgz#da1ca9c133fbefe89e0da781c75e1c59da5f8802"
   integrity sha512-M0SVXfyHnQREBKxCgyo7sffrKttwE6R8PMq330MIUF0pTwjUhLbW84pFDlf06B27XyCR++VtjugEnIHdr07SVA==
 
-"@prisma/client@^6.12.0":
-  version "6.12.0"
-  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-6.12.0.tgz#e855c76fbad75b9b28ce7879be47bfeaba8ff588"
-  integrity sha512-wn98bJ3Cj6edlF4jjpgXwbnQIo/fQLqqQHPk2POrZPxTlhY3+n90SSIF3LMRVa8VzRFC/Gec3YKJRxRu+AIGVA==
-
-"@prisma/config@6.12.0":
-  version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/config/-/config-6.12.0.tgz"
-  integrity sha512-HovZWzhWEMedHxmjefQBRZa40P81N7/+74khKFz9e1AFjakcIQdXgMWKgt20HaACzY+d1LRBC+L4tiz71t9fkg==
-  dependencies:
-    jiti "2.4.2"
-
 "@prisma/debug@5.22.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@prisma/debug/-/debug-5.22.0.tgz#58af56ed7f6f313df9fb1042b6224d3174bbf412"
   integrity sha512-AUt44v3YJeggO2ZU5BkXI7M4hu9BF2zzH2iF2V5pyXT/lRTyWiElZ7It+bRH1EshoMRxHgpYg4VB6rCM+mG5jQ==
 
-"@prisma/debug@6.12.0":
-  version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/debug/-/debug-6.12.0.tgz"
-  integrity sha512-plbz6z72orcqr0eeio7zgUrZj5EudZUpAeWkFTA/DDdXEj28YHDXuiakvR6S7sD6tZi+jiwQEJAPeV6J6m/tEQ==
-
 "@prisma/engines-version@5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2":
   version "5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2"
   resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2.tgz#d534dd7235c1ba5a23bacd5b92cc0ca3894c28f4"
   integrity sha512-2PTmxFR2yHW/eB3uqWtcgRcgAbG1rwG9ZriSvQw+nnb7c4uCr3RAcGMb6/zfE88SKlC1Nj2ziUvc96Z379mHgQ==
-
-"@prisma/engines-version@6.12.0-15.8047c96bbd92db98a2abc7c9323ce77c02c89dbc":
-  version "6.12.0-15.8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
-  resolved "https://registry.npmjs.org/@prisma/engines-version/-/engines-version-6.12.0-15.8047c96bbd92db98a2abc7c9323ce77c02c89dbc.tgz"
-  integrity sha512-70vhecxBJlRr06VfahDzk9ow4k1HIaSfVUT3X0/kZoHCMl9zbabut4gEXAyzJZxaCGi5igAA7SyyfBI//mmkbQ==
 
 "@prisma/engines@5.22.0":
   version "5.22.0"
@@ -568,16 +546,6 @@
     "@prisma/fetch-engine" "5.22.0"
     "@prisma/get-platform" "5.22.0"
 
-"@prisma/engines@6.12.0":
-  version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/engines/-/engines-6.12.0.tgz"
-  integrity sha512-4BRZZUaAuB4p0XhTauxelvFs7IllhPmNLvmla0bO1nkECs8n/o1pUvAVbQ/VOrZR5DnF4HED0PrGai+rIOVePA==
-  dependencies:
-    "@prisma/debug" "6.12.0"
-    "@prisma/engines-version" "6.12.0-15.8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
-    "@prisma/fetch-engine" "6.12.0"
-    "@prisma/get-platform" "6.12.0"
-
 "@prisma/fetch-engine@5.22.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@prisma/fetch-engine/-/fetch-engine-5.22.0.tgz#4fb691b483a450c5548aac2f837b267dd50ef52e"
@@ -587,28 +555,12 @@
     "@prisma/engines-version" "5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2"
     "@prisma/get-platform" "5.22.0"
 
-"@prisma/fetch-engine@6.12.0":
-  version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/fetch-engine/-/fetch-engine-6.12.0.tgz"
-  integrity sha512-EamoiwrK46rpWaEbLX9aqKDPOd8IyLnZAkiYXFNuq0YsU0Z8K09/rH8S7feOWAVJ3xzeSgcEJtBlVDrajM9Sag==
-  dependencies:
-    "@prisma/debug" "6.12.0"
-    "@prisma/engines-version" "6.12.0-15.8047c96bbd92db98a2abc7c9323ce77c02c89dbc"
-    "@prisma/get-platform" "6.12.0"
-
 "@prisma/get-platform@5.22.0":
   version "5.22.0"
   resolved "https://registry.yarnpkg.com/@prisma/get-platform/-/get-platform-5.22.0.tgz#fc675bc9d12614ca2dade0506c9c4a77e7dddacd"
   integrity sha512-pHhpQdr1UPFpt+zFfnPazhulaZYCUqeIcPpJViYoq9R+D/yw4fjE+CtnsnKzPYm0ddUbeXUzjGVGIRVgPDCk4Q==
   dependencies:
     "@prisma/debug" "5.22.0"
-
-"@prisma/get-platform@6.12.0":
-  version "6.12.0"
-  resolved "https://registry.npmjs.org/@prisma/get-platform/-/get-platform-6.12.0.tgz"
-  integrity sha512-nRerTGhTlgyvcBlyWgt8OLNIV7QgJS2XYXMJD1hysorMCuLAjuDDuoxmVt7C2nLxbuxbWPp7OuFRHC23HqD9dA==
-  dependencies:
-    "@prisma/debug" "6.12.0"
 
 "@radix-ui/react-compose-refs@1.1.2":
   version "1.1.2"
@@ -769,13 +721,6 @@
   integrity sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==
   dependencies:
     "@types/node" "*"
-
-"@types/dotenv@^8.2.3":
-  version "8.2.3"
-  resolved "https://registry.npmjs.org/@types/dotenv/-/dotenv-8.2.3.tgz"
-  integrity sha512-g2FXjlDX/cYuc5CiQvyU/6kkbP1JtmGzh0obW50zD7OKeILVL0NSpPWLXVfqoAGQjom2/SLLx9zHq0KXvD6mbw==
-  dependencies:
-    dotenv "*"
 
 "@types/estree@^1.0.6":
   version "1.0.8"
@@ -1397,15 +1342,15 @@ doctrine@^2.1.0:
   dependencies:
     esutils "^2.0.2"
 
-dotenv@*, dotenv@^17.2.0:
-  version "17.2.0"
-  resolved "https://registry.npmjs.org/dotenv/-/dotenv-17.2.0.tgz"
-  integrity sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==
-
 dotenv@16.0.3:
   version "16.0.3"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz"
   integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+
+dotenv@^17.2.0:
+  version "17.2.0"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-17.2.0.tgz"
+  integrity sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==
 
 dunder-proto@^1.0.0, dunder-proto@^1.0.1:
   version "1.0.1"
@@ -2341,7 +2286,7 @@ iterator.prototype@^1.1.4:
     has-symbols "^1.1.0"
     set-function-name "^2.0.2"
 
-jiti@2.4.2, jiti@^2.4.2:
+jiti@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/jiti/-/jiti-2.4.2.tgz"
   integrity sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==
@@ -2967,14 +2912,6 @@ prisma@^5.19.1:
     "@prisma/engines" "5.22.0"
   optionalDependencies:
     fsevents "2.3.3"
-
-prisma@^6.12.0:
-  version "6.12.0"
-  resolved "https://registry.yarnpkg.com/prisma/-/prisma-6.12.0.tgz#4f5416c27b6f18df89c6fe42c9fb0e52f8fedc9a"
-  integrity sha512-pmV7NEqQej9WjizN6RSNIwf7Y+jeh9mY1JEX2WjGxJi4YZWexClhde1yz/FuvAM+cTwzchcMytu2m4I6wPkIzg==
-  dependencies:
-    "@prisma/config" "6.12.0"
-    "@prisma/engines" "6.12.0"
 
 prop-types@^15.8.1:
   version "15.8.1"

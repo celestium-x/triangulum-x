@@ -27,12 +27,16 @@ export const authOption: AuthOptions = {
         async signIn({ user, account }: { user: UserType; account: Account | null }) {
             try {
                 if (account?.provider === "google") {
+                    console.log("user is : ", user);
+
+                    console.log("sign in url is : ", SIGNIN_URL);
                     const response = await axios.post(`${SIGNIN_URL}/auth/login`, {
                         user,
                         account
                     });
 
                     const result = response.data;
+                    console.log("result is : ", result);
 
                     if (result?.success) {
                         user.id = result.user.id.toString();

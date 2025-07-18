@@ -1,9 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outdir=dist --format=cjs --loader:.ts=ts --sourcemap --external:@prisma/client",
+    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outdir=dist --format=cjs --loader:.ts=ts --sourcemap --external:@prisma/client --external:express --external:jsonwebtoken",
     "start": "node dist/index.js",
     "dev": "yarn build && yarn start"
   },

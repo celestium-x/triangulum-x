@@ -1,8 +1,7 @@
 import { Router } from "express";
-import authMiddleware from "../middlewares/authMiddleware.ts";
-import { prisma } from "@repo/database"
+import signInController from "../controllers/user-controller/signInController";
 
 const router = Router();
 
-router.post('/sign-in', authMiddleware);
+router.post('/sign-in', signInController);
 export default router;
