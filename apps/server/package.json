@@ -4,11 +4,12 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outdir=dist --format=cjs --loader:.ts=ts --sourcemap --external:@prisma/client --external:express --external:jsonwebtoken",
+    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outdir=dist --format=cjs --loader:.ts=ts --sourcemap --external:@prisma/client --external:express --external:jsonwebtoken ",
     "start": "node dist/index.js",
     "dev": "yarn build && yarn start"
   },
   "dependencies": {
+    "@repo/db": "*",
     "dotenv": "^17.2.0",
     "esbuild": "^0.25.6",
     "express": "^5.1.0",
