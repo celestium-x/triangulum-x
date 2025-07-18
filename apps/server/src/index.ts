@@ -5,6 +5,7 @@ import router from "./routes/index.ts";
 dotenv.config();
 
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT;
 if (!PORT) {
     console.log("port not found")

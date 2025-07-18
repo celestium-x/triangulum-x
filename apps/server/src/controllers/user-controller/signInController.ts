@@ -4,13 +4,17 @@ import prisma from "@repo/db/client";
 
 
 export default async function signInController(req: Request, res: Response) {
+    console.log("reched");
+
     const { user, account } = req.body;
+    console.log("user is : ", user);
     try {
         const existingUser = await prisma.user.findUnique({
             where: {
                 email: user.email
             }
         })
+
 
         let myUser;
         if (existingUser) {
@@ -22,7 +26,6 @@ export default async function signInController(req: Request, res: Response) {
                     name: user.name,
                     email: user.email,
                     image: user.image,
-                    provider: account.provider
                 }
             })
         } else {
@@ -31,7 +34,6 @@ export default async function signInController(req: Request, res: Response) {
                     name: user.name,
                     email: user.email,
                     image: user.image,
-                    provider: account.provider
                 }
             })
         }

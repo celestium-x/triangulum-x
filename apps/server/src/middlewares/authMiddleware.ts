@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import prisma from "@repo/db/client"
 
-
 export default async function authMiddleware(req: Request, res: Response) {
     const { name, email, image } = req.body;
 

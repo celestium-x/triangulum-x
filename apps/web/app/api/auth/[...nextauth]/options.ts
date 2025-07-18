@@ -30,7 +30,7 @@ export const authOption: AuthOptions = {
                     console.log("user is : ", user);
 
                     console.log("sign in url is : ", SIGNIN_URL);
-                    const response = await axios.post(`${SIGNIN_URL}/auth/login`, {
+                    const response = await axios.post(`${SIGNIN_URL}`, {
                         user,
                         account
                     });
