@@ -26,7 +26,7 @@ export const authOption: AuthOptions = {
         async signIn({ user, account }: { user: UserType; account: Account | null }) {
             try {
                 if (account?.provider === "google") {
-                    
+
                     const response = await axios.post(`${SIGNIN_URL}`, {
                         user,
                         account

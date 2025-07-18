@@ -14,8 +14,62 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  name  String
-  email String  @unique
-  image String?
+  id            String  @id @default(cuid())
+  name          String
+  email         String  @unique
+  image         String?
+  walletAddress String  @unique
+
+  isVerified Boolean @default(false)
+  isActive   Boolean @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastLoginAt DateTime @default(now())
+  Quiz        Quiz[]
+
+  @@map("hosts")
+}
+
+model Quiz {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+
+  participantCode String @unique
+  spectatorCode   String @unique
+
+  prizePool Float // Maybe in lamports -> then Number
+  currency  String @default("SOL")
+
+  basePointsPerQuestion Int     @default(100)
+  pointsMultiplier      Float   @default(1.2)
+  timeBonus             Boolean @default(true)
+
+  eliminationThreshold Float @default(0.5)
+
+  questionTimeLimit     Int        @default(30)
+  breakBetweenQuestions Int        @default(5)
+  status                QuizStatus @default(CREATED)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  endedAt     DateTime?
+
+  hostId String
+  host   User   @relation(fields: [hostId], references: [id], onDelete: Cascade)
+
+  @@map("quizzes")
+}
+
+enum QuizStatus {
+  CREATED
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCELLED
+  PAYOUT_PENDING
+  PAYOUT_COMPLETED
 }
