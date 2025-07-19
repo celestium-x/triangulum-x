@@ -1,4 +1,6 @@
 import { cn } from "@/lib/utils";
+import { useHomeRendererStore } from "@/store/home/useHomeRendererStore";
+import { HomeRendererEnum } from "@/types/homeRendererTypes";
 import { motion } from "framer-motion";
 import { JSX } from "react";
 import {
@@ -25,6 +27,9 @@ export default function DashboardLeft({
     onMouseEnter,
     onMouseLeave
 }: DashboardLeftProps): JSX.Element {
+
+    const { value, setValue } = useHomeRendererStore()
+    console.log("value is", value);
     return (
         <motion.div
             className={cn("h-full bg-light-base dark:bg-dark-base/10 shrink-0",
@@ -55,36 +60,50 @@ export default function DashboardLeft({
                     icon={<TbDashboard size={20} />}
                     label="Dashboard"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.DASHBOARD)}
+                    isActive={value === HomeRendererEnum.DASHBOARD}
                 />
                 <NavOption
                     icon={<TbTrophy size={20} />}
                     label="My Quizzes"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.MY_QUIZ)}
+                    isActive={value === HomeRendererEnum.MY_QUIZ}
                 />
                 <NavOption
                     icon={<TbPlus size={20} />}
                     label="Create Quiz"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.CREATE_QUIZ)}
+                    isActive={value === HomeRendererEnum.CREATE_QUIZ}
                 />
                 <NavOption
                     icon={<TbChartBar size={20} />}
                     label="Analytics"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.ANALYTICS)}
+                    isActive={value === HomeRendererEnum.ANALYTICS}
                 />
                 <NavOption
                     icon={<TbWallet size={20} />}
                     label="Wallet"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.WALLET)}
+                    isActive={value === HomeRendererEnum.WALLET}
                 />
                 <NavOption
                     icon={<TbCrown size={20} />}
                     label="Leaderboards"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.LEADERBOARD)}
+                    isActive={value === HomeRendererEnum.LEADERBOARD}
                 />
                 <NavOption
                     icon={<TbHistory size={20} />}
                     label="History"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.HISTORY)}
+                    isActive={value === HomeRendererEnum.HISTORY}
                 />
             </div>
 
@@ -93,11 +112,15 @@ export default function DashboardLeft({
                     icon={<TbSettings size={20} />}
                     label="Settings"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.SETTINGS)}
+                    isActive={value === HomeRendererEnum.SETTINGS}
                 />
                 <NavOption
                     icon={<TbHelp size={20} />}
                     label="Help & Support"
                     isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.HELP)}
+                    isActive={value === HomeRendererEnum.HELP}
                 />
             </div>
         </motion.div>
@@ -108,11 +131,13 @@ interface OptionProps {
     isExpanded: boolean;
     icon: React.ReactNode;
     label: string;
+    onClick?: () => void;
+    isActive?: boolean
 }
 
 function LogoOption({ isExpanded, icon, label }: OptionProps) {
     return (
-        <div className="flex items-center justify-start gap-3 w-full px-4 h-10">
+        <button className="flex items-center justify-start gap-3 w-full px-4 h-10">
             <div className="flex items-center justify-center shrink-0">
                 {icon}
             </div>
@@ -130,13 +155,13 @@ function LogoOption({ isExpanded, icon, label }: OptionProps) {
             >
                 {label}
             </motion.span>
-        </div>
+        </button>
     );
 }
 
-function NavOption({ isExpanded, icon, label }: OptionProps) {
+function NavOption({ isExpanded, icon, label, onClick }: OptionProps) {
     return (
-        <div className="flex items-center justify-start gap-3 w-full px-4 h-10 hover:bg-light-base dark:hover:bg-dark-primary rounded-lg cursor-pointer transition-colors">
+        <div onClick={onClick} className="flex items-center justify-start gap-3 w-full px-4 h-10 hover:bg-light-base dark:hover:bg-dark-primary rounded-lg cursor-pointer transition-colors">
             <div className="flex items-center justify-center shrink-0 w-5 h-5">
                 {icon}
             </div>
@@ -150,7 +175,7 @@ function NavOption({ isExpanded, icon, label }: OptionProps) {
                     ease: [0.4, 0, 0.2, 1],
                     delay: isExpanded ? 0.1 : 0,
                 }}
-                className="text-sm text-dark-primary dark:text-light-base font-medium whitespace-nowrap overflow-hidden leading-none"
+                className="text-sm text-dark-primary dark:text-light-base font-normal whitespace-nowrap overflow-hidden leading-none"
             >
                 {label}
             </motion.span>

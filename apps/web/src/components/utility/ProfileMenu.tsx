@@ -24,15 +24,19 @@ export default function ProfileMenu() {
 
     return (
         <div className="relative" ref={dropdownRef}>
-            <Image
-                onClick={() => setDropdown(true)}
-                src={session?.user.image}
-                width={32}
-                height={32}
-                alt="user-logo"
-                className="rounded-full cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all"
-            />
-            <Circle className="absolute -bottom-0 -right-0 w-2 h-2 fill-green-500 text-green-500 bg-white dark:bg-dark-base rounded-full" />
+            {session?.user.image && (
+                <>
+                    <Image
+                        onClick={() => setDropdown(true)}
+                        src={session?.user.image}
+                        width={32}
+                        height={32}
+                        alt="user-logo"
+                        className="rounded-full cursor-pointer hover:ring-2 hover:ring-blue-500 transition-all"
+                    />
+                    <Circle className="absolute -bottom-0 -right-0 w-2 h-2 fill-green-500 text-green-500 bg-white dark:bg-dark-base rounded-full" />
+                </>
+            )}
             {
                 dropdown && (
                     <UtilityCard className="absolute -right-1 p-0 w-[10rem] overflow-hidden z-20">
