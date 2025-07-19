@@ -1,9 +1,7 @@
 import AppLogo from "../app/AppLogo";
-import { Button } from "../ui/button";
-import { MdChevronRight } from "react-icons/md";
 import NavItems from "./NavItems";
 import DarkModeToggle from "../base/DarkModeToggle";
-import { cn } from "@/lib/utils";
+import NavbarSigninAction from "./NavbarSigninAction";
 
 const navItems = [
     {
@@ -21,9 +19,11 @@ const navItems = [
 ];
 
 export default function Navbar() {
+
+
     return (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2  w-full max-w-4xl px-4 py-4 rounded-lg shadow-lg border dark:bg-dark-base">
-            <div className="mx-4 flex items-center justify-between">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2  w-full max-w-4xl px-4 py-4 rounded-lg shadow-lg border bg-light-base dark:bg-dark-base">
+            <div className="px-4 flex items-center justify-between w-full">
                 <AppLogo />
 
                 <div className="flex">
@@ -31,13 +31,7 @@ export default function Navbar() {
                     <NavItems items={navItems}></NavItems>
                 </div>
 
-                <Button className={cn("font-normal text-sm tracking-wider flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10]",
-                    "bg-dark-base dark:bg-light-base dark:hover:bg-light-base hover:bg-dark-base"
-                )}>
-
-                    <span>Sign in</span>
-                    <MdChevronRight className="text-neutral-300 dark:text-dark-base" />
-                </Button>
+                <NavbarSigninAction />
             </div>
         </div>
     );

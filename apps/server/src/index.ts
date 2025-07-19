@@ -1,20 +1,19 @@
-import http from "http"
+import express from "express";
 import dotenv from "dotenv"
-import express from 'express'
-import prisma from '@repo/database'
-
+import router from "./routes/index.ts";
 
 dotenv.config();
 
+const app = express();
+app.use(express.json());
 const PORT = process.env.PORT;
 if (!PORT) {
-    console.log("port is not defined");
-};
+    console.error("port not found")
+}
 
-const app = express();
-const server = http.createServer(app);
+app.use(express.json());
+app.use('/api/v1', router);
 
-
-server.listen(PORT, () => {
-    console.log("server running on port 8080")
-})
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});

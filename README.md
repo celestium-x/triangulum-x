@@ -1,127 +1,144 @@
-# Triangulum-X
+# 🧠 Developer Git Workflow Guide (For Feature Development)
 
-A staked, innovative, decentralized quiz platform that blends competitive gameplay with blockchain-based financial rewards and incentives. Hosts can create and publish quizzes with staked prize pools using wallet integration. Participants join using unique codes and compete in multiple elimination rounds. The final winner receives the staked prize after host approval, creating an engaging, gamified experience powered by smart contracts.
+A simple and safe Git guide for developers working on **feature branches**. Follow every step **exactly** to avoid conflicts and broken code.
 
-## 🎯 Project Overview
+## ✅ Prerequisites
 
-Triangulum-X transforms traditional quiz platforms into a high-stakes, blockchain-powered learning environment where knowledge meets financial incentives. By combining competitive gameplay with decentralized finance, we create an ecosystem where education becomes both engaging and profitable.
+* You already cloned the repo.
+* You have access to the remote.
+* You're working in a team, and `dev` is the base branch.
 
-## 🔥 The Triangulum-X Vision
+## 🔁 Step-by-Step Workflow
 
-**Inspired by the energy of pump.fun**, this system makes learning fun, competitive, and rewarding. Stake tokens, answer questions, and win real prizes. It's simple. Learn, stake, and earn.
+### 1. Switch to the dev branch
 
-This is ***learn-to-earn***, but turbocharged. Users aren't just quizzing. They're investing in their knowledge. With every answer, they're not only learning faster but also earning smarter. Each round is a dopamine-fueled loop of skill, risk, and reward. The experience turns spectators into participants and participants into champions.
+```bash
+git checkout dev
+```
 
-Where pump.fun brought tokens and memes to life, Triangulum-X brings education and strategy into the game powered by staking, wallets, and transparent smart contracts. It's a platform where curiosity pays, literally.
+✅ This ensures you're on the right base branch before starting your work.
 
-## 🎮 How It Works
+### 2. Pull the latest changes from remote
 
-### For Participants
-1. **Join Quiz**: Enter using unique quiz codes
-2. **Stake to Play**: Put tokens on the line to participate
-3. **Compete**: Navigate through multiple elimination rounds
-4. **Win Big**: Last participant standing claims the entire prize pool
+```bash
+git pull origin dev
+```
 
-### For Hosts
-1. **Create Quiz**: Design questions and set difficulty levels
-2. **Set Stakes**: Define prize pools and participation fees
-3. **Manage Game**: Oversee rounds and approve winners
-4. **Earn Rewards**: Collect hosting fees and build your reputation
+✅ Syncs your local `dev` with the latest code on GitHub.
 
-### For Developers
-1. **Smart Contracts**: Transparent, automated prize distribution
-2. **Wallet Integration**: Seamless blockchain connectivity
-3. **Scalable Architecture**: Built for growth and performance
-4. **Open Ecosystem**: Extensible and developer-friendly
+### 3. Create a new feature branch from dev
 
-## ⚡ Key Features
+```bash
+git checkout -b feature/your-feature-name
+```
 
-### Core Gameplay
-- **Staked Competition**: Real financial incentives drive engagement
-- **Elimination Rounds**: Progressive difficulty increases tension
-- **Instant Payouts**: Automated smart contract distributions
-- **Unique Quiz Codes**: Easy access and game management
+✅ Creates and switches to a new branch. Always start your feature branches from **updated** `dev`.
 
-### Enhanced Experience
-- **Spectator Mode**: Watch live competitions unfold
-- **Power-Ups/Lifelines**: Strategic advantages for skilled players
-- **Tournaments**: Large-scale competitive events
-- **Team Battles**: Collaborative competition modes
+📛 Use branch names like:
+* `feature/login-form`
+* `feature/payment-api`
 
-### Blockchain Integration
-- **Wallet Connectivity**: Secure, decentralized participation
-- **Smart Contracts**: Transparent, automated operations
-- **Token Economics**: Sustainable reward mechanisms
-- **Decentralized Hosting**: Community-driven content creation
+### 4. Work on your feature
 
-## 🚀 Getting Started
+Make your changes, commit often.
 
-### Prerequisites
-- Web3 wallet (MetaMask, WalletConnect, etc.)
-- Supported tokens for staking
-- Basic understanding of blockchain transactions
+```bash
+git add .
+git commit -m "feat: add login form UI"
+```
 
-### Quick Start
-1. Connect your wallet
-2. Find a quiz or create your own
-3. Stake your tokens
-4. Start competing and earning
+✅ Keep commits focused and descriptive.
 
-## 🏆 Competitive Advantages
+### 5. Sync your feature branch with dev often (important!)
 
-- **First-mover advantage** in blockchain-based quiz platforms
-- **Gamified learning** that actually pays participants
-- **Community-driven** content creation and curation
-- **Transparent** and trustless prize distribution
-- **Scalable** architecture for global adoption
+```bash
+git fetch origin
+```
 
-## 🛠 Technical Stack
+✅ Fetches latest changes from GitHub (but doesn't apply them yet).
 
-- **Frontend**: Modern web technologies for seamless UX
-- **Backend**: Scalable infrastructure for real-time gameplay
-- **Blockchain**: Smart contracts for transparent operations
-- **Wallet Integration**: Multiple wallet support for accessibility
+```bash
+git rebase origin/dev
+```
 
-## 👥 Development Team
+✅ Reapplies your commits on top of the latest `dev`.
 
-- **@Rishi Kant** - Core Developer
-- **@Anjan Suman** - Core Developer  
-- **@Piyush Raj** - Core Developer
+❗ Rebase helps keep commit history clean and avoids conflicts when merging later.
 
-## 📈 Roadmap
+⚠️ If conflicts happen, fix them manually, then run:
 
-- **Phase 1**: Core platform development and basic features
-- **Phase 2**: Advanced gaming features and tournament system
-- **Phase 3**: Mobile app and expanded blockchain support
-- **Phase 4**: Global scaling and partnership integrations
+```bash
+git add .
+git rebase --continue
+```
 
-## 🤝 Contributing
+### 6. Push your feature branch to GitHub
 
-We welcome contributions from the community! Whether you're a developer, designer, or quiz enthusiast, there are many ways to get involved:
+```bash
+git push -u origin feature/your-feature-name
+```
 
-- Submit bug reports and feature requests
-- Contribute code improvements
-- Create educational content
-- Help with community management
+✅ Sends your feature branch to GitHub.
 
-## 📄 License
+### 7. Create a Pull Request
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+* Go to GitHub.
+* Click "Compare & pull request".
+* Make sure the **base branch is** `dev`.
+* Title and describe your PR properly.
 
-## 🔗 Links
+📌 Example: "Add Login Form UI - feature/login-form"
 
-- **Website**: [Coming Soon]
-- **Documentation**: [Coming Soon]
-- **Community**: [Coming Soon]
-- **Support**: [Coming Soon]
+### 8. After Merge
+
+```bash
+git checkout dev
+git pull origin dev
+```
+
+✅ Update your local `dev` after PR is merged.
+
+```bash
+git branch -d feature/your-feature-name
+```
+
+✅ Delete old feature branch locally (clean workspace).
+
+## 🔥 Common Errors & Fixes
+
+### 🧨 Error: "Cannot create branch... already exists"
+
+```bash
+git branch -d feature
+```
+
+❌ You named the branch wrong. Use `feature/your-feature-name`, not just `feature`.
+
+### 🧨 Error during rebase
+
+```bash
+git rebase --abort
+```
+
+Cancels the rebase if it goes wrong. Start again.
+
+## ✅ Golden Rules
+
+* Always branch from latest `dev`.
+* Rebase your feature branch regularly.
+* Never push directly to `dev` or `main`.
+* Always use `feature/` prefix in branch names.
+* Ask if unsure, don't guess.
 
 ---
 
-*Triangulum-X - Where Knowledge Meets Profit*
+This file is for internal use by the dev team. Keep it open while working.
+
+**Stay clean. Stay synced. Avoid conflicts.** 💪
 
 
 ## Contributors
 
-<a  href="https://github.com/code100x/cms/graphs/contributors">
-<img  src="https://contrib.rocks/image?repo=code100x/cms&max=400&columns=20"  />
+<a href="https://github.com/celestium-x/triangulum-x/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=celestium-x/triangulum-x&max=400&columns=20" />
 </a>
