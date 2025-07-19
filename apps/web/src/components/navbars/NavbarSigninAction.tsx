@@ -12,6 +12,7 @@ export default function NavbarSigninAction() {
     const { session } = useUserSessionStore();
     const router = useRouter();
     const [opensignInModal, setOpenSignInModal] = useState<boolean>(false);
+    
 
     function handler() {
         if (!session?.user.token) {
