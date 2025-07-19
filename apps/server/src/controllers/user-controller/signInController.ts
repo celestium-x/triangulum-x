@@ -11,8 +11,7 @@ export default async function signInController(req: Request, res: Response) {
                 email: user.email
             }
         })
-
-
+        
         let myUser;
         if (existingUser) {
             myUser = await prisma.user.update({
