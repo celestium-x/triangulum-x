@@ -47,6 +47,7 @@ export default async function signInController(req: Request, res: Response) {
             return;
         }
         const token = jwt.sign(jwtPayload, secret);
+        console.log("Token generated",token);
         res.json({
             success: true,
             user: myUser,

@@ -66,6 +66,7 @@ export default function HomeNavbar() {
                     </Button>
 
                     <ProfileMenu />
+                    
                 </div>
             </div>
         </div>

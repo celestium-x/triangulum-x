@@ -1,31 +1,39 @@
-import { Request, Response } from "express"
-import prisma from "@repo/db/client"
+import { NextFunction, Request, Response } from "express"
+import jwt from "jsonwebtoken";
 
-export default async function authMiddleware(req: Request, res: Response) {
-    const { name, email, image } = req.body;
+export default async function authMiddleware(req: Request, res: Response, next:NextFunction) {
+    const authHeader = req.headers.authorization;
+    console.log("authHEader",authHeader);
 
-    if (!email) {
-        res.status(400).json({ message: "Email is required" });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        res.status(401).json({ message: "Unauthorized: No token provided" });
+        return;
+    }
+
+    const token = authHeader.split(" ")[1];
+    const secret = process.env.JWT_SECRET;
+    console.log("token and secret",token,secret);
+
+    if (!secret) {
+        res.status(500).json({ message: "JWT secret not configured" });
+        return;
+    }
+    if (!token) {
+        res.status(500).json({ message: "Token is not avilable" });
         return;
     }
 
     try {
-        const existingUser = await prisma.user.findUnique({
-            where: { email: email }
-        });
-
-        if (existingUser) {
-            await prisma.user.update({
-                where: { email: email },
-                data: { name, image }
-            });
-            res.json({ message: "Sign In successful" });
-        } else {
-            await prisma.user.create({
-                data: { email, name, image }
-            });
-            res.json({ message: "Sign up successful" });
-        }
+        jwt.verify(token, secret, (err,decoded) =>{
+            if(err){
+                res.status(401).json({message:"Not authorized"});
+                return;
+            }
+            console.log("Decoded",decoded);
+            req.user=decoded as AuthUser
+            console.log("req.user is",req.user);
+            next();
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal server error" });

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@repo/db": "*",
+    "@types/jsonwebtoken": "^9.0.10",
     "dotenv": "^17.2.0",
     "esbuild": "^0.25.6",
     "express": "^5.1.0",

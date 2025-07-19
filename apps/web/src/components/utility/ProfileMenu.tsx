@@ -8,12 +8,19 @@ import { TbSettings2 } from "react-icons/tb";
 import { SiGithub } from "react-icons/si";
 import { IoMdLogOut } from "react-icons/io";
 import { useHandleClickOutside } from "@/hooks/useHandleClickOutside";
+import LogoutModal from "./LogoutModal";
 
 export default function ProfileMenu() {
     const { session } = useUserSessionStore();
     const [dropdown, setDropdown] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     useHandleClickOutside(dropdownRef, setDropdown);
+    const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
+
+
+    function handler() {
+        setOpenLogoutModal(true);
+    }
 
     return (
         <div className="relative" ref={dropdownRef}>
@@ -28,7 +35,7 @@ export default function ProfileMenu() {
             <Circle className="absolute -bottom-0 -right-0 w-2 h-2 fill-green-500 text-green-500 bg-white dark:bg-dark-base rounded-full" />
             {
                 dropdown && (
-                    <UtilityCard className="absolute -right-1 p-0 w-[10rem] overflow-hidden">
+                    <UtilityCard className="absolute -right-1 p-0 w-[10rem] overflow-hidden z-20">
                         <div>
                             <div className="px-4 py-[11px] text-xs font-normal text-dark-base dark:text-light-base border-b-[1px] border-neutral-300 dark:border-neutral-700 cursor-default">My Profile</div>
                             <div className="px-4 py-[11px] text-xs font-light text-dark-base  dark:hover:bg-dark-primary/40 hover:bg-gray-200 dark:text-light-base">Docs</div>
@@ -46,14 +53,16 @@ export default function ProfileMenu() {
                                 Github
                                 <SiGithub />
                             </a>
-                            <div className="px-4 py-[11px] text-xs font-normal text-red-500 dark:hover:bg-dark-primary/40 hover:bg-gray-200 flex justify-between">
+                            <div className="px-4 py-[11px] text-xs font-normal text-red-500 dark:hover:bg-dark-primary/40 hover:bg-gray-200 flex justify-between hover:po cursor-pointer" onClick={handler} >
                                 Sign Out
                                 <IoMdLogOut size={14} />
                             </div>
                         </div>
-                    </UtilityCard>
+                    </UtilityCard>   
                 )
             }
+            <LogoutModal openLogoutModal={openLogoutModal} setOpenLogoutModal={setOpenLogoutModal} />
+
         </div>
     )
 }
