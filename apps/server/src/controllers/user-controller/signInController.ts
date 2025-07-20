@@ -8,7 +8,7 @@ export default async function signInController(req: Request, res: Response) {
     try {
         const existingUser = await prisma.user.findUnique({
             where: {
-                email: user.email
+                email: user.emailE
             }
         })
         
