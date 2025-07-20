@@ -48,7 +48,7 @@ export default function DashboardRight(): JSX.Element {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
         >
-            <div className="mt-[5rem] flex flex-col gap-y-4">
+            <div className="mt-[5rem] flex flex-col gap-y-4 p-4">
                 {renderDashboard()}
             </div>
         </motion.div>
