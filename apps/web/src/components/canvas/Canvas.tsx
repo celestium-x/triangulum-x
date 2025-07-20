@@ -23,16 +23,12 @@ export default function Canvas(): JSX.Element {
         }
     }, [copied])
 
-    function copyHandler() {
-        setCopied(true);
-    }
-
     function questionTapHandler(e: MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
         setSelectionMode(SELECTION_MODE.QUESTION);
     }
 
-    function canvasTapHandler(e: MouseEvent<HTMLDivElement>) {
+    function canvasTapHandler() {
         setSelectionMode(SELECTION_MODE.CANVAS);
     }
 
@@ -42,12 +38,12 @@ export default function Canvas(): JSX.Element {
 
     function getFontSizeClass(text: string): string {
         const length = text.length;
-        if (length === 0) return "text-2xl"; // Default for placeholder
-        if (length <= 50) return "text-2xl";  // 24px - short to medium questions
-        if (length <= 60) return "text-xl";   // 20px - longer questions
-        if (length <= 70) return "text-lg";   // 18px - long questions
-        if (length <= 95) return "text-base"; // 16px - very long questions (note: text-md doesn't exist in Tailwind, using text-base)
-        return "text-xs";                      // 12px - extremely long questions
+        if (length === 0) return "text-2xl";
+        if (length <= 50) return "text-2xl";
+        if (length <= 60) return "text-xl";
+        if (length <= 70) return "text-lg";
+        if (length <= 95) return "text-base";
+        return "text-xs";
     }
 
     return (
