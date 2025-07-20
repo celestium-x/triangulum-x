@@ -4,7 +4,7 @@ import QuizRight from "@/components/quiz/new/QuizRight"
 
 export default function QuizCreationPanels() {
     return (
-        <div className="w-full h-full flex flex-row dark:bg-dark-primary bg-neutral-200">
+        <div className="w-full h-full flex flex-row dark:bg-dark-primary bg-neutral-200 pt-22 overflow-hidden">
             <QuizLeft />
             <QuizRight />
         </div>
