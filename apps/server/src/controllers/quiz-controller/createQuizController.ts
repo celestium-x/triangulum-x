@@ -10,7 +10,7 @@ export default async function createQuizController(req: Request, res: Response) 
         res.status(400).json({ success: false, message: "Error while creating quiz" });
         return;
     }
-   
+
     const input = parsed.data;
     const hostId = req.user?.id;
 
