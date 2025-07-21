@@ -1,12 +1,4 @@
-export enum TypesQuizStatus {
-    CREATED = "CREATED",
-    SCHEDULED = "SCHEDULED",
-    LIVE = "LIVE",
-    COMPLETED = "COMPLETED",
-    CANCELLED = "CANCELLED",
-    PAYOUT_PENDING = "PAYOUT_PENDING",
-    PAYOUT_COMPLETED = "PAYOUT_COMPLETED",
-}
+
 
 export interface UserType {
     id: string;
@@ -29,9 +21,9 @@ export interface QuizType {
     id: string;
     title: string;
     description?: string | null;
-
-    participantCode: string;
-    spectatorCode: string;
+    theme: TemplateEnum;
+    participantCode?: string;
+    spectatorCode?: string;
 
     prizePool: number;
     currency: string;
@@ -44,7 +36,7 @@ export interface QuizType {
 
     questionTimeLimit: number;
     breakBetweenQuestions: number;
-    status: TypesQuizStatus;
+    status: QuizStatusEnum;
 
     createdAt: Date;
     updatedAt: Date;
@@ -52,6 +44,27 @@ export interface QuizType {
     startedAt?: Date | null;
     endedAt?: Date | null;
 
-    hostId: string;
-    host: UserType;
+    hostId?: string;
+    host?: UserType;
+}
+
+
+export enum TemplateEnum {
+    CLASSIC = 'CLASSIC',
+    MODERN = 'MODERN',
+    PASTEL = 'PASTEL',
+    NEON = 'NEON',
+    YELLOW = 'YELLOW',
+    GREEN = 'GREEN',
+    BLUE = 'BLUE',
+}
+
+export enum QuizStatusEnum {
+    CREATED = "CREATED",
+    SCHEDULED = "SCHEDULED",
+    LIVE = "LIVE",
+    COMPLETED = "COMPLETED",
+    CANCELLED = "CANCELLED",
+    PAYOUT_PENDING = "PAYOUT_PENDING",
+    PAYOUT_COMPLETED = "PAYOUT_COMPLETED",
 }
