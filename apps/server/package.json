@@ -9,8 +9,12 @@
     "dev": "yarn build && yarn start"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.850.0",
+    "@aws-sdk/s3-request-presigner": "^3.850.0",
     "@repo/db": "*",
+    "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "esbuild": "^0.25.6",
     "express": "^5.1.0",
