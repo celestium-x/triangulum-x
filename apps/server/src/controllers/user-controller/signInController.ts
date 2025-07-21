@@ -4,14 +4,14 @@ import prisma from "@repo/db/client";
 
 
 export default async function signInController(req: Request, res: Response) {
-    const { user, account } = req.body;
+    const { user } = req.body;
     try {
         const existingUser = await prisma.user.findUnique({
             where: {
                 email: user.email
             }
         })
-        
+
         let myUser;
         if (existingUser) {
             myUser = await prisma.user.update({
@@ -47,7 +47,7 @@ export default async function signInController(req: Request, res: Response) {
             return;
         }
         const token = jwt.sign(jwtPayload, secret);
-        console.log("Token generated",token);
+
         res.json({
             success: true,
             user: myUser,
