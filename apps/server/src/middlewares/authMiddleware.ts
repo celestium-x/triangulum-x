@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 
 export default async function authMiddleware(req: Request, res: Response, next:NextFunction) {
     const authHeader = req.headers.authorization;
-    console.log("authHEader",authHeader);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -12,7 +11,6 @@ export default async function authMiddleware(req: Request, res: Response, next:N
 
     const token = authHeader.split(" ")[1];
     const secret = process.env.JWT_SECRET;
-    console.log("token and secret",token,secret);
 
     if (!secret) {
         res.status(500).json({ message: "JWT secret not configured" });
@@ -29,9 +27,7 @@ export default async function authMiddleware(req: Request, res: Response, next:N
                 res.status(401).json({message:"Not authorized"});
                 return;
             }
-            console.log("Decoded",decoded);
             req.user=decoded as AuthUser
-            console.log("req.user is",req.user);
             next();
         })
     } catch (error) {
