@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import UtilityCard from "@/components/utility/UtilityCard";
 import { cn } from "@/lib/utils";
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
 import { JSX } from "react";

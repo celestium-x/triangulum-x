@@ -60,7 +60,7 @@ model Quiz {
 
   hostId   String
   host     User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
-  Question Question[]
+  questions Question[]
 
   @@map("quizzes")
 }
