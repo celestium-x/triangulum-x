@@ -6,11 +6,9 @@ import { BiSolidMessageEdit } from "react-icons/bi";
 import { MdAddReaction } from "react-icons/md";
 import Drafts from "./Drafts";
 
-
-
 export default function QuizRight(): JSX.Element {
     const { state, setState } = useDraftRendererStore();
-    console.log("draft state is : ", state);
+
     return (
         <div className="min-h-full flex justify-end py-4 pr-4">
             <div className={cn(
@@ -23,7 +21,7 @@ export default function QuizRight(): JSX.Element {
                             type="button"
                             onClick={() => setState(DraftRenderer.QUESTION)}
                             className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.QUESTION && "hover:bg-purple-700/10 bg-primary/30 border border-purple-800"}`
+                                `${state === DraftRenderer.QUESTION && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
                             )}
                         >
                             <div className="flex flex-col items-center justify-center gap-y-1">
@@ -36,7 +34,7 @@ export default function QuizRight(): JSX.Element {
                             type="button"
                             onClick={() => setState(DraftRenderer.THEME)}
                             className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.THEME && "hover:bg-purple-700/10 bg-primary/30 border border-purple-800"}`
+                                `${state === DraftRenderer.THEME && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
                             )}
                         >
                             <div className="flex flex-col items-center justify-center gap-y-1">
@@ -49,7 +47,7 @@ export default function QuizRight(): JSX.Element {
                             type="button"
                             onClick={() => setState(DraftRenderer.INTERACTION)}
                             className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.INTERACTION && "hover:bg-purple-700/10 bg-primary/30 border border-purple-800"}`
+                                `${state === DraftRenderer.INTERACTION && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
                             )}
                         >
                             <div className="flex flex-col items-center justify-center gap-y-1">

@@ -27,9 +27,7 @@ export default function DashboardLeft({
     onMouseEnter,
     onMouseLeave
 }: DashboardLeftProps): JSX.Element {
-
     const { value, setValue } = useHomeRendererStore()
-    console.log("value is", value);
     return (
         <motion.div
             className={cn("h-full bg-light-base dark:bg-dark-base/10 shrink-0",
