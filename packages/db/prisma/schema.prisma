@@ -32,12 +32,12 @@ model User {
 }
 
 model Quiz {
-  id          String  @id @default(cuid())
-  title       String
-  description String?
-
-  participantCode String @unique
-  spectatorCode   String @unique
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  theme           Template @default(CLASSIC)
+  participantCode String   @unique
+  spectatorCode   String   @unique
 
   prizePool Float // Maybe in lamports -> then Number
   currency  String @default("SOL")
@@ -58,10 +58,29 @@ model Quiz {
   startedAt   DateTime?
   endedAt     DateTime?
 
-  hostId String
-  host   User   @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  hostId   String
+  host     User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  Question Question[]
 
   @@map("quizzes")
+}
+
+model Question {
+  id            String  @id @default(cuid())
+  question      String
+  options       String
+  correctAnswer Int
+  explanation   String?
+
+  difficulty Int @default(1)
+  basePoints Int @default(100)
+  timeLimit  Int @default(30) // these will be in seconds
+
+  orderIndex Int
+  imageUrl   String?
+
+  quizId String
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 enum QuizStatus {
@@ -72,4 +91,14 @@ enum QuizStatus {
   CANCELLED
   PAYOUT_PENDING
   PAYOUT_COMPLETED
+}
+
+enum Template {
+  CLASSIC
+  MODERN
+  PASTEL
+  NEON
+  YELLOW
+  GREEN
+  BLUE
 }
