@@ -46,6 +46,22 @@ export interface QuizType {
 
     hostId?: string;
     host?: UserType;
+    questions: QuestionType[];
+}
+
+export interface QuestionType {
+  id: string;
+  question: string;
+  options: string;
+  correctAnswer: number;
+  explanation?: string;
+  difficulty: number;
+  basePoints: number;
+  timeLimit: number;
+  orderIndex: number;
+  imageUrl?: string;
+  quizId: string;
+  quiz?: QuizType;
 }
 
 

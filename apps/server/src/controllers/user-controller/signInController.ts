@@ -11,7 +11,7 @@ export default async function signInController(req: Request, res: Response) {
                 email: user.email
             }
         })
-        
+
         let myUser;
         if (existingUser) {
             myUser = await prisma.user.update({
@@ -47,7 +47,7 @@ export default async function signInController(req: Request, res: Response) {
             return;
         }
         const token = jwt.sign(jwtPayload, secret);
-        console.log("Token generated",token);
+        console.log("Token generated", token);
         res.json({
             success: true,
             user: myUser,
