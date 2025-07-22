@@ -13,7 +13,7 @@ const barriecito = Barriecito({
 
 export default function LandingPage() {
     return (
-        <div className="h-full flex items-center">
+        <div className="h-full flex items-center bg-light-base dark:bg-dark-primary">
             <section className="mx-[12rem] w-full">
                 <div className="flex items-center justify-between -mt-16">
                     {/* left section */}
