@@ -7,6 +7,7 @@ import { IoIosCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { templates } from "@/lib/templates";
 import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
+import CanvasAccents from "../utility/CanvasAccents";
 
 enum SELECTION_MODE {
     CANVAS = "CANVAS",
@@ -80,9 +81,10 @@ export default function Canvas(): JSX.Element {
     }
 
     return (
-        <div style={{ color: currentQTemplate?.text_color }} onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px]",
+        <div style={{ color: currentQTemplate?.text_color }} onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px] relative overflow-hidden",
             selectionMode === SELECTION_MODE.CANVAS && selectedStyles
         )}>
+            <CanvasAccents design="slash" accentColor={currentQTemplate?.accent_color} />
             <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
