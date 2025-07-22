@@ -20,11 +20,11 @@ export default function InteractionsDraft() {
             </div>
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-4">
-                    <FaHeart size={35} className="border-[1px] border-neutral-300 p-2 rounded-md" />
-                    <PiCurrencyCircleDollarFill size={35} className="border-[1px] border-neutral-300 p-2 rounded-md" />
-                    <FaLightbulb size={35} className="border-[1px] border-neutral-300 p-2 rounded-md" />
-                    <BsFillHandThumbsUpFill size={35} className="border-[1px] border-neutral-300 p-2 rounded-md" />
-                    <MdEmojiEmotions size={35} className="border-[1px] border-neutral-300 p-2 rounded-md" />
+                    <FaHeart size={35} className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md" />
+                    <PiCurrencyCircleDollarFill size={35} className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md" />
+                    <FaLightbulb size={35} className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md" />
+                    <BsFillHandThumbsUpFill size={35} className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md" />
+                    <MdEmojiEmotions size={35} className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md" />
                 </div>
             </div>
             <div className="w-full px-2 mt-6">

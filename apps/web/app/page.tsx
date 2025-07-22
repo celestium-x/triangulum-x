@@ -11,7 +11,7 @@ export default function Home() {
       <div className="pt-30 h-full">
         <JoinQuizBar />
         <LandingPage />
-        
+
         <LandingPageCards />
       </div>
     </div>
