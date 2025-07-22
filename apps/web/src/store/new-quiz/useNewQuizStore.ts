@@ -15,7 +15,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         id: "",
         title: "",
         description: "",
-        theme: TemplateEnum.CLASSIC,
+        theme: TemplateEnum.BLUE,
         prizePool: 0,
         currency: "",
         basePointsPerQuestion: 0,
@@ -34,7 +34,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             {
                 id: "",
                 question: "What is the largest planet in our solar system?",
-                options: "Mercury Venus Earth Jupiter",
+                options: ['Mercury', 'Venus', 'Earth', 'Jupiter'],
                 correctAnswer: 3,
                 explanation: "Jupiter is the largest planet in our solar system.",
                 difficulty: 1,
@@ -47,7 +47,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             {
                 id: "",
                 question: "Who wrote the play 'Romeo and Juliet'?",
-                options: "Charles Dickens William Shakespeare Mark Twain Jane Austen",
+                options: ['Charles Dickens', 'William Shakespeare', 'Mark Twain', 'Jane Austen'],
                 correctAnswer: 1,
                 explanation: "William Shakespeare wrote the tragedy 'Romeo and Juliet'.",
                 difficulty: 1,
@@ -72,7 +72,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         const question: QuestionType = {
             id: "",
             question: "Which element has the chemical symbol 'O'?",
-            options: "Oxygen Gold Hydrogen Silver",
+            options: ['Oxygen', 'Gold', 'Hydrogen', 'Silver'],
             correctAnswer: 0,
             explanation: "Oxygen is represented by the symbol 'O' in the periodic table.",
             difficulty: 1,
