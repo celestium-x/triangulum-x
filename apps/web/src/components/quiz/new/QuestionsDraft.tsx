@@ -38,7 +38,7 @@ export default function QuestionsDraft() {
                     </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-x-2 mt-3">
+                <div className="flex flex-row items-center gap-x-2 mt-3 dark:text-neutral-300 text-neutral-700">
                     <div className="flex items-center justify-evenly w-16 border-2 border-neutral-400 px-1 py-2 rounded-sm">
                         <FaSquare size={20} className="rotate-90" />
                         <TfiLayoutListPost />

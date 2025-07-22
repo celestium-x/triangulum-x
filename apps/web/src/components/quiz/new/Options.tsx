@@ -3,6 +3,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { templates } from "@/lib/templates";
 import { cn } from "@/lib/utils";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
+import { MdOutlineDragIndicator } from "react-icons/md";
+
 
 export default function Options() {
     const { quiz, currentQuestionIndex, editQuestion } = useNewQuizStore();
@@ -10,13 +12,13 @@ export default function Options() {
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
 
     function handleOptionChange(idx: number) {
-        console.log("idx logged is : ", idx);
         editQuestion(currentQuestionIndex, { correctAnswer: idx })
     }
 
     return <div className="w-full flex flex-col justify-start items-start gap-y-3 ">
         {currentQ?.options.map((option, idx) => (
             <div className="flex justify-start items-center gap-x-3 w-full" key={idx}>
+                <MdOutlineDragIndicator size={26} className="text-neutral-500 dark:text-neutral-400" />
                 <Checkbox
                     checked={currentQ?.correctAnswer === idx}
                     onCheckedChange={() => handleOptionChange(idx)}
