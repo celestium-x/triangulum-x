@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { TbSquareLetterTFilled } from "react-icons/tb";
 
 export default function AppLogo() {
     return (
