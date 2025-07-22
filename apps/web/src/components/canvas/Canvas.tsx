@@ -67,12 +67,9 @@ export default function Canvas(): JSX.Element {
         return "text-xs";
     }
 
-    // Calculate responsive bar height based on viewport and container
     function getBarHeight(voteValue: number): string {
-        // Use CSS custom properties for dynamic height calculation
-        // This ensures bars scale with available space
-        const percentage = Math.max(voteValue, 5); // Minimum 5% height
-        return `max(${percentage * 0.8}%, 1.5rem)`; // Scale with container, min 1.5rem
+        const percentage = Math.max(voteValue, 5);
+        return `max(${percentage * 0.8}%, 1.5rem)`;
     }
 
     function getResponsiveGap(): string {
@@ -80,14 +77,6 @@ export default function Canvas(): JSX.Element {
         if (optionCount <= 2) return "gap-8 sm:gap-12 md:gap-16";
         if (optionCount === 3) return "gap-4 sm:gap-8 md:gap-12";
         return "gap-2 sm:gap-4 md:gap-6 lg:gap-8";
-    }
-
-    // Get responsive bar width based on screen size and option count
-    function getBarWidth(): string {
-        const optionCount = currentQ?.options?.length || 4;
-        if (optionCount <= 2) return "w-16 sm:w-20 md:w-24 lg:w-28";
-        if (optionCount === 3) return "w-12 sm:w-16 md:w-20 lg:w-24";
-        return "w-8 sm:w-12 md:w-16 lg:w-20 xl:w-24";
     }
 
     return (
