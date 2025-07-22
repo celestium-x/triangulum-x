@@ -88,7 +88,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
     },
 
     editQuestion: (currentQuestionIndex) => {
-        
+        console.log(currentQuestionIndex);
     },
 
     removeQuestion: (index: number) => {

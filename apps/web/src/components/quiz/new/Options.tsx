@@ -21,7 +21,10 @@ export default function Options() {
 
     return <div className="w-full flex flex-col justify-start items-start gap-y-3 ">
         {options.map((option, index) => (
-            <div className="flex justify-start items-center gap-x-2 ">
+            <div
+                className="flex justify-start items-center gap-x-2 "
+                key={index}
+            >
                 <div
                     className={`border rounded-sm p-2 `}
                     style={{

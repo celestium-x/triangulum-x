@@ -54,6 +54,7 @@ export default function QuizRight(): JSX.Element {
                                 className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
                                     `${state === option.type && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
                                 )}
+                                key={index}
                             >
                                 <div className="flex flex-col items-center justify-center gap-y-1">
                                     {option.icon}
