@@ -22,7 +22,7 @@ export default function LandingPage() {
                             <div className="flex items-end justify-start mb-4 drop-shadow-2xl">
                                 <SiSolana
                                     size={120}
-                                    className="text-neutral-900 dark:text-light-base drop-shadow-lg filter"
+                                    className="text-neutral-900 dark:text-light-base drop-shadow-lg filter "
                                 />
                                 <span className={`${barriecito.className} text-8xl text-dark-base dark:text-light-base drop-shadow-md`}>
                                     olana
@@ -67,8 +67,10 @@ export default function LandingPage() {
                         <div className="relative">
                             <div className="absolute -top-10 -left-10 w-20 h-20 bg-neutral-400/20 rounded-full blur-xl animate-pulse"></div>
                             <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-neutral-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
-
                         </div>
+                        {/* <LiquidGlass>
+                            Hello 
+                        </LiquidGlass> */}
                     </div>
                 </div>
             </section>
