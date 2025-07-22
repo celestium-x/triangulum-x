@@ -33,8 +33,9 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
             case 'slash':
                 return (
                     <div
-                        className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 1 }}
+                        className="absolute inset-0 overflow-hidden rounded-xl z-10"
+                        style={{ pointerEvents: "none" }}
+
                     >
                         <svg
                             className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%]"

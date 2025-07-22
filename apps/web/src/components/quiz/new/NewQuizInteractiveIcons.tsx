@@ -1,12 +1,15 @@
 'use client'
 
-import { useState } from "react";
+import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaHeart, FaLightbulb } from "react-icons/fa6";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
 import { IconType } from "react-icons/lib";
+import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
+import { cn } from "@/lib/utils";
+import { SELECTION_MODE } from "@/components/canvas/Canvas";
 
 interface icon {
     id: string,
@@ -15,11 +18,11 @@ interface icon {
 }
 
 const icons: icon[] = [
-    { id: 'heart', Component: FaHeart, iconColor: "#ff0033" },
-    { id: 'dollar', Component: PiCurrencyCircleDollarFill, iconColor: "#85BB65" },
-    { id: 'lightbulb', Component: FaLightbulb, iconColor: "#FFD242" },
-    { id: 'thumbs', Component: BsFillHandThumbsUpFill, iconColor: "#FFDC5D" },
-    { id: 'smile', Component: MdEmojiEmotions, iconColor: "#FFD700" },
+    { id: 'heart', Component: FaHeart, iconColor: "#E53E3E" },
+    { id: 'dollar', Component: PiCurrencyCircleDollarFill, iconColor: "#38A169" },
+    { id: 'lightbulb', Component: FaLightbulb, iconColor: "#252525" },
+    { id: 'thumbs', Component: BsFillHandThumbsUpFill, iconColor: "#3182CE" },
+    { id: 'smile', Component: MdEmojiEmotions, iconColor: "#F6AD55" },
 ];
 
 interface AnimationIcon {
@@ -28,8 +31,15 @@ interface AnimationIcon {
     containerIndex: number;
 }
 
-export default function NewQuizInteractiveIcons({ color }: { color: string | undefined }) {
+interface NewQuizInteractiveIconsProps {
+    selectionMode: SELECTION_MODE;
+    setSelectionMode: Dispatch<SetStateAction<SELECTION_MODE>>;
+}
+
+export default function NewQuizInteractiveIcons({  selectionMode, setSelectionMode }: NewQuizInteractiveIconsProps) {
     const [animatingIcons, setAnimatingIcons] = useState<AnimationIcon[]>([]);
+    const { setState } = useDraftRendererStore();
+    const selectedStyles = "border-2 border-[#5e59b3]";
 
     function createAnimation(Icon: React.ElementType, containerIndex: number) {
         const newIcon = {
@@ -44,18 +54,26 @@ export default function NewQuizInteractiveIcons({ color }: { color: string | und
         }, 2200);
     }
 
+    function interactionDivTapHandler(e: MouseEvent<HTMLDivElement>) {
+        e.stopPropagation();
+        setSelectionMode(SELECTION_MODE.INTERACTION);
+        setState(DraftRenderer.INTERACTION)
+    }
+
     return (
-        <div className="flex items-center justify-end gap-x-4">
+        <div onClick={interactionDivTapHandler} className={cn("flex items-center justify-end gap-x-4 z-20 rounded-[12px] px-4 py-2",
+            selectionMode === SELECTION_MODE.INTERACTION && selectedStyles
+        )}>
             {icons.map(({ id, Component, iconColor }, index) => (
                 <div key={id} className="relative w-fit h-fit overflow-visible">
                     <Component
                         onClick={() => createAnimation(Component, index)}
                         style={{
-                            backgroundColor: `${color}AA`,
-                            color: "black"
+                            backgroundColor: `#00000070`,
+                            color: "#EEEEEEca"
                         }}
-                        size={30}
-                        className=" p-2 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
+                        size={24}
+                        className=" p-1.5 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
                     />
 
                     <AnimatePresence>
