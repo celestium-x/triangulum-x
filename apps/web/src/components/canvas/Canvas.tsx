@@ -83,7 +83,7 @@ export default function Canvas(): JSX.Element {
         <div style={{ color: currentQTemplate?.text_color }} onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px]",
             selectionMode === SELECTION_MODE.CANVAS && selectedStyles
         )}>
-            <div className="bg-[#196cff] h-full rounded-md relative flex flex-col">
+            <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
                 {/* Question Section - Fixed at top */}
