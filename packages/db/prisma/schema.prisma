@@ -58,8 +58,8 @@ model Quiz {
   startedAt   DateTime?
   endedAt     DateTime?
 
-  hostId   String
-  host     User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  hostId    String
+  host      User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
   questions Question[]
 
   @@map("quizzes")
@@ -68,7 +68,7 @@ model Quiz {
 model Question {
   id            String  @id @default(cuid())
   question      String
-  options       String
+  options       String[]
   correctAnswer Int
   explanation   String?
 
