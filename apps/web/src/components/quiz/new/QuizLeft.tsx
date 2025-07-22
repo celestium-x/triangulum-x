@@ -13,7 +13,7 @@ export default function QuizLeft() {
                     </div>
                 </UtilityCard>
                 <div className="flex-1 flex items-start justify-center w-full min-w-0">
-                    <div className="aspect-[16/9] w-full max-w-[900px] min-w-0">
+                    <div className="aspect-[16/9] w-full min-w-0">
                         <Canvas />
                     </div>
                 </div>

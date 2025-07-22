@@ -105,7 +105,7 @@ export default function Canvas(): JSX.Element {
 
                 {/* Optoin section */}
                 <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-32 sm:pt-40">
-                    <div className={cn("w-full h-full flex flex-col items-end justify-center ",)}>
+                    <div className={cn("w-full h-full flex flex-col items-end justify-center gap-y-5 ",)}>
 
                         <div className={cn(
                             "w-full h-full flex items-end justify-center ",
@@ -131,10 +131,10 @@ export default function Canvas(): JSX.Element {
 
                                     {/* Responsive Bar */}
                                     <div
-                                        className="w-full rounded-t-md sm:rounded-t-lg transition-all duration-1000 ease-in-out border border-white/20 "
+                                        className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 "
                                         style={{
                                             height: getBarHeight(votes[idx]!),
-                                            backgroundColor: currentQTemplate?.bars[idx] || '#4F46E5'
+                                            backgroundColor: `${currentQTemplate?.bars[idx]}` || '#4F46E5'
                                         }}
                                     />
 

@@ -13,12 +13,12 @@ export const templates: Template[] = [
     {
         id: "CLASSIC",
         name: "Classic",
-        background_color: "#F5F5F5",
+        background_color: "#EAE4D5",
         text_color: "#000000",
         border_color: "#000000",
         accent_type: "solid",
         accent_color: "#000000",
-        bars: ["#252525", "#000000", "#000000", "#000000", "#000000"],
+        bars: ["#252525", "#252525", "#252525", "#252525", "#252525"],
     },
     {
         id: "MODERN",
@@ -77,7 +77,7 @@ export const templates: Template[] = [
         text_color: "#EEEEEE",
         border_color: "#000000",
         accent_type: "solid",
-        accent_color: "#000000",
+        accent_color: "#EEEEEE",
         bars: ["#C5172E", "#FDFAF6", "#FFCC00", "#1DCD9F", "#000000"],
     },
 ]

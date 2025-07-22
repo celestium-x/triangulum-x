@@ -6,13 +6,20 @@ import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaHeart, FaLightbulb } from "react-icons/fa6";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
+import { IconType } from "react-icons/lib";
 
-const icons = [
-    { id: 'heart', Component: FaHeart },
-    { id: 'dollar', Component: PiCurrencyCircleDollarFill },
-    { id: 'lightbulb', Component: FaLightbulb },
-    { id: 'thumbs', Component: BsFillHandThumbsUpFill },
-    { id: 'smile', Component: MdEmojiEmotions },
+interface icon {
+    id: string,
+    Component: IconType,
+    iconColor: string
+}
+
+const icons: icon[] = [
+    { id: 'heart', Component: FaHeart, iconColor: "#ff0033" },
+    { id: 'dollar', Component: PiCurrencyCircleDollarFill, iconColor: "#85BB65" },
+    { id: 'lightbulb', Component: FaLightbulb, iconColor: "#FFD242" },
+    { id: 'thumbs', Component: BsFillHandThumbsUpFill, iconColor: "#FFDC5D" },
+    { id: 'smile', Component: MdEmojiEmotions, iconColor: "#FFD700" },
 ];
 
 interface AnimationIcon {
@@ -39,13 +46,16 @@ export default function NewQuizInteractiveIcons({ color }: { color: string | und
 
     return (
         <div className="flex items-center justify-end gap-x-4">
-            {icons.map(({ id, Component }, index) => (
+            {icons.map(({ id, Component, iconColor }, index) => (
                 <div key={id} className="relative w-fit h-fit overflow-visible">
                     <Component
                         onClick={() => createAnimation(Component, index)}
-                        style={{ backgroundColor: `${color}FF` }}
+                        style={{
+                            backgroundColor: `${color}AA`,
+                            color: "black"
+                        }}
                         size={30}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
+                        className=" p-2 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
                     />
 
                     <AnimatePresence>
@@ -76,7 +86,13 @@ export default function NewQuizInteractiveIcons({ color }: { color: string | und
                                         },
                                     }}
                                 >
-                                    <Icon size={22} className="text-[#ff0033] drop-shadow-lg" />
+                                    <Icon
+                                        size={22}
+                                        className={` drop-shadow-lg`}
+                                        style={{
+                                            color: iconColor
+                                        }}
+                                    />
                                 </motion.div>
                             ))}
                     </AnimatePresence>
