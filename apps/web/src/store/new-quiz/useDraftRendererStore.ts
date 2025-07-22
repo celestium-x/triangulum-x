@@ -4,6 +4,7 @@ export enum DraftRenderer {
     THEME = 'THEME',
     QUESTION = 'QUESTION',
     INTERACTION = 'INTERACTION',
+    ADVANCED = 'ADVANCED',
     NONE = 'NONE',
 }
 
