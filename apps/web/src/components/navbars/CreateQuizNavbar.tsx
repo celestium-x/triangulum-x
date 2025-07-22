@@ -1,17 +1,23 @@
 import AppLogo from "../app/AppLogo";
 import DarkModeToggle from "../base/DarkModeToggle";
+import ProfileMenu from "../utility/ProfileMenu";
 import NavbarQuizAction from "./NavbarQuizAction";
 
+export interface CreateQuizNavBarProps {
+    quizId: string
+}
 
-export default function CreateQuizNavbar() {
+export default function CreateQuizNavBar() {
+
     return (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2  w-full max-w-4xl px-4 py-4 rounded-lg shadow-lg border bg-light-base dark:bg-dark-base">
+        <div className="w-full h-20 bg-light-base dark:bg-dark-base/30 flex items-center justify-between px-12">
             <div className="px-4 flex items-center justify-between w-full">
                 <AppLogo />
 
-                <div className="flex items-center">
+                <div className="flex items-center gap-x-5">
                     <DarkModeToggle />
                     <NavbarQuizAction />
+                    <ProfileMenu />
                 </div>
             </div>
         </div>

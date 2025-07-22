@@ -2,16 +2,17 @@ import Image from "next/image";
 import UtilityCard from "./UtilityCard";
 import { MdChevronRight } from "react-icons/md";
 import { DiCoda } from "react-icons/di";
+import UnclickableTicker from "../tickers/UnClickableTicker";
 
 export default function LandingPageCards() {
     return (
-        <div className="flex flex-col items-start justify-start p-20">
-
-            <div className="grid grid-cols-2 gap-8 mt-4 w-full">
+        <div className="flex flex-col items-start justify-start relative border-t dark:border-neutral-700 border-neutral-200 px-12">
+            <UnclickableTicker className="absolute -top-3 left-[60%]">features</UnclickableTicker>
+            <div className="grid grid-cols-2 gap-8 mt-4 w-full pt-20">
                 <UtilityCard className="min-w-[20rem] min-h-[18rem] max-h-[18rem] shadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden p-0 rounded-xl">
                     <div className="absolute inset-0">
                         <Image
-                            src="/images/test.jpg"
+                            src="/images/card-1.jpg"
                             alt="test"
                             className="object-cover scale-110"
                             fill
@@ -33,7 +34,7 @@ export default function LandingPageCards() {
                 <UtilityCard className="min-w-[20rem] min-h-[18rem] max-h-[18rem] shadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg grid-cols-1 relative overflow-hidden rounded-xl">
                     <div className="absolute inset-0 rounded-xl overflow-hidden">
                         <Image
-                            src="/images/test2.jpg"
+                            src="/images/card-3.jpg"
                             alt="test"
                             className="object-cover scale-110"
                             fill
@@ -58,7 +59,7 @@ export default function LandingPageCards() {
                 <UtilityCard className="min-w-[20rem] min-h-[18rem] max-h-[18rem] shadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden p-0 rounded-xl">
                     <div className="absolute inset-0">
                         <Image
-                            src="/images/test.jpg"
+                            src="/images/card-2.jpg"
                             alt="test"
                             className="object-cover scale-110"
                             fill
@@ -80,7 +81,7 @@ export default function LandingPageCards() {
                 <UtilityCard className="min-w-[20rem] min-h-[18rem] max-h-[18rem] shadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg grid-cols-1 relative overflow-hidden rounded-xl">
                     <div className="absolute inset-0 rounded-xl overflow-hidden">
                         <Image
-                            src="/images/test2.jpg"
+                            src="/images/card-1.jpg"
                             alt="test"
                             className="object-cover scale-110"
                             fill
@@ -101,7 +102,7 @@ export default function LandingPageCards() {
                 <UtilityCard className="min-w-[20rem] min-h-[18rem] max-h-[18rem] shadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg grid-cols-1 relative overflow-hidden rounded-xl">
                     <div className="absolute inset-0 rounded-xl overflow-hidden">
                         <Image
-                            src="/images/test.jpg"
+                            src="/images/card-2.jpg"
                             alt="test"
                             className="object-cover scale-110"
                             fill
