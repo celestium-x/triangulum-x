@@ -73,7 +73,7 @@ export const templates: Template[] = [
     {
         id: "BLUE",
         name: "Blue",
-        background_color: "#FFFFFF",
+        background_color: "#196cff",
         text_color: "#EEEEEE",
         border_color: "#000000",
         accent_type: "solid",

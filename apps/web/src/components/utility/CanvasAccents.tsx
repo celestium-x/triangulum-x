@@ -2,7 +2,7 @@ import React from 'react';
 
 interface CanvasAccentsProps {
     design: string;
-    accentColor: string;
+    accentColor: string | undefined;
 }
 
 export default function CanvasAccents({ design, accentColor }: CanvasAccentsProps) {
@@ -34,7 +34,7 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
                 return (
                     <div
                         className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 0 }}
+                        style={{ zIndex: 1 }}
                     >
                         <svg
                             className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%]"
@@ -102,7 +102,7 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
                 return (
                     <div
                         className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 0 }}
+                        style={{ zIndex: 1 }}
                     >
                         <svg
                             className="absolute bottom-0 left-0 w-full h-full"

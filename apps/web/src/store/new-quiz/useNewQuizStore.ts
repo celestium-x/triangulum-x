@@ -16,7 +16,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         id: "",
         title: "",
         description: "",
-        theme: TemplateEnum.CLASSIC,
+        theme: TemplateEnum.BLUE,
         prizePool: 0,
         currency: "",
         basePointsPerQuestion: 0,
