@@ -6,6 +6,7 @@ import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { IoIosCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { templates } from "@/lib/templates";
+import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
 
 enum SELECTION_MODE {
     CANVAS = "CANVAS",
@@ -66,25 +67,35 @@ export default function Canvas(): JSX.Element {
         return "text-xs";
     }
 
+    function getBarHeight(voteValue: number): string {
+        const percentage = Math.max(voteValue, 5);
+        return `max(${percentage * 0.8}%, 1.5rem)`;
+    }
+
+    function getResponsiveGap(): string {
+        const optionCount = currentQ?.options?.length || 4;
+        if (optionCount <= 2) return "gap-8 sm:gap-12 md:gap-16";
+        if (optionCount === 3) return "gap-4 sm:gap-8 md:gap-12";
+        return "gap-2 sm:gap-4 md:gap-6 lg:gap-8";
+    }
+
     return (
-        <div onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px]",
+        <div style={{ color: currentQTemplate?.text_color }} onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px]",
             selectionMode === SELECTION_MODE.CANVAS && selectedStyles
         )}>
             <div className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
                 {/* Question Section - Fixed at top */}
-                <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[90%] text-light-base z-10">
+                <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] text-light-base z-10">
                     <div onClick={questionTapHandler} className={cn("p-1 rounded-[10px]",
                         selectionMode === SELECTION_MODE.QUESTION && selectedStyles
                     )}>
                         <input
-                        
-                            style={{ color: currentQTemplate?.text_color }}
                             value={currentQ?.question}
                             onChange={handleQuestionChange}
                             className={cn(
-                                "w-full py-3 px-2 rounded-md transition-all duration-200 text-black",
+                                "w-full py-2 sm:py-3 px-2 rounded-md transition-all duration-200",
                                 getFontSizeClass(question)
                             )}
                             placeholder="Ask your question here"
@@ -92,40 +103,59 @@ export default function Canvas(): JSX.Element {
                     </div>
                 </div>
 
-                {/* Chart/Bars Section - Takes remaining space and positioned at bottom */}
-                <div className="flex-1 flex items-end justify-center p-4 pt-40">
-                    <div className="w-full max-w-3xl h-64 flex items-end justify-center gap-4">
-                        {currentQ?.options?.map((option, idx) => (
-                            <div key={idx} className="flex flex-col items-center h-full justify-end flex-1 max-w-[200px] min-w-[60px]">
-                                {/* Vote count and status */}
-                                <div className="flex items-center justify-start gap-x-1 sm:gap-x-2 mb-2 whitespace-nowrap w-full">
-                                    <div className="flex-shrink-0">
-                                        {currentQ.correctAnswer === idx ? (
-                                            <IoIosCheckmark size={16} className="sm:w-[18px] sm:h-[18px] text-green-600 bg-green-200 rounded-full border-[0.5px] border-green-500" />
-                                        ) : (
-                                            <RxCross2 className="bg-red-300 rounded-full p-1 text-red-950 w-4 h-4 sm:w-[18px] sm:h-[18px]" />
-                                        )}
-                                    </div>
-                                    <span className="text-sm sm:text-base lg:text-lg font-medium text-white">{Math.round(votes[idx]!)}</span>
-                                </div>
+                {/* Optoin section */}
+                <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-32 sm:pt-40">
+                    <div className={cn("w-full h-full flex flex-col items-end justify-center ",)}>
 
-                                {/* Bar */}
-                                <div
-                                    className="w-full rounded-t-lg transition-all duration-1000 ease-in-out border border-white/20"
-                                    style={{
-                                        height: `${Math.max(votes[idx]! * 2, 20)}px`,
-                                        backgroundColor: currentQTemplate?.bars[idx] || '#4F46E5'
-                                    }}
-                                />
+                        <div className={cn(
+                            "w-full h-full flex items-end justify-center ",
+                            getResponsiveGap()
+                        )}>
+                            {currentQ?.options?.map((option, idx) => (
+                                <div key={idx} className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1">
 
-                                {/* Option label */}
-                                <div className="mt-2 h-8 flex items-center justify-center">
-                                    <div className="text-xs sm:text-sm text-center px-1 leading-tight font-light text-white">
-                                        {option.length > 12 ? `${option.substring(0, 12)}...` : option}
+                                    <div className="flex items-center justify-center gap-x-1 mb-1 sm:mb-2 w-full">
+                                        <div className="flex-shrink-0">
+                                            {currentQ.correctAnswer === idx ? (
+                                                <IoIosCheckmark
+                                                    className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 bg-green-200 rounded-full border-[0.5px] border-green-500"
+                                                />
+                                            ) : (
+                                                <RxCross2 className="bg-red-300 rounded-full p-0.5 sm:p-1 text-red-950 w-3 h-3 sm:w-4 sm:h-4" />
+                                            )}
+                                        </div>
+                                        <span className="text-xs sm:text-sm lg:text-base font-medium text-white">
+                                            {Math.round(votes[idx]!)}
+                                        </span>
+                                    </div>
+
+                                    {/* Responsive Bar */}
+                                    <div
+                                        className="w-full rounded-t-md sm:rounded-t-lg transition-all duration-1000 ease-in-out border border-white/20 "
+                                        style={{
+                                            height: getBarHeight(votes[idx]!),
+                                            backgroundColor: currentQTemplate?.bars[idx] || '#4F46E5'
+                                        }}
+                                    />
+
+                                    {/* Option label - Responsive text */}
+                                    <div className="mt-1 sm:mt-2 min-h-[1.5rem] sm:min-h-[2rem] flex items-center justify-center w-full">
+                                        <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light text-white break-words">
+                                            {/* Responsive text truncation */}
+                                            <span className="hidden sm:inline">
+                                                {option.length > 15 ? `${option.substring(0, 15)}...` : option}
+                                            </span>
+                                            <span className="sm:hidden">
+                                                {option.length > 8 ? `${option.substring(0, 8)}...` : option}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )) || []}
+                            )) || []}
+                        </div>
+                        <div>
+                            <NewQuizInteractiveIcons color={currentQTemplate?.accent_color} />
+                        </div>
                     </div>
                 </div>
             </div>
