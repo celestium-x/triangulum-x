@@ -5,6 +5,7 @@ interface NewQuizStoreTypes {
     quiz: QuizType;
     updateQuiz: (quiz: QuizType) => void;
     addQuestion: () => void;
+    editQuestion: (currentQuestionIndex: number) => void;
     currentQuestionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     removeQuestion: (index: number) => void;
@@ -84,6 +85,10 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         };
         const quiz = get().quiz;
         set({ quiz: { ...quiz, questions: [...quiz.questions, question] } });
+    },
+
+    editQuestion: (currentQuestionIndex) => {
+        
     },
 
     removeQuestion: (index: number) => {
