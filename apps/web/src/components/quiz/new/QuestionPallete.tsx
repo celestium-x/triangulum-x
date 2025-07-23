@@ -7,7 +7,7 @@ import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { TbPlus } from 'react-icons/tb'
 
 export default function QuestionPallete() {
-    const { quiz, currentQuestionIndex, addQuestion } = useNewQuizStore();
+    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion } = useNewQuizStore();
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
     
     return (
@@ -28,6 +28,7 @@ export default function QuestionPallete() {
                         <div className="text-xs">{idx + 1}.</div>
                         <MiniCanvas 
                             currentQuestionIndex={currentQuestionIndex} 
+                            setCurrentQuestionIndex={setCurrentQuestionIndex}
                             template={currentQTemplate} 
                             question={question} 
                             questionIndex={idx} 
