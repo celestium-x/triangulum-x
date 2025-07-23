@@ -20,7 +20,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         prizePool: 0,
         currency: "",
         basePointsPerQuestion: 0,
-        pointsMultiplier: 0,
+        pointsMultiplier: 1,
         timeBonus: false,
         eliminationThreshold: 0,
         questionTimeLimit: 0,

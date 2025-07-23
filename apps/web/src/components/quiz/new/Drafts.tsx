@@ -3,6 +3,7 @@ import QuestionsDraft from "./QuestionsDraft";
 import ThemesDraft from "./ThemesDraft";
 import InteractionsDraft from "./InteractionsDraft";
 import UtilityCard from "@/components/utility/UtilityCard";
+import AdvancedDraft from "./AdvancedDraft";
 
 export default function Drafts() {
     const { state } = useDraftRendererStore();
@@ -15,6 +16,8 @@ export default function Drafts() {
                 return <ThemesDraft />
             case DraftRenderer.INTERACTION:
                 return <InteractionsDraft />
+            case DraftRenderer.ADVANCED:
+                return <AdvancedDraft/>
         }
     }
 
