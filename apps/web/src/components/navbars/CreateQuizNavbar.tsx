@@ -15,6 +15,10 @@ export default function CreateQuizNavBar() {
                 <AppLogo />
 
                 <div className="flex items-center gap-x-5">
+                    <div className="flex items-center gap-x-2">
+                        <div className="h-2 w-2 rounded-full bg-green-600"></div>
+                        <span className="text-neutral-500 dark:text-neutral-400 text-xs underline cursor-pointer">auto save is on</span>
+                    </div>
                     <DarkModeToggle />
                     <NavbarQuizAction />
                     <ProfileMenu />

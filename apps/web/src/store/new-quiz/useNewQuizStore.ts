@@ -3,9 +3,9 @@ import { create } from "zustand";
 
 interface NewQuizStoreTypes {
     quiz: QuizType;
-    updateQuiz: (quiz: QuizType) => void;
+    updateQuiz: (quiz: Partial<QuizType>) => void;
     addQuestion: () => void;
-    editQuestion: (currentQuestionIndex: number) => void;
+    editQuestion: (questionIndex: number, question: Partial<QuestionType>) => void;
     currentQuestionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     removeQuestion: (index: number) => void;
@@ -20,7 +20,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         prizePool: 0,
         currency: "",
         basePointsPerQuestion: 0,
-        pointsMultiplier: 0,
+        pointsMultiplier: 1,
         timeBonus: false,
         eliminationThreshold: 0,
         questionTimeLimit: 0,
@@ -31,34 +31,19 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         scheduledAt: null,
         startedAt: null,
         endedAt: null,
-        questions: [
-            {
-                id: "",
-                question: "What is the largest planet in our solar system?",
-                options: ['Mercury', 'Venus', 'Earth', 'Jupiter'],
-                correctAnswer: 3,
-                explanation: "Jupiter is the largest planet in our solar system.",
-                difficulty: 1,
-                basePoints: 100,
-                timeLimit: 30,
-                orderIndex: 0,
-                imageUrl: "",
-                quizId: ""
-            },
-            {
-                id: "",
-                question: "Who wrote the play 'Romeo and Juliet'?",
-                options: ['Charles Dickens', 'William Shakespeare', 'Mark Twain', 'Jane Austen'],
-                correctAnswer: 1,
-                explanation: "William Shakespeare wrote the tragedy 'Romeo and Juliet'.",
-                difficulty: 1,
-                basePoints: 100,
-                timeLimit: 30,
-                orderIndex: 1,
-                imageUrl: "",
-                quizId: ""
-            }
-        ]
+        questions: Array.from({ length: 10 }, (_, index) => ({
+            id: "",
+            question: "What is the largest planet in our solar system?",
+            options: ['Mercury', 'Venus', 'Earth', 'Jupiter'],
+            correctAnswer: 3,
+            explanation: "Jupiter is the largest planet in our solar system.",
+            difficulty: 1,
+            basePoints: 100,
+            timeLimit: 30,
+            orderIndex: index,
+            imageUrl: "",
+            quizId: ""
+        }))
     },
 
     currentQuestionIndex: 0,
@@ -87,13 +72,27 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         set({ quiz: { ...quiz, questions: [...quiz.questions, question] } });
     },
 
-    editQuestion: (currentQuestionIndex) => {
-        console.log(currentQuestionIndex);
+    editQuestion: (questionIndex: number, question: Partial<QuestionType>) => {
+        const quiz = get().quiz;
+        set({
+            quiz: {
+                ...quiz,
+                questions: quiz.questions.map((q, index) =>
+                    index === questionIndex ? { ...q, ...question } : q
+                )
+            }
+        });
     },
 
     removeQuestion: (index: number) => {
         const quiz = get().quiz;
-        set({ quiz: { ...quiz, questions: quiz.questions.filter((_, i) => i !== index) } });
-    }
+        const updatedQuestions = quiz.questions
+            .filter((_, i) => i !== index)
+            .map((q, i) => ({ ...q, orderIndex: i }));
 
+        set({
+            quiz: { ...quiz, questions: updatedQuestions },
+            currentQuestionIndex: Math.min(get().currentQuestionIndex, updatedQuestions.length - 1)
+        });
+    }
 }));

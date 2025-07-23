@@ -53,7 +53,6 @@ export default function NavbarQuizAction() {
         >
             <ToolTipComponent content={"this will be saved every 30sec"} >
                 <div className="w-full flex justify-around items-center gap-x-2 bg-primary/50 transition-colors rounded-full cursor-pointer px-4 py-2 ">
-                    <div className="h-2 w-2 rounded-full bg-green-600"></div>
                     <div className="rounded-l-full text-[13px] font-normal flex justify-center items-center ">
                         {currentAction ?? actions[1]?.name}
                     </div>
