@@ -8,15 +8,17 @@ interface MiniCanvasProps {
     question: QuestionType;
     currentQuestionIndex: number;
     questionIndex: number;
+    setCurrentQuestionIndex: (index: number) => void;
 }
 
-export default function MiniCanvas({ template, question, currentQuestionIndex, questionIndex }: MiniCanvasProps) {
+export default function MiniCanvas({ template, question, currentQuestionIndex, questionIndex, setCurrentQuestionIndex }: MiniCanvasProps) {
     const selectedStyles = "border-2 border-[#5e59b3]";
     
     return (
         <div
+            onClick={() => setCurrentQuestionIndex(question.orderIndex)}
             className={cn(
-                "w-full rounded-md h-18 p-0.5",
+                "w-full rounded-md h-18 p-0.5 cursor-pointer",
                 currentQuestionIndex === question.orderIndex && selectedStyles
             )}
             style={{ boxSizing: 'border-box' }}
