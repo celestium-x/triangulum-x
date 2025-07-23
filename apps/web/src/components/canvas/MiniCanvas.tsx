@@ -30,9 +30,8 @@ export default function MiniCanvas({ template, question, currentQuestionIndex, q
                 }}
                 className="w-full h-full rounded-sm flex items-center justify-center overflow-hidden relative group"
             >
-                <div className="text-[5px] text-center bg-dark-base rounded-full absolute top-2 left-2 px-2 py-1 hidden group-hover:block">
+                <div className="text-[5px] text-center text-light-base bg-dark-base rounded-full absolute top-2 left-2 px-2 py-1 hidden group-hover:block">
                     Question {questionIndex + 1}
-                    {question.basePoints}
                 </div>
                 <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
                 <div className="text-xs">

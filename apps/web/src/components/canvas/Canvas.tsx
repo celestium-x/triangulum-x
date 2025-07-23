@@ -9,6 +9,7 @@ import { templates } from "@/lib/templates";
 import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
 import CanvasAccents from "../utility/CanvasAccents";
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
+import QuestionFormattingToolbar from "../quiz/new/QuestionFormattingToolbar";
 
 export enum SELECTION_MODE {
     CANVAS = "CANVAS",
@@ -23,6 +24,12 @@ export default function Canvas(): JSX.Element {
     const selectedStyles = "border-2 border-[#5e59b3]";
     const [copied, setCopied] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
+    
+    // Formatting states
+    const [isBold, setIsBold] = useState<boolean>(false);
+    const [isItalic, setIsItalic] = useState<boolean>(false);
+    const [isUnderline, setIsUnderline] = useState<boolean>(false);
+    
     const { currentQuestionIndex, quiz } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
@@ -60,6 +67,22 @@ export default function Canvas(): JSX.Element {
 
     function handleQuestionChange(e: ChangeEvent<HTMLInputElement>) {
         setQuestion(e.target.value);
+    }
+
+    // Formatting handlers
+    function handleBold() {
+        setIsBold(!isBold);
+        // Add your bold formatting logic here
+    }
+
+    function handleItalic() {
+        setIsItalic(!isItalic);
+        // Add your italic formatting logic here
+    }
+
+    function handleUnderline() {
+        setIsUnderline(!isUnderline);
+        // Add your underline formatting logic here
     }
 
     function getFontSizeClass(text: string): string {
@@ -115,15 +138,32 @@ export default function Canvas(): JSX.Element {
                             onChange={handleQuestionChange}
                             className={cn(
                                 "w-full py-2 sm:py-3 px-2 rounded-md transition-all duration-200",
-                                getFontSizeClass(question)
+                                getFontSizeClass(question),
+                                isBold && "font-bold",
+                                isItalic && "italic",
+                                isUnderline && "underline"
                             )}
                             placeholder="Ask your question here"
                         />
                     </div>
+                    
+                    {/* Formatting Toolbar - Only show when question is selected */}
+                    {selectionMode === SELECTION_MODE.QUESTION && (
+                        <div className="mt-2 flex justify-center">
+                            <QuestionFormattingToolbar
+                                onBold={handleBold}
+                                onItalic={handleItalic}
+                                onUnderline={handleUnderline}
+                                isBold={isBold}
+                                isItalic={isItalic}
+                                isUnderline={isUnderline}
+                            />
+                        </div>
+                    )}
                 </div>
 
-                {/* Option section */}
-                <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-32 sm:pt-40">
+                {/* Option section - Adjusted padding to account for toolbar */}
+                <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-40 sm:pt-48">
                     <div className={cn("w-full h-full flex flex-col items-end justify-center mb-6",)}>
 
                         <div className={cn(
