@@ -9,6 +9,7 @@ import ProfileMenu from "../utility/ProfileMenu";
 import { useRouter } from "next/navigation";
 import { v4 as uuid } from 'uuid'
 
+
 export default function HomeNavbar() {
     const isWalletConnected = false;
     const walletAddress = "";
