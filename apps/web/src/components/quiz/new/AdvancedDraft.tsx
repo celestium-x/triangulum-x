@@ -5,8 +5,8 @@ import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { Input } from "@/components/ui/input";
-import { getSingletonPointsCalculator } from "@/singletons/SingletonPointsCalculator";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
+import { getSingletonPointsCalculator } from "@/singletons/singletonPointsCalculator";
 
 export default function AdvancedDraft() {
     const [enabled, setEnabled] = useState<boolean>(false);
