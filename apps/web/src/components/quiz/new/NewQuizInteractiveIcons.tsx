@@ -1,28 +1,18 @@
 'use client'
 
-import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsFillHandThumbsUpFill } from "react-icons/bs";
 import { MdEmojiEmotions } from "react-icons/md";
 import { FaHeart, FaLightbulb } from "react-icons/fa6";
 import { PiCurrencyCircleDollarFill } from "react-icons/pi";
-import { IconType } from "react-icons/lib";
-import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
-import { cn } from "@/lib/utils";
-import { SELECTION_MODE } from "@/components/canvas/Canvas";
 
-interface icon {
-    id: string,
-    Component: IconType,
-    iconColor: string
-}
-
-const icons: icon[] = [
-    { id: 'heart', Component: FaHeart, iconColor: "#E53E3E" },
-    { id: 'dollar', Component: PiCurrencyCircleDollarFill, iconColor: "#38A169" },
-    { id: 'lightbulb', Component: FaLightbulb, iconColor: "#252525" },
-    { id: 'thumbs', Component: BsFillHandThumbsUpFill, iconColor: "#3182CE" },
-    { id: 'smile', Component: MdEmojiEmotions, iconColor: "#F6AD55" },
+const icons = [
+    { id: 'heart', Component: FaHeart },
+    { id: 'dollar', Component: PiCurrencyCircleDollarFill },
+    { id: 'lightbulb', Component: FaLightbulb },
+    { id: 'thumbs', Component: BsFillHandThumbsUpFill },
+    { id: 'smile', Component: MdEmojiEmotions },
 ];
 
 interface AnimationIcon {
@@ -31,15 +21,8 @@ interface AnimationIcon {
     containerIndex: number;
 }
 
-interface NewQuizInteractiveIconsProps {
-    selectionMode: SELECTION_MODE;
-    setSelectionMode: Dispatch<SetStateAction<SELECTION_MODE>>;
-}
-
-export default function NewQuizInteractiveIcons({  selectionMode, setSelectionMode }: NewQuizInteractiveIconsProps) {
+export default function NewQuizInteractiveIcons({ color }: { color: string | undefined }) {
     const [animatingIcons, setAnimatingIcons] = useState<AnimationIcon[]>([]);
-    const { setState } = useDraftRendererStore();
-    const selectedStyles = "border-2 border-[#5e59b3]";
 
     function createAnimation(Icon: React.ElementType, containerIndex: number) {
         const newIcon = {
@@ -54,26 +37,15 @@ export default function NewQuizInteractiveIcons({  selectionMode, setSelectionMo
         }, 2200);
     }
 
-    function interactionDivTapHandler(e: MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-        setSelectionMode(SELECTION_MODE.INTERACTION);
-        setState(DraftRenderer.INTERACTION)
-    }
-
     return (
-        <div onClick={interactionDivTapHandler} className={cn("flex items-center justify-end gap-x-4 z-20 rounded-[12px] px-4 py-2",
-            selectionMode === SELECTION_MODE.INTERACTION && selectedStyles
-        )}>
-            {icons.map(({ id, Component, iconColor }, index) => (
+        <div className="flex items-center justify-end gap-x-4">
+            {icons.map(({ id, Component }, index) => (
                 <div key={id} className="relative w-fit h-fit overflow-visible">
                     <Component
                         onClick={() => createAnimation(Component, index)}
-                        style={{
-                            backgroundColor: `#00000070`,
-                            color: "#EEEEEEca"
-                        }}
-                        size={24}
-                        className=" p-1.5 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
+                        style={{ backgroundColor: `${color}FF` }}
+                        size={30}
+                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-full transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-md cursor-pointer"
                     />
 
                     <AnimatePresence>
@@ -104,13 +76,7 @@ export default function NewQuizInteractiveIcons({  selectionMode, setSelectionMo
                                         },
                                     }}
                                 >
-                                    <Icon
-                                        size={22}
-                                        className={` drop-shadow-lg`}
-                                        style={{
-                                            color: iconColor
-                                        }}
-                                    />
+                                    <Icon size={22} className="text-[#ff0033] drop-shadow-lg" />
                                 </motion.div>
                             ))}
                     </AnimatePresence>
