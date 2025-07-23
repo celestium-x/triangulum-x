@@ -20,7 +20,7 @@ export default function JoinQuizCodeTicker() {
 
     return (
         <ToolTipComponent content="The code lets your audience join the presentation and expires in 2 days">
-            <div className={cn("bg-neutral-200 px-3 py-1.5 rounded-md font-light z-20",
+            <div className={cn("bg-neutral-200 px-3 py-1.5 rounded-md font-light",
                 "flex items-center justify-center gap-x-2 absolute top-2 -translate-x-1/2 left-1/2 cursor-pointer"
             )}>
 

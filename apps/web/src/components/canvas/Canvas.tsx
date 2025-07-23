@@ -7,14 +7,11 @@ import { IoIosCheckmark } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { templates } from "@/lib/templates";
 import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
-import CanvasAccents from "../utility/CanvasAccents";
-import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
 
-export enum SELECTION_MODE {
+enum SELECTION_MODE {
     CANVAS = "CANVAS",
     OPTION = "OPTION",
-    QUESTION = "QUESTION",
-    INTERACTION = 'INTERACTION'
+    QUESTION = "QUESTION"
 }
 
 export default function Canvas(): JSX.Element {
@@ -26,7 +23,6 @@ export default function Canvas(): JSX.Element {
     const { currentQuestionIndex, quiz } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
-    const { setState } = useDraftRendererStore();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -51,7 +47,6 @@ export default function Canvas(): JSX.Element {
     function questionTapHandler(e: MouseEvent<HTMLDivElement>) {
         e.stopPropagation();
         setSelectionMode(SELECTION_MODE.QUESTION);
-        setState(DraftRenderer.QUESTION);
     }
 
     function canvasTapHandler() {
@@ -85,31 +80,17 @@ export default function Canvas(): JSX.Element {
     }
 
     return (
-        <div 
-            style={{ 
-                color: currentQTemplate?.text_color,
-                boxSizing: 'border-box'
-            }} 
-            onClick={canvasTapHandler} 
-            className={cn(
-                "w-full h-full p-0.5 rounded-[12px] relative overflow-hidden",
-                selectionMode === SELECTION_MODE.CANVAS && selectedStyles
-            )}
-        >
-            <CanvasAccents design="slash" accentColor={currentQTemplate?.accent_color} />
-            <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
+        <div style={{ color: currentQTemplate?.text_color }} onClick={canvasTapHandler} className={cn("w-full h-full p-0.5 rounded-[12px]",
+            selectionMode === SELECTION_MODE.CANVAS && selectedStyles
+        )}>
+            <div className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
                 {/* Question Section - Fixed at top */}
                 <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] text-light-base z-10">
-                    <div 
-                        onClick={questionTapHandler} 
-                        className={cn(
-                            "p-1 rounded-[10px]",
-                            selectionMode === SELECTION_MODE.QUESTION && selectedStyles
-                        )}
-                        style={{ boxSizing: 'border-box' }}
-                    >
+                    <div onClick={questionTapHandler} className={cn("p-1 rounded-[10px]",
+                        selectionMode === SELECTION_MODE.QUESTION && selectedStyles
+                    )}>
                         <input
                             value={currentQ?.question}
                             onChange={handleQuestionChange}
@@ -122,9 +103,9 @@ export default function Canvas(): JSX.Element {
                     </div>
                 </div>
 
-                {/* Option section */}
+                {/* Optoin section */}
                 <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-32 sm:pt-40">
-                    <div className={cn("w-full h-full flex flex-col items-end justify-center mb-6",)}>
+                    <div className={cn("w-full h-full flex flex-col items-end justify-center ",)}>
 
                         <div className={cn(
                             "w-full h-full flex items-end justify-center ",
@@ -150,10 +131,10 @@ export default function Canvas(): JSX.Element {
 
                                     {/* Responsive Bar */}
                                     <div
-                                        className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 "
+                                        className="w-full rounded-t-md sm:rounded-t-lg transition-all duration-1000 ease-in-out border border-white/20 "
                                         style={{
                                             height: getBarHeight(votes[idx]!),
-                                            backgroundColor: `${currentQTemplate?.bars[idx]}` || '#4F46E5'
+                                            backgroundColor: currentQTemplate?.bars[idx] || '#4F46E5'
                                         }}
                                     />
 
@@ -172,8 +153,8 @@ export default function Canvas(): JSX.Element {
                                 </div>
                             )) || []}
                         </div>
-                        <div className="absolute bottom-1 right-1">
-                            <NewQuizInteractiveIcons selectionMode={selectionMode} setSelectionMode={setSelectionMode} />
+                        <div>
+                            <NewQuizInteractiveIcons color={currentQTemplate?.accent_color} />
                         </div>
                     </div>
                 </div>
