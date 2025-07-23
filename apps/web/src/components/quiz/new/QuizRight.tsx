@@ -6,6 +6,35 @@ import { BiSolidMessageEdit } from "react-icons/bi";
 import { MdAddReaction } from "react-icons/md";
 import Drafts from "./Drafts";
 
+interface option {
+    name: string,
+    type: DraftRenderer,
+    icon: React.ReactNode
+}
+
+const options: option[] = [
+    {
+        name: "QUESTION",
+        type: DraftRenderer.QUESTION,
+        icon: <BiSolidMessageEdit className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
+    },
+    {
+        name: "THEME",
+        type: DraftRenderer.THEME,
+        icon: <BiSolidMessageEdit className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
+    },
+    {
+        name: "INTERACTION",
+        type: DraftRenderer.INTERACTION,
+        icon: <MdAddReaction className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
+    },
+    {
+        name: "ADVANCED",
+        type: DraftRenderer.ADVANCED,
+        icon: <MdAddReaction className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
+    }
+]
+
 export default function QuizRight(): JSX.Element {
     const { state, setState } = useDraftRendererStore();
 
@@ -17,44 +46,23 @@ export default function QuizRight(): JSX.Element {
             )}>
                 <div className="w-[6rem] flex-shrink-0">
                     <div className="bg-light-base dark:bg-dark-base/30 rounded-xl overflow-hidden p-1 flex flex-col gap-y-2 border-[1px] border-neutral-300 dark:border-neutral-700">
-                        <Button
-                            type="button"
-                            onClick={() => setState(DraftRenderer.QUESTION)}
-                            className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.QUESTION && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
-                            )}
-                        >
-                            <div className="flex flex-col items-center justify-center gap-y-1">
-                                <BiSolidMessageEdit className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
-                                <span className="text-neutral-900 dark:text-neutral-100 text-xs">Question</span>
-                            </div>
-                        </Button>
 
-                        <Button
-                            type="button"
-                            onClick={() => setState(DraftRenderer.THEME)}
-                            className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.THEME && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
-                            )}
-                        >
-                            <div className="flex flex-col items-center justify-center gap-y-1">
-                                <BiSolidMessageEdit className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
-                                <span className="text-neutral-900 dark:text-neutral-100 text-xs">Theme</span>
-                            </div>
-                        </Button>
+                        {options.map((option, index) => (
+                            <Button
+                                type="button"
+                                onClick={() => setState(option.type)}
+                                className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
+                                    `${state === option.type && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
+                                )}
+                                key={index}
+                            >
+                                <div className="flex flex-col items-center justify-center gap-y-1">
+                                    {option.icon}
+                                    <span className="text-neutral-900 dark:text-neutral-100 text-xs">{option.name}</span>
+                                </div>
+                            </Button>
+                        ))}
 
-                        <Button
-                            type="button"
-                            onClick={() => setState(DraftRenderer.INTERACTION)}
-                            className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                `${state === DraftRenderer.INTERACTION && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
-                            )}
-                        >
-                            <div className="flex flex-col items-center justify-center gap-y-1">
-                                <MdAddReaction className="w-6 h-6 text-neutral-900 dark:text-neutral-100" />
-                                <span className="text-neutral-900 dark:text-neutral-100 text-xs">Interaction</span>
-                            </div>
-                        </Button>
                     </div>
                 </div>
 
