@@ -5,12 +5,10 @@ import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { Input } from "@/components/ui/input";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 
 export default function AdvancedDraft() {
     const [enabled, setEnabled] = useState<boolean>(false);
     const { setState } = useDraftRendererStore();
-    const { quiz } = useNewQuizStore();
     const [pointMultiplier, setPointMultiplier] = useState<string>("1.2");
 
 
