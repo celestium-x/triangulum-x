@@ -6,6 +6,7 @@ export enum DraftRenderer {
     INTERACTION = 'INTERACTION',
     ADVANCED = 'ADVANCED',
     STAKE = 'STAKE',
+    AUTO_SAVE="AUTO_SAVE",
     NONE = 'NONE',
 }
 

@@ -16,8 +16,10 @@ export default function Drafts() {
                 return <ThemesDraft />
             case DraftRenderer.INTERACTION:
                 return <InteractionsDraft />
-            case DraftRenderer.ADVANCED:
-                return <AdvancedDraft/>
+            case DraftRenderer.ADVANCED || DraftRenderer.AUTO_SAVE:
+                return <AdvancedDraft />
+            case DraftRenderer.NONE:
+                return null;
         }
     }
 

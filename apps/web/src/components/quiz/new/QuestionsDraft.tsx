@@ -9,16 +9,10 @@ import { TfiLayoutListPost } from "react-icons/tfi";
 import { Input } from "@/components/ui/input";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 
-
-
-
 export default function QuestionsDraft() {
     const { setState } = useDraftRendererStore();
     const { quiz, currentQuestionIndex } = useNewQuizStore();
-    const currentQ = quiz.questions[currentQuestionIndex]; 
-
-
-
+    const currentQ = quiz.questions[currentQuestionIndex];
     return (
         <div className="text-neutral-900 dark:text-neutral-100 flex flex-col justify-start items-start gap-y-4">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
@@ -30,23 +24,20 @@ export default function QuestionsDraft() {
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">Base Points</span>
-                    <ToolTipComponent content="Choose base points for this quiz">
+                    <ToolTipComponent content="This is the base points for this question">
                         <AiOutlineQuestionCircle size={15} />
                     </ToolTipComponent>
                 </div>
                 <div className="flex w-full items-center justify-between mt-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Add base points for this quiz</span>
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Add a relevant image to this question</span>
                 </div>
-
                 <Input
-                    className="mt-5"
                     value={currentQ?.basePoints}
+                    className="mt-3"
                     disabled={quiz.pointsMultiplier === 1}
                 />
             </div>
 
-
-            {/* Add Image */}
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">Add Image</span>
@@ -58,7 +49,7 @@ export default function QuestionsDraft() {
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">Add a relevant image to this question</span>
                 </div>
 
-                <div className="w-full border border-neutral-300 dark:border-neutral-700 hover:border-[#5e59b3] transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center gap-x-4 cursor-pointer mt-5 px-3 py-1">
+                <div className="w-full border border-neutral-300 dark:border-neutral-700 hover:border-[#5e59b3] transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center gap-x-4 cursor-pointer mt-4 px-3 py-1">
                     <FaMountainSun size={32} />
                     <div className="max-w-[70%]">
                         <span className="text-xs text-neutral-500 dark:text-neutral-400">
@@ -67,7 +58,7 @@ export default function QuestionsDraft() {
                     </div>
                 </div>
 
-                <div className="flex flex-row items-center gap-x-2 mt-3 dark:text-neutral-300 text-neutral-700">
+                <div className="flex flex-row items-center gap-x-2 mt-5 dark:text-neutral-300 text-neutral-700">
                     <div className="flex items-center justify-evenly w-16 border-2 border-neutral-400 px-1 py-2 rounded-sm">
                         <FaSquare size={20} className="rotate-90" />
                         <TfiLayoutListPost />
