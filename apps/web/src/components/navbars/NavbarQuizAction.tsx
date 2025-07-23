@@ -30,20 +30,18 @@ const actions: action[] = [
     }
 ]
 
-const SECONDS = 1000;
+// const SECONDS = 1000;
 
 export default function NavbarQuizAction() {
     const [actionsPanel, setActionsPanel] = useState<boolean>(false);
     const [currentAction, setCurrentAction] = useState<string | null>(null);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            //backend call to update the quiz automatically
-            console.log("backend call made");
-        }, 3 * SECONDS)
-        return () => {
-            clearInterval(interval);
-        }
+        // const interval = setInterval(() => {
+        // }, 3 * SECONDS)
+        // return () => {
+        //     clearInterval(interval);
+        // }
     }, [])
 
     return (

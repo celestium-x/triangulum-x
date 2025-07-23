@@ -9,6 +9,7 @@ interface NewQuizStoreTypes {
     currentQuestionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     removeQuestion: (index: number) => void;
+    updateQuestionPoints: (points: number[]) => void
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
@@ -19,7 +20,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         theme: TemplateEnum.BLUE,
         prizePool: 0,
         currency: "",
-        basePointsPerQuestion: 0,
+        basePointsPerQuestion: 100,
         pointsMultiplier: 0,
         timeBonus: false,
         eliminationThreshold: 0,
@@ -94,5 +95,21 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             quiz: { ...quiz, questions: updatedQuestions },
             currentQuestionIndex: Math.min(get().currentQuestionIndex, updatedQuestions.length - 1)
         });
+    },
+
+    updateQuestionPoints: (points: number[]) => {
+        const quiz = get().quiz;
+        const newQuestions: QuestionType[] = quiz.questions.map((qs: QuestionType, index: number) => {
+            return {
+                ...qs,
+                basePoints: points[index]!
+            }
+        });
+        set({
+            quiz: {
+                ...quiz,
+                questions: newQuestions
+            },
+        })
     }
 }));
