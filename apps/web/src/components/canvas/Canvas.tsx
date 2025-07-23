@@ -1,14 +1,14 @@
 'use client';
 import { cn } from "@/lib/utils";
-import { JSX, useEffect, useState, MouseEvent, ChangeEvent } from "react";
+import { JSX, useEffect, useState, MouseEvent } from "react";
 import JoinQuizCodeTicker from "../quiz/new/JoinquizCodeTicker";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { IoIosCheckmark } from "react-icons/io";
-import { RxCross2 } from "react-icons/rx";
 import { templates } from "@/lib/templates";
 import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
 import CanvasAccents from "../utility/CanvasAccents";
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
+import CanvasOptions from "./CanvasOptions";
+import CanvasHeading from "./CanvasHeading";
 
 export enum SELECTION_MODE {
     CANVAS = "CANVAS",
@@ -23,7 +23,7 @@ export default function Canvas(): JSX.Element {
     const selectedStyles = "border-2 border-[#5e59b3]";
     const [copied, setCopied] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
-    const { currentQuestionIndex, quiz } = useNewQuizStore();
+    const { currentQuestionIndex, quiz, editQuestion } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
     const { setState } = useDraftRendererStore();
@@ -58,8 +58,10 @@ export default function Canvas(): JSX.Element {
         setSelectionMode(SELECTION_MODE.CANVAS);
     }
 
-    function handleQuestionChange(e: ChangeEvent<HTMLInputElement>) {
-        setQuestion(e.target.value);
+    function handleQuestionChange(value: string | undefined) {
+        if (value === undefined) return;
+        setQuestion(value);
+        editQuestion(currentQuestionIndex, { question: value });
     }
 
     function getFontSizeClass(text: string): string {
@@ -85,45 +87,27 @@ export default function Canvas(): JSX.Element {
     }
 
     return (
-        <div 
-            style={{ 
+        <div
+            style={{
                 color: currentQTemplate?.text_color,
                 boxSizing: 'border-box'
-            }} 
-            onClick={canvasTapHandler} 
+            }}
+            onClick={canvasTapHandler}
             className={cn(
                 "w-full h-full p-0.5 rounded-[12px] relative overflow-hidden",
                 selectionMode === SELECTION_MODE.CANVAS && selectedStyles
             )}
         >
             <CanvasAccents design={currentQTemplate?.accent_type} accentColor={currentQTemplate?.accent_color} />
+
             <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
-                {/* Question Section - Fixed at top */}
                 <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-10">
-                    <div 
-                        onClick={questionTapHandler} 
-                        className={cn(
-                            "p-1 rounded-[10px]",
-                            selectionMode === SELECTION_MODE.QUESTION && selectedStyles
-                        )}
-                        style={{ boxSizing: 'border-box' }}
-                    >
-                        <input
-                            value={currentQ?.question}
-                            onChange={handleQuestionChange}
-                            className={cn(
-                                "w-full py-2 sm:py-3 px-2 rounded-md transition-all duration-200",
-                                getFontSizeClass(question)
-                            )}
-                            placeholder="Ask your question here"
-                        />
-                    </div>
+                    <CanvasHeading question={question} currentQ={currentQ} handleQuestionChange={handleQuestionChange} questionTapHandler={questionTapHandler} getFontSizeClass={getFontSizeClass} selectionMode={selectionMode} />
                 </div>
 
-                {/* Option section */}
-                <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-32 sm:pt-40">
+                <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-40 sm:pt-48">
                     <div className={cn("w-full h-full flex flex-col items-end justify-center mb-6",)}>
 
                         <div className={cn(
@@ -131,45 +115,15 @@ export default function Canvas(): JSX.Element {
                             getResponsiveGap()
                         )}>
                             {currentQ?.options?.map((option, idx) => (
-                                <div key={idx} className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1">
-
-                                    <div className="flex items-center justify-center gap-x-1 mb-1 sm:mb-2 w-full">
-                                        <div className="flex-shrink-0">
-                                            {currentQ.correctAnswer === idx ? (
-                                                <IoIosCheckmark
-                                                    className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 bg-green-200 rounded-full border-[0.5px] border-green-500"
-                                                />
-                                            ) : (
-                                                <RxCross2 className="bg-red-300 rounded-full p-0.5 sm:p-1 text-red-950 w-3 h-3 sm:w-4 sm:h-4" />
-                                            )}
-                                        </div>
-                                        <span className="text-xs sm:text-sm lg:text-base font-medium">
-                                            {Math.round(votes[idx]!)}
-                                        </span>
-                                    </div>
-
-                                    {/* Responsive Bar */}
-                                    <div
-                                        className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
-                                        style={{
-                                            height: getBarHeight(votes[idx]!),
-                                            backgroundColor: `${currentQTemplate?.bars[idx]}` || '#4F46E5'
-                                        }}
-                                    />
-
-                                    {/* Option label - Responsive text */}
-                                    <div className="mt-1 sm:mt-2 min-h-[1.5rem] sm:min-h-[2rem] flex items-center justify-center w-full">
-                                        <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light break-words">
-                                            {/* Responsive text truncation */}
-                                            <span className="hidden sm:inline">
-                                                {option.length > 15 ? `${option.substring(0, 15)}...` : option}
-                                            </span>
-                                            <span className="sm:hidden">
-                                                {option.length > 8 ? `${option.substring(0, 8)}...` : option}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CanvasOptions
+                                    key={idx}
+                                    idx={idx}
+                                    option={option}
+                                    votes={votes}
+                                    currentQ={currentQ}
+                                    currentQTemplate={currentQTemplate}
+                                    getBarHeight={getBarHeight}
+                                />
                             )) || []}
                         </div>
                         <div className="absolute bottom-1 right-1">

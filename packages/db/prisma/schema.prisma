@@ -48,9 +48,10 @@ model Quiz {
 
   eliminationThreshold Float @default(0.5)
 
-  questionTimeLimit     Int        @default(30)
-  breakBetweenQuestions Int        @default(5)
-  status                QuizStatus @default(CREATED)
+  questionTimeLimit     Int            @default(30)
+  breakBetweenQuestions Int            @default(5)
+  status                QuizStatus     @default(CREATED)
+  interactions          Interactions[]
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -66,7 +67,7 @@ model Quiz {
 }
 
 model Question {
-  id            String  @id @default(cuid())
+  id            String   @id @default(cuid())
   question      String
   options       String[]
   correctAnswer Int
@@ -102,7 +103,6 @@ enum Template {
   GREEN
   BLUE
 }
-
 
 enum Interactions {
   THUMBS_UP

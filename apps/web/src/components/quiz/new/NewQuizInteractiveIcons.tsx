@@ -61,7 +61,7 @@ export default function NewQuizInteractiveIcons({  selectionMode, setSelectionMo
     }
 
     return (
-        <div onClick={interactionDivTapHandler} className={cn("flex items-center justify-end gap-x-4 z-20 rounded-[12px] px-4 py-2",
+        <div onClick={interactionDivTapHandler} className={cn("flex items-center justify-end gap-x-4 z-50 rounded-[12px] px-4 py-2",
             selectionMode === SELECTION_MODE.INTERACTION && selectedStyles
         )}>
             {icons.map(({ id, Component, iconColor }, index) => (

@@ -84,3 +84,11 @@ export enum QuizStatusEnum {
     PAYOUT_PENDING = "PAYOUT_PENDING",
     PAYOUT_COMPLETED = "PAYOUT_COMPLETED",
 }
+
+export enum Interactions {
+    THUMBS_UP = "THUMBS_UP",
+    DOLLAR = "DOLLAR",
+    BULB = "BULB",
+    HEART = "HEART",
+    SMILE = "SMILE",
+}

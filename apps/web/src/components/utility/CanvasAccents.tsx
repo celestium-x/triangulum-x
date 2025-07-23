@@ -11,8 +11,8 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
             case 'circle':
                 return (
                     <div
-                        className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 1 }}
+                        className="absolute inset-0 overflow-hidden rounded-xl z-10"
+                        style={{ pointerEvents: "none" }}
                     >
                         <svg
                             className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%]"
@@ -54,8 +54,8 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
             case 'staircase':
                 return (
                     <div
-                        className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 1 }}
+                        className="absolute inset-0 overflow-hidden rounded-xl z-10"
+                        style={{ pointerEvents: "none" }}
                     >
                         {/* SVG Staircase */}
                         <svg
@@ -74,8 +74,8 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
             case 'donut':
                 return (
                     <div
-                        className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 1 }}
+                        className="absolute inset-0 overflow-hidden rounded-xl z-10"
+                        style={{ pointerEvents: "none" }}
                     >
                         <svg
                             className="absolute -top-1/2 -right-1/2 w-[150%] h-[150%]"
@@ -102,8 +102,8 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
             case 'wave':
                 return (
                     <div
-                        className="absolute inset-0 overflow-hidden rounded-xl"
-                        style={{ zIndex: 1 }}
+                        className="absolute inset-0 overflow-hidden rounded-xl z-10"
+                        style={{ pointerEvents: "none" }}
                     >
                         <svg
                             className="absolute bottom-0 left-0 w-full h-full"

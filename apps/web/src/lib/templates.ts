@@ -7,6 +7,7 @@ export interface Template {
     accent_type: string,
     accent_color: string,
     bars: string[],
+    src: string
 };
 
 export const templates: Template[] = [
@@ -19,27 +20,18 @@ export const templates: Template[] = [
         accent_type: "solid",
         accent_color: "#000000",
         bars: ["#E2C275", "#6886C5", "#ffe4e3", "#AEDADD", "#BCBAB8"],
+        src: "classic-template",
     },
     {
         id: "MODERN",
         name: "Modern",
         background_color: "#ff80ab",
-        text_color: "#1A1A1A",
+        text_color: "#000000",
         border_color: "#D1D5DB",
         accent_type: "wave",
         accent_color: "#EEEEEE",
         bars: ['#196cff', '#ffd439', '#FF2929', '#0e6b45', '#1A73E8'],
-    }
-    ,
-    {
-        id: "PASTEL",
-        name: "Pastel",
-        background_color: "#DDDAD0",
-        text_color: "#000000",
-        border_color: "#000000",
-        accent_type: "donut",
-        accent_color: "#000000",
-        bars: ["#DA6C6C", "#687FE5", "#A7C1A8", "#9B7EBD", "#E6B2BA"],
+        src: "pink-template",
     },
     {
         id: "NEON",
@@ -50,6 +42,7 @@ export const templates: Template[] = [
         accent_type: "staircase",
         accent_color: "#EEEEEE",
         bars: ["#FF6500", "#0A5EB0", "#FFE5CF", "#EEDF7A", "#7A1CAC"],
+        src: "neon-template",
     },
     {
         id: "YELLOW",
@@ -60,6 +53,7 @@ export const templates: Template[] = [
         accent_type: "circle",
         accent_color: "#000000",
         bars: ["#EB5B00", "#347433", "#C5172E", "#547792", "#F7CFD8"],
+        src: "yellow-template",
     },
     {
         id: "GREEN",
@@ -70,6 +64,18 @@ export const templates: Template[] = [
         accent_type: "staircase",
         accent_color: "#000000",
         bars: ["#feb9d0", "#ff403d", "#196cff", "#ffc739", "C886E5"],
+        src: "green-template",
+    },
+    {
+        id: "PASTEL",
+        name: "Pastel",
+        background_color: "#DDDAD0",
+        text_color: "#000000",
+        border_color: "#000000",
+        accent_type: "donut",
+        accent_color: "#000000",
+        bars: ["#DA6C6C", "#687FE5", "#A7C1A8", "#9B7EBD", "#E6B2BA"],
+        src: "pastel-template",
     },
     {
         id: "BLUE",
@@ -77,8 +83,9 @@ export const templates: Template[] = [
         background_color: "#196cff",
         text_color: "#EEEEEE",
         border_color: "#000000",
-        accent_type: "solid",
+        accent_type: "slash",
         accent_color: "#EEEEEE",
         bars: ["#C5172E", "#FDFAF6", "#FFCC00", "#1DCD9F", "#000000"],
+        src: "blue-template",
     },
 ]

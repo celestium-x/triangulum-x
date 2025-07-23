@@ -10,6 +10,7 @@ import { useAutoSaveStore } from "@/store/home/useAutoSaveStore";
 import { RiLineChartLine } from "react-icons/ri";
 import { HiChartBar } from "react-icons/hi";
 import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
+import { Button } from "@/components/ui/button";
 
 
 export default function AdvancedDraft() {
@@ -95,16 +96,16 @@ export default function AdvancedDraft() {
 
                                 <div className="flex flex-row items-center gap-x-3 dark:text-neutral-300 text-neutral-700">
                                     <div className="flex flex-col items-center space-y-2">
-                                        <button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out">
+                                        <Button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700">
                                             <RiLineChartLine size={20} />
-                                        </button>
+                                        </Button>
                                         <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Linear</span>
                                     </div>
 
                                     <div className="flex flex-col items-center space-y-2">
-                                        <button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out">
+                                        <Button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700">
                                             <HiChartBar size={20} />
-                                        </button>
+                                        </Button>
                                         <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Stepped</span>
                                     </div>
                                 </div>
