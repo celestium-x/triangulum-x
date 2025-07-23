@@ -6,10 +6,15 @@ import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { Input } from "@/components/ui/input";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
+import { useAutoSaveStore } from "@/store/home/useAutoSaveStore";
+import { RiLineChartLine } from "react-icons/ri";
+import { HiChartBar } from "react-icons/hi";
 import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
 
+
 export default function AdvancedDraft() {
-    const [enabled, setEnabled] = useState<boolean>(false);
+    const [enablePointMultiplier, setEnablePointMultiplier] = useState<boolean>(false);
+    const { enabledAutoSave, setEnableAutoSave } = useAutoSaveStore();
     const { setState } = useDraftRendererStore();
     const [pointMultiplier, setPointMultiplier] = useState<string>("1.2");
     const { quiz, updateQuestionPoints } = useNewQuizStore();
@@ -39,6 +44,21 @@ export default function AdvancedDraft() {
                 <RxCross2 onClick={() => setState(DraftRenderer.NONE)} />
             </div>
 
+            {/* Auto-Save Component */}
+            <div className="w-full px-2 mt-6">
+                <div className="flex items-center justify-start gap-x-1">
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">Auto Save</span>
+                    <ToolTipComponent content="Turn this on to save your quiz questions automatically.">
+                        <AiOutlineQuestionCircle size={15} />
+                    </ToolTipComponent>
+                </div>
+                <div className="flex w-full items-center justify-between mt-2">
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Enable auto save</span>
+                    <Switch className="cursor-pointer" checked={enabledAutoSave} onCheckedChange={setEnableAutoSave} />
+                </div>
+            </div>
+
+            {/* Point Multiplier Component */}
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">Points Multiplier</span>
@@ -48,24 +68,51 @@ export default function AdvancedDraft() {
                 </div>
                 <div className="flex w-full items-center justify-between mt-2">
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">Enable points multiplier</span>
-                    <Switch checked={enabled} onCheckedChange={setEnabled} />
+                    <Switch className="cursor-pointer" checked={enablePointMultiplier} onCheckedChange={setEnablePointMultiplier} />
                 </div>
 
                 <div className="mt-4">
-                    {enabled && (
-                        <Input
-                            min={1}
-                            step="0.1"
-                            type="number"
-                            value={pointMultiplier}
-                            onChange={handleOnChange}
-                            className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
+                    {enablePointMultiplier && (
+                        <div className="pt-3">
+                            <div className="flex flex-col space-y-2">
+                                <span className="text-xs text-neutral-500 dark:text-neutral-400">Customize</span>
+
+                                <Input
+                                    min={1}
+                                    step="0.1"
+                                    type="number"
+                                    value={pointMultiplier}
+                                    onChange={handleOnChange}
+                                    className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
 "
-                        />
+                                />
+                            </div>
+
+                            <div className="flex flex-col space-y-2 mt-5">
+                                <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                                    Multiplier Types
+                                </span>
+
+                                <div className="flex flex-row items-center gap-x-3 dark:text-neutral-300 text-neutral-700">
+                                    <div className="flex flex-col items-center space-y-2">
+                                        <button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out">
+                                            <RiLineChartLine size={20} />
+                                        </button>
+                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Linear</span>
+                                    </div>
+
+                                    <div className="flex flex-col items-center space-y-2">
+                                        <button className="flex items-center justify-center w-16 h-12 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out">
+                                            <HiChartBar size={20} />
+                                        </button>
+                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Stepped</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
-
 
         </div>
     )
