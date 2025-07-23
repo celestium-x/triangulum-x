@@ -3,6 +3,8 @@ import { Barriecito } from 'next/font/google'
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MdChevronRight } from "react-icons/md";
+import { useUserSessionStore } from "@/store/user/useUserSessionStore";
+import LandingPageAction from "../utility/LandingPageAction";
 
 const barriecito = Barriecito({
     subsets: ['latin'],
@@ -12,6 +14,7 @@ const barriecito = Barriecito({
 
 
 export default function LandingPage() {
+
     return (
         <div className="h-full flex items-center bg-light-base dark:bg-dark-primary">
             <section className="mx-[12rem] w-full">
@@ -43,22 +46,7 @@ export default function LandingPage() {
                                 with prize pools or join exciting competitions with unique codes.
                             </p>
 
-                            <div className="flex gap-4">
-                                <Button className={cn("font-light text-sm tracking-wider  flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10]",
-                                    "bg-dark-base dark:bg-light-base"
-                                )}>
-
-                                    <span>Sign in</span>
-                                    <MdChevronRight className="text-neutral-300 dark:text-dark-base" />
-                                </Button>
-                                <Button className={cn("font-light text-sm tracking-wider flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10]",
-                                    "dark:bg-dark-base bg-light-base hover:bg-light-base text-dark-base dark:text-light-base border border-neutral-300 dark:border-[1px] dark:border-neutral-700"
-                                )}>
-
-                                    <span>Start creating</span>
-                                    <MdChevronRight className="text-neutral-300 dark:text-dark-base" />
-                                </Button>
-                            </div>
+                            <LandingPageAction/>
                         </div>
                     </div>
 

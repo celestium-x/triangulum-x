@@ -4,7 +4,8 @@ import prisma from "@repo/db/client";
 
 
 export default async function signInController(req: Request, res: Response) {
-    const { user } = req.body;
+    console.log("inside sign in");
+    const { user, account } = req.body;
     try {
         const existingUser = await prisma.user.findUnique({
             where: {
@@ -33,6 +34,8 @@ export default async function signInController(req: Request, res: Response) {
                 }
             })
         }
+
+        console.log("user is ", myUser);
 
         const jwtPayload = {
             name: myUser.name,
