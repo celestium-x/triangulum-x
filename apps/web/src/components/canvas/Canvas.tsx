@@ -96,12 +96,12 @@ export default function Canvas(): JSX.Element {
                 selectionMode === SELECTION_MODE.CANVAS && selectedStyles
             )}
         >
-            <CanvasAccents design="slash" accentColor={currentQTemplate?.accent_color} />
+            <CanvasAccents design={currentQTemplate?.accent_type} accentColor={currentQTemplate?.accent_color} />
             <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
                 {/* Question Section - Fixed at top */}
-                <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] text-light-base z-10">
+                <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-10">
                     <div 
                         onClick={questionTapHandler} 
                         className={cn(
@@ -143,14 +143,14 @@ export default function Canvas(): JSX.Element {
                                                 <RxCross2 className="bg-red-300 rounded-full p-0.5 sm:p-1 text-red-950 w-3 h-3 sm:w-4 sm:h-4" />
                                             )}
                                         </div>
-                                        <span className="text-xs sm:text-sm lg:text-base font-medium text-white">
+                                        <span className="text-xs sm:text-sm lg:text-base font-medium">
                                             {Math.round(votes[idx]!)}
                                         </span>
                                     </div>
 
                                     {/* Responsive Bar */}
                                     <div
-                                        className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 "
+                                        className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
                                         style={{
                                             height: getBarHeight(votes[idx]!),
                                             backgroundColor: `${currentQTemplate?.bars[idx]}` || '#4F46E5'
@@ -159,7 +159,7 @@ export default function Canvas(): JSX.Element {
 
                                     {/* Option label - Responsive text */}
                                     <div className="mt-1 sm:mt-2 min-h-[1.5rem] sm:min-h-[2rem] flex items-center justify-center w-full">
-                                        <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light text-white break-words">
+                                        <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light break-words">
                                             {/* Responsive text truncation */}
                                             <span className="hidden sm:inline">
                                                 {option.length > 15 ? `${option.substring(0, 15)}...` : option}

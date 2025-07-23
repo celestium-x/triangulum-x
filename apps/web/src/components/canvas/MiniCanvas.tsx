@@ -34,7 +34,7 @@ export default function MiniCanvas({ template, question, currentQuestionIndex, q
                     Question {questionIndex + 1}
                     {question.basePoints}
                 </div>
-                <CanvasAccents design="slash" accentColor={template?.accent_color} />
+                <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
                 <div className="text-xs">
                     {question.question.slice(0, 10)}...
                 </div>
