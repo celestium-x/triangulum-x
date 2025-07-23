@@ -24,12 +24,12 @@ export default function Canvas(): JSX.Element {
     const selectedStyles = "border-2 border-[#5e59b3]";
     const [copied, setCopied] = useState<boolean>(false);
     const [question, setQuestion] = useState<string>("");
-    
+
     // Formatting states
     const [isBold, setIsBold] = useState<boolean>(false);
     const [isItalic, setIsItalic] = useState<boolean>(false);
     const [isUnderline, setIsUnderline] = useState<boolean>(false);
-    
+
     const { currentQuestionIndex, quiz } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
@@ -69,20 +69,16 @@ export default function Canvas(): JSX.Element {
         setQuestion(e.target.value);
     }
 
-    // Formatting handlers
     function handleBold() {
         setIsBold(!isBold);
-        // Add your bold formatting logic here
     }
 
     function handleItalic() {
         setIsItalic(!isItalic);
-        // Add your italic formatting logic here
     }
 
     function handleUnderline() {
         setIsUnderline(!isUnderline);
-        // Add your underline formatting logic here
     }
 
     function getFontSizeClass(text: string): string {
@@ -108,12 +104,12 @@ export default function Canvas(): JSX.Element {
     }
 
     return (
-        <div 
-            style={{ 
+        <div
+            style={{
                 color: currentQTemplate?.text_color,
                 boxSizing: 'border-box'
-            }} 
-            onClick={canvasTapHandler} 
+            }}
+            onClick={canvasTapHandler}
             className={cn(
                 "w-full h-full p-0.5 rounded-[12px] relative overflow-hidden",
                 selectionMode === SELECTION_MODE.CANVAS && selectedStyles
@@ -123,10 +119,9 @@ export default function Canvas(): JSX.Element {
             <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
 
-                {/* Question Section - Fixed at top */}
                 <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-10">
-                    <div 
-                        onClick={questionTapHandler} 
+                    <div
+                        onClick={questionTapHandler}
                         className={cn(
                             "p-1 rounded-[10px]",
                             selectionMode === SELECTION_MODE.QUESTION && selectedStyles
@@ -146,8 +141,7 @@ export default function Canvas(): JSX.Element {
                             placeholder="Ask your question here"
                         />
                     </div>
-                    
-                    {/* Formatting Toolbar - Only show when question is selected */}
+
                     {selectionMode === SELECTION_MODE.QUESTION && (
                         <div className="mt-2 flex justify-center">
                             <QuestionFormattingToolbar
@@ -162,7 +156,6 @@ export default function Canvas(): JSX.Element {
                     )}
                 </div>
 
-                {/* Option section - Adjusted padding to account for toolbar */}
                 <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-40 sm:pt-48">
                     <div className={cn("w-full h-full flex flex-col items-end justify-center mb-6",)}>
 
