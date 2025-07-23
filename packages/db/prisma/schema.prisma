@@ -102,3 +102,12 @@ enum Template {
   GREEN
   BLUE
 }
+
+
+enum Interactions {
+  THUMBS_UP
+  DOLLAR
+  BULB
+  HEART
+  SMILE
+}
