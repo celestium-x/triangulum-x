@@ -1,9 +1,5 @@
 import { SiSolana } from "react-icons/si";
-import { Barriecito } from 'next/font/google'
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { MdChevronRight } from "react-icons/md";
-import { useUserSessionStore } from "@/store/user/useUserSessionStore";
+import { Barriecito } from 'next/font/google';
 import LandingPageAction from "../utility/LandingPageAction";
 
 const barriecito = Barriecito({
