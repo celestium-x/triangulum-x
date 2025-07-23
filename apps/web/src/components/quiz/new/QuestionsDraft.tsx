@@ -6,11 +6,13 @@ import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { FaMountainSun } from "react-icons/fa6";
 import { FaSquare } from "react-icons/fa";
 import { TfiLayoutListPost } from "react-icons/tfi";
-
-
+import { Input } from "@/components/ui/input";
+import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 
 export default function QuestionsDraft() {
     const { setState } = useDraftRendererStore();
+    const { quiz, currentQuestionIndex } = useNewQuizStore();
+    const currentQ = quiz.questions[currentQuestionIndex];
     return (
         <div className="text-neutral-900 dark:text-neutral-100 flex flex-col justify-start items-start gap-y-4">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
@@ -18,6 +20,20 @@ export default function QuestionsDraft() {
                 <RxCross2 onClick={() => setState(DraftRenderer.NONE)} />
             </div>
             <Options />
+
+            <div className="w-full px-2 mt-6">
+                <div className="flex items-center justify-start gap-x-1">
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">Base Points</span>
+                    <ToolTipComponent content="This is the base points for this question">
+                        <AiOutlineQuestionCircle size={15} />
+                    </ToolTipComponent>
+                </div>
+                <div className="flex w-full items-center justify-between mt-2">
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Add a relevant image to this question</span>
+                </div>
+                <Input value={currentQ?.basePoints} disabled={quiz.pointsMultiplier === 1} />
+            </div>
+
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">Add Image</span>
