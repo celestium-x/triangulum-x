@@ -6,6 +6,6 @@ interface AutoSaveRendererTypes {
 }
 
 export const useAutoSaveStore = create<AutoSaveRendererTypes>((set) => ({
-    enabledAutoSave: false,
+    enabledAutoSave: true,
     setEnableAutoSave: (val) => set({ enabledAutoSave: val })
 }))

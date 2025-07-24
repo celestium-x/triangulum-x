@@ -63,6 +63,11 @@ model Quiz {
   host      User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
   questions Question[]
 
+  //settings
+  autoSave      Boolean @default(true)
+  liveChat      Boolean @default(false)
+  spectatorMode Boolean @default(false)
+
   @@map("quizzes")
 }
 
