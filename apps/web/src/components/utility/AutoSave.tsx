@@ -1,6 +1,6 @@
 "use client"
 
-import { useAutoSaveStore } from "@/store/home/useAutoSaveStore";
+import { useAutoSaveStore } from "@/store/new-quiz/useAutoSaveStore";
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore"
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
