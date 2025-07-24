@@ -1,5 +1,6 @@
 import MiniCanvas from "@/components/canvas/MiniCanvas";
 import { Button } from "@/components/ui/button";
+import ToolTipComponent from "@/components/utility/TooltipComponent";
 import UtilityCard from "@/components/utility/UtilityCard";
 import { templates } from "@/lib/templates";
 import { cn } from "@/lib/utils";
@@ -7,12 +8,13 @@ import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { TbPlus } from 'react-icons/tb'
 
 export default function QuestionPallete() {
-    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion } = useNewQuizStore();
+    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion } = useNewQuizStore();
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
-    
+
+
     return (
-        <UtilityCard className="max-w-[10rem] w-full flex-shrink-0 shadow-none rounded-sm bg-neutral-200 dark:bg-dark-primary p-0 flex flex-col items-center px-1 border-none h-full">
-            <Button 
+        <UtilityCard className="max-w-[10rem] w-full shadow-none rounded-sm bg-neutral-200 dark:bg-dark-primary p-0 flex flex-col items-center px-1 border-none h-full">
+            <Button
                 onClick={addQuestion}
                 className={cn("bg-dark-base dark:bg-neutral-200 dark:hover:bg-light-base hover:bg-dark-primary ",
                     'rounded-full m-0 mt-4 px-20 text-xs font-light flex items-center justify-center gap-x-2'
@@ -21,18 +23,21 @@ export default function QuestionPallete() {
                 <TbPlus />
                 <span>Add Question</span>
             </Button>
-            
-            <div className="flex flex-col gap-y-1.5 mt-6 w-full flex-1 overflow-y-auto overflow-x-hidden pr-1 hide-scrollbar">
+
+            <div className="flex flex-col gap-y-1.5 mt-6 w-full flex-1 overflow-y-auto pr-1 hide-scrollbar relative">
                 {quiz.questions.map((question, idx) => (
                     <div key={idx} className="flex items-end gap-x-2 flex-shrink-0">
                         <div className="text-xs">{idx + 1}.</div>
-                        <MiniCanvas 
-                            currentQuestionIndex={currentQuestionIndex} 
-                            setCurrentQuestionIndex={setCurrentQuestionIndex}
-                            template={currentQTemplate} 
-                            question={question} 
-                            questionIndex={idx} 
-                        />
+                        <ToolTipComponent side="right" content={idx + 1}>
+                            <MiniCanvas
+                                removeQuestion={removeQuestion}
+                                currentQuestionIndex={currentQuestionIndex}
+                                setCurrentQuestionIndex={setCurrentQuestionIndex}
+                                template={currentQTemplate}
+                                question={question}
+                                questionIndex={idx}
+                            />
+                        </ToolTipComponent>
                     </div>
                 ))}
             </div>

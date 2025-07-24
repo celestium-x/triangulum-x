@@ -32,7 +32,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         scheduledAt: null,
         startedAt: null,
         endedAt: null,
-        questions: Array.from({ length: 2 }, (_, index) => ({
+        questions: Array.from({ length: 10 }, (_, index) => ({
             id: "",
             question: "What is the largest planet in our solar system?",
             options: ['Mercury', 'Venus', 'Earth', 'Jupiter'],

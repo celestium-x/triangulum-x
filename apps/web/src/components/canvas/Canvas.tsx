@@ -1,12 +1,11 @@
 'use client';
 import { cn } from "@/lib/utils";
-import { JSX, useEffect, useState, MouseEvent } from "react";
+import { JSX, useEffect, useState } from "react";
 import JoinQuizCodeTicker from "../quiz/new/JoinquizCodeTicker";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { templates } from "@/lib/templates";
 import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
 import CanvasAccents from "../utility/CanvasAccents";
-import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
 import CanvasOptions from "./CanvasOptions";
 import CanvasHeading from "./CanvasHeading";
 
@@ -22,11 +21,9 @@ export default function Canvas(): JSX.Element {
     const [votes, setVotes] = useState([0, 0, 0, 0]);
     const selectedStyles = "border-2 border-[#5e59b3]";
     const [copied, setCopied] = useState<boolean>(false);
-    const [question, setQuestion] = useState<string>("");
-    const { currentQuestionIndex, quiz, editQuestion } = useNewQuizStore();
+    const { currentQuestionIndex, quiz } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
     const currentQTemplate = templates.find(t => t.id === quiz.theme);
-    const { setState } = useDraftRendererStore();
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -48,30 +45,8 @@ export default function Canvas(): JSX.Element {
         }
     }, [copied])
 
-    function questionTapHandler(e: MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-        setSelectionMode(SELECTION_MODE.QUESTION);
-        setState(DraftRenderer.QUESTION);
-    }
-
     function canvasTapHandler() {
         setSelectionMode(SELECTION_MODE.CANVAS);
-    }
-
-    function handleQuestionChange(value: string | undefined) {
-        if (value === undefined) return;
-        setQuestion(value);
-        editQuestion(currentQuestionIndex, { question: value });
-    }
-
-    function getFontSizeClass(text: string): string {
-        const length = text.length;
-        if (length === 0) return "text-2xl";
-        if (length <= 50) return "text-2xl";
-        if (length <= 60) return "text-xl";
-        if (length <= 70) return "text-lg";
-        if (length <= 95) return "text-base";
-        return "text-xs";
     }
 
     function getBarHeight(voteValue: number): string {
@@ -102,28 +77,17 @@ export default function Canvas(): JSX.Element {
 
             <div style={{ backgroundColor: currentQTemplate?.background_color }} className="bg-[#196cff] h-full rounded-md relative flex flex-col">
                 <JoinQuizCodeTicker />
+                <CanvasHeading currentQ={currentQ} selectionMode={selectionMode} setSelectionMode={setSelectionMode} />
 
-                <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-10">
-                    <CanvasHeading question={question} currentQ={currentQ} handleQuestionChange={handleQuestionChange} questionTapHandler={questionTapHandler} getFontSizeClass={getFontSizeClass} selectionMode={selectionMode} />
-                </div>
-
+                {/* canvas options */}
                 <div className="flex-1 flex items-end justify-center p-2 sm:p-4 pt-40 sm:pt-48">
                     <div className={cn("w-full h-full flex flex-col items-end justify-center mb-6",)}>
-
                         <div className={cn(
                             "w-full h-full flex items-end justify-center ",
                             getResponsiveGap()
                         )}>
                             {currentQ?.options?.map((option, idx) => (
-                                <CanvasOptions
-                                    key={idx}
-                                    idx={idx}
-                                    option={option}
-                                    votes={votes}
-                                    currentQ={currentQ}
-                                    currentQTemplate={currentQTemplate}
-                                    getBarHeight={getBarHeight}
-                                />
+                                <CanvasOptions key={idx} idx={idx} option={option} votes={votes} currentQ={currentQ} currentQTemplate={currentQTemplate} getBarHeight={getBarHeight} />
                             )) || []}
                         </div>
                         <div className="absolute bottom-1 right-1">
@@ -131,6 +95,7 @@ export default function Canvas(): JSX.Element {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     )

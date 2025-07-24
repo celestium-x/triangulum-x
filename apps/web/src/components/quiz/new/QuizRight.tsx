@@ -69,7 +69,7 @@ export default function QuizRight(): JSX.Element {
                         <div className="bg-light-base dark:bg-dark-base/30 rounded-xl overflow-hidden p-1 flex flex-col gap-y-2 border-[1px] border-neutral-300 dark:border-neutral-700">
 
                             {option_one.map((option, index) => (
-                                <ToolTipComponent key={index} content={option.message}>
+                                <ToolTipComponent side="left" key={index} content={option.message}>
                                     <Button
                                         type="button"
                                         onClick={() => setState(option.type)}
@@ -91,7 +91,7 @@ export default function QuizRight(): JSX.Element {
                         <div className="bg-light-base dark:bg-dark-base/30 rounded-xl overflow-hidden p-1 flex flex-col gap-y-2 border-[1px] border-neutral-300 dark:border-neutral-700">
 
                             {option_two.map((option, index) => (
-                                <ToolTipComponent key={index} content={option.message}>
+                                <ToolTipComponent side="left" key={index} content={option.message}>
                                     <Button
                                     type="button"
                                     onClick={() => setState(option.type)}
