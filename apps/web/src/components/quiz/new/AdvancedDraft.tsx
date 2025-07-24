@@ -27,11 +27,15 @@ export default function AdvancedDraft() {
         if (!enableLinearPointMultiplier && !enableSteppedPointMultiplier) {
             setEnablePointMultiplier(false);
         }
-    }, [enableLinearPointMultiplier, enableSteppedPointMultiplier]);
+    }, [enableLinearPointMultiplier, enableSteppedPointMultiplier, setEnablePointMultiplier]);
 
     function handleOnCheckedChange(checked: boolean) {
-        if (enablePointMultiplier || checked)  {
-            selectedMultiplier === "Linear" ? setEnableLinearPointMultiplier(true) : setEnableSteppedPointMultiplier(true);
+        if (enablePointMultiplier || checked) {
+            if(selectedMultiplier === "Linear") {
+                setEnableLinearPointMultiplier(true);
+            } else {
+                setEnableSteppedPointMultiplier(true);
+            }
         }
         setEnablePointMultiplier(!enablePointMultiplier);
     }
@@ -106,7 +110,11 @@ export default function AdvancedDraft() {
 
                                 {/* Linear */}
                                 <div className="flex flex-col items-center space-y-2">
-                                    <Button onClick={() => { setEnableLinearPointMultiplier(!enableLinearPointMultiplier), setEnableSteppedPointMultiplier(false), setSelectedMultiplier("Linear") }}
+                                    <Button onClick={() => {
+                                        setEnableLinearPointMultiplier(!enableLinearPointMultiplier);
+                                        setEnableSteppedPointMultiplier(false);
+                                        setSelectedMultiplier("Linear");
+                                    }}
                                         className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableLinearPointMultiplier ? "border-3 border-neutral-600 dark:border-neutral-500" : "border border-neutral-300 dark:border-neutral-600"}`}>
                                         <RiLineChartLine size={20} />
                                     </Button>
@@ -120,7 +128,11 @@ export default function AdvancedDraft() {
 
                                 {/* Stepped */}
                                 <div className="flex flex-col items-center space-y-2">
-                                    <Button onClick={() => { setEnableSteppedPointMultiplier(!enableSteppedPointMultiplier), setEnableLinearPointMultiplier(false), setSelectedMultiplier("Stepped") }} className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableSteppedPointMultiplier ? "border-3 border-neutral-600 dark:border-neutral-500" : "border border-neutral-300 dark:border-neutral-600"}`}>
+                                    <Button onClick={() => {
+                                        setEnableSteppedPointMultiplier(!enableSteppedPointMultiplier);
+                                        setEnableLinearPointMultiplier(false);
+                                        setSelectedMultiplier("Stepped");
+                                    }} className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableSteppedPointMultiplier ? "border-3 border-neutral-600 dark:border-neutral-500" : "border border-neutral-300 dark:border-neutral-600"}`}>
                                         <HiChartBar size={20} />
                                     </Button>
                                     <div className="flex items-center justify-start gap-x-1">
@@ -152,6 +164,6 @@ export default function AdvancedDraft() {
                 </div>
             </div>
         </div>
-  
+
     )
 }

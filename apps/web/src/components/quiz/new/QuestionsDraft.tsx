@@ -54,10 +54,7 @@ export default function QuestionsDraft() {
         const points: number[] = singletonPointsCalculator.set_point_after_current_index(questionIndex, point);
         let pointsItr: number = 0;
 
-        console.log("points: ", points);
-
         while (questionIndex < quiz.questions.length) {
-            console.log("q index: ", questionIndex);
             changeQuestionPoint(questionIndex, points[pointsItr]!);
             questionIndex++;
             pointsItr++;

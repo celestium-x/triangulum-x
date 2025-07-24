@@ -1,14 +1,14 @@
 "use client";
-import ImageUploadModal from "@/components/utility/ImageUploadModal";
+
 import ToolTipComponent from "@/components/utility/TooltipComponent";
 import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { FaMountainSun, FaSquare } from "react-icons/fa6";
 import { TfiLayoutListPost } from "react-icons/tfi";
-import Image from "next/image";
 import DragImageBackground from "@/components/utility/DragImageBackground";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { handleUpload } from "@/lib/s3-uploads";
+
 
 export default function UploadQuizImage() {
     const [enableLeftView, setEnableLeftView] = useState(false);
@@ -16,11 +16,9 @@ export default function UploadQuizImage() {
     const { editQuestion, currentQuestionIndex } = useNewQuizStore();
 
 
-    const handleImageSelect = async (file: File, preview: string) => {
-        console.log("logging file: ", file);
+    const handleImageSelect = async (file: File) => {
         const imageUrl = await handleUpload(file);
         editQuestion(currentQuestionIndex, { imageUrl: imageUrl });
-        console.log("image url is: ", imageUrl);
     };
 
     return (
