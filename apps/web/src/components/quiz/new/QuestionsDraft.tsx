@@ -19,10 +19,10 @@ export default function QuestionsDraft() {
     const { quiz, currentQuestionIndex, changeQuestionPoint, getQuestion } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
 
-    const [basePoints, setBasePoints] = useState<string>(currentQ?.basePoints.toString()!);
+    const [basePoints, setBasePoints] = useState<string>(currentQ?.basePoints.toString() || "0");
     const singletonPointsCalculator = getSingletonPointsCalculator(quiz.questions.length);
     const [wrongBasePoints, setWrongBasePoints] = useState<boolean>(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleBasePointsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = Number(e.target.value);
@@ -72,7 +72,7 @@ export default function QuestionsDraft() {
     }
 
     useEffect(() => {
-        setBasePoints(currentQ?.basePoints.toString()!);
+        setBasePoints(currentQ?.basePoints.toString() || "0");
     }, [currentQ?.basePoints]);
 
     return (
