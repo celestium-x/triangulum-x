@@ -1,6 +1,3 @@
--- CreateEnum
-CREATE TYPE "Interactions" AS ENUM ('THUMBS_UP', 'DOLLAR', 'BULB', 'HEART', 'SMILE');
-
 -- AlterTable
 ALTER TABLE "quizzes" ADD COLUMN     "autoSave" BOOLEAN NOT NULL DEFAULT true,
 ADD COLUMN     "interactions" "Interactions"[],

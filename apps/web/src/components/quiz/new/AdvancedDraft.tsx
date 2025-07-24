@@ -6,7 +6,6 @@ import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import { Input } from "@/components/ui/input";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { useAutoSaveStore } from "@/store/new-quiz/useAutoSaveStore";
 import { RiLineChartLine } from "react-icons/ri";
 import { HiChartBar } from "react-icons/hi";
 import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
@@ -15,9 +14,8 @@ import { usePointsMultiplierAdvStore } from "@/store/new-quiz/usePointsMultiplie
 
 
 export default function AdvancedDraft() {
-    const { enabledAutoSave, setEnableAutoSave } = useAutoSaveStore();
     const { setState } = useDraftRendererStore();
-    const { quiz, updateQuestionPoints } = useNewQuizStore();
+    const { quiz, updateQuestionPoints, updateQuiz } = useNewQuizStore();
     const singletonPointsCalculator = getSingletonPointsCalculator(quiz.questions.length, Number(quiz.basePointsPerQuestion));
     const { enablePointMultiplier, setEnablePointMultiplier, enableLinearPointMultiplier, setEnableLinearPointMultiplier, enableSteppedPointMultiplier, setEnableSteppedPointMultiplier, inputPointMultiplier, setInputPointMultiplier } = usePointsMultiplierAdvStore();
     const [selectedMultiplier, setSelectedMultiplier] = useState<"Linear" | "Stepped">("Linear");
@@ -31,13 +29,17 @@ export default function AdvancedDraft() {
 
     function handleOnCheckedChange(checked: boolean) {
         if (enablePointMultiplier || checked) {
-            if(selectedMultiplier === "Linear") {
+            if (selectedMultiplier === "Linear") {
                 setEnableLinearPointMultiplier(true);
             } else {
                 setEnableSteppedPointMultiplier(true);
             }
         }
         setEnablePointMultiplier(!enablePointMultiplier);
+    }
+
+    function handleAutoSaveChangeHandler(checked: boolean) {
+        updateQuiz({ autoSave: checked });
     }
 
 
@@ -75,7 +77,7 @@ export default function AdvancedDraft() {
                 </div>
                 <div className="flex w-full items-center justify-between mt-2">
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">Enable auto save</span>
-                    <Switch className="cursor-pointer" checked={enabledAutoSave} onCheckedChange={setEnableAutoSave} />
+                    <Switch className="cursor-pointer" checked={quiz.autoSave} onCheckedChange={handleAutoSaveChangeHandler} />
                 </div>
             </div>
 

@@ -22,7 +22,7 @@ export default function QuestionsDraft() {
     const [wrongBasePoints, setWrongBasePoints] = useState<boolean>(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const handleBasePointsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    function handleBasePointsChange(e: React.ChangeEvent<HTMLInputElement>) {
         const value = Number(e.target.value);
         if (value < 0 || isNaN(value)) return;
 
@@ -34,7 +34,6 @@ export default function QuestionsDraft() {
             clearTimeout(timerRef.current);
         }
 
-        // Delay by 2 seconds
         timerRef.current = setTimeout(() => {
             const prev = getQuestionPoints(currentQuestionIndex - 1) || 0;
             const next = getQuestionPoints(currentQuestionIndex + 1) ?? Infinity;
@@ -50,7 +49,7 @@ export default function QuestionsDraft() {
     };
 
 
-    const handleUpdateQuestionPoints = (questionIndex: number, point: number) => {
+    function handleUpdateQuestionPoints(questionIndex: number, point: number) {
         const points: number[] = singletonPointsCalculator.set_point_after_current_index(questionIndex, point);
         let pointsItr: number = 0;
 
@@ -62,7 +61,7 @@ export default function QuestionsDraft() {
 
     }
 
-    const getQuestionPoints = (questionIndex: number) => {
+    function getQuestionPoints(questionIndex: number) {
         return getQuestion(questionIndex)?.basePoints;
     }
 
@@ -94,12 +93,10 @@ export default function QuestionsDraft() {
                     max={getQuestionPoints(currentQuestionIndex + 1)}
                     value={basePoints}
                     className={`mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${wrongBasePoints ? "border border-red-600 text-red-600" : ""} `}
-                    // disabled={quiz.pointsMultiplier === 1}
                     onChange={handleBasePointsChange}
                 />
             </div>
-            <UploadQuizImage/>
-            
+            <UploadQuizImage />
         </div>
     )
 }
