@@ -68,6 +68,9 @@ model Quiz {
   liveChat      Boolean @default(false)
   spectatorMode Boolean @default(false)
 
+  participants Participant[]
+  Spectator    Spectator[]
+
   @@map("quizzes")
 }
 
@@ -87,6 +90,38 @@ model Question {
 
   quizId String
   quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model Participant {
+  id                   String    @id @default(cuid())
+  nickname             String
+  avatar               String?
+  ipAddress            String?
+  isEliminated         Boolean   @default(false)
+  eliminatedAt         DateTime?
+  eliminatedAtQuestion String?
+  finalRank            Int?
+  totalScore           Int       @default(0)
+  correctAnswers       Int       @default(0)
+  longestStreak        Int       @default(0)
+  walletAddress        String?
+  quizId               String
+  quiz                 Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@map("participants")
+}
+
+model Spectator {
+  id           String   @id @default(cuid())
+  nickname     String
+  avatar       String?
+  ipAddress    String?
+  connectionId String?
+  joinedAt     DateTime @default(now())
+  quizId       String
+  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@map("spectators")
 }
 
 enum QuizStatus {

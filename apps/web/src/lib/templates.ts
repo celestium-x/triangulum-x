@@ -19,7 +19,7 @@ export const templates: Template[] = [
         border_color: "#000000",
         accent_type: "mountains",
         accent_color: "#00000010",
-        bars: ["#E2C275", "#6886C5", "#ffe4e3", "#AEDADD", "#BCBAB8"],
+        bars: ["#E2C275", "#6886C5", "#CD5656", "#AEDADD", "#BCBAB8"],
         src: "classic-template",
     },
     {
