@@ -6,7 +6,7 @@ interface CanvasAccentsProps {
 }
 
 export default function CanvasAccents({ design, accentColor }: CanvasAccentsProps) {
-    const getDesignElement = () => {
+    function getDesignElement() {
         switch (design) {
             case 'circle':
                 return (
