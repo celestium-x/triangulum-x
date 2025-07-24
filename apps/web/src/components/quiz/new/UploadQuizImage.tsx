@@ -47,7 +47,7 @@ export default function UploadQuizImage() {
 
                 <div className="flex items-center justify-between gap-x-8 mt-4">
                     <div
-                        className="relative flex-1 border border-neutral-300 hover:border-[#5e59b3] transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center justify-center cursor-pointer px-3 py-2"
+                        className="relative flex-1 border border-neutral-300 dark:border-neutral-600 hover:border-[#5e59b3] transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center justify-center cursor-pointer px-3 py-2"
                     >
                         <FaMountainSun size={32} />
                         <span className="ml-3 text-xs text-neutral-500 dark:text-neutral-400">

@@ -55,7 +55,7 @@ export default function Canvas(): JSX.Element {
                 <CanvasHeading currentQ={currentQ} selectionMode={selectionMode} setSelectionMode={setSelectionMode} />
 
 
-                <div className="flex-1 flex items-end justify-center mb-6">
+                <div className="flex-1 flex items-end justify-center mb-6 z-10">
                     <CanvasOptions selectionMode={selectionMode} setSelectionMode={setSelectionMode} />
                     {currentQ?.imageUrl && (
                         <div
