@@ -14,7 +14,7 @@ export default function ProfileMenu() {
     const { session } = useUserSessionStore();
     const [dropdown, setDropdown] = useState<boolean>(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    useHandleClickOutside(dropdownRef, setDropdown);
+    useHandleClickOutside([dropdownRef], setDropdown);
     const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
 
 
@@ -62,7 +62,7 @@ export default function ProfileMenu() {
                                 <IoMdLogOut size={14} />
                             </div>
                         </div>
-                    </UtilityCard>   
+                    </UtilityCard>
                 )
             }
             <LogoutModal openLogoutModal={openLogoutModal} setOpenLogoutModal={setOpenLogoutModal} />
