@@ -9,7 +9,9 @@ interface NewQuizStoreTypes {
     currentQuestionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     removeQuestion: (index: number) => void;
-    updateQuestionPoints: (points: number[]) => void
+    updateQuestionPoints: (points: number[]) => void;
+    changeQuestionPoint: (questionIndex: number, point: number) => void;
+    getQuestion: (questionIndex: number) => QuestionType | null;
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
@@ -21,7 +23,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         prizePool: 0,
         currency: "",
         basePointsPerQuestion: 100,
-        pointsMultiplier: 0,
+        pointsMultiplier: 1,
         timeBonus: false,
         eliminationThreshold: 0,
         questionTimeLimit: 0,
@@ -111,5 +113,19 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
                 questions: newQuestions
             },
         })
-    }
+    },
+
+    changeQuestionPoint: (questionIndex: number, point: number) => {
+        get().editQuestion(questionIndex, { basePoints: point })
+    },
+
+    getQuestion(questionIndex: number) {
+
+        if(questionIndex < 0) return null;
+
+        const quiz = get().quiz;
+        const question: QuestionType = quiz.questions.find((_, index) => index === questionIndex)!
+        return question;
+    },
+
 }));

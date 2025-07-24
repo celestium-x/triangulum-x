@@ -53,4 +53,28 @@ export default class PointsCalculator {
         return rounded_points;
     }
 
+    public set_point_after_current_index(index: number, point: number): number[] {
+        const points: number[] = [point];
+        index++;
+
+        while((index) < this.no_of_question) {
+            const prev_question_point = points[points.length - 1]!;
+            const current_question_point = this.point_multiplier * prev_question_point;
+            const rounded_value = this.round_to_two_decimals(current_question_point);
+            points.push(rounded_value);
+            index++;
+        }
+
+        return points;
+
+    }
+
+    public round_to_two_decimals(value: number): number {
+        return Math.round(value * 100) / 100;
+    }
+
+    public round_to_integer(value: number): number {
+        return Math.round(value);
+    }
+
 }

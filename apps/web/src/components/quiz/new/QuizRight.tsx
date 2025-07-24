@@ -93,17 +93,17 @@ export default function QuizRight(): JSX.Element {
                             {option_two.map((option, index) => (
                                 <ToolTipComponent side="left" key={index} content={option.message}>
                                     <Button
-                                    type="button"
-                                    onClick={() => setState(option.type)}
-                                    className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
-                                        `${state === option.type && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
-                                    )}
-                                >
-                                    <div className="flex flex-col items-center justify-center gap-y-1">
-                                        {option.icon}
-                                        <span className="text-neutral-900 dark:text-neutral-100 text-xs">{option.name}</span>
-                                    </div>
-                                </Button>
+                                        type="button"
+                                        onClick={() => setState(option.type)}
+                                        className={cn("w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10",
+                                            `${state === option.type && "hover:bg-purple-700/10 bg-primary/10 border border-purple-800"}`
+                                        )}
+                                    >
+                                        <div className="flex flex-col items-center justify-center gap-y-1">
+                                            {option.icon}
+                                            <span className="text-neutral-900 dark:text-neutral-100 text-xs">{option.name}</span>
+                                        </div>
+                                    </Button>
                                 </ToolTipComponent>
                             ))}
 
