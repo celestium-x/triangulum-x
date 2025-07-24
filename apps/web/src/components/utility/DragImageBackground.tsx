@@ -1,60 +1,31 @@
-import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+'use client';
+import { useDragAndDrop } from '@/hooks/useDragAndDrop';
+import { createPortal } from 'react-dom';
 
-interface DragImageBGProps {
-    children: React.ReactNode;
-    className?: string;
-    onBackgroundClick?: () => void;
-    dragActive?: boolean;
-}
+export default function DragImageBackground({
+    onDropFile,
+}: {
+    onDropFile: (file: File, preview: string) => void;
+}) {
+    const { dragActive } = useDragAndDrop({
+        onDropFile,
+        acceptedTypes: ['image/']
+    });
 
-export default function DragImageBackground({ children, className, onBackgroundClick, dragActive }: DragImageBGProps) {
-    const [mounted, setMounted] = useState(false);
+    if (!dragActive) return null;
 
-    useEffect(() => {
-        setMounted(true);
-        document.body.style.overflow = 'hidden';
+    return createPortal(
+        <>
+            <div className="fixed inset-0 z-[998]" />
 
-        return () => {
-            setMounted(false);
-            document.body.style.overflow = 'unset';
-        };
-    }, []);
-
-    const handleBackgroundClick = (e: React.MouseEvent) => {
-        if (e.target === e.currentTarget && onBackgroundClick) {
-            onBackgroundClick();
-        }
-    };
-
-    useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && onBackgroundClick) {
-                onBackgroundClick();
-            }
-        };
-
-        document.addEventListener('keydown', handleEscape);
-        return () => document.removeEventListener('keydown', handleEscape);
-    }, [onBackgroundClick]);
-
-    const backgroundElement = (
-        <div
-            onClick={handleBackgroundClick}
-            className={cn(
-                "fixed inset-0 z-50 w-screen h-screen flex items-center justify-center",
-                "bg-black/80 backdrop-blur-sm ",
-                "p-4",
-                className
+            {dragActive && (
+                <div className="fixed inset-0 z-[999] bg-secDark/70 backdrop-blur-md flex items-center justify-center">
+                    <div className="text-white text-lg font-semibold px-6 py-4 bg-black/30 border border-white/20 rounded-lg">
+                        Drop your image here
+                    </div>
+                </div>
             )}
-        >
-            <div className="relative max-w-[95vw] max-h-[95vh] rounded-4xl overflow-hidden bg-white dark:bg-[#051113] shadow-2xl">
-                {children}
-            </div>
-        </div>
+        </>,
+        document.body
     );
-
-    if (!mounted) return null;
-    return createPortal(backgroundElement, document.body);
 }
