@@ -32,7 +32,7 @@ export default function QuestionsDraft() {
                     <span className="text-xs text-neutral-500 dark:text-neutral-400">Add a relevant image to this question</span>
                 </div>
                 <Input
-                    value={currentQ?.basePoints}
+                    defaultValue={currentQ?.basePoints}
                     className="mt-3"
                     disabled={quiz.pointsMultiplier === 1}
                 />

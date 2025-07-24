@@ -187,6 +187,27 @@ export default function CanvasAccents({ design, accentColor }: CanvasAccentsProp
                         </svg>
                     </div>
                 );
+            case 'mountains':
+                return (
+                    <div
+                        className="absolute inset-0 overflow-hidden z-10"
+                        style={{ pointerEvents: "none" }}
+                    >
+                        <svg
+                            className="absolute inset-0 w-full h-full"
+                            viewBox="0 0 1440 320"
+                            preserveAspectRatio="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                fill={accentColor || "#8EC5FC"}
+                                fillOpacity="1"
+                                d="M0,256L48,245.3C96,235,192,213,288,186.7C384,160,480,128,576,133.3C672,139,768,181,864,192C960,203,1056,181,1152,176C1248,171,1344,181,1392,186.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+                            />
+                        </svg>
+                    </div>
+                );
+
 
             default:
                 return null;
