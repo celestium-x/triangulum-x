@@ -26,8 +26,9 @@ export default function MiniCanvas({ template, question, currentQuestionIndex, q
     const selectedStyles = "border-2 border-[#5e59b3]";
 
     function handleRemoveQuestion() {
-        console.log("deleting question", questionIndex);
         removeQuestion(questionIndex);
+        setCurrentQuestionIndex(currentQuestionIndex - 1);
+        setOpenMiniCanvasOptions(false);
     }
 
     function stripHtml(html: string): string {
