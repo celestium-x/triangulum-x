@@ -1,14 +1,15 @@
 "use client"
 
-import { useAutoSaveStore } from "@/store/new-quiz/useAutoSaveStore";
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore"
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
+import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 
 export default function AutoSaveComponent() {
     const { setState } = useDraftRendererStore();
-    const { enabledAutoSave } = useAutoSaveStore();
     const underlineRef = useRef<HTMLDivElement>(null);
+
+    const { quiz } = useNewQuizStore();;
 
     useEffect(() => {
         const underline = underlineRef.current;
@@ -51,9 +52,9 @@ export default function AutoSaveComponent() {
         <div
             onClick={() => setState(DraftRenderer.ADVANCED)}
             className="flex items-center gap-x-2">
-            <div className={`h-2 w-2 rounded-full animate-pulse ${enabledAutoSave ? " bg-green-600" : "bg-red-500"}`}></div>
+            <div className={`h-2 w-2 rounded-full animate-pulse ${quiz.autoSave ? " bg-green-600" : "bg-red-500"}`}></div>
             <span className="text-neutral-500 dark:text-neutral-400 text-xs cursor-pointer relative">
-                {enabledAutoSave ? "auto save is on" : "auto save is off"}
+                {quiz.autoSave ? "auto save is on" : "auto save is off"}
                 <div
                     ref={underlineRef}
                     className="absolute bottom-0 left-0 w-full h-px bg-current"

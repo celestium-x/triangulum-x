@@ -12,6 +12,8 @@ interface NewQuizStoreTypes {
     updateQuestionPoints: (points: number[]) => void;
     changeQuestionPoint: (questionIndex: number, point: number) => void;
     getQuestion: (questionIndex: number) => QuestionType | null;
+    loading: boolean;
+    setLoading: (loading: boolean) => void;
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
@@ -31,6 +33,9 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         status: QuizStatusEnum.CREATED,
         createdAt: new Date(),
         updatedAt: new Date(),
+        autoSave: true,
+        liveChat: false,
+        spectatorMode: false,
         scheduledAt: null,
         startedAt: null,
         endedAt: null,
@@ -121,11 +126,12 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
 
     getQuestion(questionIndex: number) {
 
-        if(questionIndex < 0) return null;
+        if (questionIndex < 0) return null;
 
         const quiz = get().quiz;
         const question: QuestionType = quiz.questions.find((_, index) => index === questionIndex)!
         return question;
     },
-
+    loading: false,
+    setLoading: (loading: boolean) => set({ loading })
 }));

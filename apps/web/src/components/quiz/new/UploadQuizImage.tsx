@@ -1,5 +1,6 @@
 "use client";
 
+
 import ToolTipComponent from "@/components/utility/TooltipComponent";
 import { useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
@@ -8,17 +9,23 @@ import { TfiLayoutListPost } from "react-icons/tfi";
 import DragImageBackground from "@/components/utility/DragImageBackground";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
 import { handleUpload } from "@/lib/s3-uploads";
+import { Loader } from "lucide-react";
 
 
 export default function UploadQuizImage() {
     const [enableLeftView, setEnableLeftView] = useState(false);
     const [enableRightView, setEnableRightView] = useState(false);
-    const { editQuestion, currentQuestionIndex } = useNewQuizStore();
+    const { editQuestion, currentQuestionIndex, setLoading, loading } = useNewQuizStore();
 
 
     const handleImageSelect = async (file: File) => {
-        const imageUrl = await handleUpload(file);
-        editQuestion(currentQuestionIndex, { imageUrl: imageUrl });
+        setLoading(true);
+        try {
+            const imageUrl = await handleUpload(file);
+            editQuestion(currentQuestionIndex, { imageUrl: imageUrl });
+        } catch (err) {
+            console.error("Error in uploading image", err)
+        } finally { setLoading(false); }
     };
 
     return (
@@ -38,15 +45,16 @@ export default function UploadQuizImage() {
                     Add a relevant image to this question
                 </span>
 
-                <div className="flex items-start gap-4 mt-4">
+                <div className="flex items-center justify-between gap-x-8 mt-4">
                     <div
-                        className="relative flex-1 border border-neutral-300 dark:border-neutral-700 hover:border-[#5e59b3] hover:border-dashed transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center justify-center cursor-pointer px-3 py-2 min-h-[100px]"
+                        className="relative flex-1 border border-neutral-300 hover:border-[#5e59b3] transition-colors duration-200 bg-white dark:bg-neutral-900 rounded-md flex items-center justify-center cursor-pointer px-3 py-2"
                     >
                         <FaMountainSun size={32} />
                         <span className="ml-3 text-xs text-neutral-500 dark:text-neutral-400">
                             Click to upload or drag an image here
                         </span>
                     </div>
+                    {loading && <Loader className="animate-spin text-primary" size={20} />}
                 </div>
 
                 <div className="flex items-center gap-x-3 mt-5 dark:text-neutral-300 text-neutral-700">
@@ -85,10 +93,6 @@ export default function UploadQuizImage() {
                         </ToolTipComponent>
                     </div>
                 </div>
-
-                {/* // if image -> button should appear to send post request to backend and upload it  */}
-
-
             </div>
         </>
     );

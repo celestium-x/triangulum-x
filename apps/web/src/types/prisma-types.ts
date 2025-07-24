@@ -46,7 +46,15 @@ export interface QuizType {
 
     hostId?: string;
     host?: UserType;
+
+    autoSave: boolean;
+    liveChat: boolean;
+    spectatorMode: boolean;
+
     questions: QuestionType[];
+    participants?: ParticipantType[];
+    spectators?: SpectatorType[];
+
 }
 
 export interface QuestionType {
@@ -63,6 +71,35 @@ export interface QuestionType {
     quizId: string;
     quiz?: QuizType;
 }
+
+export interface ParticipantType {
+    id: string;
+    nickname: string;
+    avatar?: string | null;
+    ipAddress?: string | null;
+    isEliminated: boolean;
+    eliminatedAt?: Date | null;
+    eliminatedAtQuestion?: string | null;
+    finalRank?: number | null;
+    totalScore: number;
+    correctAnswers: number;
+    longestStreak: number;
+    walletAddress?: string | null;
+    quizId: string;
+    quiz?: QuizType;
+}
+
+export interface SpectatorType {
+    id: string;
+    nickname: string;
+    avatar?: string | null;
+    ipAddress?: string | null;
+    connectionId?: string | null;
+    joinedAt: Date;
+    quizId: string;
+    quiz?: QuizType;
+}
+
 
 
 export enum TemplateEnum {
