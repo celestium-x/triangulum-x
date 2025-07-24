@@ -84,8 +84,7 @@ export default function AdvancedDraft() {
                                     type="number"
                                     value={pointMultiplier}
                                     onChange={handleOnChange}
-                                    className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none
-"
+                                    className="appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                 />
                             </div>
 

@@ -53,4 +53,23 @@ export default class PointsCalculator {
         return rounded_points;
     }
 
+    public set_point_after_current_index(index: number, point: number): number[] {
+        const points: number[] = [];
+        
+        points.push(point);
+        console.log("point and points arr: ", point, points);
+        index++;
+        while((index) < this.no_of_question) {
+            const prev_question_point = points[points.length - 1]!;
+            console.log("prev index: ", points.length - 1);
+            console.log("prev: ", prev_question_point);
+            const current_question_point = this.point_multiplier * prev_question_point;
+            points.push(current_question_point);
+            index++;
+        }
+
+        return points;
+
+    }
+
 }

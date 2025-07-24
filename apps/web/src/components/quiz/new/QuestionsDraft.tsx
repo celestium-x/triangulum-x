@@ -1,3 +1,5 @@
+"use client"
+
 import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
 import { RxCross2 } from "react-icons/rx";
 import Options from "./Options";
@@ -8,11 +10,71 @@ import { FaSquare } from "react-icons/fa";
 import { TfiLayoutListPost } from "react-icons/tfi";
 import { Input } from "@/components/ui/input";
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
+import { useEffect, useRef, useState } from "react";
+import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
+import { IoIosInfinite } from "react-icons/io";
 
 export default function QuestionsDraft() {
     const { setState } = useDraftRendererStore();
-    const { quiz, currentQuestionIndex } = useNewQuizStore();
+    const { quiz, currentQuestionIndex, changeQuestionPoint, getQuestion } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
+
+    const [basePoints, setBasePoints] = useState<string>(currentQ?.basePoints.toString()!);
+    const singletonPointsCalculator = getSingletonPointsCalculator(quiz.questions.length);
+    const [wrongBasePoints, setWrongBasePoints] = useState<boolean>(false);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleBasePointsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number(e.target.value);
+        if (value < 0 || isNaN(value)) return;
+
+        setBasePoints(value.toString());
+        changeQuestionPoint(currentQuestionIndex, value);
+        handleUpdateQuestionPoints(currentQuestionIndex, value);
+
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+        }
+
+        // Delay by 2 seconds
+        timerRef.current = setTimeout(() => {
+            const prev = getQuestionPoints(currentQuestionIndex - 1) || 0;
+            const next = getQuestionPoints(currentQuestionIndex + 1) ?? Infinity;
+
+            if (value === 0 || value < prev || value > next) {
+                setWrongBasePoints(true);
+            } else {
+                setWrongBasePoints(false);
+            }
+        }, 2000);
+
+        setWrongBasePoints(false);
+    };
+
+
+    const handleUpdateQuestionPoints = (questionIndex: number, point: number) => {
+        const points: number[] = singletonPointsCalculator.set_point_after_current_index(questionIndex, point);
+        let pointsItr: number = 0;
+
+        console.log("points: ", points);
+
+        while (questionIndex < quiz.questions.length) {
+            console.log("q index: ", questionIndex);
+            changeQuestionPoint(questionIndex, points[pointsItr]!);
+            questionIndex++;
+            pointsItr++;
+        }
+
+    }
+
+    const getQuestionPoints = (questionIndex: number) => {
+        return getQuestion(questionIndex)?.basePoints;
+    }
+
+    useEffect(() => {
+        setBasePoints(currentQ?.basePoints.toString()!);
+    }, [currentQ?.basePoints]);
+
     return (
         <div className="text-neutral-900 dark:text-neutral-100 flex flex-col justify-start items-start gap-y-4">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
@@ -28,13 +90,17 @@ export default function QuestionsDraft() {
                         <AiOutlineQuestionCircle size={15} />
                     </ToolTipComponent>
                 </div>
-                <div className="flex w-full items-center justify-between mt-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Add a relevant image to this question</span>
+                <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    between<span>{getQuestionPoints(currentQuestionIndex - 1) || 0}</span>-<span>{getQuestionPoints(currentQuestionIndex + 1) || <IoIosInfinite />}</span>
                 </div>
                 <Input
-                    defaultValue={currentQ?.basePoints}
-                    className="mt-3"
-                    disabled={quiz.pointsMultiplier === 1}
+                    type={"number"}
+                    min={getQuestionPoints(currentQuestionIndex - 1)}
+                    max={getQuestionPoints(currentQuestionIndex + 1)}
+                    value={basePoints}
+                    className={`mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${wrongBasePoints ? "border border-red-600 text-red-600" : ""} `}
+                    // disabled={quiz.pointsMultiplier === 1}
+                    onChange={handleBasePointsChange}
                 />
             </div>
 
