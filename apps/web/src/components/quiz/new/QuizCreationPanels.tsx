@@ -1,8 +1,19 @@
 'use client'
 import QuizLeft from "@/components/quiz/new/QuizLeft"
 import QuizRight from "@/components/quiz/new/QuizRight"
+import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore"
+import { useEffect } from "react";
+interface QuizCreationPanelsProps {
+    quizId: string
+}
 
-export default function QuizCreationPanels() {
+export default function QuizCreationPanels({ quizId }: QuizCreationPanelsProps) {
+    const { updateQuiz } = useNewQuizStore();
+    console.log("quiz is id : ", quizId);
+    useEffect(() => {
+        updateQuiz({ id: quizId[0] })
+    }, [quizId, updateQuiz])
+
     return (
         <div className="w-full h-full flex flex-row flex-1 dark:bg-dark-primary bg-neutral-200 overflow-hidden">
             <QuizLeft />
