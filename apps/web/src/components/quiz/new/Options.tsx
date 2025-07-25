@@ -36,16 +36,12 @@ export default function Options() {
 
     const handleDrop = (dropIndex: number) => {
         if (draggedIndex === null || !currentQ || draggedIndex === dropIndex) return;
-
         const newOptions = [...currentQ.options];
         const [draggedItem] = newOptions.splice(draggedIndex, 1);
         if (draggedItem !== undefined) {
             newOptions.splice(dropIndex, 0, draggedItem);
         }
-
-
         let newCorrectAnswer = currentQ.correctAnswer;
-
         if (draggedIndex === currentQ.correctAnswer) {
             newCorrectAnswer = dropIndex;
         } else if (draggedIndex < currentQ.correctAnswer && dropIndex >= currentQ.correctAnswer) {
@@ -58,7 +54,6 @@ export default function Options() {
             options: newOptions,
             correctAnswer: newCorrectAnswer,
         });
-
         setDraggedIndex(null);
     };
 

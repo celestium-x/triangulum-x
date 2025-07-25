@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export default function JoinQuizBar() {
+    
     return (
         <div className="dark:bg-primary/30 bg-primary/80 py-2 flex items-center justify-center">
 

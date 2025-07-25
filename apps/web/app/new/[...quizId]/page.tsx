@@ -4,43 +4,65 @@ import QuizCreationPanels from "@/components/quiz/new/QuizCreationPanels"
 import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore"
 import { useUserSessionStore } from "@/store/user/useUserSessionStore"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { Loader } from "lucide-react"
+import { use, useEffect, useState } from "react"
 import { GET_OWNER_QUIZ_URL } from "routes/api_routes"
 
+enum AllowanceEnum {
+    ALLOWED = "ALLOWED",
+    NOT_ALLOWED = "NOT_ALLOWED",
+    LOADING = "LOADING",
+    NONE = "NONE",
+}
+
+enum QuizResponseType {
+    QUIZ_FOUND = "QUIZ_FOUND",
+    QUIZ_NOT_EXIST = "QUIZ_NOT_EXIST",
+    ACCESS_DENIED = "ACCESS_DENIED",
+    INVALID_QUIZ_ID = "INVALID_QUIZ_ID",
+    INVALID_USER = "INVALID_USER",
+    INTERNAL_ERROR = "INTERNAL_ERROR"
+}
+
+
 export interface NewProps {
-    params: {
+    params: Promise<{
         quizId: string
-    }
+    }>
 }
 
 export default function New({ params }: NewProps) {
-    const { quizId } = params;
+    const { quizId } = use(params);
     const { session } = useUserSessionStore();
     const { updateQuiz } = useNewQuizStore();
-    const [ allowance, setAllowance ] = useState<"LOADING" | "ALLOWED" | "NOT_ALLOWED" | "NONE">("NONE");
+    const [allowance, setAllowance] = useState<AllowanceEnum>(AllowanceEnum.NONE);
 
     useEffect(() => {
         const fetchQuiz = async () => {
-            setAllowance("LOADING");
+            setAllowance(AllowanceEnum.LOADING);
+            await new Promise(t => setTimeout(t, 5000));
             try {
-                const response = await axios.get(`${GET_OWNER_QUIZ_URL}/${quizId}`, {
+                const { data } = await axios.get(`${GET_OWNER_QUIZ_URL}/${quizId}`, {
                     headers: {
                         Authorization: `Bearer ${session?.user.token}`
                     }
                 })
-                if (response.data.success) {
 
-                    switch (response.data.value) {
-                        case "QUIZ_NOT_EXIST":
-                            setAllowance("ALLOWED");
+                if (data.success) {
+                    switch (data.type as QuizResponseType) {
+                        case QuizResponseType.QUIZ_FOUND:
+                            setAllowance(AllowanceEnum.ALLOWED);
+                            updateQuiz(data.quiz);
                             break;
-                        case "NOT_AUTHORIZED":
-                            setAllowance("NOT_ALLOWED");
+                        case QuizResponseType.ACCESS_DENIED:
+                            setAllowance(AllowanceEnum.NOT_ALLOWED);
                             break;
-                        case "QUIZ_FOUND":
-                            setAllowance("ALLOWED");
-                            updateQuiz(response.data.quiz);
+                        case QuizResponseType.QUIZ_NOT_EXIST:
+                            console.log("quiz not exist");
+                            setAllowance(AllowanceEnum.ALLOWED);
                             break;
+                        default:
+                            setAllowance(AllowanceEnum.NOT_ALLOWED);
                     }
                 }
 
@@ -57,11 +79,17 @@ export default function New({ params }: NewProps) {
 
 
     return (
-        <div className="h-screen max-h-screen w-full max-w-screen dark:bg-dark-primary bg-light-base flex flex-col">
-            <div className="h-20 ">
-                <CreateQuizNavBar />
-            </div>
-            {(allowance === "ALLOWED") && (<QuizCreationPanels quizId={quizId}/>) }
-        </div>
+        <>
+            {(allowance === AllowanceEnum.ALLOWED) && (
+                <div className="h-screen max-h-screen w-full max-w-screen dark:bg-dark-primary bg-light-base flex flex-col">
+                    <div className="h-20 ">
+                        <CreateQuizNavBar />
+                    </div>
+                    <QuizCreationPanels quizId={quizId} />
+                </div>
+            )}
+            {allowance === AllowanceEnum.NOT_ALLOWED && <div className="flex items-center justify-center w-full">Not allowed</div>}
+            {allowance === AllowanceEnum.LOADING && <div className="text-primary h-full w-screen h-screen flex items-center justify-center"><Loader className="animate-spin" /></div>}
+        </>
     )
 }

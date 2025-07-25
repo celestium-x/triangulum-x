@@ -49,8 +49,6 @@ export default async function upsertQuizController(req: Request, res: Response) 
             quiz = await prisma.quiz.create({
                 data: {
                     ...input,
-                    participantCode: QuizAction.generateCode(8),
-                    spectatorCode: QuizAction.generateCode(8),
                     scheduledAt: input.scheduledAt ? new Date(input.scheduledAt) : undefined,
                     hostId: String(hostId),
                     questions: {

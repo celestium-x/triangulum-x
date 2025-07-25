@@ -9,7 +9,7 @@ interface QuizCreationPanelsProps {
 
 export default function QuizCreationPanels({ quizId }: QuizCreationPanelsProps) {
     const { updateQuiz } = useNewQuizStore();
-    console.log("quiz is id : ", quizId);
+
     useEffect(() => {
         updateQuiz({ id: quizId[0] })
     }, [quizId, updateQuiz])
