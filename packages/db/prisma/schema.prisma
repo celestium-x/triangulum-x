@@ -33,7 +33,7 @@ model User {
 
 model Quiz {
   id              String   @id @default(cuid())
-  title           String
+  title           String   @db.VarChar(50)
   description     String?
   theme           Template @default(CLASSIC)
   participantCode String   @unique
