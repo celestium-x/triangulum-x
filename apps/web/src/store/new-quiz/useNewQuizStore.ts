@@ -1,3 +1,4 @@
+import { generateDefaultQuestions } from "@/lib/generate-default-questions";
 import { QuestionType, QuizStatusEnum, QuizType, TemplateEnum } from "@/types/prisma-types";
 import { create } from "zustand";
 
@@ -19,7 +20,7 @@ interface NewQuizStoreTypes {
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
     quiz: {
         id: "",
-        title: "",
+        title: "Centralized vs Decentralized: Know the Difference?",
         description: "",
         theme: TemplateEnum.CLASSIC,
         prizePool: 0,
@@ -39,19 +40,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         scheduledAt: null,
         startedAt: null,
         endedAt: null,
-        questions: Array.from({ length: 10 }, (_, index) => ({
-            id: "",
-            question: "What is the largest planet in our solar system?",
-            options: ['Mercury', 'Venus', 'Earth', 'Jupiter'],
-            correctAnswer: 3,
-            explanation: "Jupiter is the largest planet in our solar system.",
-            difficulty: 1,
-            basePoints: 100,
-            timeLimit: 30,
-            orderIndex: index,
-            imageUrl: "",
-            quizId: ""
-        }))
+        questions: generateDefaultQuestions(),
     },
 
     currentQuestionIndex: 0,

@@ -27,7 +27,7 @@ export default function JoinQuizCodeTicker() {
                     "max-w-[90vw] flex-wrap text-center"
                 )}
             >
-                <span className="text-sm text-dark-base">Join the quiz | Use code</span>
+                <span className="text-sm text-dark-base">Spectators | Use code</span>
                 <div
                     onClick={copyHandler}
                     className="bg-dark-base text-light-base py-0.5 px-2 rounded-sm tracking-widest flex items-center justify-center gap-x-1 group"
