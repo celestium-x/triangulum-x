@@ -1,5 +1,17 @@
 import { z } from "zod"
 
+const questionSchema = z.object({
+    question: z.string(),
+    options: z.array(z.string().min(1)).min(4),
+    correctAnswer: z.number(),
+    explanation: z.string().optional(),
+    difficulty: z.number(),
+    basePoints: z.number(),
+    timeLimit: z.number(),
+    orderIndex: z.number(),
+    imageUrl: z.string().optional()
+});
+
 export const createQuizSchema = z.object({
     id: z.string(),
     title: z.string().min(1).max(50),
@@ -16,5 +28,5 @@ export const createQuizSchema = z.object({
     autoSave: z.coerce.boolean().optional(),
     liveChat: z.coerce.boolean().optional(),
     spectatorMode: z.coerce.boolean().optional(),
+    questions: z.array(questionSchema),
 });
-
