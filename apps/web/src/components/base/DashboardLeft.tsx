@@ -15,6 +15,8 @@ import {
     TbSettings,
     TbHelp,
 } from "react-icons/tb";
+import { IoEnterOutline } from "react-icons/io5";
+
 
 interface DashboardLeftProps {
     isExpanded: boolean;
@@ -74,6 +76,13 @@ export default function DashboardLeft({
                     isExpanded={isExpanded}
                     onClick={() => setValue(HomeRendererEnum.CREATE_QUIZ)}
                     isActive={value === HomeRendererEnum.CREATE_QUIZ}
+                />
+                <NavOption
+                    icon={<IoEnterOutline size={20} />}
+                    label="Join Quiz"
+                    isExpanded={isExpanded}
+                    onClick={() => setValue(HomeRendererEnum.JOIN_QUIZ)}
+                    isActive={value === HomeRendererEnum.JOIN_QUIZ}
                 />
                 <NavOption
                     icon={<TbChartBar size={20} />}

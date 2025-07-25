@@ -15,7 +15,6 @@ if (!PORT) {
     console.error("port not found")
 }
 
-app.use(express.json());
 app.use('/api/v1', router);
 
 app.listen(PORT, () => {
