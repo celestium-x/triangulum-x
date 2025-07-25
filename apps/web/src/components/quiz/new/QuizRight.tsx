@@ -57,7 +57,7 @@ const option_two: option[] = [
 
 export default function QuizRight(): JSX.Element {
     const { state, setState } = useDraftRendererStore();
-
+    
     return (
         <div className="min-h-full flex justify-end py-4 pr-4">
             <div className={cn(

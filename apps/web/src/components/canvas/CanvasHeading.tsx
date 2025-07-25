@@ -99,7 +99,7 @@ export default function CanvasHeading({ currentQ, selectionMode, setSelectionMod
     }
 
     return (
-        <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-10">
+        <div className="absolute top-16 sm:top-20 left-1/2 -translate-x-1/2 w-[90%] z-20">
             <div
                 onClick={questionTapHandler}
                 className={cn(
