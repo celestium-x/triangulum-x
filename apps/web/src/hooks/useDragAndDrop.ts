@@ -1,86 +1,100 @@
-import { useEffect, useState, useCallback } from 'react';
 
-interface UseDragAndDropOptions {
+import { useCallback, useEffect, useState } from 'react';
+
+interface UseDragAndDropProps {
     onDropFile: (file: File, preview: string) => void;
-    acceptedTypes?: string[]; // Optional: filter file types
+    acceptedTypes: string[];
 }
 
-interface UseDragAndDropReturn {
-    dragActive: boolean;
-    dragCounter: number;
-}
-
-export function useDragAndDrop({
-    onDropFile,
-    acceptedTypes
-}: UseDragAndDropOptions): UseDragAndDropReturn {
+export function useDragAndDrop({ onDropFile, acceptedTypes }: UseDragAndDropProps) {
     const [dragActive, setDragActive] = useState(false);
-    const [dragCounter, setDragCounter] = useState(0);
 
-    const isValidFileType = useCallback((file: File): boolean => {
-        if (!acceptedTypes || acceptedTypes.length === 0) return true;
-        return acceptedTypes.some(type => file.type.startsWith(type));
-    }, [acceptedTypes]);
+    const handleDragEnter = useCallback((e: DragEvent) => {
+        e.preventDefault();
+
+        
+        if (e.dataTransfer?.types.includes('application/x-option-drag')) {
+            return; 
+        }
+
+        
+        const hasFiles = e.dataTransfer?.types.includes('Files');
+        if (hasFiles) {
+            setDragActive(true);
+        }
+    }, []);
+
+    const handleDragLeave = useCallback((e: DragEvent) => {
+        e.preventDefault();
+
+        
+        if (e.dataTransfer?.types.includes('application/x-option-drag')) {
+            return;
+        }
+
+        
+        if (e.clientX === 0 && e.clientY === 0) {
+            setDragActive(false);
+        }
+    }, []);
+
+    const handleDragOver = useCallback((e: DragEvent) => {
+        e.preventDefault();
+
+        
+        if (e.dataTransfer?.types.includes('application/x-option-drag')) {
+            return;
+        }
+
+        
+        const hasFiles = e.dataTransfer?.types.includes('Files');
+        if (hasFiles) {
+            setDragActive(true);
+        }
+    }, []);
+
+    const handleDrop = useCallback((e: DragEvent) => {
+        e.preventDefault();
+        setDragActive(false);
+
+        
+        if (e.dataTransfer?.types.includes('application/x-option-drag')) {
+            return;
+        }
+
+        const files = e.dataTransfer?.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0]!;
+
+        
+        const isAccepted = acceptedTypes.some(type =>
+            file.type.startsWith(type.replace('/', ''))
+        );
+
+        if (isAccepted) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const preview = event.target?.result as string;
+                onDropFile(file, preview);
+            };
+            reader.readAsDataURL(file);
+        }
+    }, [onDropFile, acceptedTypes]);
 
     useEffect(() => {
-        const handleDragEnter = (e: DragEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragCounter((prev) => prev + 1);
-            setDragActive(true);
-        };
-
-        const handleDragLeave = (e: DragEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragCounter((prev) => {
-                const next = prev - 1;
-                if (next === 0) setDragActive(false);
-                return next;
-            });
-        };
-
-        const handleDragOver = (e: DragEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-        };
-
-        const handleDrop = (e: DragEvent) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragActive(false);
-            setDragCounter(0);
-
-            if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
-                const file = e.dataTransfer.files[0]!;
-
-                // Optional file type validation
-                if (!isValidFileType(file)) {
-                    console.warn(`File type ${file.type} is not accepted`);
-                    return;
-                }
-
-                const preview = URL.createObjectURL(file);
-                onDropFile(file, preview);
-                e.dataTransfer.clearData();
-            }
-        };
-
-        window.addEventListener('dragenter', handleDragEnter);
-        window.addEventListener('dragleave', handleDragLeave);
-        window.addEventListener('dragover', handleDragOver);
-        window.addEventListener('drop', handleDrop);
+        document.addEventListener('dragenter', handleDragEnter);
+        document.addEventListener('dragleave', handleDragLeave);
+        document.addEventListener('dragover', handleDragOver);
+        document.addEventListener('drop', handleDrop);
 
         return () => {
-            window.removeEventListener('dragenter', handleDragEnter);
-            window.removeEventListener('dragleave', handleDragLeave);
-            window.removeEventListener('dragover', handleDragOver);
-            window.removeEventListener('drop', handleDrop);
+            document.removeEventListener('dragenter', handleDragEnter);
+            document.removeEventListener('dragleave', handleDragLeave);
+            document.removeEventListener('dragover', handleDragOver);
+            document.removeEventListener('drop', handleDrop);
         };
-    }, [onDropFile, isValidFileType]);
+    }, [handleDragEnter, handleDragLeave, handleDragOver, handleDrop]);
 
-    return {
-        dragActive,
-        dragCounter,
-    };
+    return { dragActive };
 }
