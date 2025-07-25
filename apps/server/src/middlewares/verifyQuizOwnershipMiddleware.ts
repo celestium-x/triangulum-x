@@ -1,8 +1,8 @@
 import prisma from "@repo/db/client";
 import { NextFunction, Request, Response } from "express";
 
-export default async function verifyQuizOwnership(req: Request, res: Response, next: NextFunction) {
-    const quizId = req.params.id;
+export default async function verifyQuizOwnershipMiddleware(req: Request, res: Response, next: NextFunction) {
+    const quizId = req.params.quizId;
     const userId = req.user?.id;
 
     if (!userId) {
@@ -16,7 +16,7 @@ export default async function verifyQuizOwnership(req: Request, res: Response, n
     }
 
     try {
-        const quiz = await prisma.quiz.findFirst({
+        const quiz = await prisma.quiz.findUnique({
             where: {
                 id: quizId,
                 hostId: String(userId),
@@ -24,7 +24,7 @@ export default async function verifyQuizOwnership(req: Request, res: Response, n
         })
 
         if (!quiz) {
-            res.status(403).json({ success: false, message: "You have not permission to delete this quiz" });
+            res.status(403).json({ success: false, message: "You are not authorized" });
             return;
         }
 

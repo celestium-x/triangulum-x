@@ -11,6 +11,7 @@ import HomeLeaderboards from "./HomeLeaderboards";
 import HomeHistory from "./HomeHistory";
 import HomeSettings from "./HomeSettings";
 import HomeHelp from "./HomeHelp";
+import HomeJoinQuiz from "./HomeJoinQuiz";
 
 export default function DashboardRight(): JSX.Element {
     const { value } = useHomeRendererStore();
@@ -23,6 +24,8 @@ export default function DashboardRight(): JSX.Element {
                 return <HomeMyQuiz />
             case HomeRendererEnum.CREATE_QUIZ:
                 return <HomeCreateQuiz />
+            case HomeRendererEnum.JOIN_QUIZ:
+                return <HomeJoinQuiz/>
             case HomeRendererEnum.ANALYTICS:
                 return <HomeAnalytics />
             case HomeRendererEnum.WALLET:
