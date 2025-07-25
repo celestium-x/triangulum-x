@@ -32,10 +32,18 @@ export default function MiniCanvas({ template, question, currentQuestionIndex, q
     }
 
     function stripHtml(html: string): string {
+        // Check if we're in the browser environment
+        if (typeof window === 'undefined') {
+            // Fallback for SSR: simple regex-based HTML stripping
+            return html.replace(/<[^>]*>/g, '');
+        }
+        
+        // Browser environment: use DOM API
         const div = document.createElement("div");
         div.innerHTML = html;
         return div.textContent || div.innerText || "";
     }
+    
     const preview = stripHtml(question.question).slice(0, 10) + "...";
 
     function openMiniCanvasOptionsHandler(e: MouseEvent<HTMLDivElement>) {

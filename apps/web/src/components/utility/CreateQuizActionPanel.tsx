@@ -6,7 +6,8 @@ import { useHandleClickOutside } from "@/hooks/useHandleClickOutside";
 interface action {
     name: string,
     description?: string,
-    icon: React.ReactNode
+    icon: React.ReactNode,
+    action?: () => void | Promise<void>
 }
 
 interface CreateQuizActionPanelProps {
@@ -18,19 +19,27 @@ interface CreateQuizActionPanelProps {
 export default function CreateQuizActionPanel({ setCurrentAction, setActionsPanel, actions }: CreateQuizActionPanelProps) {
     const ref = useRef<HTMLDivElement>(null);
     useHandleClickOutside([ref], setActionsPanel)
-
-    const handleActionClick = (actionName: string) => {
-        setCurrentAction(actionName);
+    
+    const handleActionClick = async (action: action) => {
+        setCurrentAction(action.name);
         setActionsPanel(false);
+        
+        if (action.action) {
+            try {
+                await action.action();
+            } catch (error) {
+                console.error(`Error executing action ${action.name}:`, error);
+            }
+        }
     }
-
+    
     return (
         <UtilityCard ref={ref} className="absolute right-0 top-full mt-2 w-[20rem] bg-light-base border-[1px] border-neutral-300 rounded-md shadow-xl z-40 overflow-hidden p-0">
             <div className="flex flex-col w-full gap-y-1">
                 {actions.map((action, index) => (
                     <div
                         key={action.name}
-                        onClick={() => handleActionClick(action.name)}
+                        onClick={() => handleActionClick(action)}
                         className={cn(
                             "flex flex-row items-start w-full gap-4 bg-transparent dark:hover:bg-dark-primary/20 hover:bg-dark-primary/10 text-left rounded-none border-none outline-none shadow-none focus:outline-none focus:ring-0 cursor-pointer",
                             index === 0 ? "px-6 py-3 pt-5" : "px-6 py-3",
