@@ -54,7 +54,7 @@ export default function AutoSaveComponent() {
             className="flex items-center gap-x-2">
             <div className={`h-2 w-2 rounded-full animate-pulse ${quiz.autoSave ? " bg-green-600" : "bg-red-500"}`}></div>
             <span className="text-neutral-500 dark:text-neutral-400 text-xs cursor-pointer relative">
-                {quiz.autoSave ? "auto save is on" : "auto save is off"}
+                {quiz.autoSave ? "auto save every 30s" : "auto save is off"}
                 <div
                     ref={underlineRef}
                     className="absolute bottom-0 left-0 w-full h-px bg-current"

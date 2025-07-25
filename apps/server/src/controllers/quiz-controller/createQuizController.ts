@@ -4,8 +4,8 @@ import QuizAction from "../../class/quizAction";
 import { createQuizSchema } from "../../schemas/createQuizSchema";
 
 export default async function createQuizController(req: Request, res: Response) {
+    
     const parsed = createQuizSchema.safeParse(req.body);
-
     if (!parsed.success) {
         res.status(400).json({ success: false, message: "Error while creating quiz" });
         return;

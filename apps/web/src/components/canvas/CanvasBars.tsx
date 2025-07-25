@@ -30,8 +30,7 @@ export default function CanvasBars({ idx, option, votes, currentQ, currentQTempl
                     {Math.round(votes[idx]!)}
                 </span>
             </div>
-
-            {/* Responsive Bar */}
+ 
             <div
                 className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
                 style={{
@@ -43,10 +42,7 @@ export default function CanvasBars({ idx, option, votes, currentQ, currentQTempl
             <div className="mt-1 sm:mt-2 min-h-[1.5rem] sm:min-h-[2rem] flex items-center justify-center w-full">
                 <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light break-words">
                     <span className="hidden sm:inline">
-                        {option.length > 15 ? `${option.substring(0, 15)}...` : option}
-                    </span>
-                    <span className="sm:hidden">
-                        {option.length > 8 ? `${option.substring(0, 8)}...` : option}
+                        {option}
                     </span>
                 </div>
             </div>

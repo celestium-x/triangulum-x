@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export default function QuizLeft() {
-    const [quizTitle, setQuizTitle] = useState("");
     const [error, setError] = useState<boolean>(false);
     const maxCharacters = 50
     const { quiz, updateQuiz } = useNewQuizStore();
+    const [quizTitle, setQuizTitle] = useState(quiz.title);
 
     function handleQuizTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.value.length > maxCharacters) {
@@ -35,7 +35,6 @@ export default function QuizLeft() {
                             onChange={handleQuizTitleChange}
                             type="text"
                             value={quizTitle}
-                            defaultValue={quiz.title}
                             className={cn(
                                 "!text-lg font-medium tracking-wide flex-1 min-w-0 !py-4 px-2 appearance-none border-none outline-none bg-transparent dark:bg-transparent shadow-none text-center",
                                 error && "focus:!ring-2 focus:!ring-red-500/70"
@@ -44,7 +43,6 @@ export default function QuizLeft() {
                         />
                         <div className={cn("absolute right-2 text-xs px-2 py-1 rounded-sm")}>{maxCharacters - quizTitle.length}</div>
                     </div>
-
                 </UtilityCard>
                 <div className="flex-1 flex items-start justify-center w-full min-w-0">
                     <div className="aspect-[16/9] w-full min-w-0">

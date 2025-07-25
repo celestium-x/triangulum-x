@@ -111,7 +111,7 @@ export default function CanvasHeading({ currentQ, selectionMode, setSelectionMod
                 <div className="relative">
                     <EditorContent 
                         editor={editor}
-                        className="question-editor"
+                        className="question-editor text-center"
                     />
                     
                     {editor.isEmpty && (
