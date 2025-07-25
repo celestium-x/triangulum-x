@@ -36,8 +36,8 @@ model Quiz {
   title           String   @db.VarChar(50)
   description     String?
   theme           Template @default(CLASSIC)
-  participantCode String   @unique
-  spectatorCode   String   @unique
+  participantCode String?   @unique
+  spectatorCode   String?   @unique
 
   prizePool Float // Maybe in lamports -> then Number
   currency  String @default("SOL")

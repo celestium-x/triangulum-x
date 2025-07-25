@@ -18,6 +18,7 @@ interface NewQuizStoreTypes {
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
+
     quiz: {
         id: "",
         title: "Centralized vs Decentralized: Know the Difference?",
@@ -34,12 +35,12 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         status: QuizStatusEnum.CREATED,
         createdAt: new Date(),
         updatedAt: new Date(),
-        autoSave: true,
-        liveChat: false,
-        spectatorMode: false,
         scheduledAt: null,
         startedAt: null,
         endedAt: null,
+        autoSave: true,
+        liveChat: false,
+        spectatorMode: false,
         questions: generateDefaultQuestions(),
     },
 
