@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 export default function QuizLeft() {
     const [error, setError] = useState<boolean>(false);
     const maxCharacters = 50
+    const [maxCharacterVisible, setMaxCharacterVisible] = useState<boolean>(false);
     const { quiz, updateQuiz } = useNewQuizStore();
     const [quizTitle, setQuizTitle] = useState(quiz.title);
 
@@ -33,6 +34,8 @@ export default function QuizLeft() {
                             placeholder="Quiz Title"
                             aria-label="quiz-title"
                             onChange={handleQuizTitleChange}
+                            onFocus={() => setMaxCharacterVisible(true)}
+                            onBlur={() => setMaxCharacterVisible(false)}
                             type="text"
                             value={quizTitle}
                             className={cn(
@@ -41,7 +44,7 @@ export default function QuizLeft() {
 
                             )}
                         />
-                        <div className={cn("absolute right-2 text-xs px-2 py-1 rounded-sm")}>{maxCharacters - quizTitle.length}</div>
+                        {maxCharacterVisible && <div className={cn("absolute right-2 text-xs px-2 py-1 rounded-sm")}>{maxCharacters - quizTitle.length}</div>}
                     </div>
                 </UtilityCard>
                 <div className="flex-1 flex items-start justify-center w-full min-w-0">
