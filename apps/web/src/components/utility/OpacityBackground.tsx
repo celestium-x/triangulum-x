@@ -1,6 +1,6 @@
-import { cn } from "@/lib/utils";
-import { createPortal } from "react-dom";
-import { useEffect, useState } from "react";
+import { cn } from '@/lib/utils';
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 
 interface OpacityBackgroundProps {
     children: React.ReactNode;
@@ -8,7 +8,11 @@ interface OpacityBackgroundProps {
     onBackgroundClick?: () => void;
 }
 
-export default function OpacityBackground({ children, className, onBackgroundClick }: OpacityBackgroundProps) {
+export default function OpacityBackground({
+    children,
+    className,
+    onBackgroundClick,
+}: OpacityBackgroundProps) {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -25,11 +29,10 @@ export default function OpacityBackground({ children, className, onBackgroundCli
     const backgroundElement = (
         <div
             className={cn(
-                "fixed w-screen h-screen inset-0 bg-secDark backdrop-blur-[2px] flex items-center justify-center z-50",
-                className
+                'fixed w-screen h-screen inset-0 bg-secDark backdrop-blur-[2px] flex items-center justify-center z-50',
+                className,
             )}
             onClick={handleBackgroundClick}
-            
         >
             {children}
         </div>

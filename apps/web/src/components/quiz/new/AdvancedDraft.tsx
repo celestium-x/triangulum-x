@@ -1,25 +1,35 @@
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
-import { Switch } from "@/components/ui/switch";
-import { useEffect, useState } from "react";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { RxCross2 } from "react-icons/rx";
-import { Input } from "@/components/ui/input";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { RiLineChartLine } from "react-icons/ri";
-import { HiChartBar } from "react-icons/hi";
-import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
-import { Button } from "@/components/ui/button";
-import { usePointsMultiplierAdvStore } from "@/store/new-quiz/usePointsMultiplierAdvStore";
-
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { DraftRenderer, useDraftRendererStore } from '@/store/new-quiz/useDraftRendererStore';
+import { Switch } from '@/components/ui/switch';
+import { useEffect, useState } from 'react';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { RxCross2 } from 'react-icons/rx';
+import { Input } from '@/components/ui/input';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { RiLineChartLine } from 'react-icons/ri';
+import { HiChartBar } from 'react-icons/hi';
+import { getSingletonPointsCalculator } from '@/lib/singletonPointsCalculator';
+import { Button } from '@/components/ui/button';
+import { usePointsMultiplierAdvStore } from '@/store/new-quiz/usePointsMultiplierAdvStore';
 
 export default function AdvancedDraft() {
     const { setState } = useDraftRendererStore();
     const { quiz, updateQuestionPoints, updateQuiz } = useNewQuizStore();
-    const singletonPointsCalculator = getSingletonPointsCalculator(quiz.questions.length, Number(quiz.basePointsPerQuestion));
-    const { enablePointMultiplier, setEnablePointMultiplier, enableLinearPointMultiplier, setEnableLinearPointMultiplier, enableSteppedPointMultiplier, setEnableSteppedPointMultiplier, inputPointMultiplier, setInputPointMultiplier } = usePointsMultiplierAdvStore();
-    const [selectedMultiplier, setSelectedMultiplier] = useState<"Linear" | "Stepped">("Linear");
-
+    const singletonPointsCalculator = getSingletonPointsCalculator(
+        quiz.questions.length,
+        Number(quiz.basePointsPerQuestion),
+    );
+    const {
+        enablePointMultiplier,
+        setEnablePointMultiplier,
+        enableLinearPointMultiplier,
+        setEnableLinearPointMultiplier,
+        enableSteppedPointMultiplier,
+        setEnableSteppedPointMultiplier,
+        inputPointMultiplier,
+        setInputPointMultiplier,
+    } = usePointsMultiplierAdvStore();
+    const [selectedMultiplier, setSelectedMultiplier] = useState<'Linear' | 'Stepped'>('Linear');
 
     useEffect(() => {
         if (!enableLinearPointMultiplier && !enableSteppedPointMultiplier) {
@@ -29,7 +39,7 @@ export default function AdvancedDraft() {
 
     function handleOnCheckedChange(checked: boolean) {
         if (enablePointMultiplier || checked) {
-            if (selectedMultiplier === "Linear") {
+            if (selectedMultiplier === 'Linear') {
                 setEnableLinearPointMultiplier(true);
             } else {
                 setEnableSteppedPointMultiplier(true);
@@ -42,12 +52,11 @@ export default function AdvancedDraft() {
         updateQuiz({ autoSave: checked });
     }
 
-
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
         const value = e.target.value;
 
-        if (value === "") {
-            setInputPointMultiplier("");
+        if (value === '') {
+            setInputPointMultiplier('');
             return;
         }
 
@@ -70,34 +79,49 @@ export default function AdvancedDraft() {
             {/* Auto-Save Component */}
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
-                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">Auto Save</span>
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">
+                        Auto Save
+                    </span>
                     <ToolTipComponent content="Turn this on to save your quiz questions automatically.">
                         <AiOutlineQuestionCircle size={15} />
                     </ToolTipComponent>
                 </div>
                 <div className="flex w-full items-center justify-between mt-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Enable auto save</span>
-                    <Switch className="cursor-pointer" checked={quiz.autoSave} onCheckedChange={handleAutoSaveChangeHandler} />
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        Enable auto save
+                    </span>
+                    <Switch
+                        className="cursor-pointer"
+                        checked={quiz.autoSave}
+                        onCheckedChange={handleAutoSaveChangeHandler}
+                    />
                 </div>
             </div>
 
             {/* Point Multiplier Component */}
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
-                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">Points Multiplier</span>
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">
+                        Points Multiplier
+                    </span>
                     <ToolTipComponent content="Do you want to use point multiplier?">
                         <AiOutlineQuestionCircle size={15} />
                     </ToolTipComponent>
                 </div>
 
                 <div className="flex w-full items-center justify-between mt-2">
-                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Enable points multiplier</span>
-                    <Switch className="cursor-pointer" checked={enablePointMultiplier} onCheckedChange={handleOnCheckedChange} />
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        Enable points multiplier
+                    </span>
+                    <Switch
+                        className="cursor-pointer"
+                        checked={enablePointMultiplier}
+                        onCheckedChange={handleOnCheckedChange}
+                    />
                 </div>
 
                 <div className="mt-4">
                     {enablePointMultiplier && (
-
                         <div className="flex flex-col space-y-3 mt-6">
                             <div className="flex items-center justify-start gap-x-1">
                                 <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
@@ -109,19 +133,24 @@ export default function AdvancedDraft() {
                             </div>
 
                             <div className="flex flex-row items-center gap-x-3 dark:text-neutral-300 text-neutral-700">
-
                                 {/* Linear */}
                                 <div className="flex flex-col items-center space-y-2">
-                                    <Button onClick={() => {
-                                        setEnableLinearPointMultiplier(!enableLinearPointMultiplier);
-                                        setEnableSteppedPointMultiplier(false);
-                                        setSelectedMultiplier("Linear");
-                                    }}
-                                        className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableLinearPointMultiplier ? "border-3 border-neutral-600 dark:border-neutral-500" : "border border-neutral-300 dark:border-neutral-600"}`}>
+                                    <Button
+                                        onClick={() => {
+                                            setEnableLinearPointMultiplier(
+                                                !enableLinearPointMultiplier,
+                                            );
+                                            setEnableSteppedPointMultiplier(false);
+                                            setSelectedMultiplier('Linear');
+                                        }}
+                                        className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableLinearPointMultiplier ? 'border-3 border-neutral-600 dark:border-neutral-500' : 'border border-neutral-300 dark:border-neutral-600'}`}
+                                    >
                                         <RiLineChartLine size={20} />
                                     </Button>
                                     <div className="flex items-center justify-start gap-x-1">
-                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Linear</span>
+                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                                            Linear
+                                        </span>
                                         <ToolTipComponent content="Select Linear Multiplier (x1.25)">
                                             <AiOutlineQuestionCircle size={12} />
                                         </ToolTipComponent>
@@ -130,15 +159,22 @@ export default function AdvancedDraft() {
 
                                 {/* Stepped */}
                                 <div className="flex flex-col items-center space-y-2">
-                                    <Button onClick={() => {
-                                        setEnableSteppedPointMultiplier(!enableSteppedPointMultiplier);
-                                        setEnableLinearPointMultiplier(false);
-                                        setSelectedMultiplier("Stepped");
-                                    }} className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableSteppedPointMultiplier ? "border-3 border-neutral-600 dark:border-neutral-500" : "border border-neutral-300 dark:border-neutral-600"}`}>
+                                    <Button
+                                        onClick={() => {
+                                            setEnableSteppedPointMultiplier(
+                                                !enableSteppedPointMultiplier,
+                                            );
+                                            setEnableLinearPointMultiplier(false);
+                                            setSelectedMultiplier('Stepped');
+                                        }}
+                                        className={`flex items-center justify-center w-16 h-12 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 ${enableSteppedPointMultiplier ? 'border-3 border-neutral-600 dark:border-neutral-500' : 'border border-neutral-300 dark:border-neutral-600'}`}
+                                    >
                                         <HiChartBar size={20} />
                                     </Button>
                                     <div className="flex items-center justify-start gap-x-1">
-                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">Stepped</span>
+                                        <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                                            Stepped
+                                        </span>
                                         <ToolTipComponent content="Cusotmize your points multiplier">
                                             <AiOutlineQuestionCircle size={12} />
                                         </ToolTipComponent>
@@ -148,7 +184,9 @@ export default function AdvancedDraft() {
 
                             {(enableSteppedPointMultiplier || enableLinearPointMultiplier) && (
                                 <div className="flex flex-col space-y-2 mt-2">
-                                    <span className="text-xs text-neutral-500 dark:text-neutral-400">Customize</span>
+                                    <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                        Customize
+                                    </span>
 
                                     <Input
                                         min={1}
@@ -166,6 +204,5 @@ export default function AdvancedDraft() {
                 </div>
             </div>
         </div>
-
-    )
+    );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 // import DragImageBackground from "@/components/utility/DragImageBackground";
 // import { useRef, useState, useEffect } from "react";
 // import { FaMountainSun } from "react-icons/fa6";
@@ -83,7 +83,7 @@
 //                     onDragLeave={handleDragLeave}
 //                     onDrop={handleDrop}
 //                     className={`
-//                         w-full h-full border-2 border-dashed rounded-4xl 
+//                         w-full h-full border-2 border-dashed rounded-4xl
 //                         flex flex-col items-center justify-center gap-4
 //                         transition-all duration-200 ease-in-out
 //                         ${dragActive
@@ -112,6 +112,4 @@
 //     );
 // }
 
-export default function ImageUploadModal() {
-    
-}
+export default function ImageUploadModal() {}

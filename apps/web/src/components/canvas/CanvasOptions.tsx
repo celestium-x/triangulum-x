@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
-import CanvasBars from "./CanvasBars";
-import NewQuizInteractiveIcons from "../quiz/new/NewQuizInteractiveIcons";
-import { SELECTION_MODE } from "./Canvas";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { templates } from "@/lib/templates";
+import { cn } from '@/lib/utils';
+import CanvasBars from './CanvasBars';
+import NewQuizInteractiveIcons from '../quiz/new/NewQuizInteractiveIcons';
+import { SELECTION_MODE } from './Canvas';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { templates } from '@/lib/templates';
 
 interface CanvasOptionsProps {
     selectionMode: SELECTION_MODE;
@@ -15,11 +15,11 @@ export default function CanvasOptions({ selectionMode, setSelectionMode }: Canva
     const [votes, setVotes] = useState([0, 0, 0, 0]);
     const { quiz, currentQuestionIndex } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
-    const currentQTemplate = templates.find(t => t.id === quiz.theme);
+    const currentQTemplate = templates.find((t) => t.id === quiz.theme);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setVotes(prev => {
+            setVotes((prev) => {
                 return prev.map(() => {
                     return Math.floor(Math.random() * 80) + 10;
                 });
@@ -36,26 +36,39 @@ export default function CanvasOptions({ selectionMode, setSelectionMode }: Canva
 
     function getResponsiveGap(): string {
         const optionCount = currentQ?.options?.length || 4;
-        if (optionCount <= 2) return "gap-8 sm:gap-12 md:gap-16";
-        if (optionCount === 3) return "gap-4 sm:gap-8 md:gap-12";
-        return "gap-2 sm:gap-4 md:gap-6 lg:gap-8";
+        if (optionCount <= 2) return 'gap-8 sm:gap-12 md:gap-16';
+        if (optionCount === 3) return 'gap-4 sm:gap-8 md:gap-12';
+        return 'gap-2 sm:gap-4 md:gap-6 lg:gap-8';
     }
 
     return (
         <div className="p-2 sm:p-4 pt-40 sm:pt-48 w-full h-full">
-            <div className={cn("w-full h-full flex flex-col items-end justify-center",)}>
-                <div className={cn(
-                    "w-full h-full flex items-end justify-center ",
-                    getResponsiveGap()
-                )}>
+            <div className={cn('w-full h-full flex flex-col items-end justify-center')}>
+                <div
+                    className={cn(
+                        'w-full h-full flex items-end justify-center ',
+                        getResponsiveGap(),
+                    )}
+                >
                     {currentQ?.options?.map((option, idx) => (
-                        <CanvasBars key={idx} idx={idx} option={option} votes={votes} currentQ={currentQ} currentQTemplate={currentQTemplate} getBarHeight={getBarHeight} />
+                        <CanvasBars
+                            key={idx}
+                            idx={idx}
+                            option={option}
+                            votes={votes}
+                            currentQ={currentQ}
+                            currentQTemplate={currentQTemplate}
+                            getBarHeight={getBarHeight}
+                        />
                     )) || []}
                 </div>
                 <div className="absolute bottom-1 right-1">
-                    <NewQuizInteractiveIcons selectionMode={selectionMode} setSelectionMode={setSelectionMode} />
+                    <NewQuizInteractiveIcons
+                        selectionMode={selectionMode}
+                        setSelectionMode={setSelectionMode}
+                    />
                 </div>
             </div>
         </div>
-    )
+    );
 }

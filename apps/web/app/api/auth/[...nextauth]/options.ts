@@ -1,8 +1,8 @@
-import { Account, AuthOptions, ISODateString } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import { JWT } from "next-auth/jwt";
-import axios from "axios";
-import { SIGNIN_URL } from "routes/api_routes";
+import { Account, AuthOptions, ISODateString } from 'next-auth';
+import GoogleProvider from 'next-auth/providers/google';
+import { JWT } from 'next-auth/jwt';
+import axios from 'axios';
+import { SIGNIN_URL } from 'routes/api_routes';
 
 export interface UserType {
     id?: string | null;
@@ -20,16 +20,15 @@ export interface CustomSession {
 
 export const authOption: AuthOptions = {
     pages: {
-        signIn: "/",
+        signIn: '/',
     },
     callbacks: {
         async signIn({ user, account }: { user: UserType; account: Account | null }) {
             try {
-                if (account?.provider === "google") {
-
+                if (account?.provider === 'google') {
                     const response = await axios.post(`${SIGNIN_URL}`, {
                         user,
-                        account
+                        account,
                     });
 
                     const result = response.data;
@@ -51,22 +50,20 @@ export const authOption: AuthOptions = {
             }
             return token;
         },
-        async session({ session, token }: {
-            session: CustomSession; token: JWT;
-        }) {
+        async session({ session, token }: { session: CustomSession; token: JWT }) {
             session.user = token.user as UserType;
             return session;
         },
     },
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
             authorization: {
                 params: {
-                    prompt: "consent",
-                    access_type: "offline",
-                    response_type: "code",
+                    prompt: 'consent',
+                    access_type: 'offline',
+                    response_type: 'code',
                 },
             },
         }),

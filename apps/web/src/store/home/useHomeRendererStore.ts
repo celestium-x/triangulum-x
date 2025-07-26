@@ -1,5 +1,5 @@
-import { HomeRendererEnum } from "@/types/homeRendererTypes"
-import { create } from "zustand";
+import { HomeRendererEnum } from '@/types/homeRendererTypes';
+import { create } from 'zustand';
 
 interface HomeRendererStoreTypes {
     value: HomeRendererEnum;
@@ -8,5 +8,5 @@ interface HomeRendererStoreTypes {
 
 export const useHomeRendererStore = create<HomeRendererStoreTypes>((set) => ({
     value: HomeRendererEnum.DASHBOARD,
-    setValue: (data: HomeRendererEnum) => set({ value: data })
-}))
+    setValue: (data: HomeRendererEnum) => set({ value: data }),
+}));

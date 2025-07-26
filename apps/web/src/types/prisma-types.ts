@@ -1,5 +1,3 @@
-
-
 export interface UserType {
     id: string;
     name: string;
@@ -51,7 +49,6 @@ export interface QuizType {
     questions: QuestionType[];
     participants?: ParticipantType[];
     spectators?: SpectatorType[];
-
 }
 
 export interface QuestionType {
@@ -161,7 +158,6 @@ export interface EliminationType {
     gameSession?: GameSessionType;
 }
 
-
 export enum TemplateEnum {
     CLASSIC = 'CLASSIC',
     MODERN = 'MODERN',
@@ -173,46 +169,46 @@ export enum TemplateEnum {
 }
 
 export enum QuizStatusEnum {
-    CREATED = "CREATED",
-    SCHEDULED = "SCHEDULED",
-    LIVE = "LIVE",
-    COMPLETED = "COMPLETED",
-    CANCELLED = "CANCELLED",
-    PAYOUT_PENDING = "PAYOUT_PENDING",
-    PAYOUT_COMPLETED = "PAYOUT_COMPLETED",
+    CREATED = 'CREATED',
+    SCHEDULED = 'SCHEDULED',
+    LIVE = 'LIVE',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED',
+    PAYOUT_PENDING = 'PAYOUT_PENDING',
+    PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
 }
 
 export enum Interactions {
-    THUMBS_UP = "THUMBS_UP",
-    DOLLAR = "DOLLAR",
-    BULB = "BULB",
-    HEART = "HEART",
-    SMILE = "SMILE",
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
 }
 
 export enum SessionStatusEnum {
-    WAITING = "WAITING",
-    STARTING = "STARTING",
-    QUESTION_ACTIVE = "QUESTION_ACTIVE",
-    QUESTION_ENDED = "QUESTION_ENDED",
-    ELIMINATING = "ELIMINATING",
-    COMPLETED = "COMPLETED",
-    PAUSED = "PAUSED",
+    WAITING = 'WAITING',
+    STARTING = 'STARTING',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_ENDED = 'QUESTION_ENDED',
+    ELIMINATING = 'ELIMINATING',
+    COMPLETED = 'COMPLETED',
+    PAUSED = 'PAUSED',
 }
 
 export enum ParticipantScreenEnum {
-    LOBBY = "LOBBY",
-    COUNTDOWN = "COUNTDOWN",
-    MOTIVATION = "MOTIVATION",
-    QUESTION_READING = "QUESTION_READING",
-    QUESTION_ACTIVE = "QUESTION_ACTIVE",
+    LOBBY = 'LOBBY',
+    COUNTDOWN = 'COUNTDOWN',
+    MOTIVATION = 'MOTIVATION',
+    QUESTION_READING = 'QUESTION_READING',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
 }
 
 export enum HostScreenEnum {
-    LOBBY = "LOBBY",
-    QUESTION_PREVIEW = "QUESTION_PREVIEW",
-    QUESTION_ACTIVE = "QUESTION_ACTIVE",
-    QUESTION_RESULTS = "QUESTION_RESULTS",
-    LEADERBOARD = "LEADERBOARD",
-    FINAL_RESULTS = "FINAL_RESULTS",
+    LOBBY = 'LOBBY',
+    QUESTION_PREVIEW = 'QUESTION_PREVIEW',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_RESULTS = 'QUESTION_RESULTS',
+    LEADERBOARD = 'LEADERBOARD',
+    FINAL_RESULTS = 'FINAL_RESULTS',
 }

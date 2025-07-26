@@ -1,15 +1,15 @@
 'use client';
-import Canvas from "@/components/canvas/Canvas";
-import UtilityCard from "@/components/utility/UtilityCard";
-import QuestionPallete from "./QuestionPallete";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import Canvas from '@/components/canvas/Canvas';
+import UtilityCard from '@/components/utility/UtilityCard';
+import QuestionPallete from './QuestionPallete';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 export default function QuizLeft() {
     const [error, setError] = useState<boolean>(false);
-    const maxCharacters = 50
+    const maxCharacters = 50;
     const [maxCharacterVisible, setMaxCharacterVisible] = useState<boolean>(false);
     const { quiz, updateQuiz } = useNewQuizStore();
     const [quizTitle, setQuizTitle] = useState(quiz.title);
@@ -39,12 +39,15 @@ export default function QuizLeft() {
                             type="text"
                             value={quizTitle}
                             className={cn(
-                                "!text-lg font-medium tracking-wide flex-1 min-w-0 !py-4 px-2 appearance-none border-none outline-none bg-transparent dark:bg-transparent shadow-none text-center",
-                                error && "focus:!ring-2 focus:!ring-red-500/70"
-
+                                '!text-lg font-medium tracking-wide flex-1 min-w-0 !py-4 px-2 appearance-none border-none outline-none bg-transparent dark:bg-transparent shadow-none text-center',
+                                error && 'focus:!ring-2 focus:!ring-red-500/70',
                             )}
                         />
-                        {maxCharacterVisible && <div className={cn("absolute right-2 text-xs px-2 py-1 rounded-sm")}>{maxCharacters - quizTitle.length}</div>}
+                        {maxCharacterVisible && (
+                            <div className={cn('absolute right-2 text-xs px-2 py-1 rounded-sm')}>
+                                {maxCharacters - quizTitle.length}
+                            </div>
+                        )}
                     </div>
                 </UtilityCard>
                 <div className="flex-1 flex items-start justify-center w-full min-w-0">

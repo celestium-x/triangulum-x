@@ -4,9 +4,9 @@ A simple and safe Git guide for developers working on **feature branches**. Foll
 
 ## ✅ Prerequisites
 
-* You already cloned the repo.
-* You have access to the remote.
-* You're working in a team, and `dev` is the base branch.
+- You already cloned the repo.
+- You have access to the remote.
+- You're working in a team, and `dev` is the base branch.
 
 ## 🔁 Step-by-Step Workflow
 
@@ -35,8 +35,9 @@ git checkout -b feature/your-feature-name
 ✅ Creates and switches to a new branch. Always start your feature branches from **updated** `dev`.
 
 📛 Use branch names like:
-* `feature/login-form`
-* `feature/payment-api`
+
+- `feature/login-form`
+- `feature/payment-api`
 
 ### 4. Work on your feature
 
@@ -82,10 +83,10 @@ git push -u origin feature/your-feature-name
 
 ### 7. Create a Pull Request
 
-* Go to GitHub.
-* Click "Compare & pull request".
-* Make sure the **base branch is** `dev`.
-* Title and describe your PR properly.
+- Go to GitHub.
+- Click "Compare & pull request".
+- Make sure the **base branch is** `dev`.
+- Title and describe your PR properly.
 
 📌 Example: "Add Login Form UI - feature/login-form"
 
@@ -124,18 +125,17 @@ Cancels the rebase if it goes wrong. Start again.
 
 ## ✅ Golden Rules
 
-* Always branch from latest `dev`.
-* Rebase your feature branch regularly.
-* Never push directly to `dev` or `main`.
-* Always use `feature/` prefix in branch names.
-* Ask if unsure, don't guess.
+- Always branch from latest `dev`.
+- Rebase your feature branch regularly.
+- Never push directly to `dev` or `main`.
+- Always use `feature/` prefix in branch names.
+- Ask if unsure, don't guess.
 
 ---
 
 This file is for internal use by the dev team. Keep it open while working.
 
 **Stay clean. Stay synced. Avoid conflicts.** 💪
-
 
 ## Contributors
 

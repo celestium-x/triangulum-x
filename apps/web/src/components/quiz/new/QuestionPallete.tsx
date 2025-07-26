@@ -1,23 +1,24 @@
-import MiniCanvas from "@/components/canvas/MiniCanvas";
-import { Button } from "@/components/ui/button";
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import UtilityCard from "@/components/utility/UtilityCard";
-import { templates } from "@/lib/templates";
-import { cn } from "@/lib/utils";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { TbPlus } from 'react-icons/tb'
+import MiniCanvas from '@/components/canvas/MiniCanvas';
+import { Button } from '@/components/ui/button';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import UtilityCard from '@/components/utility/UtilityCard';
+import { templates } from '@/lib/templates';
+import { cn } from '@/lib/utils';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { TbPlus } from 'react-icons/tb';
 
 export default function QuestionPallete() {
-    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion } = useNewQuizStore();
-    const currentQTemplate = templates.find(t => t.id === quiz.theme);
-
+    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion } =
+        useNewQuizStore();
+    const currentQTemplate = templates.find((t) => t.id === quiz.theme);
 
     return (
         <UtilityCard className="max-w-[10rem] w-full shadow-none rounded-sm bg-neutral-200 dark:bg-dark-primary p-0 flex flex-col items-center px-1 border-none h-full">
             <Button
                 onClick={addQuestion}
-                className={cn("bg-dark-base dark:bg-neutral-200 dark:hover:bg-light-base hover:bg-dark-primary ",
-                    'rounded-full m-0 mt-4 px-20 text-xs font-light flex items-center justify-center gap-x-2'
+                className={cn(
+                    'bg-dark-base dark:bg-neutral-200 dark:hover:bg-light-base hover:bg-dark-primary ',
+                    'rounded-full m-0 mt-4 px-20 text-xs font-light flex items-center justify-center gap-x-2',
                 )}
             >
                 <TbPlus />
@@ -42,5 +43,5 @@ export default function QuestionPallete() {
                 ))}
             </div>
         </UtilityCard>
-    )
+    );
 }

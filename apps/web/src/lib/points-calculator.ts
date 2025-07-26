@@ -16,7 +16,7 @@ export default class PointsCalculator {
         const increment = this.base_points * (new_point_multiplier - 1);
 
         for (let i = 0; i < this.no_of_question; i++) {
-            const questionPoints = this.base_points + (increment * i);
+            const questionPoints = this.base_points + increment * i;
             points.push(Math.round(questionPoints));
         }
         return points;
@@ -26,7 +26,7 @@ export default class PointsCalculator {
         const points: number[] = [];
         this.point_multiplier = new_point_multiplier;
 
-        const step_size = Math.round(this.base_points * (new_point_multiplier - 1) / 2);
+        const step_size = Math.round((this.base_points * (new_point_multiplier - 1)) / 2);
 
         for (let i = 0; i < this.no_of_question; i++) {
             if (i === 0) {
@@ -49,7 +49,7 @@ export default class PointsCalculator {
             }
         }
 
-        const rounded_points = points.map(p => Math.round(p / 5) * 5);
+        const rounded_points = points.map((p) => Math.round(p / 5) * 5);
         return rounded_points;
     }
 
@@ -57,7 +57,7 @@ export default class PointsCalculator {
         const points: number[] = [point];
         index++;
 
-        while((index) < this.no_of_question) {
+        while (index < this.no_of_question) {
             const prev_question_point = points[points.length - 1]!;
             const current_question_point = this.point_multiplier * prev_question_point;
             const rounded_value = this.round_to_two_decimals(current_question_point);
@@ -66,7 +66,6 @@ export default class PointsCalculator {
         }
 
         return points;
-
     }
 
     public round_to_two_decimals(value: number): number {
@@ -76,5 +75,4 @@ export default class PointsCalculator {
     public round_to_integer(value: number): number {
         return Math.round(value);
     }
-
 }

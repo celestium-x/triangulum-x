@@ -1,13 +1,13 @@
-'use client'
-import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
-import { useState } from "react";
+'use client';
+import { cn } from '@/lib/utils';
+import { motion } from 'motion/react';
+import { useState } from 'react';
 
 interface NavItemsProps {
     items: {
         name: string;
         link?: string;
-        onClick?: () => void
+        onClick?: () => void;
     }[];
     className?: string;
 }
@@ -19,7 +19,7 @@ export default function NavItems({ items, className }: NavItemsProps) {
         <motion.div
             onMouseLeave={() => setHovered(null)}
             className={cn(
-                "hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+                'hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2',
                 className,
             )}
         >
@@ -42,4 +42,4 @@ export default function NavItems({ items, className }: NavItemsProps) {
             ))}
         </motion.div>
     );
-};
+}

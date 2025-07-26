@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 export enum DraftRenderer {
     THEME = 'THEME',
@@ -6,7 +6,7 @@ export enum DraftRenderer {
     INTERACTION = 'INTERACTION',
     ADVANCED = 'ADVANCED',
     STAKE = 'STAKE',
-    AUTO_SAVE="AUTO_SAVE",
+    AUTO_SAVE = 'AUTO_SAVE',
     NONE = 'NONE',
 }
 
@@ -17,5 +17,5 @@ interface DraftRendererStoreTypes {
 
 export const useDraftRendererStore = create<DraftRendererStoreTypes>((set) => ({
     state: DraftRenderer.QUESTION,
-    setState: (state) => set({ state })
-}))
+    setState: (state) => set({ state }),
+}));

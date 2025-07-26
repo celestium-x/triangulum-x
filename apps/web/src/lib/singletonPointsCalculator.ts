@@ -1,4 +1,4 @@
-import PointsCalculator from "@/lib/points-calculator";
+import PointsCalculator from '@/lib/points-calculator';
 
 let singletonPointsCalculator: PointsCalculator | null = null;
 

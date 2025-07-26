@@ -1,11 +1,8 @@
-import { signOut } from "next-auth/react";
-import { Dispatch, SetStateAction } from "react";
-import OpacityBackground from "./OpacityBackground";
-import UtilityCard from "./UtilityCard";
-import { Button } from "../ui/button";
-
-
-
+import { signOut } from 'next-auth/react';
+import { Dispatch, SetStateAction } from 'react';
+import OpacityBackground from './OpacityBackground';
+import UtilityCard from './UtilityCard';
+import { Button } from '../ui/button';
 
 interface LogoutModalProps {
     openLogoutModal: boolean;
@@ -13,10 +10,9 @@ interface LogoutModalProps {
 }
 
 export default function LogoutModal({ openLogoutModal, setOpenLogoutModal }: LogoutModalProps) {
-
     async function LogoutHandler() {
         signOut({
-            callbackUrl: "/"
+            callbackUrl: '/',
         });
     }
 
@@ -27,10 +23,11 @@ export default function LogoutModal({ openLogoutModal, setOpenLogoutModal }: Log
                     <UtilityCard className="max-w-md px-8 py-6 flex flex-col items-center justify-center space-y-6">
                         <div className="space-y-2">
                             <h2 className="text-2xl font-semibold text-neutral-900 dark:text-white">
-                               Log out ?
+                                Log out ?
                             </h2>
                             <p className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
-                                You will be logged out of your session and redirected to the Sign in Page.
+                                You will be logged out of your session and redirected to the Sign in
+                                Page.
                             </p>
                         </div>
 
@@ -52,6 +49,5 @@ export default function LogoutModal({ openLogoutModal, setOpenLogoutModal }: Log
                 </OpacityBackground>
             )}
         </div>
-    )
-
+    );
 }

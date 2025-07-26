@@ -1,6 +1,6 @@
-import { generateDefaultQuestions } from "@/lib/generate-default-questions";
-import { QuestionType, QuizStatusEnum, QuizType, TemplateEnum } from "@/types/prisma-types";
-import { create } from "zustand";
+import { generateDefaultQuestions } from '@/lib/generate-default-questions';
+import { QuestionType, QuizStatusEnum, QuizType, TemplateEnum } from '@/types/prisma-types';
+import { create } from 'zustand';
 
 interface NewQuizStoreTypes {
     quiz: QuizType;
@@ -18,14 +18,13 @@ interface NewQuizStoreTypes {
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
-
     quiz: {
-        id: "",
-        title: "Centralized vs Decentralized: Know the Difference?",
-        description: "",
+        id: '',
+        title: 'Centralized vs Decentralized: Know the Difference?',
+        description: '',
         theme: TemplateEnum.CLASSIC,
         prizePool: 0,
-        currency: "",
+        currency: '',
         basePointsPerQuestion: 100,
         pointsMultiplier: 1,
         timeBonus: false,
@@ -54,7 +53,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
 
     addQuestion: () => {
         const question: QuestionType = {
-            id: "",
+            id: '',
             question: "Which element has the chemical symbol 'O'?",
             options: ['Oxygen', 'Gold', 'Hydrogen', 'Silver'],
             correctAnswer: 0,
@@ -63,8 +62,8 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             basePoints: 100,
             timeLimit: 30,
             orderIndex: get().quiz.questions.length,
-            imageUrl: "",
-            quizId: ""
+            imageUrl: '',
+            quizId: '',
         };
         const quiz = get().quiz;
         set({ quiz: { ...quiz, questions: [...quiz.questions, question] } });
@@ -76,9 +75,9 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             quiz: {
                 ...quiz,
                 questions: quiz.questions.map((q, index) =>
-                    index === questionIndex ? { ...q, ...question } : q
-                )
-            }
+                    index === questionIndex ? { ...q, ...question } : q,
+                ),
+            },
         });
     },
 
@@ -90,38 +89,39 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
 
         set({
             quiz: { ...quiz, questions: updatedQuestions },
-            currentQuestionIndex: Math.min(get().currentQuestionIndex, updatedQuestions.length - 1)
+            currentQuestionIndex: Math.min(get().currentQuestionIndex, updatedQuestions.length - 1),
         });
     },
 
     updateQuestionPoints: (points: number[]) => {
         const quiz = get().quiz;
-        const newQuestions: QuestionType[] = quiz.questions.map((qs: QuestionType, index: number) => {
-            return {
-                ...qs,
-                basePoints: points[index]!
-            }
-        });
+        const newQuestions: QuestionType[] = quiz.questions.map(
+            (qs: QuestionType, index: number) => {
+                return {
+                    ...qs,
+                    basePoints: points[index]!,
+                };
+            },
+        );
         set({
             quiz: {
                 ...quiz,
-                questions: newQuestions
+                questions: newQuestions,
             },
-        })
+        });
     },
 
     changeQuestionPoint: (questionIndex: number, point: number) => {
-        get().editQuestion(questionIndex, { basePoints: point })
+        get().editQuestion(questionIndex, { basePoints: point });
     },
 
     getQuestion(questionIndex: number) {
-
         if (questionIndex < 0) return null;
 
         const quiz = get().quiz;
-        const question: QuestionType = quiz.questions.find((_, index) => index === questionIndex)!
+        const question: QuestionType = quiz.questions.find((_, index) => index === questionIndex)!;
         return question;
     },
     loading: false,
-    setLoading: (loading: boolean) => set({ loading })
+    setLoading: (loading: boolean) => set({ loading }),
 }));

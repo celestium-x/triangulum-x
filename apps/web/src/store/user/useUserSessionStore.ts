@@ -1,5 +1,5 @@
 import { Session } from 'next-auth';
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 interface UserSessionStoreType {
     session: Session | null;
@@ -8,5 +8,5 @@ interface UserSessionStoreType {
 
 export const useUserSessionStore = create<UserSessionStoreType>((set) => ({
     session: null,
-    setSession: (data: Session | null) => set({ session: data })
-}))
+    setSession: (data: Session | null) => set({ session: data }),
+}));

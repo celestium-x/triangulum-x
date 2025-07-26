@@ -1,6 +1,6 @@
-import { TbPlus } from "react-icons/tb";
-import HeadAndSubHead from "../content/HeadAndSubHead";
-import UtilityCard from "../utility/UtilityCard";
+import { TbPlus } from 'react-icons/tb';
+import HeadAndSubHead from '../content/HeadAndSubHead';
+import UtilityCard from '../utility/UtilityCard';
 
 export default function HomeCreateQuiz() {
     return (
@@ -14,11 +14,12 @@ export default function HomeCreateQuiz() {
                 <UtilityCard className="w-full aspectshadow-md border border-dashed transition-all duration-300 ease-in-out hover:shadow-lg relative overflow-hidden p-0 m-0 rounded-xl flex items-center justify-center min-w-[20rem] min-h-[10rem] max-h-[10rem] max-w-[20rem] hover:scale-105">
                     <div className="flex items-center justify-center gap-x-2">
                         <TbPlus />
-                        <div className="text-xs dark:text-light-base text-dark-primary tracking-wide">create quiz</div>
+                        <div className="text-xs dark:text-light-base text-dark-primary tracking-wide">
+                            create quiz
+                        </div>
                     </div>
                 </UtilityCard>
             </div>
-
         </div>
     );
 }
