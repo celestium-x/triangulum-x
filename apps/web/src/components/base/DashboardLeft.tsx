@@ -14,7 +14,6 @@ import {
     TbSettings,
     TbHelp,
 } from 'react-icons/tb';
-import { IoEnterOutline } from 'react-icons/io5';
 
 export default function DashboardLeft(): JSX.Element {
     const { value, setValue } = useHomeRendererStore();
@@ -53,12 +52,6 @@ export default function DashboardLeft(): JSX.Element {
                     label="Create Quiz"
                     onClick={() => setValue(HomeRendererEnum.CREATE_QUIZ)}
                     isActive={value === HomeRendererEnum.CREATE_QUIZ}
-                />
-                <NavOption
-                    icon={<IoEnterOutline size={20} />}
-                    label="Join Quiz"
-                    onClick={() => setValue(HomeRendererEnum.JOIN_QUIZ)}
-                    isActive={value === HomeRendererEnum.JOIN_QUIZ}
                 />
                 <NavOption
                     icon={<TbChartBar size={20} />}
