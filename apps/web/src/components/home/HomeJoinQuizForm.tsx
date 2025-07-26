@@ -1,5 +1,5 @@
 "use client";
-import JoinQuizBar from "./JoinQuizBar";
+import JoinQuizBar from "../base/JoinQuizBar";
 
 export default function HomeJoinQuizForm() {
 
