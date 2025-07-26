@@ -1,8 +1,8 @@
-import Redis from "ioredis";
-import { GameSessionType } from "../types/prisma-types";
+import Redis from 'ioredis';
+import { GameSessionType } from '../types/prisma-types';
 
-const SECONDS = 60
-const MINUTES = 60
+const SECONDS = 60;
+const MINUTES = 60;
 const HOURS = 24;
 const REDIS_URL = process.env.REDIS_URL;
 
@@ -13,13 +13,19 @@ export default class RedisCache {
         this.redis_cache = new Redis(REDIS_URL!);
     }
 
-    public async set_game_session(game_live_session_id: string, game_live_session: Partial<GameSessionType>) {
+    public async set_game_session(
+        game_live_session_id: string,
+        game_live_session: Partial<GameSessionType>,
+    ) {
         try {
             const key = this.get_game_session_key(game_live_session_id);
-            await this.redis_cache.hset(key, game_live_session);
+            const entries: [string, string][] = Object.entries(game_live_session).map(
+                ([key, value]) => [key, JSON.stringify(value)],
+            );
+            await this.redis_cache.hset(key, ...entries.flat());
             await this.redis_cache.expire(key, SECONDS * MINUTES * HOURS);
         } catch (err) {
-            console.error("Error in session management while creating session", err);
+            console.error('Error in session management while creating session', err);
         }
     }
 
@@ -41,7 +47,7 @@ export default class RedisCache {
 
             return parsed;
         } catch (err) {
-            console.error("RedisCache error get_game_session : ", err);
+            console.error('RedisCache error get_game_session : ', err);
             return null;
         }
     }
@@ -51,8 +57,7 @@ export default class RedisCache {
             const key = this.get_game_session_key(game_live_session_id);
             await this.redis_cache.del(key);
         } catch (err) {
-            console.error("RedisCache error delete_game_session : ", err);
-
+            console.error('RedisCache error delete_game_session : ', err);
         }
     }
 

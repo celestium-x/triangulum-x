@@ -1,11 +1,11 @@
-import prisma from "@repo/db/client";
-import { Request, Response } from "express";
+import prisma from '@repo/db/client';
+import { Request, Response } from 'express';
 
 export default async function getAllQuizController(req: Request, res: Response) {
     if (!req.user?.id) {
         res.status(401).json({
             success: false,
-            message: "User authentication required",
+            message: 'User authentication required',
         });
         return;
     }
@@ -13,7 +13,7 @@ export default async function getAllQuizController(req: Request, res: Response) 
     try {
         const quizzes = await prisma.quiz.findMany({
             where: {
-                hostId: String(req.user.id)
+                hostId: String(req.user.id),
             },
             select: {
                 id: true,
@@ -23,30 +23,29 @@ export default async function getAllQuizController(req: Request, res: Response) 
                 currency: true,
                 status: true,
                 scheduledAt: true,
-            }
+            },
         });
 
         if (!quizzes || quizzes.length === 0) {
             res.status(200).json({
                 success: true,
-                message: "No quizzes found",
-                quizzes: []
+                message: 'No quizzes found',
+                quizzes: [],
             });
             return;
         }
 
         res.status(200).json({
             success: true,
-            message: "Quizzes retrieved successfully",
-            quizzes
+            message: 'Quizzes retrieved successfully',
+            quizzes,
         });
         return;
-
     } catch (err) {
-        console.error("Error fetching quizzes:", err);
+        console.error('Error fetching quizzes:', err);
         res.status(500).json({
             success: false,
-            message: "Internal server error while fetching quizzes",
+            message: 'Internal server error while fetching quizzes',
         });
         return;
     }

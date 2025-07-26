@@ -1,6 +1,5 @@
-import { WebSocket, Server as WSServer } from 'ws'
-import { QuizType } from '../types/prisma-types';
-import { Server } from 'http'
+import { WebSocket, Server as WSServer } from 'ws';
+import { Server } from 'http';
 import Redis from 'ioredis';
 const REDIS_URL = process.env.REDIS_URL;
 
@@ -21,13 +20,7 @@ export default class WebsocketServer {
     }
 
     private initialize() {
-        this.wss.on('connection', (ws: WebSocket, req) => {
-            
-        })
-        this.subscriber.on('message', (data) => {
-
-        })
+        this.wss.on('connection', (_ws: WebSocket, _req) => {});
+        this.subscriber.on('message', (_data) => {});
     }
 }
-
-
