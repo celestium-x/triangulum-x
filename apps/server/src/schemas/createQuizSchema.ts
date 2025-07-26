@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod';
 
 const questionSchema = z.object({
     question: z.string(),
@@ -9,7 +9,7 @@ const questionSchema = z.object({
     basePoints: z.number(),
     timeLimit: z.number(),
     orderIndex: z.number(),
-    imageUrl: z.string().optional()
+    imageUrl: z.string().optional(),
 });
 
 export const createQuizSchema = z.object({
@@ -17,7 +17,7 @@ export const createQuizSchema = z.object({
     title: z.string().min(1).max(50),
     description: z.string().optional(),
     prizePool: z.coerce.number().nonnegative(),
-    currency: z.string().default("SOL"),
+    currency: z.string().default('SOL'),
     basePointsPerQuestion: z.coerce.number().optional(),
     pointsMultiplier: z.coerce.number().optional(),
     timeBonus: z.coerce.boolean().optional(),

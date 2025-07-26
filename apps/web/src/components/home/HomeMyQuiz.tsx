@@ -26,7 +26,7 @@ export default function HomeMyQuiz() {
                 console.error("Error in getting all the quizzes", err);
             }
         }
-        
+
         getUserAllQuizs();
     }, [session?.user.token, setAllQuizs])
 
@@ -36,9 +36,7 @@ export default function HomeMyQuiz() {
                 heading="My Quizzes"
                 subHeading="Manage your quizzes, analytics, and more"
             />
-            <div>
-                <AllQuizComponent />
-            </div>
+            <AllQuizComponent />
         </div>
     )
 }

@@ -1,6 +1,6 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { v4 as uuid } from "uuid";
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { v4 as uuid } from 'uuid';
 
 export default class S3ClientActions {
     private s3: S3Client;
@@ -15,7 +15,9 @@ export default class S3ClientActions {
         });
     }
 
-    async getPresignedUrl(fileType: string): Promise<{ signedUrl: string, publicUrl: string, key: string }> {
+    async getPresignedUrl(
+        fileType: string,
+    ): Promise<{ signedUrl: string; publicUrl: string; key: string }> {
         const fileExt = this.getFileExtension(fileType);
         const fileName = `${uuid()}.${fileExt}`;
         const key = `quiz-images/${fileName}`;
@@ -28,7 +30,6 @@ export default class S3ClientActions {
 
         const signedUrl = await getSignedUrl(this.s3, command, { expiresIn: 60 });
         const publicUrl = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${key}`;
-
 
         return { signedUrl, publicUrl, key };
     }
@@ -43,7 +44,7 @@ export default class S3ClientActions {
             'image/svg+xml': 'svg',
             'application/pdf': 'pdf',
             'text/plain': 'txt',
-            'application/json': 'json'
+            'application/json': 'json',
         };
 
         return mimeToExt[mimeType] || mimeType.split('/')[1] || 'bin';

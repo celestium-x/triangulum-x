@@ -1,5 +1,3 @@
-
-
 export interface UserType {
     id: string;
     name: string;
@@ -51,7 +49,6 @@ export interface QuizType {
     questions: QuestionType[];
     participants?: ParticipantType[];
     spectators?: SpectatorType[];
-
 }
 
 export interface QuestionType {
@@ -97,7 +94,69 @@ export interface SpectatorType {
     quiz?: QuizType;
 }
 
+export interface GameSessionType {
+    id: string;
+    currentQuestionIndex: number;
+    currentQuestionId?: string | null;
+    status: SessionStatusEnum;
+    hostScreen: HostScreenEnum;
+    participantScreen: ParticipantScreenEnum;
+    questionStartedAt?: Date | null;
+    questionEndsAt?: Date | null;
 
+    lastEliminationAt?: number | null;
+    nextEliminationAt?: number | null;
+
+    totalParticipants: number;
+    activeParticipants: number;
+    totalSpectators: number;
+
+    avgResponseTime: number;
+    correctAnswerRate: number;
+
+    createdAt: Date;
+    updatedAt: Date;
+
+    quizId: string;
+    quiz?: QuizType;
+
+    responses?: ResponseType[];
+    eliminations?: EliminationType[];
+}
+
+export interface ResponseType {
+    id: string;
+    selectedAnswer: number;
+    isCorrect: boolean;
+    timeToAnswer: number;
+    pointsEarned: number;
+
+    timeBonus: number;
+    streakBonus: number;
+    answeredAt: Date;
+
+    participantId: string;
+    participant?: ParticipantType;
+
+    questionId: string;
+    question?: QuestionType;
+
+    gameSessionId: string;
+    gameSession?: GameSessionType;
+}
+
+export interface EliminationType {
+    id: string;
+    participantId: string;
+    questionIndex: number;
+    finalScore: number;
+    finalRank: number;
+    reason: string;
+    eliminatedAt: Date;
+
+    gameSessionId: string;
+    gameSession?: GameSessionType;
+}
 
 export enum TemplateEnum {
     CLASSIC = 'CLASSIC',
@@ -110,19 +169,46 @@ export enum TemplateEnum {
 }
 
 export enum QuizStatusEnum {
-    CREATED = "CREATED",
-    SCHEDULED = "SCHEDULED",
-    LIVE = "LIVE",
-    COMPLETED = "COMPLETED",
-    CANCELLED = "CANCELLED",
-    PAYOUT_PENDING = "PAYOUT_PENDING",
-    PAYOUT_COMPLETED = "PAYOUT_COMPLETED",
+    CREATED = 'CREATED',
+    SCHEDULED = 'SCHEDULED',
+    LIVE = 'LIVE',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED',
+    PAYOUT_PENDING = 'PAYOUT_PENDING',
+    PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
 }
 
 export enum Interactions {
-    THUMBS_UP = "THUMBS_UP",
-    DOLLAR = "DOLLAR",
-    BULB = "BULB",
-    HEART = "HEART",
-    SMILE = "SMILE",
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
+export enum SessionStatusEnum {
+    WAITING = 'WAITING',
+    STARTING = 'STARTING',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_ENDED = 'QUESTION_ENDED',
+    ELIMINATING = 'ELIMINATING',
+    COMPLETED = 'COMPLETED',
+    PAUSED = 'PAUSED',
+}
+
+export enum ParticipantScreenEnum {
+    LOBBY = 'LOBBY',
+    COUNTDOWN = 'COUNTDOWN',
+    MOTIVATION = 'MOTIVATION',
+    QUESTION_READING = 'QUESTION_READING',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+}
+
+export enum HostScreenEnum {
+    LOBBY = 'LOBBY',
+    QUESTION_PREVIEW = 'QUESTION_PREVIEW',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_RESULTS = 'QUESTION_RESULTS',
+    LEADERBOARD = 'LEADERBOARD',
+    FINAL_RESULTS = 'FINAL_RESULTS',
 }
