@@ -4,8 +4,8 @@ import { GameSessionType } from "../types/prisma-types";
 const SECONDS = 60
 const MINUTES = 60
 const HOURS = 24;
-
 const REDIS_URL = process.env.REDIS_URL;
+
 export default class RedisCache {
     private redis_cache: Redis;
 
