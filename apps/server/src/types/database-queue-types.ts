@@ -1,0 +1,18 @@
+export interface JobOption {
+    attempts?: number;
+    delay?: number;
+    removeOnComplete?: number;
+    removeOnFail?: number;
+}
+
+export enum QueueJobTypes {
+    CREATE_GAME_SESSION = 'CREATE_GAME_SESSION',
+    UPDATE_GAME_SESSION = 'UPDATE_GAME_SESSION',
+    UPDATE_SESSION_STATUS = 'UPDATE_SESSION_STATUS',
+    NAME_CHANGE = 'NAME_CHANGE',
+    UPDATE_SCREEN = 'UPDATE_SCREEN',
+    ADD_PARTICIPANT = 'ADD_PARTICIPANT',
+    UPDATE_PARTICIPANT_SCORE = 'UPDATE_PARTICIPANT_SCORE',
+    CREATE_QUESTION_RESPONSE = 'CREATE_QUESTION_RESPONSE',
+    CLEANUP_SESSION = 'CLEANUP_SESSION',
+}

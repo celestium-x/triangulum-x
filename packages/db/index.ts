@@ -13,3 +13,23 @@ const prisma: ReturnType<typeof prismaClientSingleton> = globalThis.prismaGlobal
 export default prisma
 
 if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
+
+export type {
+  Prisma,
+  // Model types --------------------------->
+  User,
+  Quiz,
+  Question,
+  Participant,
+  Spectator,
+  GameSession,
+  Response,
+  Elimination,
+  // Enum types ----------------------------->
+  QuizStatus,
+  Template,
+  Interactions,
+  SessionStatus,
+  ParticipantScreen,
+  HostScreen
+} from '@prisma/client'

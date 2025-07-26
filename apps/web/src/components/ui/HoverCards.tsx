@@ -32,7 +32,7 @@ export default function HoverCards({
             <AnimatePresence>
               {hoveredIndex === idx && (
                 <motion.span
-                  className="absolute inset-0 h-full w-full bg-primary/10 dark:bg-primary/10 block rounded-3xl"
+                  className="absolute inset-0 h-full w-full dark:bg-light-base/40 bg-dark-base/10 block rounded-3xl"
                   layoutId="hoverBackground"
                   initial={{ opacity: 0 }}
                   animate={{
@@ -113,11 +113,11 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full overflow-hidden dark:bg-[#141414] bg-light-base border border-neutral-300 dark:border-neutral-700 relative z-20 transition-all duration-200 ease-out min-h-[12rem]",
+        "rounded-2xl h-full w-full overflow-hidden dark:bg-[#141414] bg-light-base border border-neutral-300 dark:border-neutral-700 relative z-10 transition-all duration-200 ease-out min-h-[12rem]",
         className
       )}
     >
-      <div className="relative z-50 h-full">
+      <div className="relative z-10 h-full">
         <div className="h-full">{children}</div>
       </div>
     </div>
