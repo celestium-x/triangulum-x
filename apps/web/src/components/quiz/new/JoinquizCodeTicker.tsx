@@ -1,7 +1,7 @@
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { cn } from "@/lib/utils";
-import { CheckIcon, CopyIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { cn } from '@/lib/utils';
+import { CheckIcon, CopyIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function JoinQuizCodeTicker() {
     const [copied, setCopied] = useState<boolean>(false);
@@ -10,7 +10,7 @@ export default function JoinQuizCodeTicker() {
         if (copied) {
             setTimeout(() => {
                 setCopied(false);
-            }, 2000)
+            }, 2000);
         }
     }, [copied]);
 
@@ -22,9 +22,9 @@ export default function JoinQuizCodeTicker() {
         <ToolTipComponent content="The code lets your audience join the presentation and expires in 2 days">
             <div
                 className={cn(
-                    "bg-neutral-200 px-3 py-1.5 rounded-md font-light z-20",
-                    "flex items-center justify-center gap-x-2 absolute top-2 -translate-x-1/2 left-1/2 cursor-pointer",
-                    "max-w-[90vw] flex-wrap text-center"
+                    'bg-neutral-200 px-3 py-1.5 rounded-md font-light z-20',
+                    'flex items-center justify-center gap-x-2 absolute top-2 -translate-x-1/2 left-1/2 cursor-pointer',
+                    'max-w-[90vw] flex-wrap text-center',
                 )}
             >
                 <span className="text-sm text-dark-base">Spectators | Use code</span>

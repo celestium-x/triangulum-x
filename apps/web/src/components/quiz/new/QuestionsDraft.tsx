@@ -1,23 +1,23 @@
-"use client"
+'use client';
 
-import { DraftRenderer, useDraftRendererStore } from "@/store/new-quiz/useDraftRendererStore";
-import { RxCross2 } from "react-icons/rx";
-import Options from "./Options";
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { Input } from "@/components/ui/input";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { useEffect, useRef, useState } from "react";
-import { getSingletonPointsCalculator } from "@/lib/singletonPointsCalculator";
-import { IoIosInfinite } from "react-icons/io";
-import UploadQuizImage from "./UploadQuizImage";
+import { DraftRenderer, useDraftRendererStore } from '@/store/new-quiz/useDraftRendererStore';
+import { RxCross2 } from 'react-icons/rx';
+import Options from './Options';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { Input } from '@/components/ui/input';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { useEffect, useRef, useState } from 'react';
+import { getSingletonPointsCalculator } from '@/lib/singletonPointsCalculator';
+import { IoIosInfinite } from 'react-icons/io';
+import UploadQuizImage from './UploadQuizImage';
 
 export default function QuestionsDraft() {
     const { setState } = useDraftRendererStore();
     const { quiz, currentQuestionIndex, changeQuestionPoint, getQuestion } = useNewQuizStore();
     const currentQ = quiz.questions[currentQuestionIndex];
 
-    const [basePoints, setBasePoints] = useState<string>(currentQ?.basePoints.toString() || "0");
+    const [basePoints, setBasePoints] = useState<string>(currentQ?.basePoints.toString() || '0');
     const singletonPointsCalculator = getSingletonPointsCalculator(quiz.questions.length);
     const [wrongBasePoints, setWrongBasePoints] = useState<boolean>(false);
     const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -46,11 +46,12 @@ export default function QuestionsDraft() {
         }, 2000);
 
         setWrongBasePoints(false);
-    };
-
-
+    }
     function handleUpdateQuestionPoints(questionIndex: number, point: number) {
-        const points: number[] = singletonPointsCalculator.set_point_after_current_index(questionIndex, point);
+        const points: number[] = singletonPointsCalculator.set_point_after_current_index(
+            questionIndex,
+            point,
+        );
         let pointsItr: number = 0;
 
         while (questionIndex < quiz.questions.length) {
@@ -58,7 +59,6 @@ export default function QuestionsDraft() {
             questionIndex++;
             pointsItr++;
         }
-
     }
 
     function getQuestionPoints(questionIndex: number) {
@@ -66,7 +66,7 @@ export default function QuestionsDraft() {
     }
 
     useEffect(() => {
-        setBasePoints(currentQ?.basePoints.toString() || "0");
+        setBasePoints(currentQ?.basePoints.toString() || '0');
     }, [currentQ?.basePoints]);
 
     return (
@@ -79,24 +79,27 @@ export default function QuestionsDraft() {
 
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
-                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">Base Points</span>
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">
+                        Base Points
+                    </span>
                     <ToolTipComponent content="This is the base points for this question">
                         <AiOutlineQuestionCircle size={15} />
                     </ToolTipComponent>
                 </div>
                 <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    between<span>{getQuestionPoints(currentQuestionIndex - 1) || 0}</span>-<span>{getQuestionPoints(currentQuestionIndex + 1) || <IoIosInfinite />}</span>
+                    between<span>{getQuestionPoints(currentQuestionIndex - 1) || 0}</span>-
+                    <span>{getQuestionPoints(currentQuestionIndex + 1) || <IoIosInfinite />}</span>
                 </div>
                 <Input
-                    type={"number"}
+                    type={'number'}
                     min={getQuestionPoints(currentQuestionIndex - 1)}
                     max={getQuestionPoints(currentQuestionIndex + 1)}
                     value={basePoints}
-                    className={`mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${wrongBasePoints ? "border border-red-600 text-red-600" : ""} `}
+                    className={`mt-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${wrongBasePoints ? 'border border-red-600 text-red-600' : ''} `}
                     onChange={handleBasePointsChange}
                 />
             </div>
             <UploadQuizImage />
         </div>
-    )
+    );
 }

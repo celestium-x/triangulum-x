@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { templates } from "@/lib/templates";
-import { cn } from "@/lib/utils";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { MdOutlineDragIndicator } from "react-icons/md";
-import ColoredInput from "@/components/utility/ColoredInput";
+import { useState } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { templates } from '@/lib/templates';
+import { cn } from '@/lib/utils';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { MdOutlineDragIndicator } from 'react-icons/md';
+import ColoredInput from '@/components/utility/ColoredInput';
 
 export default function Options() {
     const { quiz, currentQuestionIndex, editQuestion } = useNewQuizStore();
@@ -69,8 +69,8 @@ export default function Options() {
                     onDragOver={handleDragOver}
                     onDrop={() => handleDrop(idx)}
                     className={cn(
-                        "flex justify-start items-center gap-x-3 w-full transition-all duration-200 ease-outrounded-md",
-                        draggedIndex === idx ? "opacity-50" : ""
+                        'flex justify-start items-center gap-x-3 w-full transition-all duration-200 ease-outrounded-md',
+                        draggedIndex === idx ? 'opacity-50' : '',
                     )}
                 >
                     <MdOutlineDragIndicator

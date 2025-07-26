@@ -1,8 +1,7 @@
 'use client';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 import { createPortal } from 'react-dom';
-import { FaImage } from "react-icons/fa";
-
+import { FaImage } from 'react-icons/fa';
 
 export default function DragImageBackground({
     onDropFile,
@@ -11,7 +10,7 @@ export default function DragImageBackground({
 }) {
     const { dragActive } = useDragAndDrop({
         onDropFile,
-        acceptedTypes: ['image/']
+        acceptedTypes: ['image/'],
     });
 
     if (!dragActive) return null;
@@ -33,9 +32,8 @@ export default function DragImageBackground({
                         </div>
                     </div>
                 </div>
-
             )}
         </>,
-        document.body
+        document.body,
     );
 }

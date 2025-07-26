@@ -1,23 +1,22 @@
-'use client'
-import { signIn } from "next-auth/react"
-import { Dispatch, SetStateAction } from "react";
-import OpacityBackground from "../utility/OpacityBackground";
-import UtilityCard from "../utility/UtilityCard";
-import { Button } from "../ui/button";
-import Image from "next/image";
+'use client';
+import { signIn } from 'next-auth/react';
+import { Dispatch, SetStateAction } from 'react';
+import OpacityBackground from '../utility/OpacityBackground';
+import UtilityCard from '../utility/UtilityCard';
+import { Button } from '../ui/button';
+import Image from 'next/image';
 
 interface LoginModalProps {
-    opensignInModal: boolean,
+    opensignInModal: boolean;
     setOpenSignInModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function LoginModal({ opensignInModal, setOpenSignInModal }: LoginModalProps) {
-
     async function signinHandler() {
         signIn('google', {
             redirect: false,
-            callbackUrl: "/"
-        })
+            callbackUrl: '/',
+        });
     }
 
     return (
@@ -30,10 +29,14 @@ export default function LoginModal({ opensignInModal, setOpenSignInModal }: Logi
                                 Sign in to continue
                             </h2>
                             <p className="text-sm text-neutral-500 dark:text-neutral-400 font-normal">
-                                Log in to access your personalized dashboard, track your quiz performance, and compete with others.
+                                Log in to access your personalized dashboard, track your quiz
+                                performance, and compete with others.
                             </p>
                         </div>
-                        <Button onClick={signinHandler} className="w-full flex items-center justify-center gap-3 px-6 py-[22px] text-sm font-medium bg-neutral-200 hover:bg-neutral-200/70 dark:bg-dark-primary/30 hover:dark:bg-dark-primary/40 rounded-md border-[1px] border-neutral-300 dark:border-neutral-700 cursor-pointer">
+                        <Button
+                            onClick={signinHandler}
+                            className="w-full flex items-center justify-center gap-3 px-6 py-[22px] text-sm font-medium bg-neutral-200 hover:bg-neutral-200/70 dark:bg-dark-primary/30 hover:dark:bg-dark-primary/40 rounded-md border-[1px] border-neutral-300 dark:border-neutral-700 cursor-pointer"
+                        >
                             <Image
                                 src="/images/google.png"
                                 height={24}
@@ -42,16 +45,25 @@ export default function LoginModal({ opensignInModal, setOpenSignInModal }: Logi
                                 priority
                                 unoptimized
                             />
-                            <span className="text-neutral-900 dark:text-white">Sign in with Google</span>
+                            <span className="text-neutral-900 dark:text-white">
+                                Sign in with Google
+                            </span>
                         </Button>
                         <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center leading-relaxed">
                             By signing in, you agree to our
-                            <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"> Terms of Service</span> and
-                            <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"> Privacy Policy</span>
+                            <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                                {' '}
+                                Terms of Service
+                            </span>{' '}
+                            and
+                            <span className="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer">
+                                {' '}
+                                Privacy Policy
+                            </span>
                         </p>
                     </UtilityCard>
                 </OpacityBackground>
             )}
         </div>
-    )
+    );
 }

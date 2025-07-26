@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface PointMultiplierAdvanced {
     enablePointMultiplier: boolean;
@@ -18,7 +18,6 @@ export const usePointsMultiplierAdvStore = create<PointMultiplierAdvanced>((set)
     setEnableLinearPointMultiplier: (val) => set({ enableLinearPointMultiplier: val }),
     enableSteppedPointMultiplier: false,
     setEnableSteppedPointMultiplier: (val) => set({ enableSteppedPointMultiplier: val }),
-    inputPointMultiplier: "1.2",
-    setInputPointMultiplier: (val) => set({ inputPointMultiplier: val })
-}))
-
+    inputPointMultiplier: '1.2',
+    setInputPointMultiplier: (val) => set({ inputPointMultiplier: val }),
+}));

@@ -1,4 +1,4 @@
-import HeadAndSubHead from "../content/HeadAndSubHead";
+import HeadAndSubHead from '../content/HeadAndSubHead';
 
 export default function HomeHistory() {
     return (
@@ -8,5 +8,5 @@ export default function HomeHistory() {
                 subHeading="Manage your quizzes, analytics, and more"
             />
         </div>
-    )
+    );
 }

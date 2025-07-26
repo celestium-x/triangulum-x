@@ -1,16 +1,16 @@
-import { useHomeRendererStore } from "@/store/home/useHomeRendererStore";
-import { HomeRendererEnum } from "@/types/homeRendererTypes";
-import { motion } from "framer-motion";
-import { JSX } from "react";
-import HomeDashboard from "../home/HomeDashboard";
-import HomeMyQuiz from "../home/HomeMyQuiz";
-import HomeCreateQuiz from "../home/HomeCreateQuiz";
-import HomeAnalytics from "../home/HomeAnalytics";
-import HomeWallet from "../home/HomeWallet";
-import HomeLeaderboards from "../home/HomeLeaderboards";
-import HomeHistory from "../home/HomeHistory";
-import HomeSettings from "../home/HomeSettings";
-import HomeHelp from "../home/HomeHelp";
+import { useHomeRendererStore } from '@/store/home/useHomeRendererStore';
+import { HomeRendererEnum } from '@/types/homeRendererTypes';
+import { motion } from 'framer-motion';
+import { JSX } from 'react';
+import HomeDashboard from '../home/HomeDashboard';
+import HomeMyQuiz from '../home/HomeMyQuiz';
+import HomeCreateQuiz from '../home/HomeCreateQuiz';
+import HomeAnalytics from '../home/HomeAnalytics';
+import HomeWallet from '../home/HomeWallet';
+import HomeLeaderboards from '../home/HomeLeaderboards';
+import HomeHistory from '../home/HomeHistory';
+import HomeSettings from '../home/HomeSettings';
+import HomeHelp from '../home/HomeHelp';
 
 export default function DashboardRight(): JSX.Element {
     const { value } = useHomeRendererStore();
@@ -18,28 +18,27 @@ export default function DashboardRight(): JSX.Element {
     function renderDashboard() {
         switch (value) {
             case HomeRendererEnum.DASHBOARD:
-                return <HomeDashboard />
+                return <HomeDashboard />;
             case HomeRendererEnum.MY_QUIZ:
-                return <HomeMyQuiz />
+                return <HomeMyQuiz />;
             case HomeRendererEnum.CREATE_QUIZ:
-                return <HomeCreateQuiz />
+                return <HomeCreateQuiz />;
             case HomeRendererEnum.ANALYTICS:
-                return <HomeAnalytics />
+                return <HomeAnalytics />;
             case HomeRendererEnum.WALLET:
-                return <HomeWallet />
+                return <HomeWallet />;
             case HomeRendererEnum.LEADERBOARD:
-                return <HomeLeaderboards />
+                return <HomeLeaderboards />;
             case HomeRendererEnum.HISTORY:
-                return <HomeHistory />
+                return <HomeHistory />;
             case HomeRendererEnum.SETTINGS:
-                return <HomeSettings />
+                return <HomeSettings />;
             case HomeRendererEnum.HELP:
-                return <HomeHelp />
+                return <HomeHelp />;
             default:
-                return <div>Dashboard</div>
+                return <div>Dashboard</div>;
         }
     }
-
 
     return (
         <motion.div
@@ -48,9 +47,7 @@ export default function DashboardRight(): JSX.Element {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
         >
-            <div className="mt-[5rem] flex flex-col gap-y-4">
-                {renderDashboard()}
-            </div>
+            <div className="mt-[5rem] flex flex-col gap-y-4">{renderDashboard()}</div>
         </motion.div>
     );
 }

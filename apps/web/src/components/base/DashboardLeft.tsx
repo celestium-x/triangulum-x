@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils";
-import { useHomeRendererStore } from "@/store/home/useHomeRendererStore";
-import { HomeRendererEnum } from "@/types/homeRendererTypes";
-import { JSX } from "react";
+import { cn } from '@/lib/utils';
+import { useHomeRendererStore } from '@/store/home/useHomeRendererStore';
+import { HomeRendererEnum } from '@/types/homeRendererTypes';
+import { JSX } from 'react';
 import {
     TbSquareLetterTFilled,
     TbDashboard,
@@ -13,22 +13,25 @@ import {
     TbHistory,
     TbSettings,
     TbHelp,
-} from "react-icons/tb";
-import { IoEnterOutline } from "react-icons/io5";
+} from 'react-icons/tb';
+import { IoEnterOutline } from 'react-icons/io5';
 
 export default function DashboardLeft(): JSX.Element {
-    const { value, setValue } = useHomeRendererStore()
+    const { value, setValue } = useHomeRendererStore();
     return (
         <div
-            className={cn("h-full bg-light-base dark:bg-dark-base/10 shrink-0 w-[300px]",
-                "flex flex-col justify-start items-center py-6"
+            className={cn(
+                'h-full bg-light-base dark:bg-dark-base/10 shrink-0 w-[300px]',
+                'flex flex-col justify-start items-center py-6',
             )}
         >
             <LogoOption
-                icon={<TbSquareLetterTFilled
-                    size={28}
-                    className="group-hover:-translate-x-1 transition-transform ease-in"
-                />}
+                icon={
+                    <TbSquareLetterTFilled
+                        size={28}
+                        className="group-hover:-translate-x-1 transition-transform ease-in"
+                    />
+                }
                 label="Triangulum"
             />
 
@@ -105,15 +108,13 @@ interface OptionProps {
     icon: React.ReactNode;
     label: string;
     onClick?: () => void;
-    isActive?: boolean
+    isActive?: boolean;
 }
 
 function LogoOption({ icon, label }: OptionProps) {
     return (
         <button className="flex items-center justify-start gap-3 w-full px-4 h-10">
-            <div className="flex items-center justify-center shrink-0">
-                {icon}
-            </div>
+            <div className="flex items-center justify-center shrink-0">{icon}</div>
             <span className="text-xl text-dark-base dark:text-light-base font-bold whitespace-nowrap overflow-hidden leading-none">
                 {label}
             </span>
@@ -123,16 +124,14 @@ function LogoOption({ icon, label }: OptionProps) {
 
 function NavOption({ icon, label, onClick, isActive }: OptionProps) {
     return (
-        <div 
-            onClick={onClick} 
+        <div
+            onClick={onClick}
             className={cn(
-                "flex items-center justify-start gap-3 w-full px-4 h-10 hover:bg-light-base dark:hover:bg-dark-primary rounded-lg cursor-pointer transition-colors",
-                isActive && "bg-light-base dark:bg-dark-primary"
+                'flex items-center justify-start gap-3 w-full px-4 h-10 hover:bg-light-base dark:hover:bg-dark-primary rounded-lg cursor-pointer transition-colors',
+                isActive && 'bg-light-base dark:bg-dark-primary',
             )}
         >
-            <div className="flex items-center justify-center shrink-0 w-5 h-5">
-                {icon}
-            </div>
+            <div className="flex items-center justify-center shrink-0 w-5 h-5">{icon}</div>
             <span className="text-sm text-dark-primary dark:text-light-base font-normal whitespace-nowrap overflow-hidden leading-none">
                 {label}
             </span>

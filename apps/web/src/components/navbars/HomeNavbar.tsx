@@ -1,40 +1,40 @@
-'use client'
-import AppLogo from "../app/AppLogo";
-import NavItems from "./NavItems";
-import DarkModeToggle from "../base/DarkModeToggle";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import { Wallet, BarChart3, Circle } from "lucide-react";
-import ProfileMenu from "../utility/ProfileMenu";
-import { useRouter } from "next/navigation";
-import { v4 as uuid } from 'uuid'
+'use client';
+import AppLogo from '../app/AppLogo';
+import NavItems from './NavItems';
+import DarkModeToggle from '../base/DarkModeToggle';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import { Wallet, BarChart3, Circle } from 'lucide-react';
+import ProfileMenu from '../utility/ProfileMenu';
+import { useRouter } from 'next/navigation';
+import { v4 as uuid } from 'uuid';
 
 export default function HomeNavbar() {
     const isWalletConnected = false;
-    const walletAddress = "";
+    const walletAddress = '';
     const router = useRouter();
 
     const navItems = [
         {
-            name: "My Quizzes",
-            link: "/dashboard/quizzes",
-            icon: <BarChart3 className="w-4 h-4" />
+            name: 'My Quizzes',
+            link: '/dashboard/quizzes',
+            icon: <BarChart3 className="w-4 h-4" />,
         },
         {
-            name: "Analytics",
-            link: "/dashboard/analytics",
-            icon: <BarChart3 className="w-4 h-4" />
+            name: 'Analytics',
+            link: '/dashboard/analytics',
+            icon: <BarChart3 className="w-4 h-4" />,
         },
     ];
 
     function truncateAddress(address: string) {
-        if (!address) return "";
+        if (!address) return '';
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
-    };
+    }
 
     function createNewQuizHandler() {
         const newQuizUuid = uuid();
-        router.push(`new/${newQuizUuid}`)
+        router.push(`new/${newQuizUuid}`);
     }
 
     return (
@@ -52,28 +52,30 @@ export default function HomeNavbar() {
                         variant="outline"
                         size="sm"
                         className={cn(
-                            "font-light text-[13px] tracking-wide flex items-center gap-x-2 transition-transform hover:-translate-y-0.5",
+                            'font-light text-[13px] tracking-wide flex items-center gap-x-2 transition-transform hover:-translate-y-0.5',
                             isWalletConnected
-                                ? "text-green-600 border-green-600/30 dark:border-green-600/30 bg-green-50 dark:bg-green-950/10 hover:!text-green-600 hover:!border-green-600/30 hover:!bg-green-50 dark:hover:!bg-green-950/10"
-                                : "text-primary border-primary hover:!text-primary "
+                                ? 'text-green-600 border-green-600/30 dark:border-green-600/30 bg-green-50 dark:bg-green-950/10 hover:!text-green-600 hover:!border-green-600/30 hover:!bg-green-50 dark:hover:!bg-green-950/10'
+                                : 'text-primary border-primary hover:!text-primary ',
                         )}
                     >
                         <Wallet className="w-4 h-4" />
-                        {isWalletConnected ? truncateAddress(walletAddress) : "Connect Wallet"}
+                        {isWalletConnected ? truncateAddress(walletAddress) : 'Connect Wallet'}
                         {isWalletConnected && (
                             <Circle className="w-2 h-2 fill-green-500 text-green-500" />
                         )}
                     </Button>
 
-                    <Button onClick={createNewQuizHandler} className={cn(
-                        "font-light text-[13px] tracking-wide flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10] rounded-lg",
-                        "bg-dark-base dark:bg-light-base dark:hover:bg-light-base hover:bg-dark-base"
-                    )}>
+                    <Button
+                        onClick={createNewQuizHandler}
+                        className={cn(
+                            'font-light text-[13px] tracking-wide flex items-center justify-center transition-transform hover:-translate-y-0.5 cursor-pointer z-[10] rounded-lg',
+                            'bg-dark-base dark:bg-light-base dark:hover:bg-light-base hover:bg-dark-base',
+                        )}
+                    >
                         Create Quiz
                     </Button>
 
                     <ProfileMenu />
-
                 </div>
             </div>
         </div>

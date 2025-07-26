@@ -1,22 +1,19 @@
-"use client";
+'use client';
 
-
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { useState } from "react";
-import { AiOutlineQuestionCircle } from "react-icons/ai";
-import { FaMountainSun, FaSquare } from "react-icons/fa6";
-import { TfiLayoutListPost } from "react-icons/tfi";
-import DragImageBackground from "@/components/utility/DragImageBackground";
-import { useNewQuizStore } from "@/store/new-quiz/useNewQuizStore";
-import { handleUpload } from "@/lib/s3-uploads";
-import { Loader } from "lucide-react";
-
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { useState } from 'react';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { FaMountainSun, FaSquare } from 'react-icons/fa6';
+import { TfiLayoutListPost } from 'react-icons/tfi';
+import DragImageBackground from '@/components/utility/DragImageBackground';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { handleUpload } from '@/lib/s3-uploads';
+import { Loader } from 'lucide-react';
 
 export default function UploadQuizImage() {
     const [enableLeftView, setEnableLeftView] = useState(false);
     const [enableRightView, setEnableRightView] = useState(false);
     const { editQuestion, currentQuestionIndex, setLoading, loading } = useNewQuizStore();
-
 
     const handleImageSelect = async (file: File) => {
         setLoading(true);
@@ -24,8 +21,10 @@ export default function UploadQuizImage() {
             const imageUrl = await handleUpload(file);
             editQuestion(currentQuestionIndex, { imageUrl: imageUrl });
         } catch (err) {
-            console.error("Error in uploading image", err)
-        } finally { setLoading(false); }
+            console.error('Error in uploading image', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -46,9 +45,7 @@ export default function UploadQuizImage() {
                 </span>
 
                 <div className="flex items-center justify-between gap-x-8 mt-4">
-                    <div
-                        className="relative flex-1 border border-neutral-300 dark:border-neutral-600 hover:border-primary dark:hover:border-primary transition-colors duration-200 bg-light-base dark:bg-dark-base rounded-md flex items-center justify-center cursor-pointer px-3 py-2"
-                    >
+                    <div className="relative flex-1 border border-neutral-300 dark:border-neutral-600 hover:border-primary dark:hover:border-primary transition-colors duration-200 bg-light-base dark:bg-dark-base rounded-md flex items-center justify-center cursor-pointer px-3 py-2">
                         <FaMountainSun size={32} />
                         <span className="ml-3 text-xs text-neutral-500 dark:text-neutral-400">
                             Click to upload or drag an image here
@@ -63,10 +60,11 @@ export default function UploadQuizImage() {
                             setEnableLeftView(!enableLeftView);
                             setEnableRightView(false);
                         }}
-                        className={`flex items-center justify-center w-16 h-12 rounded-md gap-x-1.5 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 cursor-pointer ${enableLeftView
-                            ? "border-2 border-neutral-600 dark:border-neutral-500"
-                            : "border border-neutral-300 dark:border-neutral-600"
-                            }`}
+                        className={`flex items-center justify-center w-16 h-12 rounded-md gap-x-1.5 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 cursor-pointer ${
+                            enableLeftView
+                                ? 'border-2 border-neutral-600 dark:border-neutral-500'
+                                : 'border border-neutral-300 dark:border-neutral-600'
+                        }`}
                     >
                         <ToolTipComponent content="Shift image to left side">
                             <div className="flex justify-center gap-x-1 items-center">
@@ -80,10 +78,11 @@ export default function UploadQuizImage() {
                             setEnableRightView(!enableRightView);
                             setEnableLeftView(false);
                         }}
-                        className={`flex items-center justify-center w-16 h-12 rounded-md gap-x-1.5 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 cursor-pointer ${enableRightView
-                            ? "border-2 border-neutral-600 dark:border-neutral-500"
-                            : "border border-neutral-300 dark:border-neutral-600"
-                            }`}
+                        className={`flex items-center justify-center w-16 h-12 rounded-md gap-x-1.5 hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 cursor-pointer ${
+                            enableRightView
+                                ? 'border-2 border-neutral-600 dark:border-neutral-500'
+                                : 'border border-neutral-300 dark:border-neutral-600'
+                        }`}
                     >
                         <ToolTipComponent content="Shift image to right side">
                             <div className="flex justify-center gap-x-1 items-center">

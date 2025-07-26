@@ -1,4 +1,4 @@
-import { Circle } from "lucide-react";
+import { Circle } from 'lucide-react';
 
 export default function LiveQuizTicker() {
     return (
@@ -10,5 +10,5 @@ export default function LiveQuizTicker() {
                 </span>
             </div>
         </div>
-    )
+    );
 }

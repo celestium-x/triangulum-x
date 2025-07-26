@@ -1,5 +1,5 @@
-import JoinQuizBar from "../base/JoinQuizBar";
-import HeadAndSubHead from "../content/HeadAndSubHead";
+import JoinQuizBar from '../base/JoinQuizBar';
+import HeadAndSubHead from '../content/HeadAndSubHead';
 
 export default function HomeDashboard() {
     return (
@@ -9,9 +9,8 @@ export default function HomeDashboard() {
                     heading="Dashboard"
                     subHeading="Manage your quizzes, analytics, and more"
                 />
-
             </div>
             <JoinQuizBar />
         </div>
-    )
+    );
 }

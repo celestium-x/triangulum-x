@@ -11,11 +11,9 @@ export function useDragAndDrop({ onDropFile, acceptedTypes }: UseDragAndDropProp
     const handleDragEnter = useCallback((e: DragEvent) => {
         e.preventDefault();
 
-
         if (e.dataTransfer?.types.includes('application/x-option-drag')) {
             return;
         }
-
 
         const hasFiles = e.dataTransfer?.types.includes('Files');
         if (hasFiles) {
@@ -26,11 +24,9 @@ export function useDragAndDrop({ onDropFile, acceptedTypes }: UseDragAndDropProp
     const handleDragLeave = useCallback((e: DragEvent) => {
         e.preventDefault();
 
-
         if (e.dataTransfer?.types.includes('application/x-option-drag')) {
             return;
         }
-
 
         if (e.clientX === 0 && e.clientY === 0) {
             setDragActive(false);
@@ -40,11 +36,9 @@ export function useDragAndDrop({ onDropFile, acceptedTypes }: UseDragAndDropProp
     const handleDragOver = useCallback((e: DragEvent) => {
         e.preventDefault();
 
-
         if (e.dataTransfer?.types.includes('application/x-option-drag')) {
             return;
         }
-
 
         const hasFiles = e.dataTransfer?.types.includes('Files');
         if (hasFiles) {
@@ -52,34 +46,35 @@ export function useDragAndDrop({ onDropFile, acceptedTypes }: UseDragAndDropProp
         }
     }, []);
 
-    const handleDrop = useCallback((e: DragEvent) => {
-        e.preventDefault();
-        setDragActive(false);
+    const handleDrop = useCallback(
+        (e: DragEvent) => {
+            e.preventDefault();
+            setDragActive(false);
 
+            if (e.dataTransfer?.types.includes('application/x-option-drag')) {
+                return;
+            }
 
-        if (e.dataTransfer?.types.includes('application/x-option-drag')) {
-            return;
-        }
+            const files = e.dataTransfer?.files;
+            if (!files || files.length === 0) return;
 
-        const files = e.dataTransfer?.files;
-        if (!files || files.length === 0) return;
+            const file = files[0]!;
 
-        const file = files[0]!;
+            const isAccepted = acceptedTypes.some((type) =>
+                file.type.startsWith(type.replace('/', '')),
+            );
 
-
-        const isAccepted = acceptedTypes.some(type =>
-            file.type.startsWith(type.replace('/', ''))
-        );
-
-        if (isAccepted) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const preview = event.target?.result as string;
-                onDropFile(file, preview);
-            };
-            reader.readAsDataURL(file);
-        }
-    }, [onDropFile, acceptedTypes]);
+            if (isAccepted) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const preview = event.target?.result as string;
+                    onDropFile(file, preview);
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+        [onDropFile, acceptedTypes],
+    );
 
     useEffect(() => {
         document.addEventListener('dragenter', handleDragEnter);
