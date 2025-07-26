@@ -2,16 +2,16 @@ import { useHomeRendererStore } from "@/store/home/useHomeRendererStore";
 import { HomeRendererEnum } from "@/types/homeRendererTypes";
 import { motion } from "framer-motion";
 import { JSX } from "react";
-import HomeDashboard from "./HomeDashboard";
-import HomeMyQuiz from "./HomeMyQuiz";
-import HomeCreateQuiz from "./HomeCreateQuiz";
-import HomeAnalytics from "./HomeAnalytics";
-import HomeWallet from "./HomeWallet";
-import HomeLeaderboards from "./HomeLeaderboards";
-import HomeHistory from "./HomeHistory";
-import HomeSettings from "./HomeSettings";
-import HomeHelp from "./HomeHelp";
-import HomeJoinQuizForm from "./HomeJoinQuizForm";
+import HomeDashboard from "../home/HomeDashboard";
+import HomeMyQuiz from "../home/HomeMyQuiz";
+import HomeCreateQuiz from "../home/HomeCreateQuiz";
+import HomeAnalytics from "../home/HomeAnalytics";
+import HomeWallet from "../home/HomeWallet";
+import HomeLeaderboards from "../home/HomeLeaderboards";
+import HomeHistory from "../home/HomeHistory";
+import HomeSettings from "../home/HomeSettings";
+import HomeHelp from "../home/HomeHelp";
+import HomeJoinQuizForm from "../home/HomeJoinQuizForm";
 
 export default function DashboardRight(): JSX.Element {
     const { value } = useHomeRendererStore();
