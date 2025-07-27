@@ -39,7 +39,6 @@ export default function New({ params }: NewProps) {
     useEffect(() => {
         const fetchQuiz = async () => {
             setAllowance(AllowanceEnum.LOADING);
-            await new Promise((t) => setTimeout(t, 5000));
             try {
                 const { data } = await axios.get(`${GET_OWNER_QUIZ_URL}/${quizId}`, {
                     headers: {
@@ -87,7 +86,7 @@ export default function New({ params }: NewProps) {
                 <div className="flex items-center justify-center w-full">Not allowed</div>
             )}
             {allowance === AllowanceEnum.LOADING && (
-                <div className="text-primary h-full w-screen h-screen flex items-center justify-center">
+                <div className="text-primary w-screen h-screen flex items-center justify-center">
                     <Loader className="animate-spin" />
                 </div>
             )}

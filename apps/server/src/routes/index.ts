@@ -5,6 +5,9 @@ import getPreSignedUrlController from '../controllers/s3-controller/getPreSigned
 import upsertQuizController from '../controllers/quiz-controller/upsertQuizController';
 import getQuizController from '../controllers/quiz-controller/getQuizController';
 import getAllQuizController from '../controllers/quiz-controller/getAllQuizController';
+import publishQuizController from '../controllers/quiz-controller/publishQuizController';
+import verifyQuizOwnershipMiddleware from '../middlewares/verifyQuizOwnershipMiddleware';
+import launchQuizController from '../controllers/quiz-controller/launchQuizController';
 
 const router = Router();
 
@@ -15,5 +18,17 @@ router.post('/quiz/create-quiz/:quizId', authMiddleware, upsertQuizController);
 router.get('/quiz/get-quiz/:quizId', authMiddleware, getQuizController);
 router.get('/quiz/get-all-quiz', authMiddleware, getAllQuizController);
 router.post('/get-presigned-url', getPreSignedUrlController);
+router.put(
+    '/quiz/publish-quiz/:quizId',
+    authMiddleware,
+    verifyQuizOwnershipMiddleware,
+    publishQuizController,
+);
+router.get(
+    '/quiz/launch-quiz/:quizId',
+    authMiddleware,
+    verifyQuizOwnershipMiddleware,
+    launchQuizController,
+);
 
 export default router;

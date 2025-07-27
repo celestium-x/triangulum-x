@@ -23,6 +23,7 @@ export default async function getAllQuizController(req: Request, res: Response) 
                 currency: true,
                 status: true,
                 scheduledAt: true,
+                createdAt: true,
             },
         });
 

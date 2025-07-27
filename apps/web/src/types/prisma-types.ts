@@ -170,6 +170,7 @@ export enum TemplateEnum {
 
 export enum QuizStatusEnum {
     CREATED = 'CREATED',
+    PUBLISHED = 'PUBLISHED',
     SCHEDULED = 'SCHEDULED',
     LIVE = 'LIVE',
     COMPLETED = 'COMPLETED',

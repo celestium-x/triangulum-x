@@ -6,9 +6,11 @@ import { IoIosPlay } from 'react-icons/io';
 import { CiSaveDown1 } from 'react-icons/ci';
 import { MdPublish } from 'react-icons/md';
 import CreateQuizActionPanel from '../utility/CreateQuizActionPanel';
-import BackendActions from '@/lib/backend/upsertQuizAction';
+import BackendActions from '@/lib/backend/backend-actions';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { useAllQuizsStore } from '@/store/user/useAllQuizsStore';
+import { QuizStatusEnum } from '@/types/prisma-types';
 
 interface Option {
     name: string;
@@ -22,7 +24,9 @@ export default function NavbarQuizAction() {
     const [currentAction, setCurrentAction] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { session } = useUserSessionStore();
-    const { quiz } = useNewQuizStore();
+    const { quiz, updateQuiz } = useNewQuizStore();
+    const { updateQuiz: updateAllQuiz } = useAllQuizsStore();
+
     async function handleSaveDraft() {
         if (!quiz || !session?.user.token) {
             console.error('Quiz or token is missing');
@@ -38,10 +42,53 @@ export default function NavbarQuizAction() {
         }
     }
 
+    async function handlePublishQuiz() {
+        if (!quiz || !session?.user.token) {
+            console.error('Quiz or token is missing');
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const isPublished = await BackendActions.publishQuiz(quiz.id, session.user.token);
+            if (isPublished) {
+                updateAllQuiz(quiz.id, {
+                    status: QuizStatusEnum.PUBLISHED,
+                });
+                updateQuiz({ status: QuizStatusEnum.PUBLISHED });
+            }
+        } catch (error) {
+            console.error('Failed to save quiz:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async function handleLaunchQuiz() {
+        if (!quiz || !session?.user.token) {
+            console.error('Quiz or token is missing');
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const isPublished = await BackendActions.launchQuiz(quiz.id, session.user.token);
+            if (isPublished) {
+                updateAllQuiz(quiz.id, {
+                    status: QuizStatusEnum.LIVE,
+                });
+                updateQuiz({ status: QuizStatusEnum.LIVE });
+            }
+        } catch (error) {
+            console.error('Failed to save quiz:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     const options: Option[] = [
         {
             name: 'Launch Quiz',
             icon: <IoIosPlay size={'24px'} />,
+            action: handleLaunchQuiz,
         },
         {
             name: 'Save Draft',
@@ -53,6 +100,7 @@ export default function NavbarQuizAction() {
             name: 'Publish Quiz',
             description: 'Make your quiz live and shareable with participants',
             icon: <MdPublish size={'24px'} />,
+            action: handlePublishQuiz,
         },
     ];
 

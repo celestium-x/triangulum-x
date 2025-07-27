@@ -195,6 +195,7 @@ model Elimination {
 enum QuizStatus {
   CREATED
   SCHEDULED
+  PUBLISHED
   LIVE
   COMPLETED
   CANCELLED

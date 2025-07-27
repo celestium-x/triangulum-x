@@ -11,8 +11,8 @@ enum QuizResponseType {
 }
 
 export default async function getQuizController(req: Request, res: Response): Promise<void> {
-    const quizId = req.params.quizId;
     const userId = req.user?.id;
+    const quizId = req.params.quizId;
     if (!quizId) {
         res.status(400).json({
             success: false,
