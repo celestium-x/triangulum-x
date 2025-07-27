@@ -54,6 +54,7 @@ export default function Options() {
             options: newOptions,
             correctAnswer: newCorrectAnswer,
         });
+
         setDraggedIndex(null);
     };
 

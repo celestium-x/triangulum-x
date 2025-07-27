@@ -4,6 +4,7 @@ import ThemesDraft from './ThemesDraft';
 import InteractionsDraft from './InteractionsDraft';
 import UtilityCard from '@/components/utility/UtilityCard';
 import AdvancedDraft from './AdvancedDraft';
+import StakeDraft from './StakeDraft';
 
 export default function Drafts() {
     const { state } = useDraftRendererStore();
@@ -18,6 +19,8 @@ export default function Drafts() {
                 return <InteractionsDraft />;
             case DraftRenderer.ADVANCED || DraftRenderer.AUTO_SAVE:
                 return <AdvancedDraft />;
+            case DraftRenderer.STAKE:
+                return <StakeDraft />;
             case DraftRenderer.NONE:
                 return null;
         }

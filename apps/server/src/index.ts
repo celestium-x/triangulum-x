@@ -19,4 +19,6 @@ if (!PORT) {
 
 app.use('/api/v1', router);
 
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`Server running on PORT ${PORT}`);
+});
