@@ -1,4 +1,9 @@
-import { stringify } from "querystring";
+export type MessagePayload = unknown;
+export type MessageHandler = (payload: MessagePayload) => void;
+export type ParsedMessage = {
+    type: string;
+    payload: MessagePayload;
+};
 
 export default class WebSocketClient {
     private ws!: WebSocket;
@@ -8,8 +13,8 @@ export default class WebSocketClient {
     private max_reconnect_attempts = 5;
     private reconnect_timeout: NodeJS.Timeout | null = null;
     private reconnect_delay: number = 1000;
-    private message_queue: unknown[] = [];
-    private handlers: Map<string, Function[]> = new Map();
+    private message_queue: MessagePayload[] = [];
+    private handlers: Map<string, MessageHandler[]> = new Map();
 
     constructor(url: string) {
         this.url = url;
@@ -24,16 +29,16 @@ export default class WebSocketClient {
             this.flush_message_queue();
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = (event: MessageEvent<string>) => {
             try {
-                const parsed_data = JSON.parse(event.data);
+                const parsed_data: ParsedMessage = JSON.parse(event.data);
                 this.handle_incoming_message(parsed_data);
-            } catch (error) {
+            } catch {
                 console.error("Failed to parse incoming WebSocket message:", event.data);
             }
         };
 
-        this.ws.onclose = (event) => {
+        this.ws.onclose = (event: CloseEvent) => {
             this.is_connected = false;
 
             if (this.reconnect_timeout) {
@@ -49,21 +54,19 @@ export default class WebSocketClient {
         };
     }
 
-    private handle_incoming_message(parsed_data: { type: string; payload: any }) {
+    private handle_incoming_message(parsed_data: ParsedMessage) {
         const { type, payload } = parsed_data;
-        if (this.handlers.has(type)) {
-            this.handlers.get(type)?.forEach((handler) => handler(payload));
-        }
+        this.handlers.get(type)?.forEach((handler) => handler(payload));
     }
 
-    public subscribe_to_handlers(type: string, handler: (payload: any) => void) {
+    public subscribe_to_handlers(type: string, handler: MessageHandler) {
         if (!this.handlers.has(type)) {
             this.handlers.set(type, []);
         }
-        this.handlers.get(type)?.push(handler);
+        this.handlers.get(type)!.push(handler);
     }
 
-    public unsubscribe_to_handlers(type: string, handler: (payload: any) => void) {
+    public unsubscribe_to_handlers(type: string, handler: MessageHandler) {
         const handler_list = this.handlers.get(type);
         if (!handler_list) return;
 
@@ -79,7 +82,7 @@ export default class WebSocketClient {
         }
     }
 
-    public send_message(message: any) {
+    public send_message(message: MessagePayload) {
         if (this.is_connected && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify(message));
         } else {

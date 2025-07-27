@@ -1,8 +1,5 @@
-import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 import AppLogo from '../app/AppLogo';
 import DarkModeToggle from '../base/DarkModeToggle';
-import QuizStatusTicker from '../tickers/QuizstatusTicker';
-import AutoSaveComponent from '../utility/AutoSave';
 import ProfileMenu from '../utility/ProfileMenu';
 import NavbarQuizAction from './NavbarQuizAction';
 
