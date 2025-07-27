@@ -34,7 +34,7 @@ export default class WebSocketClient {
                 const parsed_data: ParsedMessage = JSON.parse(event.data);
                 this.handle_incoming_message(parsed_data);
             } catch {
-                console.error("Failed to parse incoming WebSocket message:", event.data);
+                console.error('Failed to parse incoming WebSocket message:', event.data);
             }
         };
 
@@ -49,7 +49,7 @@ export default class WebSocketClient {
             if (event.code !== 1000 && this.reconnect_attempts < this.max_reconnect_attempts) {
                 this.attempt_reconnect();
             } else if (this.reconnect_attempts >= this.max_reconnect_attempts) {
-                console.error("Max reconnection attempts reached");
+                console.error('Max reconnection attempts reached');
             }
         };
     }
@@ -103,7 +103,7 @@ export default class WebSocketClient {
         this.message_queue = [];
     }
 
-    public close(code: number = 1000, reason: string = "Client disconnect") {
+    public close(code: number = 1000, reason: string = 'Client disconnect') {
         this.ws.close(code, reason);
     }
 }

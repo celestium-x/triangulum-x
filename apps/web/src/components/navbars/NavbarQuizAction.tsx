@@ -124,8 +124,11 @@ export default function NavbarQuizAction() {
     }, []);
 
     return (
-        <div className="relative select-none flex flex-shrink-0 items-center gap-x-3" onClick={() => setActionsPanel((prev) => !prev)}>
-            <QuizStatusTicker className='' status={quiz?.status} />
+        <div
+            className="relative select-none flex flex-shrink-0 items-center gap-x-3"
+            onClick={() => setActionsPanel((prev) => !prev)}
+        >
+            <QuizStatusTicker className="" status={quiz?.status} />
             <AutoSaveComponent />
             <ToolTipComponent content={'this will be saved every 30sec'}>
                 <div className="w-full flex justify-around items-center gap-x-2 bg-primary/50 transition-colors rounded-full cursor-pointer px-4 py-2">
