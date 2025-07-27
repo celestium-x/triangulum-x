@@ -10,9 +10,7 @@
             {
                 "name": "next"
             }
-        ],
-        "noUnusedParameters": false,
-        "noUnusedLocals": false
+        ]
     },
     "include": [
         "**/*.ts",

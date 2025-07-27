@@ -49,6 +49,12 @@ const statusConfig = {
         textColor: 'text-emerald-800',
         dotColor: 'bg-emerald-500',
     },
+    [QuizStatusEnum.PUBLISHED]: {
+        label: 'Published',
+        bgColor: 'bg-cyan-100',
+        textColor: 'text-cyan-800',
+        dotColor: 'bg-cyan-500',
+    },
 };
 
 export default function QuizStatusTicker({ status, className = '' }: QuizStatusTickerProps) {

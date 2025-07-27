@@ -115,12 +115,13 @@ export default function ShowInfoToggle() {
                                     <PiCurrencyDollar size={18} />
                                     Balance
                                 </span>
-                                <button
+                                <Button
+                                    variant={'ghost'}
                                     onClick={() => setShowBalance(!showBalance)}
                                     className="text-neutral-600 dark:text-neutral-300 hover:scale-110 transition-transform duration-150"
                                 >
                                     {showBalance ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                                </button>
+                                </Button>
                             </div>
                             {showBalance && (
                                 <div
@@ -138,24 +139,27 @@ export default function ShowInfoToggle() {
                                     <MdOutlineKey size={18} />
                                     Public Key
                                 </span>
-                                <button
+                                <Button
+                                    variant={'ghost'}
                                     onClick={() => setShowPublicKey(!showPublicKey)}
                                     className="text-neutral-600 dark:text-neutral-300 hover:scale-110 transition-transform duration-150"
                                 >
                                     {showPublicKey ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
-                                </button>
+                                </Button>
                             </div>
                             {showPublicKey && (
                                 <div ref={publicKeyRef} className="mt-1 flex items-center gap-x-2">
                                     <div className="text-sm text-neutral-500 dark:text-neutral-300 truncate max-w-[calc(100%-32px)]">
                                         {dummyPublicKey}
                                     </div>
-                                    <button
+                                    <Button
+                                        variant={'ghost'}
+                                        type="button"
                                         onClick={handleCopy}
                                         className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200 transition hover:scale-110 duration-150"
                                     >
                                         <LuCopy size={16} />
-                                    </button>
+                                    </Button>
                                 </div>
                             )}
                         </div>
