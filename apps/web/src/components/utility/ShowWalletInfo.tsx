@@ -12,7 +12,7 @@ export default function ShowInfoToggle() {
     const [showInfo, setShowInfo] = useState(false);
     const [showBalance, setShowBalance] = useState(false);
     const [showPublicKey, setShowPublicKey] = useState(false);
-    const [walletConnected, setWalletConnected] = useState<boolean>(true);
+    const [walletConnected, _setWalletConnected] = useState<boolean>(false);
 
     const infoContainerRef = useRef<HTMLDivElement>(null);
     const balanceRef = useRef<HTMLDivElement>(null);
