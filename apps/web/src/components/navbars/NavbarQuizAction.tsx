@@ -11,6 +11,9 @@ import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 import { useAllQuizsStore } from '@/store/user/useAllQuizsStore';
 import { QuizStatusEnum } from '@/types/prisma-types';
+import { toast } from 'sonner';
+import QuizStatusTicker from '../tickers/QuizstatusTicker';
+import AutoSaveComponent from '../utility/AutoSave';
 
 interface Option {
     name: string;
@@ -35,10 +38,12 @@ export default function NavbarQuizAction() {
         setIsLoading(true);
         try {
             await BackendActions.upsertQuizAction(quiz, session.user.token);
+            toast.success('Draft saved');
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
             setIsLoading(false);
+            setActionsPanel(false);
         }
     }
 
@@ -55,11 +60,13 @@ export default function NavbarQuizAction() {
                     status: QuizStatusEnum.PUBLISHED,
                 });
                 updateQuiz({ status: QuizStatusEnum.PUBLISHED });
+                toast.success('Quiz published successfully');
             }
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
             setIsLoading(false);
+            setActionsPanel(false);
         }
     }
 
@@ -76,11 +83,13 @@ export default function NavbarQuizAction() {
                     status: QuizStatusEnum.LIVE,
                 });
                 updateQuiz({ status: QuizStatusEnum.LIVE });
+                toast.success('Quiz launched successfully');
             }
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
             setIsLoading(false);
+            setActionsPanel(false);
         }
     }
 
@@ -115,9 +124,11 @@ export default function NavbarQuizAction() {
     }, []);
 
     return (
-        <div className="relative select-none" onClick={() => setActionsPanel((prev) => !prev)}>
+        <div className="relative select-none flex flex-shrink-0 items-center gap-x-3" onClick={() => setActionsPanel((prev) => !prev)}>
+            <QuizStatusTicker className='' status={quiz?.status} />
+            <AutoSaveComponent />
             <ToolTipComponent content={'this will be saved every 30sec'}>
-                <div className="w-full flex justify-around items-center gap-x-2 bg-primary/50 transition-colors rounded-full cursor-pointer px-4 py-2 ">
+                <div className="w-full flex justify-around items-center gap-x-2 bg-primary/50 transition-colors rounded-full cursor-pointer px-4 py-2">
                     <div className="rounded-l-full text-[13px] font-normal flex justify-center items-center ">
                         {isLoading ? 'Saving...' : (currentAction ?? options[1]?.name)}
                     </div>

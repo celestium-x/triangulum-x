@@ -49,11 +49,16 @@ export default function AutoSaveComponent() {
     }, []);
 
     return (
-        <div onClick={() => setState(DraftRenderer.ADVANCED)} className="flex items-center gap-x-2">
+        <div
+            onClick={() => setState(DraftRenderer.ADVANCED)}
+            className="inline-flex items-center gap-x-2 whitespace-nowrap max-w-full cursor-pointer"
+        >
             <div
-                className={`h-2 w-2 rounded-full animate-pulse ${quiz.autoSave ? ' bg-green-600' : 'bg-red-500'}`}
-            ></div>
-            <span className="text-neutral-500 dark:text-neutral-400 text-xs cursor-pointer relative">
+                className={`h-2 w-2 rounded-full shrink-0 animate-pulse ${
+                    quiz.autoSave ? 'bg-green-600' : 'bg-red-500'
+                }`}
+            />
+            <span className="relative text-neutral-500 dark:text-neutral-400 text-xs">
                 {quiz.autoSave ? 'auto save every 30s' : 'auto save is off'}
                 <div
                     ref={underlineRef}

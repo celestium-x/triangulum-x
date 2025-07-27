@@ -50,6 +50,7 @@ export default class BackendActions {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                withCredentials: true,
             });
             if (data.success) {
                 return true;

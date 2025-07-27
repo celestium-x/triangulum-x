@@ -1,9 +1,10 @@
-import type { Metadata } from 'next';
 import './globals.css';
+import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import { authOption } from './api/auth/[...nextauth]/options';
 import SessionSetter from '@/components/utility/SessionSetter';
+import { Toaster } from 'sonner';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -25,6 +26,7 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${poppins.className}`}>
+                <Toaster theme="dark" />
                 {children}
                 <SessionSetter session={session} />
             </body>
