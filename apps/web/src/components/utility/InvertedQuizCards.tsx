@@ -34,7 +34,7 @@ export default function InvertedQuizCards() {
                                         <div className="flex items-center justify-between">
                                             <p className="dark:text-neutral-900 text-neutral-300 text-[11px] font-light tracking-wide">
                                                 {DateActions.formatFullDateTime(
-                                                    new Date(quiz?.scheduledAt ?? Date.now())
+                                                    new Date(quiz?.scheduledAt ?? Date.now()),
                                                 )}
                                             </p>
                                             <QuizStatusTicker

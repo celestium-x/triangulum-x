@@ -74,18 +74,26 @@ export default async function launchQuizController(req: Request, res: Response) 
             });
             return { updatedQuiz, gameSession };
         });
+
         const secureTokenData = QuizAction.generateHostToken(
             String(userId),
             quizId,
             result.gameSession.id,
         );
+
+        res.cookie('token', secureTokenData, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 60 * 1000,
+        });
+
         res.status(200).json({
             success: true,
             message: 'Quiz launched successfully',
             data: {
                 quizId: quiz.id,
                 gameSessionId: result.gameSession.id,
-                hostToken: secureTokenData,
                 quiz: {
                     title: quiz.title,
                     status: 'LIVE',
