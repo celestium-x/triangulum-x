@@ -11,7 +11,6 @@ interface UpdateGameSessionJobtype {
 
 export default class DatabaseQueue {
     private database_queue: Bull.Queue;
-    private prisma = prisma;
     private default_job_options: JobOption = {
         attempts: 3,
         delay: 1000,

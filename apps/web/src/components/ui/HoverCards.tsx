@@ -49,9 +49,6 @@ export default function HoverCards({
                                     <CardTitle className="mt-0 p-0 flex-1 min-w-0">
                                         <span className="break-words">{quiz.title}</span>
                                     </CardTitle>
-                                    <div className="flex-shrink-0 ml-2">
-                                        <QuizStatusTicker status={quiz.status} />
-                                    </div>
                                 </div>
 
                                 <div className="flex items-center gap-x-4 mt-4">
@@ -65,6 +62,9 @@ export default function HoverCards({
                                         <p className="text-sm text-gray-600 dark:text-gray-400 leading-tight">
                                             0 sol
                                         </p>
+                                    </div>
+                                    <div className="flex-shrink-0 ml-2">
+                                        <QuizStatusTicker status={quiz.status} />
                                     </div>
                                 </div>
 
