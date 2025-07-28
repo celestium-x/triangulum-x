@@ -1,26 +1,106 @@
-import { WebSocket, Server as WSServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import { Server } from 'http';
 import Redis from 'ioredis';
+import { parse } from 'cookie';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import { CustomWebSocket, HostTokenPayload } from '../types/web-socket-types';
+import HostManager from './HostManager';
+import QuizManager from './QuizManager';
+dotenv.config();
+
 const REDIS_URL = process.env.REDIS_URL;
+const JWT_SECRET = process.env.JWT_SOCKET;
 
 export default class WebsocketServer {
-    private wss: WSServer;
-    private socket_mapping: Map<string, WebSocket> = new Map(); // Map<ws.id, ws>
+    private wss: WebSocketServer;
+    private socket_mapping: Map<string, CustomWebSocket> = new Map(); // Map<ws.id, ws>
     private session_participants_mapping: Map<string, Set<string>> = new Map(); // Map<live_session_id<Set<ws.id>>
     private session_spectators_mapping: Map<string, Set<string>> = new Map(); // Map<live_session_id<Set<ws.id>>
-    private session_host_mapping: Map<string, string> = new Map(); // Map<live_session_id<ws.id>
+    private session_host_mapping: Map<string, string> = new Map(); // Map<live_session_id, ws.id>
     private publisher: Redis;
     private subscriber: Redis;
 
+    private hostManager!: HostManager;
+    private quizManager!: QuizManager;
+
     constructor(server: Server) {
-        this.wss = new WSServer({ server });
-        this.initialize();
+        this.wss = new WebSocketServer({ server });
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
+        this.initialize_managers();
+        this.initialize();
+    }
+
+    private initialize_managers() {
+        this.hostManager = new HostManager({
+            publisher: this.publisher,
+            subscriber: this.subscriber,
+            socketMapping: this.socket_mapping,
+            sessionHostMapping: this.session_host_mapping,
+            quizManager: this.quizManager,
+        });
     }
 
     private initialize() {
-        this.wss.on('connection', (_ws: WebSocket, _req) => {});
-        this.subscriber.on('message', (_data) => {});
+        this.wss.on('connection', (ws: CustomWebSocket, req) => {
+            const quizId = '';
+            this.validate_connection(ws, req, quizId);
+        });
+    }
+
+    private validate_connection(ws: CustomWebSocket, req: any, quizId: string) {
+        const cookies = req.headers.cookie;
+
+        if (!cookies) {
+            ws.close();
+            return false;
+        }
+
+        const parsedCookies = parse(cookies);
+        const hostToken = parsedCookies['host-token'];
+        const participantToken = parsedCookies['participant-token'];
+
+        if (hostToken) {
+            this.extract_token(ws, hostToken, quizId, 'HOST');
+        } else if (participantToken) {
+            this.extract_token(ws, participantToken, quizId, 'PARTICIPANT');
+        }
+    }
+
+    private async extract_token(
+        ws: CustomWebSocket,
+        token: string,
+        quizId: string,
+        role: 'HOST' | 'PARTICIPANT',
+    ): Promise<void> {
+        try {
+            jwt.verify(token, JWT_SECRET!, async (err, decoded) => {
+                if (err) {
+                    console.error('Error while verifying [JWT_SOCKET]', err);
+                    ws.close();
+                    return;
+                }
+
+                const payload = decoded as HostTokenPayload;
+
+                if (payload.quizId !== quizId || payload.role !== role) {
+                    console.error('Token validation failed');
+                    ws.close();
+                    return;
+                }
+
+                switch (payload.role) {
+                    case 'HOST':
+                        await this.hostManager.handle_connection(ws, payload as HostTokenPayload);
+                        break;
+                    default:
+                        ws.close();
+                }
+            });
+        } catch (err) {
+            console.error('Error while verifying [JWT_SOCKET]', err);
+            ws.close();
+        }
     }
 }
