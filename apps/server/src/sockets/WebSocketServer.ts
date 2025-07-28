@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import { CustomWebSocket, HostTokenPayload } from '../types/web-socket-types';
 import HostManager from './HostManager';
 import QuizManager from './QuizManager';
+import RedisCache from '../cache/RedisCache';
 dotenv.config();
 
 const REDIS_URL = process.env.REDIS_URL;
@@ -20,6 +21,7 @@ export default class WebsocketServer {
     private session_host_mapping: Map<string, string> = new Map(); // Map<live_session_id, ws.id>
     private publisher: Redis;
     private subscriber: Redis;
+    private redis_cache: RedisCache;
 
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
@@ -28,6 +30,7 @@ export default class WebsocketServer {
         this.wss = new WebSocketServer({ server });
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
+        this.redis_cache = new RedisCache();
         this.initialize_managers();
         this.initialize();
     }
@@ -39,6 +42,11 @@ export default class WebsocketServer {
             socketMapping: this.socket_mapping,
             sessionHostMapping: this.session_host_mapping,
             quizManager: this.quizManager,
+        });
+        this.quizManager = new QuizManager({
+            publisher: this.publisher,
+            subscriber: this.subscriber,
+            redis_cache: this.redis_cache,
         });
     }
 

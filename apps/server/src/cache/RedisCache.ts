@@ -1,5 +1,5 @@
+import { GameSession } from '@repo/db/client';
 import Redis from 'ioredis';
-import { GameSessionType } from '../types/prisma-types';
 
 const SECONDS = 60;
 const MINUTES = 60;
@@ -15,7 +15,7 @@ export default class RedisCache {
 
     public async set_game_session(
         game_live_session_id: string,
-        game_live_session: Partial<GameSessionType>,
+        game_live_session: Partial<GameSession>,
     ) {
         try {
             const key = this.get_game_session_key(game_live_session_id);
@@ -29,19 +29,19 @@ export default class RedisCache {
         }
     }
 
-    public async get_game_session(sessionId: string): Promise<Partial<GameSessionType> | null> {
+    public async get_game_session(sessionId: string): Promise<Partial<GameSession> | null> {
         try {
             const key = this.get_game_session_key(sessionId);
             const data = await this.redis_cache.hgetall(key);
 
             if (Object.keys(data).length === 0) return null;
 
-            const parsed: Partial<GameSessionType> = {};
+            const parsed: Partial<GameSession> = {};
             for (const [key, value] of Object.entries(data)) {
                 try {
-                    parsed[key as keyof GameSessionType] = JSON.parse(value);
+                    parsed[key as keyof GameSession] = JSON.parse(value);
                 } catch {
-                    parsed[key as keyof GameSessionType] = value as any;
+                    parsed[key as keyof GameSession] = value as any;
                 }
             }
 

@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { CustomWebSocket, HostTokenPayload } from '../types/web-socket-types';
+import { CustomWebSocket, HOST_MESSAGE_TYPES, HostTokenPayload } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
@@ -46,24 +46,32 @@ export default class HostManager {
         ws.id = this.generateSocketId();
         this.socketMapping.set(ws.id, ws);
         this.sessionHostMapping.set(payload.gameSessionId, ws.id);
-
+        this.quizManager.onHostconnect(payload.gameSessionId, ws.id);
         this.setup_message_handlers(ws);
     }
 
     private setup_message_handlers(ws: CustomWebSocket) {
         ws.on('message', (data) => {
             try {
-                JSON.parse(data.toString());
-                // this.handle_host_message(ws, message);
+                const message = JSON.parse(data.toString());
+                this.handle_host_message(ws, message);
             } catch (err) {
                 console.error('Error parsing message', err);
             }
         });
     }
 
-    // private handle_host_message(ws: CustomWebSocket, message: any) {
-    //     const { type, payload } = message;
-    // }
+    private handle_host_message(ws: CustomWebSocket, message: any) {
+        const { type } = message;
+        switch (type) {
+            case HOST_MESSAGE_TYPES.JOIN_GAME_SESSION:
+                // this.handle_join_game_session(ws, payload);
+                break;
+            default:
+                console.error('Unknown message type', type);
+                break;
+        }
+    }
 
     private async validateHostInDB(quizId: string, hostId: string): Promise<boolean> {
         const quiz = await prisma.quiz.findUnique({
