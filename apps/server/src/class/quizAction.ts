@@ -2,18 +2,9 @@ import prisma from '@repo/db/client';
 import { customAlphabet } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { HostTokenPayload } from '../types/web-socket-types';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
-
-interface HostTokenPayload {
-    userId: string;
-    quizId: string;
-    gameSessionId: string;
-    role: 'HOST';
-    tokenId: string;
-    iat: number;
-    exp: number;
-}
 
 export default class QuizAction {
     private static generateSpectatorCode = customAlphabet(
