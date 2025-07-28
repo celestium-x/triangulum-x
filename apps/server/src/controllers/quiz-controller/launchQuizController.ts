@@ -86,11 +86,11 @@ export default async function launchQuizController(req: Request, res: Response) 
             result.gameSession.id,
         );
 
-        res.cookie('token', secureTokenData, {
+        res.cookie('host-token', secureTokenData, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 60 * 1000,
+            maxAge: 60 * 60 * 24 * 1000, // 1 day
         });
 
         res.status(200).json({
