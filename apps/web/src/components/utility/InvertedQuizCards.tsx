@@ -15,7 +15,7 @@ import { MdPublish } from 'react-icons/md';
 
 export default function InvertedQuizCards() {
     const [openQuizOptionId, setOpenQuizOptionId] = useState<string | null>(null);
-    const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+    const [_selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const { quizs } = useAllQuizsStore();
     const router = useRouter();
@@ -25,7 +25,7 @@ export default function InvertedQuizCards() {
 
     function handleOpenOption(e: MouseEvent<SVGElement>, quizId: string) {
         e.stopPropagation();
-        setOpenQuizOptionId(prev => (prev === quizId ? null : quizId));
+        setOpenQuizOptionId((prev) => (prev === quizId ? null : quizId));
     }
 
     return (
@@ -74,9 +74,9 @@ export default function InvertedQuizCards() {
                                                 className={cn(
                                                     'absolute left-full top-full mt-1',
                                                     'bg-light-base/90 dark:bg-dark-base/90 border border-neutral-200 dark:border-neutral-700',
-                                                    'w-[8rem] rounded-md shadow-lg z-[1000]'
+                                                    'w-[8rem] rounded-md shadow-lg z-[1000]',
                                                 )}
-                                                onClick={e => e.stopPropagation()}
+                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 <Button
                                                     onClick={() => setSelectedQuizId(quiz.id)}
@@ -113,7 +113,6 @@ export default function InvertedQuizCards() {
                                             </div>
                                         )}
                                     </div>
-
                                 </div>
                             ))}
                         </div>
