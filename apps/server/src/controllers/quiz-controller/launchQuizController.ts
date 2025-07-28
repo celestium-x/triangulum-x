@@ -53,6 +53,9 @@ export default async function launchQuizController(req: Request, res: Response) 
         }
 
         const result = await prisma.$transaction(async (tx) => {
+            const participantCode = await QuizAction.generateUniqueCode('participant');
+            const spectatorCode = await QuizAction.generateUniqueCode('spectator');
+
             const updatedQuiz = await tx.quiz.update({
                 where: {
                     id: quizId,
@@ -60,6 +63,8 @@ export default async function launchQuizController(req: Request, res: Response) 
                 data: {
                     status: 'LIVE',
                     startedAt: new Date(),
+                    participantCode,
+                    spectatorCode,
                 },
             });
 

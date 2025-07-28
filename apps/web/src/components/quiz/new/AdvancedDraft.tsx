@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 import { RiLineChartLine } from 'react-icons/ri';
 import { HiChartBar } from 'react-icons/hi';
-import { getSingletonPointsCalculator } from '@/lib/singletonPointsCalculator';
+import { getSingletonPointsCalculator } from '@/lib/singleton-points-calculator';
 import { Button } from '@/components/ui/button';
 import { usePointsMultiplierAdvStore } from '@/store/new-quiz/usePointsMultiplierAdvStore';
 

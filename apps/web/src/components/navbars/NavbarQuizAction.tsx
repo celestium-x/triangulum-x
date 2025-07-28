@@ -14,6 +14,7 @@ import { QuizStatusEnum } from '@/types/prisma-types';
 import { toast } from 'sonner';
 import QuizStatusTicker from '../tickers/QuizstatusTicker';
 import AutoSaveComponent from '../utility/AutoSave';
+import { useRouter } from 'next/navigation';
 
 interface Option {
     name: string;
@@ -29,6 +30,7 @@ export default function NavbarQuizAction() {
     const { session } = useUserSessionStore();
     const { quiz, updateQuiz } = useNewQuizStore();
     const { updateQuiz: updateAllQuiz } = useAllQuizsStore();
+    const router = useRouter();
 
     async function handleSaveDraft() {
         if (!quiz || !session?.user.token) {
@@ -84,6 +86,7 @@ export default function NavbarQuizAction() {
                 });
                 updateQuiz({ status: QuizStatusEnum.LIVE });
                 toast.success('Quiz launched successfully');
+                router.push(`/live/${quiz.id}`);
             }
         } catch (error) {
             console.error('Failed to save quiz:', error);
