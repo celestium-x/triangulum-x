@@ -14,3 +14,7 @@ export interface HostTokenPayload {
     iat: number;
     exp: number;
 }
+
+export enum HOST_MESSAGE_TYPES {
+    JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+}
