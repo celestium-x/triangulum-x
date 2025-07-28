@@ -8,7 +8,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { Input } from '@/components/ui/input';
 import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 import { useEffect, useRef, useState } from 'react';
-import { getSingletonPointsCalculator } from '@/lib/singletonPointsCalculator';
+import { getSingletonPointsCalculator } from '@/lib/singleton-points-calculator';
 import { IoIosInfinite } from 'react-icons/io';
 import UploadQuizImage from './UploadQuizImage';
 

@@ -1,5 +1,5 @@
 import prisma from '@repo/db/client';
-import { randomBytes } from 'crypto';
+import { customAlphabet } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -16,9 +16,32 @@ interface HostTokenPayload {
 }
 
 export default class QuizAction {
-    static generateCode(length: number = 8): string {
-        return randomBytes(length).toString('hex').slice(0, length).toUpperCase();
+    private static generateSpectatorCode = customAlphabet(
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+        6,
+    );
+
+    private static generateParticipantCode = customAlphabet(
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+        12,
+    );
+
+    public static async generateUniqueCode(type: 'participant' | 'spectator'): Promise<string> {
+        while (true) {
+            const code =
+                type === 'participant'
+                    ? QuizAction.generateParticipantCode()
+                    : QuizAction.generateSpectatorCode();
+
+            const quiz = await prisma.quiz.findFirst({
+                where: type === 'participant' ? { participantCode: code } : { spectatorCode: code },
+                select: { id: true },
+            });
+
+            if (!quiz) return code;
+        }
     }
+
     static async deleteQuiz(quizId: string) {
         await prisma.quiz.delete({
             where: {
