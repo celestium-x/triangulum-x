@@ -1,4 +1,5 @@
 import HeadAndSubHead from '../content/HeadAndSubHead';
+import DashboardStakedAmountCard from '../utility/DashboardStakedAmountCard';
 import InvertedQuizCards from '../utility/InvertedQuizCards';
 
 export default function HomeDashboard() {
@@ -8,7 +9,10 @@ export default function HomeDashboard() {
                 heading="Dashboard"
                 subHeading="Manage your quizzes, analytics, and more"
             />
-            <InvertedQuizCards />
+            <div className="flex gap-4 h-[24rem]">
+                <InvertedQuizCards />
+                <DashboardStakedAmountCard />
+            </div>
         </div>
     );
 }
