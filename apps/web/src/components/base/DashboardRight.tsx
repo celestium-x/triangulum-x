@@ -11,6 +11,7 @@ import HomeLeaderboards from '../home/HomeLeaderboards';
 import HomeHistory from '../home/HomeHistory';
 import HomeSettings from '../home/HomeSettings';
 import HomeHelp from '../home/HomeHelp';
+import ReviewBackground from '../utility/ReviewBackground';
 
 export default function DashboardRight(): JSX.Element {
     const { value } = useHomeRendererStore();
@@ -35,6 +36,8 @@ export default function DashboardRight(): JSX.Element {
                 return <HomeSettings />;
             case HomeRendererEnum.HELP:
                 return <HomeHelp />;
+            case HomeRendererEnum.REVIEW:
+                return <ReviewBackground />;
             default:
                 return <div>Dashboard</div>;
         }

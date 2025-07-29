@@ -9,4 +9,5 @@ export enum HomeRendererEnum {
     HISTORY,
     SETTINGS,
     HELP,
+    REVIEW,
 }
