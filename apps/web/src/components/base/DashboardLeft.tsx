@@ -124,83 +124,96 @@ function SmallDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setV
             <DashboardOptions
                 value={value}
                 setValue={setValue}
+                close={handleClose}
             />
         </div>
     );
 }
 
-function DashboardOptions({ value, setValue }: { value: HomeRendererEnum, setValue: (value: HomeRendererEnum) => void }): JSX.Element {
+function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum, setValue: (value: HomeRendererEnum) => void, close?: () => void }): JSX.Element {
+
+    const upperDashboardOptions: OptionProps[] = [
+        {
+            icon: <TbDashboard size={20} />,
+            label: "Dashboard",
+            onClick: () => setValue(HomeRendererEnum.DASHBOARD),
+            isActive: value === HomeRendererEnum.DASHBOARD,
+        },
+        {
+            icon: <TbTrophy size={20} />,
+            label: "My Quizzes",
+            onClick: () => setValue(HomeRendererEnum.MY_QUIZ),
+            isActive: value === HomeRendererEnum.MY_QUIZ,
+        },
+        {
+            icon: <TbPlus size={20} />,
+            label: "Create Quiz",
+            onClick: () => setValue(HomeRendererEnum.CREATE_QUIZ),
+            isActive: value === HomeRendererEnum.CREATE_QUIZ,
+        },
+        {
+            icon: <TbChartBar size={20} />,
+            label: "Analytics",
+            onClick: () => setValue(HomeRendererEnum.ANALYTICS),
+            isActive: value === HomeRendererEnum.ANALYTICS,
+        },
+        {
+            icon: <TbWallet size={20} />,
+            label: "Wallet",
+            onClick: () => setValue(HomeRendererEnum.WALLET),
+            isActive: value === HomeRendererEnum.WALLET,
+        },
+        {
+            icon: <TbCrown size={20} />,
+            label: "Leaderboards",
+            onClick: () => setValue(HomeRendererEnum.LEADERBOARD),
+            isActive: value === HomeRendererEnum.LEADERBOARD,
+        },
+        {
+            icon: <TbHistory size={20} />,
+            label: "History",
+            onClick: () => setValue(HomeRendererEnum.HISTORY),
+            isActive: value === HomeRendererEnum.HISTORY,
+        }
+    ];
+
+    const lowerDashboardOptions: OptionProps[] = [
+        {
+            icon: <MdRateReview size={20} />,
+            label: "Leave a Review",
+            onClick: () => setValue(HomeRendererEnum.REVIEW),
+            isActive: value === HomeRendererEnum.REVIEW,
+        },
+        {
+            icon: <MdRateReview size={20} />,
+            label: "Leave a review",
+            onClick: () => setValue(HomeRendererEnum.REVIEW),
+            isActive: value === HomeRendererEnum.REVIEW,
+        },
+        {
+            icon: <TbSettings size={20} />,
+            label: "Settings",
+            onClick: () => setValue(HomeRendererEnum.SETTINGS),
+            isActive: value === HomeRendererEnum.SETTINGS,
+        },
+        {
+            icon: <TbHelp size={20} />,
+            label: "Help & Support",
+            onClick: () => setValue(HomeRendererEnum.HELP),
+            isActive: value === HomeRendererEnum.HELP,
+        }
+    ];
+
     return <>
         <div className="mt-8 w-full space-y-1 px-2 flex flex-col gap-y-2">
-            <NavOption
-                icon={<TbDashboard size={20} />}
-                label="Dashboard"
-                onClick={() => setValue(HomeRendererEnum.DASHBOARD)}
-                isActive={value === HomeRendererEnum.DASHBOARD}
-            />
-            <NavOption
-                icon={<TbTrophy size={20} />}
-                label="My Quizzes"
-                onClick={() => setValue(HomeRendererEnum.MY_QUIZ)}
-                isActive={value === HomeRendererEnum.MY_QUIZ}
-            />
-            <NavOption
-                icon={<TbPlus size={20} />}
-                label="Create Quiz"
-                onClick={() => setValue(HomeRendererEnum.CREATE_QUIZ)}
-                isActive={value === HomeRendererEnum.CREATE_QUIZ}
-            />
-            <NavOption
-                icon={<TbChartBar size={20} />}
-                label="Analytics"
-                onClick={() => setValue(HomeRendererEnum.ANALYTICS)}
-                isActive={value === HomeRendererEnum.ANALYTICS}
-            />
-            <NavOption
-                icon={<TbWallet size={20} />}
-                label="Wallet"
-                onClick={() => setValue(HomeRendererEnum.WALLET)}
-                isActive={value === HomeRendererEnum.WALLET}
-            />
-            <NavOption
-                icon={<TbCrown size={20} />}
-                label="Leaderboards"
-                onClick={() => setValue(HomeRendererEnum.LEADERBOARD)}
-                isActive={value === HomeRendererEnum.LEADERBOARD}
-            />
-            <NavOption
-                icon={<TbHistory size={20} />}
-                label="History"
-                onClick={() => setValue(HomeRendererEnum.HISTORY)}
-                isActive={value === HomeRendererEnum.HISTORY}
-            />
+            {upperDashboardOptions.map((opt, i) => (
+                <NavOption key={i} {...opt} />
+            ))}
         </div>
-
-        <div className="mt-auto w-full space-y-1 pl-2">
-            <NavOption
-                icon={<MdRateReview size={20} />}
-                label="Leave a Review"
-                onClick={() => setValue(HomeRendererEnum.REVIEW)}
-                isActive={value === HomeRendererEnum.REVIEW}
-            />
-            <NavOption
-                icon={<MdRateReview size={20} />}
-                label="Leave a review"
-                onClick={() => setValue(HomeRendererEnum.REVIEW)}
-                isActive={value === HomeRendererEnum.REVIEW}
-            />
-            <NavOption
-                icon={<TbSettings size={20} />}
-                label="Settings"
-                onClick={() => setValue(HomeRendererEnum.SETTINGS)}
-                isActive={value === HomeRendererEnum.SETTINGS}
-            />
-            <NavOption
-                icon={<TbHelp size={20} />}
-                label="Help & Support"
-                onClick={() => setValue(HomeRendererEnum.HELP)}
-                isActive={value === HomeRendererEnum.HELP}
-            />
+        <div className='mt-auto w-full space-y-1 pl-2'>
+            {lowerDashboardOptions.map((opt, i) => (
+                <NavOption key={i} {...opt} />
+            ))}
         </div>
     </>
 }
