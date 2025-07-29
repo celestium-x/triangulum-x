@@ -17,6 +17,7 @@ export default class BackendActions {
             console.error('[UPSERT_QUIZ_ERROR]', err);
         }
     }
+
     static async publishQuiz(quizId: string, token: string): Promise<boolean> {
         if (!token || !quizId) {
             return false;

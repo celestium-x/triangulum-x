@@ -4,15 +4,14 @@ import GenerateUser from '../../class/generateUser';
 import QuizAction from '../../class/quizAction';
 import { participantJoinSchema } from '../../schemas/participantJoinSchema';
 
-const ALLOWED_STATUSES = ['CREATED', 'SCHEDULED'];
-
 export default async function participantJoinController(req: Request, res: Response) {
     const parseResult = participantJoinSchema.safeParse(req.body);
     if (!parseResult.success) {
-        return res.status(400).json({
+        res.status(400).json({
             success: false,
-            message: parseResult.error,
+            message: 'Invalid request data',
         });
+        return;
     }
 
     const { code } = parseResult.data;
@@ -20,44 +19,112 @@ export default async function participantJoinController(req: Request, res: Respo
     try {
         const quiz = await prisma.quiz.findUnique({
             where: { participantCode: code },
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                theme: true,
+                status: true,
+                questionTimeLimit: true,
+                breakBetweenQuestions: true,
+                eliminationThreshold: true,
+                timeBonus: true,
+                liveChat: true,
+                spectatorMode: true,
+                basePointsPerQuestion: true,
+                pointsMultiplier: true,
+                prizePool: true,
+                currency: true,
+                _count: {
+                    select: {
+                        questions: true,
+                        participants: true,
+                    },
+                },
+            },
         });
 
         if (!quiz) {
-            return res.status(404).json({
+            res.status(404).json({
                 success: false,
                 message: 'Invalid quiz code. Please check and try again.',
             });
+            return;
         }
 
-        if (!ALLOWED_STATUSES.includes(quiz.status)) {
-            return res.status(403).json({
+        if (!['LIVE'].includes(quiz.status)) {
+            res.status(403).json({
                 success: false,
-                message: 'This quiz is not accepting new participants at the moment.',
+                message: 'Quiz is not available for joining at this time.',
             });
+            return;
         }
 
         const gameSession = await prisma.gameSession.findUnique({
             where: { quizId: quiz.id },
-        });
-
-        if (!gameSession) {
-            return res.status(500).json({
-                success: false,
-                message: 'Unable to join. The game session has not been initialized yet.',
-            });
-        }
-
-        const participant = await prisma.participant.create({
-            data: {
-                quizId: quiz.id,
-                nickname: GenerateUser.getRandomName(),
-                avatar: GenerateUser.getRandomAvatar(),
-                ipAddress: req.ip,
+            select: {
+                id: true,
+                status: true,
+                hostScreen: true,
+                participantScreen: true,
+                totalParticipants: true,
+                activeParticipants: true,
+                currentQuestionIndex: true,
             },
         });
 
+        if (!gameSession) {
+            res.status(500).json({
+                success: false,
+                message: 'Quiz session is not available yet. Please try again later.',
+            });
+            return;
+        }
+
+        if (!['WAITING', 'STARTING'].includes(gameSession.status)) {
+            res.status(403).json({
+                success: false,
+                message: 'Quiz has already started. New participants cannot join.',
+            });
+            return;
+        }
+
+        const result = await prisma.$transaction(async (tx) => {
+            const participant = await tx.participant.create({
+                data: {
+                    quizId: quiz.id,
+                    nickname: GenerateUser.getRandomName(),
+                    avatar: GenerateUser.getRandomAvatar(),
+                    ipAddress: req.ip || 'unknown',
+                },
+            });
+
+            const updatedGameSession = await tx.gameSession.update({
+                where: { id: gameSession.id },
+                data: {
+                    totalParticipants: {
+                        increment: 1,
+                    },
+                    activeParticipants: {
+                        increment: 1,
+                    },
+                },
+                select: {
+                    id: true,
+                    status: true,
+                    hostScreen: true,
+                    participantScreen: true,
+                    currentQuestionIndex: true,
+                    totalParticipants: true,
+                    activeParticipants: true,
+                },
+            });
+
+            return { participant, updatedGameSession };
+        });
+
         const secureTokenData = QuizAction.generateParticipantToken(
-            participant.id,
+            result.participant.id,
             quiz.id,
             gameSession.id,
         );
@@ -67,10 +134,27 @@ export default async function participantJoinController(req: Request, res: Respo
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
-                maxAge: 60 * 60 * 24 * 1000,
+                maxAge: 24 * 60 * 60 * 1000,
             });
         } catch (cookieErr) {
-            console.error('Cookie setting error', cookieErr);
+            console.error('Cookie setting error:', cookieErr);
+            await prisma
+                .$transaction(async (tx) => {
+                    await tx.participant.delete({
+                        where: { id: result.participant.id },
+                    });
+                    await tx.gameSession.update({
+                        where: { id: gameSession.id },
+                        data: {
+                            totalParticipants: { decrement: 1 },
+                            activeParticipants: { decrement: 1 },
+                        },
+                    });
+                })
+                .catch((cleanupErr) => {
+                    console.error('Failed to cleanup after cookie error:', cleanupErr);
+                });
+
             res.status(500).json({
                 success: false,
                 message: 'Could not set authentication cookie. Please try again.',
@@ -80,15 +164,11 @@ export default async function participantJoinController(req: Request, res: Respo
 
         res.status(200).json({
             success: true,
-            message: 'You have successfully joined the quiz!',
+            message: 'Successfully joined the quiz!',
             data: {
-                quizId: quiz.id,
-                gameSessionId: gameSession.id,
-                participantId: participant.id,
-                participant: {
-                    nickname: participant.nickname,
-                    avatar: participant.avatar,
-                },
+                participant: result.participant,
+                quiz: quiz,
+                gameSession: result.updatedGameSession,
             },
         });
         return;

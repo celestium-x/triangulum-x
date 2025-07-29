@@ -10,6 +10,7 @@ export interface NewProps {
 
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
+
     useWebSocket();
-    return <div>{quizId}</div>;
+    return <div className="h-screen w-full">{quizId}</div>;
 }

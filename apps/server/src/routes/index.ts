@@ -9,6 +9,7 @@ import publishQuizController from '../controllers/quiz-controller/publishQuizCon
 import verifyQuizOwnershipMiddleware from '../middlewares/verifyQuizOwnershipMiddleware';
 import launchQuizController from '../controllers/quiz-controller/launchQuizController';
 import reviewAppController from '../controllers/appReview-controller/reviewAppController';
+import participantJoinController from '../controllers/live-quiz-controller/participantJoinController';
 
 const router = Router();
 
@@ -34,4 +35,5 @@ router.get(
 
 router.post('review', authMiddleware, reviewAppController);
 
+router.post('/quiz/participant-join-quiz', participantJoinController);
 export default router;
