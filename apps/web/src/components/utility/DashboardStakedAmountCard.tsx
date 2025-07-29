@@ -23,8 +23,8 @@ export default function DashboardStakedAmountCard() {
     }
 
     return (
-        <div className="flex-1 p-12">
-            <div className="bg-primary h-full max-h-[24rem] rounded-4xl p-6 relative overflow-hidden text-light-base">
+        <div className="flex-1 p-7 md:p-12">
+            <div className="bg-primary h-full max-h-[24rem] rounded-4xl p-6 relative overflow-hidden">
                 <div className="flex flex-col justify-between h-full">
                     <div className="w-full flex items-center justify-between">
                         <div className="flex flex-col items-start gap-y-2">
