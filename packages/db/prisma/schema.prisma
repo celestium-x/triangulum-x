@@ -27,6 +27,7 @@ model User {
   updatedAt   DateTime @updatedAt
   lastLoginAt DateTime @default(now())
   Quiz        Quiz[]
+  reviews     Review[]
 
   @@map("hosts")
 }
@@ -162,9 +163,9 @@ model Response {
   timeToAnswer   Int
   pointsEarned   Int
 
-  timeBonus   Int @default(0)
-  streakBonus Int @default(0)
-  answeredAt DateTime @default(now())
+  timeBonus   Int      @default(0)
+  streakBonus Int      @default(0)
+  answeredAt  DateTime @default(now())
 
   participantId String
   participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
@@ -190,6 +191,18 @@ model Elimination {
   gameSession   GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
 
   @@map("eliminations")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@unique([userId])
 }
 
 enum QuizStatus {
