@@ -17,7 +17,6 @@ import {
     TbHelp,
 } from 'react-icons/tb';
 
-
 export default function DashboardLeft(): JSX.Element {
     const { value, setValue } = useHomeRendererStore();
     return (
@@ -83,13 +82,12 @@ export default function DashboardLeft(): JSX.Element {
             </div>
 
             <div className="mt-auto w-full space-y-1 pl-2">
-                <NavOption 
+                <NavOption
                     icon={<MdRateReview size={20} />}
                     label="Leave a Review"
-                    onClick={()=> setValue(HomeRendererEnum.REVIEW)}
-                    isActive={value===HomeRendererEnum.REVIEW}
-
-                 />
+                    onClick={() => setValue(HomeRendererEnum.REVIEW)}
+                    isActive={value === HomeRendererEnum.REVIEW}
+                />
                 <NavOption
                     icon={<MdRateReview size={20} />}
                     label="Leave a review"
