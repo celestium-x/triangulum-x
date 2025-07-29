@@ -2,7 +2,7 @@ import prisma from '@repo/db/client';
 import { customAlphabet } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { HostTokenPayload } from '../types/web-socket-types';
+import { HostTokenPayload, ParticipantTokenPayload } from '../types/web-socket-types';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -63,6 +63,24 @@ export default class QuizAction {
             quizId,
             gameSessionId,
             role: 'HOST',
+            tokenId,
+            iat: Math.floor(Date.now() / 1000),
+            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+        };
+        return jwt.sign(payload, JWT_SECRET!);
+    }
+
+    public static generateParticipantToken(
+        participantId: string,
+        quizId: string,
+        gameSessionId: string,
+    ): string {
+        const tokenId = QuizAction.generateTokenId();
+        const payload: ParticipantTokenPayload = {
+            participantId,
+            quizId,
+            gameSessionId,
+            role: 'PARTICIPANT',
             tokenId,
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,

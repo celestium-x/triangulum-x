@@ -8,10 +8,11 @@ import { CustomWebSocket, HostTokenPayload } from '../types/web-socket-types';
 import HostManager from './HostManager';
 import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
+import { URL } from 'url';
 dotenv.config();
 
 const REDIS_URL = process.env.REDIS_URL;
-const JWT_SECRET = process.env.JWT_SOCKET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export default class WebsocketServer {
     private wss: WebSocketServer;
@@ -36,6 +37,11 @@ export default class WebsocketServer {
     }
 
     private initialize_managers() {
+        this.quizManager = new QuizManager({
+            publisher: this.publisher,
+            subscriber: this.subscriber,
+            redis_cache: this.redis_cache,
+        });
         this.hostManager = new HostManager({
             publisher: this.publisher,
             subscriber: this.subscriber,
@@ -43,16 +49,16 @@ export default class WebsocketServer {
             sessionHostMapping: this.session_host_mapping,
             quizManager: this.quizManager,
         });
-        this.quizManager = new QuizManager({
-            publisher: this.publisher,
-            subscriber: this.subscriber,
-            redis_cache: this.redis_cache,
-        });
     }
 
     private initialize() {
         this.wss.on('connection', (ws: CustomWebSocket, req) => {
-            const quizId = '';
+            const url = new URL(req.url || '', `http://${req.headers.host}`);
+            const quizId = url.searchParams.get('quizId');
+            if (!quizId) {
+                ws.close();
+                return;
+            }
             this.validate_connection(ws, req, quizId);
         });
     }

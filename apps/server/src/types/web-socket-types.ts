@@ -15,6 +15,16 @@ export interface HostTokenPayload {
     exp: number;
 }
 
+export interface ParticipantTokenPayload {
+    participantId: string;
+    quizId: string;
+    gameSessionId: string;
+    role: 'PARTICIPANT';
+    tokenId: string;
+    iat: number;
+    exp: number;
+}
+
 export enum HOST_MESSAGE_TYPES {
     JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
 }
