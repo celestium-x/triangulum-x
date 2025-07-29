@@ -8,7 +8,7 @@ export default class ParticipantQuizAction {
             if (!code) {
                 toast.error('Please enter a code');
                 return;
-            };
+            }
             if (code.length !== 6 && code.length !== 12) {
                 toast.error('Please enter a valid code');
                 return;
@@ -17,7 +17,7 @@ export default class ParticipantQuizAction {
             const { data } = await axios.post(
                 PARTICIPANT_JOIN_QUIZ_URL,
                 { code },
-                { withCredentials: true }
+                { withCredentials: true },
             );
 
             if (data.success) {
