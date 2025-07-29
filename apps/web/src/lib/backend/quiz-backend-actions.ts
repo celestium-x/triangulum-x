@@ -3,6 +3,7 @@ import axios from 'axios';
 import { CREATE_QUIZ_URL, LAUNCH_QUIZ_URL, PUBLISH_QUIZ_URL } from 'routes/api_routes';
 
 export default class BackendActions {
+    
     static async upsertQuizAction(quiz: QuizType, token: string) {
         if (!token || !quiz.id) {
             return;
@@ -17,6 +18,7 @@ export default class BackendActions {
             console.error('[UPSERT_QUIZ_ERROR]', err);
         }
     }
+
     static async publishQuiz(quizId: string, token: string): Promise<boolean> {
         if (!token || !quizId) {
             return false;
@@ -61,4 +63,5 @@ export default class BackendActions {
             return false;
         }
     }
+
 }
