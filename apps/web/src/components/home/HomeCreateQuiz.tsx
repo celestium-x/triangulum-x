@@ -4,7 +4,7 @@ import UtilityCard from '../utility/UtilityCard';
 
 export default function HomeCreateQuiz() {
     return (
-        <div className="flex flex-col items-start justify-start">
+        <div className="p-8 flex flex-col items-start justify-start">
             <HeadAndSubHead
                 heading="Create Quiz"
                 subHeading="Manage your quizzes, analytics, and more"

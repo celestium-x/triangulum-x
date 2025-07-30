@@ -1,8 +1,14 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { useHomeRendererStore } from '@/store/home/useHomeRendererStore';
+import { useSideBarStore } from '@/store/home/useSideBar';
 import { HomeRendererEnum } from '@/types/homeRendererTypes';
-import { JSX } from 'react';
+import { JSX, useEffect, useRef } from 'react';
 import { MdRateReview } from 'react-icons/md';
+import { FiX } from 'react-icons/fi';
+import gsap from 'gsap';
+
 import {
     TbSquareLetterTFilled,
     TbDashboard,
@@ -15,14 +21,31 @@ import {
     TbSettings,
     TbHelp,
 } from 'react-icons/tb';
+import { AppLogo } from '../ui/svg/AppLogo';
 
 export default function DashboardLeft(): JSX.Element {
     const { value, setValue } = useHomeRendererStore();
     return (
+        <>
+            <BigDashboardLeft value={value} setValue={setValue} />
+            <SmallDashboardLeft value={value} setValue={setValue} />
+        </>
+    );
+}
+
+function BigDashboardLeft({
+    value,
+    setValue,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+}): JSX.Element {
+    return (
         <div
             className={cn(
                 'h-full bg-light-base dark:bg-dark-base/10 shrink-0 w-[300px]',
-                'flex flex-col justify-start items-center py-6',
+                'hidden lg:flex flex-col justify-start items-center py-6',
+                '',
             )}
         >
             <LogoOption
@@ -35,72 +58,208 @@ export default function DashboardLeft(): JSX.Element {
                 label="Triangulum"
             />
 
-            <div className="mt-8 w-full space-y-1 pl-2 flex flex-col gap-y-2">
-                <NavOption
-                    icon={<TbDashboard size={20} />}
-                    label="Dashboard"
-                    onClick={() => setValue(HomeRendererEnum.DASHBOARD)}
-                    isActive={value === HomeRendererEnum.DASHBOARD}
+            <DashboardOptions value={value} setValue={setValue} />
+        </div>
+    );
+}
+
+function SmallDashboardLeft({
+    value,
+    setValue,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+}): JSX.Element {
+    const { appearing, setAppearing } = useSideBarStore();
+    const sidebarRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (appearing) {
+            gsap.fromTo(
+                sidebarRef.current,
+                {
+                    x: -300,
+                },
+                {
+                    x: 0,
+                    duration: 0.2,
+                    ease: 'power2.inOut',
+                },
+            );
+        }
+    }, [appearing]);
+
+    const handleClose = () => {
+        gsap.fromTo(
+            sidebarRef.current,
+            {
+                x: 0,
+            },
+            {
+                x: -300,
+                duration: 0.2,
+                ease: 'power2.inOut',
+                onComplete: () => setAppearing(false),
+            },
+        );
+    };
+
+    return (
+        <div
+            ref={sidebarRef}
+            className={cn(
+                'h-full xs:w-[300px] w-full bg-light-base dark:bg-dark-base border-r dark:border-dark-base shadow-xl shrink-0 ',
+                'lg:hidden flex flex-col justify-start items-center py-6',
+                'absolute z-20',
+                `${appearing ? '' : 'hidden'}`,
+            )}
+        >
+            <div className="w-full flex items-center justify-between pr-10 ">
+                <LogoOption
+                    icon={
+                        <AppLogo
+                            size={28}
+                            className="group-hover:-translate-x-1 transition-transform ease-in "
+                        />
+                    }
+                    label="Triangulum"
                 />
-                <NavOption
-                    icon={<TbTrophy size={20} />}
-                    label="My Quizzes"
-                    onClick={() => setValue(HomeRendererEnum.MY_QUIZ)}
-                    isActive={value === HomeRendererEnum.MY_QUIZ}
-                />
-                <NavOption
-                    icon={<TbPlus size={20} />}
-                    label="Create Quiz"
-                    onClick={() => setValue(HomeRendererEnum.CREATE_QUIZ)}
-                    isActive={value === HomeRendererEnum.CREATE_QUIZ}
-                />
-                <NavOption
-                    icon={<TbChartBar size={20} />}
-                    label="Analytics"
-                    onClick={() => setValue(HomeRendererEnum.ANALYTICS)}
-                    isActive={value === HomeRendererEnum.ANALYTICS}
-                />
-                <NavOption
-                    icon={<TbWallet size={20} />}
-                    label="Wallet"
-                    onClick={() => setValue(HomeRendererEnum.WALLET)}
-                    isActive={value === HomeRendererEnum.WALLET}
-                />
-                <NavOption
-                    icon={<TbCrown size={20} />}
-                    label="Leaderboards"
-                    onClick={() => setValue(HomeRendererEnum.LEADERBOARD)}
-                    isActive={value === HomeRendererEnum.LEADERBOARD}
-                />
-                <NavOption
-                    icon={<TbHistory size={20} />}
-                    label="History"
-                    onClick={() => setValue(HomeRendererEnum.HISTORY)}
-                    isActive={value === HomeRendererEnum.HISTORY}
-                />
+
+                <FiX size={20} onClick={handleClose} className="cursor-pointer" />
             </div>
 
-            <div className="mt-auto w-full space-y-1 pl-2">
-                <NavOption
-                    icon={<MdRateReview size={20} />}
-                    label="Leave a Review"
-                    onClick={() => setValue(HomeRendererEnum.REVIEW)}
-                    isActive={value === HomeRendererEnum.REVIEW}
-                />
-                <NavOption
-                    icon={<TbSettings size={20} />}
-                    label="Settings"
-                    onClick={() => setValue(HomeRendererEnum.SETTINGS)}
-                    isActive={value === HomeRendererEnum.SETTINGS}
-                />
-                <NavOption
-                    icon={<TbHelp size={20} />}
-                    label="Help & Support"
-                    onClick={() => setValue(HomeRendererEnum.HELP)}
-                    isActive={value === HomeRendererEnum.HELP}
-                />
-            </div>
+            <DashboardOptions value={value} setValue={setValue} close={handleClose} />
         </div>
+    );
+}
+
+function DashboardOptions({
+    value,
+    setValue,
+    close,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+    close?: () => void;
+}): JSX.Element {
+    const upperDashboardOptions: OptionProps[] = [
+        {
+            icon: <TbDashboard size={20} />,
+            label: 'Dashboard',
+            onClick: () => {
+                setValue(HomeRendererEnum.DASHBOARD);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.DASHBOARD,
+        },
+        {
+            icon: <TbTrophy size={20} />,
+            label: 'My Quizzes',
+            onClick: () => {
+                setValue(HomeRendererEnum.MY_QUIZ);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.MY_QUIZ,
+        },
+        {
+            icon: <TbPlus size={20} />,
+            label: 'Create Quiz',
+            onClick: () => {
+                setValue(HomeRendererEnum.CREATE_QUIZ);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.CREATE_QUIZ,
+        },
+        {
+            icon: <TbChartBar size={20} />,
+            label: 'Analytics',
+            onClick: () => {
+                setValue(HomeRendererEnum.ANALYTICS);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.ANALYTICS,
+        },
+        {
+            icon: <TbWallet size={20} />,
+            label: 'Wallet',
+            onClick: () => {
+                setValue(HomeRendererEnum.WALLET);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.WALLET,
+        },
+        {
+            icon: <TbCrown size={20} />,
+            label: 'Leaderboards',
+            onClick: () => {
+                setValue(HomeRendererEnum.LEADERBOARD);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.LEADERBOARD,
+        },
+        {
+            icon: <TbHistory size={20} />,
+            label: 'History',
+            onClick: () => {
+                setValue(HomeRendererEnum.HISTORY);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.HISTORY,
+        },
+    ];
+
+    const lowerDashboardOptions: OptionProps[] = [
+        {
+            icon: <MdRateReview size={20} />,
+            label: 'Leave a Review',
+            onClick: () => {
+                setValue(HomeRendererEnum.REVIEW);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.REVIEW,
+        },
+        {
+            icon: <MdRateReview size={20} />,
+            label: 'Leave a review',
+            onClick: () => {
+                setValue(HomeRendererEnum.REVIEW);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.REVIEW,
+        },
+        {
+            icon: <TbSettings size={20} />,
+            label: 'Settings',
+            onClick: () => {
+                setValue(HomeRendererEnum.SETTINGS);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.SETTINGS,
+        },
+        {
+            icon: <TbHelp size={20} />,
+            label: 'Help & Support',
+            onClick: () => {
+                setValue(HomeRendererEnum.HELP);
+                close?.();
+            },
+            isActive: value === HomeRendererEnum.HELP,
+        },
+    ];
+
+    return (
+        <>
+            <div className="mt-8 w-full space-y-1 px-2 flex flex-col gap-y-2">
+                {upperDashboardOptions.map((opt, i) => (
+                    <NavOption key={i} {...opt} />
+                ))}
+            </div>
+            <div className="mt-auto w-full space-y-1 pl-2">
+                {lowerDashboardOptions.map((opt, i) => (
+                    <NavOption key={i} {...opt} />
+                ))}
+            </div>
+        </>
     );
 }
 

@@ -5,7 +5,7 @@ import { useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 
-export default function AutoSaveComponent() {
+export default function AutoSaveComponent({ className }: { className?: string }) {
     const { setState } = useDraftRendererStore();
     const underlineRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +51,7 @@ export default function AutoSaveComponent() {
     return (
         <div
             onClick={() => setState(DraftRenderer.ADVANCED)}
-            className="inline-flex items-center gap-x-2 whitespace-nowrap max-w-full cursor-pointer"
+            className={`hidden lg:inline-flex items-center gap-x-2 whitespace-nowrap max-w-full cursor-pointer ${className} `}
         >
             <div
                 className={`h-2 w-2 rounded-full shrink-0 animate-pulse ${

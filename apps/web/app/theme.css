@@ -4,3 +4,8 @@
     --color-dark-base: #252525;
     --color-dark-primary: #0d0d0d;
 }
+
+@theme {
+    --breakpoint-xs: 375px;
+    --breakpoint-md2: 896px;
+}
