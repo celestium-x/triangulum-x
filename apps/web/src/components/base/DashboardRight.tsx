@@ -37,7 +37,7 @@ export default function DashboardRight(): JSX.Element {
             case HomeRendererEnum.HELP:
                 return <HomeHelp />;
             case HomeRendererEnum.REVIEW:
-                return <ReviewBackground />;
+                return <ReviewBackground/>
             default:
                 return <div>Dashboard</div>;
         }
