@@ -67,6 +67,15 @@ export default class ParticipantManager {
                 console.error('Error parsing message', err);
             }
         });
+
+        ws.on('close', () => {
+            this.cleanup_participant_socket(ws);
+        });
+
+        ws.on('error', (error) => {
+            console.error('WebSocket error:', error);
+            this.cleanup_participant_socket(ws);
+        });
     }
 
     private handle_host_message(ws: CustomWebSocket, message: any) {
@@ -95,6 +104,27 @@ export default class ParticipantManager {
                 this.session_participants_mapping.get(game_session_id);
             if (session_participants_socket_ids) {
                 session_participants_socket_ids.delete(existing_participant_socket_id);
+            }
+        }
+    }
+
+    private cleanup_participant_socket(ws: CustomWebSocket): void {
+        if (!ws.id || !ws.user) {
+            return;
+        }
+
+        const socket_id = ws.id;
+        const participant_id = ws.user.userId;
+        const game_session_id = ws.user.gameSessionId;
+
+        this.socket_mapping.delete(socket_id);
+        this.participant_socket_mapping.delete(participant_id);
+        const session_participants_socket_ids =
+            this.session_participants_mapping.get(game_session_id);
+        if (session_participants_socket_ids) {
+            session_participants_socket_ids.delete(socket_id);
+            if (session_participants_socket_ids.size === 0) {
+                this.session_participants_mapping.delete(game_session_id);
             }
         }
     }
