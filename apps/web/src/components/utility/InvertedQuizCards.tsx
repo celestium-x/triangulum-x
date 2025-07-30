@@ -29,7 +29,7 @@ export default function InvertedQuizCards() {
     }
 
     return (
-        <div className="max-h-[24rem] h-full">
+        <div className="max-h-[24rem] h-full flex flex-row items-start justify-center mt-8">
             {quizs.length > 0 && (
                 <div className="mt-12 relative w-[20rem] h-fit">
                     <div className="absolute bottom-6 left-3 w-[90%] h-full rounded-3xl bg-dark-base/50 dark:bg-neutral-100/50 scale-95 z-0"></div>

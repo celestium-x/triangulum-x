@@ -8,8 +8,8 @@ import { Wallet, BarChart3, Circle } from 'lucide-react';
 import ProfileMenu from '../utility/ProfileMenu';
 import { useRouter } from 'next/navigation';
 import { v4 as uuid } from 'uuid';
-import { FiMenu } from 'react-icons/fi';
 import { useSideBarStore } from '@/store/home/useSideBar';
+import { RiMenu2Fill } from 'react-icons/ri';
 
 interface NavItems {
     name: string;
@@ -81,7 +81,7 @@ function BigHomeNavbar({
     createNewQuizHandler,
 }: HomeNavbar) {
     return (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-full max-w-5xl px-4 py-4 rounded-lg shadow-lg border dark:bg-dark-base bg-light-base hidden xl:flex ">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-full max-w-5xl px-4 py-4 rounded-lg shadow-lg border dark:bg-dark-base bg-light-base hidden xl:flex">
             <div className="px-4 flex items-center justify-between w-full">
                 <AppLogo />
 
@@ -137,10 +137,10 @@ function SmallHomeNavbar({
     return (
         <div className="w-full fixed px-4 py-4 xl:hidden shadow-lg border-b bg-light-base dark:bg-dark-base ">
             <div className="px-4 flex items-center justify-between w-full">
-                <div className="flex justify-center items-center gap-x-2">
-                    <FiMenu
-                        size={30}
-                        className={`lg:hidden cursor-pointer `}
+                <div className="flex justify-center items-center gap-x-4">
+                    <RiMenu2Fill
+                        size={20}
+                        className={`lg:hidden cursor-pointer`}
                         onClick={() => setAppearing(!appearing)}
                     />
                     <AppLogo />

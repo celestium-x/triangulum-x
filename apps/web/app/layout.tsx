@@ -5,6 +5,7 @@ import { getServerSession } from 'next-auth';
 import { authOption } from './api/auth/[...nextauth]/options';
 import SessionSetter from '@/components/utility/SessionSetter';
 import { Toaster } from 'sonner';
+import { ThemeProvider } from 'next-themes';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -26,9 +27,11 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${poppins.className}`}>
-                <Toaster theme="dark" />
-                {children}
-                <SessionSetter session={session} />
+                <ThemeProvider attribute="class" defaultTheme="system">
+                    <Toaster theme="dark" />
+                    {children}
+                    <SessionSetter session={session} />
+                </ThemeProvider>
             </body>
         </html>
     );
