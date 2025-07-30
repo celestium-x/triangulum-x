@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { parse } from 'cookie';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { CustomWebSocket, HostTokenPayload } from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket } from '../types/web-socket-types';
 import HostManager from './HostManager';
 import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
@@ -96,7 +96,7 @@ export default class WebsocketServer {
                     return;
                 }
 
-                const payload = decoded as HostTokenPayload;
+                const payload = decoded as CookiePayload;
 
                 if (payload.quizId !== quizId || payload.role !== role) {
                     console.error('Token validation failed');
@@ -106,7 +106,7 @@ export default class WebsocketServer {
 
                 switch (payload.role) {
                     case 'HOST':
-                        await this.hostManager.handle_connection(ws, payload as HostTokenPayload);
+                        await this.hostManager.handle_connection(ws, payload as CookiePayload);
                         break;
                     default:
                         ws.close();

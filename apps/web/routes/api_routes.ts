@@ -10,3 +10,4 @@ export const GET_ALL_OWNER_QUIZ_URL = QUIZ_URL + '/get-all-quiz';
 export const PUBLISH_QUIZ_URL = QUIZ_URL + '/publish-quiz';
 export const LAUNCH_QUIZ_URL = QUIZ_URL + '/launch-quiz';
 export const PARTICIPANT_JOIN_QUIZ_URL = QUIZ_URL + '/participant-join-quiz';
+export const LIVE_QUIZ_DATA_URL = QUIZ_URL + '/get-live-quiz-data';

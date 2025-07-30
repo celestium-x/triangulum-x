@@ -66,6 +66,29 @@ export default async function launchQuizController(req: Request, res: Response) 
                     participantCode,
                     spectatorCode,
                 },
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    theme: true,
+                    status: true,
+                    questionTimeLimit: true,
+                    breakBetweenQuestions: true,
+                    eliminationThreshold: true,
+                    timeBonus: true,
+                    liveChat: true,
+                    spectatorMode: true,
+                    basePointsPerQuestion: true,
+                    pointsMultiplier: true,
+                    prizePool: true,
+                    currency: true,
+                    _count: {
+                        select: {
+                            questions: true,
+                            participants: true,
+                        },
+                    },
+                },
             });
 
             const gameSession = await tx.gameSession.create({
@@ -75,6 +98,15 @@ export default async function launchQuizController(req: Request, res: Response) 
                     participantScreen: 'LOBBY',
                     questionStartedAt: new Date(),
                     status: 'WAITING',
+                },
+                select: {
+                    id: true,
+                    status: true,
+                    hostScreen: true,
+                    participantScreen: true,
+                    totalParticipants: true,
+                    activeParticipants: true,
+                    currentQuestionIndex: true,
                 },
             });
             return { updatedQuiz, gameSession };
@@ -86,7 +118,7 @@ export default async function launchQuizController(req: Request, res: Response) 
             result.gameSession.id,
         );
 
-        res.cookie('host-token', secureTokenData, {
+        res.cookie('token', secureTokenData, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
@@ -97,12 +129,8 @@ export default async function launchQuizController(req: Request, res: Response) 
             success: true,
             message: 'Quiz launched successfully',
             data: {
-                quizId: quiz.id,
-                gameSessionId: result.gameSession.id,
-                quiz: {
-                    title: quiz.title,
-                    status: 'LIVE',
-                },
+                quiz: result.updatedQuiz,
+                gameSession: result.gameSession,
             },
         });
         return;

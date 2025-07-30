@@ -2,7 +2,7 @@ import prisma from '@repo/db/client';
 import { customAlphabet } from 'nanoid';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { HostTokenPayload, ParticipantTokenPayload } from '../types/web-socket-types';
+import { CookiePayload } from '../types/web-socket-types';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -58,7 +58,7 @@ export default class QuizAction {
 
     public static generateHostToken(userId: string, quizId: string, gameSessionId: string): string {
         const tokenId = QuizAction.generateTokenId();
-        const payload: HostTokenPayload = {
+        const payload: CookiePayload = {
             userId,
             quizId,
             gameSessionId,
@@ -76,8 +76,8 @@ export default class QuizAction {
         gameSessionId: string,
     ): string {
         const tokenId = QuizAction.generateTokenId();
-        const payload: ParticipantTokenPayload = {
-            participantId,
+        const payload: CookiePayload = {
+            userId: participantId,
             quizId,
             gameSessionId,
             role: 'PARTICIPANT',
@@ -88,9 +88,35 @@ export default class QuizAction {
         return jwt.sign(payload, JWT_SECRET!);
     }
 
-    public static verifyHostToken(token: string): HostTokenPayload | null {
+    public static sanitizeGameSession(gameSession: any, role: string) {
+        switch (role) {
+            case 'HOST': {
+                return gameSession;
+            }
+
+            case 'PARTICIPANT': {
+                const rest = { ...gameSession };
+                delete rest.hostScreen;
+                return rest;
+            }
+
+            case 'SPECTATOR': {
+                const rest = { ...gameSession };
+                delete rest.hostScreen;
+                delete rest.participantScreen;
+                delete rest.currentQuestionIndex;
+                return rest;
+            }
+
+            default: {
+                return {};
+            }
+        }
+    }
+
+    public static verifyCookie(token: string): CookiePayload | null {
         try {
-            return jwt.verify(token, JWT_SECRET!) as HostTokenPayload;
+            return jwt.verify(token, JWT_SECRET!) as CookiePayload;
         } catch {
             return null;
         }

@@ -21,26 +21,7 @@ export default async function participantJoinController(req: Request, res: Respo
             where: { participantCode: code },
             select: {
                 id: true,
-                title: true,
-                description: true,
-                theme: true,
                 status: true,
-                questionTimeLimit: true,
-                breakBetweenQuestions: true,
-                eliminationThreshold: true,
-                timeBonus: true,
-                liveChat: true,
-                spectatorMode: true,
-                basePointsPerQuestion: true,
-                pointsMultiplier: true,
-                prizePool: true,
-                currency: true,
-                _count: {
-                    select: {
-                        questions: true,
-                        participants: true,
-                    },
-                },
             },
         });
 
@@ -65,11 +46,6 @@ export default async function participantJoinController(req: Request, res: Respo
             select: {
                 id: true,
                 status: true,
-                hostScreen: true,
-                participantScreen: true,
-                totalParticipants: true,
-                activeParticipants: true,
-                currentQuestionIndex: true,
             },
         });
 
@@ -99,7 +75,7 @@ export default async function participantJoinController(req: Request, res: Respo
                 },
             });
 
-            const updatedGameSession = await tx.gameSession.update({
+            await tx.gameSession.update({
                 where: { id: gameSession.id },
                 data: {
                     totalParticipants: {
@@ -109,18 +85,9 @@ export default async function participantJoinController(req: Request, res: Respo
                         increment: 1,
                     },
                 },
-                select: {
-                    id: true,
-                    status: true,
-                    hostScreen: true,
-                    participantScreen: true,
-                    currentQuestionIndex: true,
-                    totalParticipants: true,
-                    activeParticipants: true,
-                },
             });
 
-            return { participant, updatedGameSession };
+            return { participant };
         });
 
         const secureTokenData = QuizAction.generateParticipantToken(
@@ -130,7 +97,7 @@ export default async function participantJoinController(req: Request, res: Respo
         );
 
         try {
-            res.cookie('participant-token', secureTokenData, {
+            res.cookie('token', secureTokenData, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
@@ -165,11 +132,7 @@ export default async function participantJoinController(req: Request, res: Respo
         res.status(200).json({
             success: true,
             message: 'Successfully joined the quiz!',
-            data: {
-                participant: result.participant,
-                quiz: quiz,
-                gameSession: result.updatedGameSession,
-            },
+            quizId: quiz.id,
         });
         return;
     } catch (err) {
