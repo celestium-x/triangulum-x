@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '../ui/button';
 import { RiUserFill } from 'react-icons/ri';
 import { SiSolana } from 'react-icons/si';
@@ -6,13 +7,19 @@ import { MdChevronRight } from 'react-icons/md';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import ParticipantQuizAction from '@/lib/backend/participant-quiz-action';
+// import { useLiveQuizStore } from '@/store/useLiveQuizStore';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardStakedAmountCard() {
     const [code, setCode] = useState<string>('');
+    // const { updateQuiz, updateGameSession } = useLiveQuizStore();
+    const router = useRouter();
 
     async function joinQuizHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        await ParticipantQuizAction.joinQuiz(code);
+        const quizId = await ParticipantQuizAction.joinQuiz(code);
+        if (!quizId) return;
+        router.push(`/live/${quizId}`);
     }
 
     return (

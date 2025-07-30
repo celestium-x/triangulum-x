@@ -1,9 +1,11 @@
+//these are not server actions but client actions
+
 import axios from 'axios';
 import { PARTICIPANT_JOIN_QUIZ_URL } from 'routes/api_routes';
 import { toast } from 'sonner';
 
 export default class ParticipantQuizAction {
-    public static async joinQuiz(code: string): Promise<void> {
+    public static async joinQuiz(code: string): Promise<unknown> {
         try {
             if (!code) {
                 toast.error('Please enter a code');
@@ -22,7 +24,7 @@ export default class ParticipantQuizAction {
 
             if (data.success) {
                 toast.success(data.message);
-                return;
+                return data.quizId;
             }
             toast.error(data.message);
             return;

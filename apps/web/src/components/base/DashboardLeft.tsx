@@ -3,7 +3,6 @@ import { useHomeRendererStore } from '@/store/home/useHomeRendererStore';
 import { HomeRendererEnum } from '@/types/homeRendererTypes';
 import { JSX } from 'react';
 import { MdRateReview } from 'react-icons/md';
-
 import {
     TbSquareLetterTFilled,
     TbDashboard,
@@ -85,12 +84,6 @@ export default function DashboardLeft(): JSX.Element {
                 <NavOption
                     icon={<MdRateReview size={20} />}
                     label="Leave a Review"
-                    onClick={() => setValue(HomeRendererEnum.REVIEW)}
-                    isActive={value === HomeRendererEnum.REVIEW}
-                />
-                <NavOption
-                    icon={<MdRateReview size={20} />}
-                    label="Leave a review"
                     onClick={() => setValue(HomeRendererEnum.REVIEW)}
                     isActive={value === HomeRendererEnum.REVIEW}
                 />

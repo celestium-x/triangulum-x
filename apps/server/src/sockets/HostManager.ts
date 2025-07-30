@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { CustomWebSocket, HOST_MESSAGE_TYPES, HostTokenPayload } from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket, HOST_MESSAGE_TYPES } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
@@ -28,7 +28,7 @@ export default class HostManager {
         this.quizManager = dependencies.quizManager;
     }
 
-    public async handle_connection(ws: CustomWebSocket, payload: HostTokenPayload): Promise<void> {
+    public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
         const isValidHost = await this.validateHostInDB(payload.quizId, payload.userId);
         if (!isValidHost) {
             ws.close();

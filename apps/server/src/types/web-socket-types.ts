@@ -2,24 +2,14 @@ import { WebSocket } from 'ws';
 
 export interface CustomWebSocket extends WebSocket {
     id: string;
-    user: HostTokenPayload;
+    user: CookiePayload;
 }
 
-export interface HostTokenPayload {
+export interface CookiePayload {
     userId: string;
     quizId: string;
     gameSessionId: string;
-    role: 'HOST';
-    tokenId: string;
-    iat: number;
-    exp: number;
-}
-
-export interface ParticipantTokenPayload {
-    participantId: string;
-    quizId: string;
-    gameSessionId: string;
-    role: 'PARTICIPANT';
+    role: 'PARTICIPANT' | 'HOST';
     tokenId: string;
     iat: number;
     exp: number;
