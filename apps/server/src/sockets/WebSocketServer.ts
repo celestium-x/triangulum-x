@@ -4,7 +4,7 @@ import Redis from 'ioredis';
 import { parse } from 'cookie';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { CookiePayload, CustomWebSocket } from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket, USER_TYPE } from '../types/web-socket-types';
 import HostManager from './HostManager';
 import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
@@ -114,10 +114,10 @@ export default class WebsocketServer {
                 }
 
                 switch (payload.role) {
-                    case 'HOST':
+                    case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, payload as CookiePayload);
                         break;
-                    case 'PARTICIPANT':
+                    case USER_TYPE.PARTICIPANT:
                         await this.participant_manager.handle_connection(
                             ws,
                             payload as CookiePayload,
