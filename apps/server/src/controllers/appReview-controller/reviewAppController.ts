@@ -11,6 +11,11 @@ export default async function reviewAppController(req: Request, res: Response) {
     }
 
     const user = req.user;
+    if (!user) {
+        return res.status(401).json({
+            message: 'Unauthorized user',
+        });
+    }
 
     try {
         const existingReview = await prisma.review.findUnique({

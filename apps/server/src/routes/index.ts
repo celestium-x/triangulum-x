@@ -33,7 +33,7 @@ router.get(
     verifyQuizOwnershipMiddleware,
     launchQuizController,
 );
-router.post('review', authMiddleware, reviewAppController);
+router.post('/user/review', authMiddleware, reviewAppController);
 router.post('/quiz/participant-join-quiz', participantJoinController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
 

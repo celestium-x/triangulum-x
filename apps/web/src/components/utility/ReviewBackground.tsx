@@ -4,9 +4,64 @@ import UtilityCard from './UtilityCard';
 import { HomeRendererEnum } from '@/types/homeRendererTypes';
 import ReviewRight from '../base/ReviewRight';
 import HeadAndSubHead from '../content/HeadAndSubHead';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import axios from 'axios';
+import { REVIEW_URL } from 'routes/api_routes';
+import { useUserSessionStore } from '@/store/user/useUserSessionStore';
+import { FaAngry, FaFrown, FaMeh, FaSmile, FaGrinHearts } from 'react-icons/fa';
+
+function getReviewIcon(rating: number) {
+    switch (rating) {
+        case 1:
+            return <FaAngry color="red" />;
+        case 2:
+            return <FaFrown color="orangered" />;
+        case 3:
+            return <FaMeh color="orange" />;
+        case 4:
+            return <FaSmile color="lightgreen" />;
+        case 5:
+            return <FaGrinHearts color="green" />;
+        default:
+            return null;
+    }
+}
+
+export const reviews = Array.from({ length: 5 }, (_, i) => ({
+    rating: i + 1,
+    icon: getReviewIcon(i + 1),
+}));
 
 export default function ReviewBackground() {
     const { setValue } = useHomeRendererStore();
+    const [feedback, setFeedback] = useState<string>('');
+    const [rating, setRating] = useState<number>(0);
+    const { session } = useUserSessionStore();
+    async function submitReviewHandler() {
+        if (!feedback) {
+            toast.error('Please enter a feedback');
+            return;
+        }
+
+        try {
+            await axios.post(
+                REVIEW_URL,
+                {
+                    rating,
+                    comment: feedback,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${session?.user.token}`,
+                    },
+                },
+            );
+        } catch (err) {
+            console.error('error', err);
+        }
+    }
+
     return (
         <OpacityBackground
             className="bg-dark-primary/90"
@@ -42,20 +97,36 @@ export default function ReviewBackground() {
                         REVIEW
                     </span>
                 </div>
-                <div className='flex flex-col items-center justify-end  h-full '>
-                    <div className='grid grid-cols-2 mb-12 w-full px-12'>
-                        <div className='flex flex-col h-full justify-end min-w-[50%] col-span-1'>
-                            <HeadAndSubHead heading='Feedback' subHeading='Loved us! Leave a feedback' subHeadClassname='text-neutral-400' headClassname='text-3xl font-sans' />
-                            <div>
-                                
+                <div className="flex flex-col items-center justify-end  h-full ">
+                    <div className="grid grid-cols-2 mb-12 w-full px-12">
+                        <div className="flex flex-col h-full justify-end min-w-[50%] col-span-1">
+                            <HeadAndSubHead
+                                heading="Feedback"
+                                subHeading="Loved us! Leave a feedback"
+                                subHeadClassname="text-neutral-400"
+                                headClassname="text-3xl font-sans"
+                            />
+                            <div className="flex items-center justify-start gap-x-2">
+                                {reviews.map((element, index) => (
+                                    <div
+                                        key={index}
+                                        onClick={() => setRating(element.rating)}
+                                        className="flex items-center justify-center gap-x-2 rounded-full bg-primary/50 hover:bg-primary/10 transition-colors cursor-pointer"
+                                    >
+                                        {element.icon}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         <div className=" items-center h-full min-w-[50%] flex flex-col  px-4 py-2 rounded-xl border border-white/20 bg-white/5 backdrop-blur-lg text-white placeholder-white/60 shadow-md focus:outline-none focus:ring-2 focus:ring-white/20 transition duration-200 col-span-1">
-                            <ReviewRight />
+                            <ReviewRight
+                                setFeedback={setFeedback}
+                                feedback={feedback}
+                                submitReviewHandler={submitReviewHandler}
+                            />
                         </div>
                     </div>
                 </div>
-
             </UtilityCard>
         </OpacityBackground>
     );
