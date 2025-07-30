@@ -16,7 +16,11 @@ export interface CookiePayload {
 }
 
 export enum HOST_MESSAGE_TYPES {
-    JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+    HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+}
+
+export enum PARTICIPANT_MESSAGE_TYPES {
+    PARTICIPANT_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
 }
 
 export enum USER_TYPE {

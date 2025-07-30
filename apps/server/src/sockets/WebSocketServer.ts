@@ -9,6 +9,7 @@ import HostManager from './HostManager';
 import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
 import { URL } from 'url';
+import ParticipantManager from './ParticipantManager';
 dotenv.config();
 
 const REDIS_URL = process.env.REDIS_URL;
@@ -26,6 +27,7 @@ export default class WebsocketServer {
 
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
+    private participant_manager!: ParticipantManager;
 
     constructor(server: Server) {
         this.wss = new WebSocketServer({ server });
@@ -47,6 +49,13 @@ export default class WebsocketServer {
             subscriber: this.subscriber,
             socketMapping: this.socket_mapping,
             sessionHostMapping: this.session_host_mapping,
+            quizManager: this.quizManager,
+        });
+        this.participant_manager = new ParticipantManager({
+            publisher: this.publisher,
+            subscriber: this.subscriber,
+            socket_mapping: this.socket_mapping,
+            session_participants_mapping: this.session_participants_mapping,
             quizManager: this.quizManager,
         });
     }
@@ -107,6 +116,12 @@ export default class WebsocketServer {
                 switch (payload.role) {
                     case 'HOST':
                         await this.hostManager.handle_connection(ws, payload as CookiePayload);
+                        break;
+                    case 'PARTICIPANT':
+                        await this.participant_manager.handle_connection(
+                            ws,
+                            payload as CookiePayload,
+                        );
                         break;
                     default:
                         ws.close();
