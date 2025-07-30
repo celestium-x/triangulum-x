@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import MiniCanvas from '@/components/canvas/MiniCanvas';
 import { Button } from '@/components/ui/button';
@@ -12,42 +12,52 @@ import { QuizType } from '@/types/prisma-types';
 import { useEffect, useRef } from 'react';
 import { FiX } from 'react-icons/fi';
 import { TbPlus } from 'react-icons/tb';
-import gsap from "gsap";
+import gsap from 'gsap';
 
 export default function QuestionPallete() {
-    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion } = useNewQuizStore();
+    const { quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion } =
+        useNewQuizStore();
     const currentQTemplate = templates.find((t) => t.id === quiz.theme);
 
-    return <>
-        <BigQuestionPallete
-            quiz={quiz}
-            currentQuestionIndex={currentQuestionIndex}
-            setCurrentQuestionIndex={setCurrentQuestionIndex}
-            addQuestion={addQuestion}
-            removeQuestion={removeQuestion}
-            currentQTemplate={currentQTemplate}
-        />
-        <SmallQuestionPallete
-            quiz={quiz}
-            currentQuestionIndex={currentQuestionIndex}
-            setCurrentQuestionIndex={setCurrentQuestionIndex}
-            addQuestion={addQuestion}
-            removeQuestion={removeQuestion}
-            currentQTemplate={currentQTemplate}
-        />
-    </>
+    return (
+        <>
+            <BigQuestionPallete
+                quiz={quiz}
+                currentQuestionIndex={currentQuestionIndex}
+                setCurrentQuestionIndex={setCurrentQuestionIndex}
+                addQuestion={addQuestion}
+                removeQuestion={removeQuestion}
+                currentQTemplate={currentQTemplate}
+            />
+            <SmallQuestionPallete
+                quiz={quiz}
+                currentQuestionIndex={currentQuestionIndex}
+                setCurrentQuestionIndex={setCurrentQuestionIndex}
+                addQuestion={addQuestion}
+                removeQuestion={removeQuestion}
+                currentQTemplate={currentQTemplate}
+            />
+        </>
+    );
 }
 
 interface QuestionPallete {
-    quiz: QuizType,
-    currentQuestionIndex: number,
-    setCurrentQuestionIndex: (index: number) => void,
-    addQuestion: () => void,
-    removeQuestion: (index: number) => void,
-    currentQTemplate: Template | undefined
+    quiz: QuizType;
+    currentQuestionIndex: number;
+    setCurrentQuestionIndex: (index: number) => void;
+    addQuestion: () => void;
+    removeQuestion: (index: number) => void;
+    currentQTemplate: Template | undefined;
 }
 
-function BigQuestionPallete({ quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion, currentQTemplate }: QuestionPallete) {
+function BigQuestionPallete({
+    quiz,
+    currentQuestionIndex,
+    setCurrentQuestionIndex,
+    addQuestion,
+    removeQuestion,
+    currentQTemplate,
+}: QuestionPallete) {
     return (
         <UtilityCard className="hidden lg:flex max-w-[10rem] w-full shadow-none rounded-sm bg-neutral-200 dark:bg-dark-primary p-0 flex-col items-center px-1 border-none h-full">
             <Button
@@ -82,47 +92,57 @@ function BigQuestionPallete({ quiz, currentQuestionIndex, setCurrentQuestionInde
     );
 }
 
-function SmallQuestionPallete({ quiz, currentQuestionIndex, setCurrentQuestionIndex, addQuestion, removeQuestion, currentQTemplate }: QuestionPallete) {
-
+function SmallQuestionPallete({
+    quiz,
+    currentQuestionIndex,
+    setCurrentQuestionIndex,
+    addQuestion,
+    removeQuestion,
+    currentQTemplate,
+}: QuestionPallete) {
     const { appearing, setAppearing } = useSideBarStore();
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (appearing) {
-            gsap.fromTo(sidebarRef.current,
+            gsap.fromTo(
+                sidebarRef.current,
                 {
                     x: -300,
                 },
                 {
                     x: 0,
                     duration: 0.2,
-                    ease: "power2.inOut"
-                });
+                    ease: 'power2.inOut',
+                },
+            );
         }
     }, [appearing]);
 
     const handleClose = () => {
-        gsap.fromTo(sidebarRef.current,
+        gsap.fromTo(
+            sidebarRef.current,
             {
-                x: 0
+                x: 0,
             },
             {
                 x: -300,
                 duration: 0.2,
-                ease: "power2.inOut",
-                onComplete: () => setAppearing(false)
-            }
+                ease: 'power2.inOut',
+                onComplete: () => setAppearing(false),
+            },
         );
-    }
+    };
 
     return (
         <UtilityCard
             ref={sidebarRef}
             className={cn(
-                "absolute left-0 top-0 z-40 flex max-w-[11rem] w-full shadow-none rounded-sm bg-neutral-200/80 dark:bg-dark-primary/80 backdrop-blur-lg p-0 flex-col items-center px-1 border-none h-full",
-                `${appearing ? "" : "hidden"}`
-            )}>
-            <div className='w-full flex justify-center items-center gap-x-2 mt-4' >
+                'absolute left-0 top-0 z-40 flex max-w-[11rem] w-full shadow-none rounded-sm bg-neutral-200/80 dark:bg-dark-primary/80 backdrop-blur-lg p-0 flex-col items-center px-1 border-none h-full',
+                `${appearing ? '' : 'hidden'}`,
+            )}
+        >
+            <div className="w-full flex justify-center items-center gap-x-2 mt-4">
                 <Button
                     onClick={addQuestion}
                     className={cn(
@@ -133,11 +153,7 @@ function SmallQuestionPallete({ quiz, currentQuestionIndex, setCurrentQuestionIn
                     <TbPlus />
                     <span>Add Question</span>
                 </Button>
-                <FiX
-                    size={20}
-                    onClick={handleClose}
-                    className='cursor-pointer'
-                />
+                <FiX size={20} onClick={handleClose} className="cursor-pointer" />
             </div>
 
             <div className="flex flex-col gap-y-1.5 mt-6 w-[90%] flex-1 overflow-y-auto pr-1 hide-scrollbar relative">

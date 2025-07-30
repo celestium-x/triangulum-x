@@ -64,12 +64,11 @@ export default function QuizRight(): JSX.Element {
 }
 
 interface QuizRight {
-    state: DraftRenderer,
-    setState: (state: DraftRenderer) => void
+    state: DraftRenderer;
+    setState: (state: DraftRenderer) => void;
 }
 
 function BigQuizRight({ state, setState }: QuizRight): JSX.Element {
-
     return (
         <div className="hidden min-h-full md2:flex justify-end py-4 pr-4">
             <div
@@ -133,9 +132,7 @@ function BigQuizRight({ state, setState }: QuizRight): JSX.Element {
 }
 
 export function SmallQuizRight(): JSX.Element {
-
     const { state, setState } = useDraftRendererStore();
-
 
     return (
         <div className="md2:hidden min-h-full flex justify-end py-4 pr-4">

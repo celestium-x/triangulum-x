@@ -62,7 +62,6 @@ export default function DashboardStakedAmountCard() {
                         </div>
                     </div>
                     <div className="w-full flex flex-col gap-y-3 sm:flex-row-reverse sm:items-end justify-between ">
-
                         {/* staked amount */}
                         <div className="w-full flex justify-end flex-col gap-y-3 group">
                             <div className="flex items-center justify-end gap-x-2 text-white/80">
@@ -90,7 +89,6 @@ export default function DashboardStakedAmountCard() {
                                 <span className="text-6xl font-black">1,200</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

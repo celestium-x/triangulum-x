@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { cn } from '@/lib/utils';
 import { useHomeRendererStore } from '@/store/home/useHomeRendererStore';
@@ -6,8 +6,8 @@ import { useSideBarStore } from '@/store/home/useSideBar';
 import { HomeRendererEnum } from '@/types/homeRendererTypes';
 import { JSX, useEffect, useRef } from 'react';
 import { MdRateReview } from 'react-icons/md';
-import { FiX } from "react-icons/fi";
-import gsap from "gsap";
+import { FiX } from 'react-icons/fi';
+import gsap from 'gsap';
 
 import {
     TbSquareLetterTFilled,
@@ -33,13 +33,19 @@ export default function DashboardLeft(): JSX.Element {
     );
 }
 
-function BigDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setValue: (value: HomeRendererEnum) => void }): JSX.Element {
+function BigDashboardLeft({
+    value,
+    setValue,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+}): JSX.Element {
     return (
         <div
             className={cn(
                 'h-full bg-light-base dark:bg-dark-base/10 shrink-0 w-[300px]',
                 'hidden lg:flex flex-col justify-start items-center py-6',
-                ''
+                '',
             )}
         >
             <LogoOption
@@ -52,46 +58,51 @@ function BigDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setVal
                 label="Triangulum"
             />
 
-            <DashboardOptions
-                value={value}
-                setValue={setValue}
-            />
+            <DashboardOptions value={value} setValue={setValue} />
         </div>
     );
 }
 
-function SmallDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setValue: (value: HomeRendererEnum) => void }): JSX.Element {
-
+function SmallDashboardLeft({
+    value,
+    setValue,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+}): JSX.Element {
     const { appearing, setAppearing } = useSideBarStore();
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (appearing) {
-            gsap.fromTo(sidebarRef.current,
+            gsap.fromTo(
+                sidebarRef.current,
                 {
                     x: -300,
                 },
                 {
                     x: 0,
                     duration: 0.2,
-                    ease: "power2.inOut"
-                });
+                    ease: 'power2.inOut',
+                },
+            );
         }
     }, [appearing]);
 
     const handleClose = () => {
-        gsap.fromTo(sidebarRef.current,
+        gsap.fromTo(
+            sidebarRef.current,
             {
-                x: 0
+                x: 0,
             },
             {
                 x: -300,
                 duration: 0.2,
-                ease: "power2.inOut",
-                onComplete: () => setAppearing(false)
-            }
+                ease: 'power2.inOut',
+                onComplete: () => setAppearing(false),
+            },
         );
-    }
+    };
 
     return (
         <div
@@ -100,11 +111,10 @@ function SmallDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setV
                 'h-full xs:w-[300px] w-full bg-light-base dark:bg-dark-base border-r dark:border-dark-base shadow-xl shrink-0 ',
                 'lg:hidden flex flex-col justify-start items-center py-6',
                 'absolute z-20',
-                `${appearing ? "" : "hidden"}`
+                `${appearing ? '' : 'hidden'}`,
             )}
         >
-
-            <div className='w-full flex items-center justify-between pr-10 '>
+            <div className="w-full flex items-center justify-between pr-10 ">
                 <LogoOption
                     icon={
                         <AppLogo
@@ -115,28 +125,27 @@ function SmallDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setV
                     label="Triangulum"
                 />
 
-                <FiX
-                    size={20}
-                    onClick={handleClose}
-                    className='cursor-pointer'
-                />
+                <FiX size={20} onClick={handleClose} className="cursor-pointer" />
             </div>
 
-            <DashboardOptions
-                value={value}
-                setValue={setValue}
-                close={handleClose}
-            />
+            <DashboardOptions value={value} setValue={setValue} close={handleClose} />
         </div>
     );
 }
 
-function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum, setValue: (value: HomeRendererEnum) => void, close?: () => void }): JSX.Element {
-
+function DashboardOptions({
+    value,
+    setValue,
+    close,
+}: {
+    value: HomeRendererEnum;
+    setValue: (value: HomeRendererEnum) => void;
+    close?: () => void;
+}): JSX.Element {
     const upperDashboardOptions: OptionProps[] = [
         {
             icon: <TbDashboard size={20} />,
-            label: "Dashboard",
+            label: 'Dashboard',
             onClick: () => {
                 setValue(HomeRendererEnum.DASHBOARD);
                 close?.();
@@ -145,7 +154,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbTrophy size={20} />,
-            label: "My Quizzes",
+            label: 'My Quizzes',
             onClick: () => {
                 setValue(HomeRendererEnum.MY_QUIZ);
                 close?.();
@@ -154,7 +163,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbPlus size={20} />,
-            label: "Create Quiz",
+            label: 'Create Quiz',
             onClick: () => {
                 setValue(HomeRendererEnum.CREATE_QUIZ);
                 close?.();
@@ -163,7 +172,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbChartBar size={20} />,
-            label: "Analytics",
+            label: 'Analytics',
             onClick: () => {
                 setValue(HomeRendererEnum.ANALYTICS);
                 close?.();
@@ -172,7 +181,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbWallet size={20} />,
-            label: "Wallet",
+            label: 'Wallet',
             onClick: () => {
                 setValue(HomeRendererEnum.WALLET);
                 close?.();
@@ -181,7 +190,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbCrown size={20} />,
-            label: "Leaderboards",
+            label: 'Leaderboards',
             onClick: () => {
                 setValue(HomeRendererEnum.LEADERBOARD);
                 close?.();
@@ -190,7 +199,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbHistory size={20} />,
-            label: "History",
+            label: 'History',
             onClick: () => {
                 setValue(HomeRendererEnum.HISTORY);
                 close?.();
@@ -202,7 +211,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
     const lowerDashboardOptions: OptionProps[] = [
         {
             icon: <MdRateReview size={20} />,
-            label: "Leave a Review",
+            label: 'Leave a Review',
             onClick: () => {
                 setValue(HomeRendererEnum.REVIEW);
                 close?.();
@@ -211,7 +220,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <MdRateReview size={20} />,
-            label: "Leave a review",
+            label: 'Leave a review',
             onClick: () => {
                 setValue(HomeRendererEnum.REVIEW);
                 close?.();
@@ -220,7 +229,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbSettings size={20} />,
-            label: "Settings",
+            label: 'Settings',
             onClick: () => {
                 setValue(HomeRendererEnum.SETTINGS);
                 close?.();
@@ -229,7 +238,7 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
         {
             icon: <TbHelp size={20} />,
-            label: "Help & Support",
+            label: 'Help & Support',
             onClick: () => {
                 setValue(HomeRendererEnum.HELP);
                 close?.();
@@ -238,18 +247,20 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         },
     ];
 
-    return <>
-        <div className="mt-8 w-full space-y-1 px-2 flex flex-col gap-y-2">
-            {upperDashboardOptions.map((opt, i) => (
-                <NavOption key={i} {...opt} />
-            ))}
-        </div>
-        <div className='mt-auto w-full space-y-1 pl-2'>
-            {lowerDashboardOptions.map((opt, i) => (
-                <NavOption key={i} {...opt} />
-            ))}
-        </div>
-    </>
+    return (
+        <>
+            <div className="mt-8 w-full space-y-1 px-2 flex flex-col gap-y-2">
+                {upperDashboardOptions.map((opt, i) => (
+                    <NavOption key={i} {...opt} />
+                ))}
+            </div>
+            <div className="mt-auto w-full space-y-1 pl-2">
+                {lowerDashboardOptions.map((opt, i) => (
+                    <NavOption key={i} {...opt} />
+                ))}
+            </div>
+        </>
+    );
 }
 
 interface OptionProps {

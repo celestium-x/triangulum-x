@@ -16,7 +16,7 @@ interface MiniCanvasProps {
     questionIndex: number;
     setCurrentQuestionIndex: (index: number) => void;
     removeQuestion: (index: number) => void;
-    onClick?: () => void
+    onClick?: () => void;
 }
 
 export default function MiniCanvas({
@@ -26,7 +26,7 @@ export default function MiniCanvas({
     questionIndex,
     setCurrentQuestionIndex,
     removeQuestion,
-    onClick
+    onClick,
 }: MiniCanvasProps) {
     const [openMiniCanvasOptions, setOpenMiniCanvasOptions] = useState<boolean>(false);
     const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });

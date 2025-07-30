@@ -10,7 +10,6 @@ export interface CreateQuizNavBarProps {
 }
 
 export default function CreateQuizNavBar() {
-
     const { appearing, setAppearing } = useSideBarStore();
 
     return (

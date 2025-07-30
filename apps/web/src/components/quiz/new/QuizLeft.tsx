@@ -55,7 +55,7 @@ export default function QuizLeft() {
                     <div className="aspect-[16/9] w-full min-w-0">
                         <Canvas />
                     </div>
-                    <div className='w-full flex ' >
+                    <div className="w-full flex ">
                         <SmallQuizRight />
                     </div>
                 </div>
