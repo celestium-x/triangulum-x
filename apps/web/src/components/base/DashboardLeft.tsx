@@ -211,15 +211,6 @@ function DashboardOptions({
     const lowerDashboardOptions: OptionProps[] = [
         {
             icon: <MdRateReview size={20} />,
-            label: 'Leave a Review',
-            onClick: () => {
-                setValue(HomeRendererEnum.REVIEW);
-                close?.();
-            },
-            isActive: value === HomeRendererEnum.REVIEW,
-        },
-        {
-            icon: <MdRateReview size={20} />,
             label: 'Leave a review',
             onClick: () => {
                 setValue(HomeRendererEnum.REVIEW);

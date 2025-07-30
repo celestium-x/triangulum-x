@@ -9,9 +9,9 @@ export default function HomeDashboard() {
                 heading="Dashboard"
                 subHeading="Manage your quizzes, analytics, and more"
             />
-            <div className="flex-col sm:flex gap-4 h-[24rem]">
-                <DashboardStakedAmountCard />
+            <div className="flex flex-col items-start lg:flex-row lg:gap-x-12 lg:items-center gap-4 h-[24rem]">
                 <InvertedQuizCards />
+                <DashboardStakedAmountCard />
             </div>
         </div>
     );
