@@ -9,6 +9,7 @@ import AdvancedDraft from './AdvancedDraft';
 import StakeDraft from './StakeDraft';
 import { JSX, useEffect } from 'react';
 import gsap from 'gsap';
+import { cn } from '@/lib/utils';
 
 export default function Drafts() {
     const { state } = useDraftRendererStore();
@@ -32,18 +33,36 @@ export default function Drafts() {
 
     return <>
         <BigDrafts handleDraftRenderer={handleDraftRenderer} />
+        <MediumDrafts handleDraftRenderer={handleDraftRenderer} />
         <SmallDrafts handleDraftRenderer={handleDraftRenderer} />
     </>
 }
 
 function BigDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.Element | null | undefined }) {
     return (
-        <UtilityCard className="hidden lg:flex flex-col bg-light-base dark:bg-dark-base/30 rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
+        <UtilityCard className="hidden xl:flex flex-col bg-light-base dark:bg-dark-base/30 rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
             {handleDraftRenderer()}
         </UtilityCard>
     );
 }
 
+
+function MediumDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.Element | null | undefined }) {
+
+    useEffect(() => {
+        gsap.from("utility", {
+            x: 300,
+            duration: 0.2,
+            ease: "power2.inOut"
+        });
+    }, [handleDraftRenderer]);
+
+    return (
+        <UtilityCard className="utitlity hidden md2:absolute z-40 xl:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
+            {handleDraftRenderer()}
+        </UtilityCard>
+    );
+}
 
 function SmallDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.Element | null | undefined }) {
 
@@ -56,7 +75,10 @@ function SmallDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.E
     }, [handleDraftRenderer]);
 
     return (
-        <UtilityCard className="utitlity absolute z-40 lg:hidden bg-light-base dark:bg-dark-base rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
+        <UtilityCard className={cn(
+            "utitlity absolute top-0 right-0 z-40 md2:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-l-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 ",
+            "h-screen xs:w-[326px] w-full"
+        )}>
             {handleDraftRenderer()}
         </UtilityCard>
     );

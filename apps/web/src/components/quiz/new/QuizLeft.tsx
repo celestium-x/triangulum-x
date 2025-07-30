@@ -6,6 +6,7 @@ import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { SmallQuizRight } from './QuizRight';
 
 export default function QuizLeft() {
     const [error, setError] = useState<boolean>(false);
@@ -50,9 +51,12 @@ export default function QuizLeft() {
                         )}
                     </div>
                 </UtilityCard>
-                <div className="flex-1 flex items-start justify-center w-full min-w-0">
+                <div className="flex-1 flex flex-col items-start justify-center w-full min-w-0">
                     <div className="aspect-[16/9] w-full min-w-0">
                         <Canvas />
+                    </div>
+                    <div className='w-full flex ' >
+                        <SmallQuizRight />
                     </div>
                 </div>
             </div>

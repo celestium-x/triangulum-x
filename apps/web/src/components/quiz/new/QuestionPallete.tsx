@@ -119,7 +119,7 @@ function SmallQuestionPallete({ quiz, currentQuestionIndex, setCurrentQuestionIn
         <UtilityCard
             ref={sidebarRef}
             className={cn(
-                "absolute left-0 top-0 z-40 flex max-w-[11rem] w-full shadow-none rounded-sm bg-neutral-200 dark:bg-dark-primary p-0 flex-col items-center px-1 border-none h-full",
+                "absolute left-0 top-0 z-40 flex max-w-[11rem] w-full shadow-none rounded-sm bg-neutral-200/80 dark:bg-dark-primary/80 backdrop-blur-lg p-0 flex-col items-center px-1 border-none h-full",
                 `${appearing ? "" : "hidden"}`
             )}>
             <div className='w-full flex justify-center items-center gap-x-2 mt-4' >
