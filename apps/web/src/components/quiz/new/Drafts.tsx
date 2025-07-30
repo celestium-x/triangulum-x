@@ -58,7 +58,7 @@ function MediumDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.
     }, [handleDraftRenderer]);
 
     return (
-        <UtilityCard className="utitlity hidden md2:absolute z-40 xl:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
+        <UtilityCard className="utility h-full hidden md2:flex flex-col absolute z-40 xl:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 w-[326px]">
             {handleDraftRenderer()}
         </UtilityCard>
     );
@@ -74,9 +74,14 @@ function SmallDrafts({ handleDraftRenderer }: { handleDraftRenderer: () => JSX.E
         });
     }, [handleDraftRenderer]);
 
+    useEffect(() => {
+        console.log("window of medium screen: ", window.innerWidth);
+    }, []);
+
     return (
         <UtilityCard className={cn(
-            "utitlity absolute top-0 right-0 z-40 md2:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-l-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 ",
+            "bg-red-600",
+            "utility absolute top-0 right-0 z-40 md2:hidden bg-light-base/80 dark:bg-dark-base/80 backdrop-blur-md shadow-lg rounded-l-sm overflow-hidden py-4 px-6 border-[1px] border-neutral-300 dark:border-neutral-800 ",
             "h-screen xs:w-[326px] w-full"
         )}>
             {handleDraftRenderer()}
