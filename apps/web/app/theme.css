@@ -7,4 +7,5 @@
 
 @theme {
     --breakpoint-xs: 375px;
+    --breakpoint-md2: 896px;
 }

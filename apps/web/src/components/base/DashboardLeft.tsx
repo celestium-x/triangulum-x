@@ -21,6 +21,7 @@ import {
     TbSettings,
     TbHelp,
 } from 'react-icons/tb';
+import { AppLogo } from '../ui/svg/AppLogo';
 
 export default function DashboardLeft(): JSX.Element {
     const { value, setValue } = useHomeRendererStore();
@@ -106,9 +107,9 @@ function SmallDashboardLeft({ value, setValue }: { value: HomeRendererEnum, setV
             <div className='w-full flex items-center justify-between pr-10 '>
                 <LogoOption
                     icon={
-                        <TbSquareLetterTFilled
+                        <AppLogo
                             size={28}
-                            className="group-hover:-translate-x-1 transition-transform ease-in"
+                            className="group-hover:-translate-x-1 transition-transform ease-in "
                         />
                     }
                     label="Triangulum"
@@ -136,72 +137,105 @@ function DashboardOptions({ value, setValue, close }: { value: HomeRendererEnum,
         {
             icon: <TbDashboard size={20} />,
             label: "Dashboard",
-            onClick: () => setValue(HomeRendererEnum.DASHBOARD),
+            onClick: () => {
+                setValue(HomeRendererEnum.DASHBOARD);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.DASHBOARD,
         },
         {
             icon: <TbTrophy size={20} />,
             label: "My Quizzes",
-            onClick: () => setValue(HomeRendererEnum.MY_QUIZ),
+            onClick: () => {
+                setValue(HomeRendererEnum.MY_QUIZ);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.MY_QUIZ,
         },
         {
             icon: <TbPlus size={20} />,
             label: "Create Quiz",
-            onClick: () => setValue(HomeRendererEnum.CREATE_QUIZ),
+            onClick: () => {
+                setValue(HomeRendererEnum.CREATE_QUIZ);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.CREATE_QUIZ,
         },
         {
             icon: <TbChartBar size={20} />,
             label: "Analytics",
-            onClick: () => setValue(HomeRendererEnum.ANALYTICS),
+            onClick: () => {
+                setValue(HomeRendererEnum.ANALYTICS);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.ANALYTICS,
         },
         {
             icon: <TbWallet size={20} />,
             label: "Wallet",
-            onClick: () => setValue(HomeRendererEnum.WALLET),
+            onClick: () => {
+                setValue(HomeRendererEnum.WALLET);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.WALLET,
         },
         {
             icon: <TbCrown size={20} />,
             label: "Leaderboards",
-            onClick: () => setValue(HomeRendererEnum.LEADERBOARD),
+            onClick: () => {
+                setValue(HomeRendererEnum.LEADERBOARD);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.LEADERBOARD,
         },
         {
             icon: <TbHistory size={20} />,
             label: "History",
-            onClick: () => setValue(HomeRendererEnum.HISTORY),
+            onClick: () => {
+                setValue(HomeRendererEnum.HISTORY);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.HISTORY,
-        }
+        },
     ];
 
     const lowerDashboardOptions: OptionProps[] = [
         {
             icon: <MdRateReview size={20} />,
             label: "Leave a Review",
-            onClick: () => setValue(HomeRendererEnum.REVIEW),
+            onClick: () => {
+                setValue(HomeRendererEnum.REVIEW);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.REVIEW,
         },
         {
             icon: <MdRateReview size={20} />,
             label: "Leave a review",
-            onClick: () => setValue(HomeRendererEnum.REVIEW),
+            onClick: () => {
+                setValue(HomeRendererEnum.REVIEW);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.REVIEW,
         },
         {
             icon: <TbSettings size={20} />,
             label: "Settings",
-            onClick: () => setValue(HomeRendererEnum.SETTINGS),
+            onClick: () => {
+                setValue(HomeRendererEnum.SETTINGS);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.SETTINGS,
         },
         {
             icon: <TbHelp size={20} />,
             label: "Help & Support",
-            onClick: () => setValue(HomeRendererEnum.HELP),
+            onClick: () => {
+                setValue(HomeRendererEnum.HELP);
+                close?.();
+            },
             isActive: value === HomeRendererEnum.HELP,
-        }
+        },
     ];
 
     return <>

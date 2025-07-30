@@ -64,7 +64,7 @@ export default function QuizRight(): JSX.Element {
                     state ? 'w-full max-w-4xl' : 'w-auto',
                 )}
             >
-                <div className="flex flex-col gap-y-3">
+                <div className="hidden md2:flex flex-col gap-y-3 ">
                     <div className="w-[6rem] flex-shrink-0">
                         <div className="bg-light-base dark:bg-dark-base/30 rounded-xl overflow-hidden p-1 flex flex-col gap-y-2 border-[1px] border-neutral-300 dark:border-neutral-700">
                             {option_one.map((option, index) => (
