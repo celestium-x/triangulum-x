@@ -6,11 +6,7 @@ interface ReviewTextAreaProps {
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export default function ReviewTextArea({
-    placeholder,
-    value,
-    onChange,
-}: ReviewTextAreaProps) {
+export default function ReviewTextArea({ placeholder, value, onChange }: ReviewTextAreaProps) {
     return (
         <textarea
             placeholder={placeholder}
