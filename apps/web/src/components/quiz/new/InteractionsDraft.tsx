@@ -1,17 +1,58 @@
+'use client';
+
 import { RxCross2 } from 'react-icons/rx';
 import { BsFillHandThumbsUpFill } from 'react-icons/bs';
 import { MdEmojiEmotions } from 'react-icons/md';
 import { FaHeart, FaLightbulb } from 'react-icons/fa6';
 import { PiCurrencyCircleDollarFill } from 'react-icons/pi';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-import { useState } from 'react';
+import { useState, ReactElement, cloneElement } from 'react';
 import { Switch } from '@/components/ui/switch';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { DraftRenderer, useDraftRendererStore } from '@/store/new-quiz/useDraftRendererStore';
+import { useNewQuizStore } from '@/store/new-quiz/useNewQuizStore';
+import { InteractionEnum } from '@/types/prisma-types';
+
+interface InteractionIconProps {
+    icon: ReactElement;
+    type: InteractionEnum;
+    color: string;
+}
 
 export default function InteractionsDraft() {
     const { setState } = useDraftRendererStore();
     const [enabled, setEnabled] = useState(false);
+    const { quiz, toggleInteraction } = useNewQuizStore();
+    const [hoveredType, setHoveredType] = useState<InteractionEnum | null>(null);
+
+    const interactionIcons: InteractionIconProps[] = [
+        {
+            icon: <FaHeart size={20} />,
+            type: InteractionEnum.HEART,
+            color: '#E53E3E',
+        },
+        {
+            icon: <PiCurrencyCircleDollarFill size={20} />,
+            type: InteractionEnum.DOLLAR,
+            color: '#38A169',
+        },
+        {
+            icon: <FaLightbulb size={20} />,
+            type: InteractionEnum.BULB,
+            color: '#F6E05E',
+        },
+        {
+            icon: <BsFillHandThumbsUpFill size={20} />,
+            type: InteractionEnum.THUMBS_UP,
+            color: '#3182CE',
+        },
+        {
+            icon: <MdEmojiEmotions size={20} />,
+            type: InteractionEnum.SMILE,
+            color: '#F6AD55',
+        },
+    ];
+
     return (
         <div className="text-neutral-900 dark:text-neutral-100">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
@@ -20,28 +61,33 @@ export default function InteractionsDraft() {
             </div>
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-4">
-                    <FaHeart
-                        size={35}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md hover:text-red-500 hover:shadow-sm transition-all duration-200 ease-in-out"
-                    />
-                    <PiCurrencyCircleDollarFill
-                        size={35}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md hover:text-green-600 hover:shadow-sm transition-all duration-200 ease-in-out"
-                    />
-                    <FaLightbulb
-                        size={35}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md hover:text-yellow-400 hover:shadow-sm transition-all duration-200 ease-in-out"
-                    />
-                    <BsFillHandThumbsUpFill
-                        size={35}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 p-2 rounded-md hover:text-blue-400 hover:shadow-sm transition-all duration-200 ease-in-out"
-                    />
-                    <MdEmojiEmotions
-                        size={35}
-                        className="border-[1px] dark:border-neutral-600 border-neutral-300 hover:text-amber-400 p-2 rounded-md hover:shadow-sm transition-all duration-200 ease-in-out"
-                    />
+                    {interactionIcons.map(({ icon, type, color }) => {
+                        const isSelected = quiz.interactions.includes(type);
+                        const isHovered = hoveredType === type;
+                        const displayColor = isSelected || isHovered ? color : undefined;
+
+                        return (
+                            <div
+                                key={type}
+                                onClick={() => toggleInteraction(type)}
+                                onMouseEnter={() => setHoveredType(type)}
+                                onMouseLeave={() => setHoveredType(null)}
+                                className={`border-[1px] p-2 rounded-md cursor-pointer transition-all duration-200 ease-in-out
+                                    dark:border-neutral-600 border-neutral-300
+                                    hover:shadow-sm
+                                    ${
+                                        isSelected
+                                            ? 'scale-110 shadow-md bg-neutral-800/40'
+                                            : 'hover:scale-105'
+                                    }`}
+                            >
+                                <span style={{ color: displayColor }}>{cloneElement(icon)}</span>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
+
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">
@@ -58,6 +104,7 @@ export default function InteractionsDraft() {
                     <Switch checked={enabled} onCheckedChange={setEnabled} />
                 </div>
             </div>
+
             <div className="w-full px-2 mt-6">
                 <div className="flex items-center justify-start gap-x-1">
                     <span className="text-sm font-normal text-dark-primary dark:text-light-base">

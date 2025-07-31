@@ -29,6 +29,7 @@ export interface QuizType {
     questionTimeLimit: number;
     breakBetweenQuestions: number;
     status: QuizStatusEnum;
+    interactions: InteractionEnum[];
 
     participantCode?: string;
     spectatorCode?: string;
@@ -179,7 +180,7 @@ export enum QuizStatusEnum {
     PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
 }
 
-export enum Interactions {
+export enum InteractionEnum {
     THUMBS_UP = 'THUMBS_UP',
     DOLLAR = 'DOLLAR',
     BULB = 'BULB',

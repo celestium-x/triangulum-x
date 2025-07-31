@@ -62,7 +62,7 @@ export default function CanvasOptions({ selectionMode, setSelectionMode }: Canva
                         />
                     )) || []}
                 </div>
-                <div className="absolute bottom-1 right-1">
+                <div className="absolute bottom-1 right-1 ">
                     <NewQuizInteractiveIcons
                         selectionMode={selectionMode}
                         setSelectionMode={setSelectionMode}
