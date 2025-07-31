@@ -113,6 +113,7 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
+                console.log("user came with role : ", payload.role);
                 switch (payload.role) {
                     case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, payload as CookiePayload);
