@@ -1,5 +1,15 @@
 import { z } from 'zod';
 
+export enum TemplateEnum {
+    CLASSIC = 'CLASSIC',
+    MODERN = 'MODERN',
+    PASTEL = 'PASTEL',
+    NEON = 'NEON',
+    YELLOW = 'YELLOW',
+    GREEN = 'GREEN',
+    BLUE = 'BLUE',
+}
+
 const questionSchema = z.object({
     question: z.string(),
     options: z.array(z.string().min(1)).min(4),
@@ -16,6 +26,7 @@ export const createQuizSchema = z.object({
     id: z.string(),
     title: z.string().min(1).max(50),
     description: z.string().optional(),
+    theme: z.enum(Object.values(TemplateEnum) as [string, ...string[]]),
     prizePool: z.coerce.number().nonnegative(),
     currency: z.string().default('SOL'),
     basePointsPerQuestion: z.coerce.number().optional(),
