@@ -1,3 +1,21 @@
+'use client';
+import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
+import { HostScreenEnum } from "@/types/prisma-types";
+import HostLobbyScreen from "./HostLobbyScreen";
+
 export default function HostMainScreen() {
-    return <div>Host Main Screen</div>;
+    const { gameSession } = useLiveQuizStore();
+
+    function renderHostScreenPanels() {
+        switch (gameSession?.hostScreen) {
+            case HostScreenEnum.LOBBY:
+                return <HostLobbyScreen />;
+        }
+    }
+
+    return (
+        <div className="w-full h-full">
+            {renderHostScreenPanels()}
+        </div>
+    )
 }
