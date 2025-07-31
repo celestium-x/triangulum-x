@@ -1,5 +1,11 @@
 import { generateDefaultQuestions } from '@/lib/generate-default-questions';
-import { QuestionType, QuizStatusEnum, QuizType, TemplateEnum } from '@/types/prisma-types';
+import {
+    QuestionType,
+    QuizStatusEnum,
+    QuizType,
+    TemplateEnum,
+    InteractionEnum,
+} from '@/types/prisma-types';
 import { create } from 'zustand';
 
 interface NewQuizStoreTypes {
@@ -15,6 +21,8 @@ interface NewQuizStoreTypes {
     getQuestion: (questionIndex: number) => QuestionType | null;
     loading: boolean;
     setLoading: (loading: boolean) => void;
+    toggleInteraction: (interaction: InteractionEnum) => void;
+    setInteractions: (Interactions: InteractionEnum[]) => void;
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
@@ -41,6 +49,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         liveChat: false,
         spectatorMode: false,
         questions: generateDefaultQuestions(),
+        interactions: [],
     },
 
     currentQuestionIndex: 0,
@@ -124,4 +133,23 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
     },
     loading: false,
     setLoading: (loading: boolean) => set({ loading }),
+
+    toggleInteraction: (interaction: InteractionEnum) =>
+        set((state) => {
+            const exists = state.quiz.interactions.includes(interaction);
+            const updated = exists
+                ? state.quiz.interactions.filter((i) => i !== interaction)
+                : [...state.quiz.interactions, interaction];
+            return {
+                quiz: {
+                    ...state.quiz,
+                    interactions: updated,
+                },
+            };
+        }),
+
+    setInteractions: (interactions: InteractionEnum[]) => {
+        const quiz = get().quiz;
+        set({ quiz: { ...quiz, interactions } });
+    },
 }));

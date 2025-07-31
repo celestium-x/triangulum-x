@@ -3,7 +3,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-
 interface User {
     id: number;
     name: string;
@@ -49,7 +48,7 @@ export default function WaitingLobbyAvatar({
             initial={{
                 opacity: 0,
                 scale: 0,
-                y: 30
+                y: 30,
             }}
             animate={{
                 opacity: 1,
@@ -59,22 +58,22 @@ export default function WaitingLobbyAvatar({
             transition={{
                 delay: index * 0.1,
                 duration: 0.6,
-                ease: "easeOut",
+                ease: 'easeOut',
                 y: {
                     duration: 2.5 + Math.random() * 1,
                     repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: index * 0.2
-                }
+                    ease: 'easeInOut',
+                    delay: index * 0.2,
+                },
             }}
             whileHover={{
                 scale: 1.2,
                 zIndex: 10,
-                transition: { type: "spring", stiffness: 300, damping: 20 }
+                transition: { type: 'spring', stiffness: 300, damping: 20 },
             }}
             whileTap={{
                 scale: 0.95,
-                transition: { duration: 0.1 }
+                transition: { duration: 0.1 },
             }}
         >
             <div className="relative w-full h-full group">
@@ -99,9 +98,7 @@ export default function WaitingLobbyAvatar({
 
                 {/* Hover name tooltip */}
                 {showNameTooltip && (
-                    <div
-                        className="absolute -top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none hidden group-hover:block"
-                    >
+                    <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap pointer-events-none hidden group-hover:block">
                         <span className="text-gray-800 font-medium text-sm bg-white px-4 py-2 rounded-full shadow-xl border border-gray-200">
                             {name}
                         </span>
@@ -110,6 +107,6 @@ export default function WaitingLobbyAvatar({
             </div>
         </motion.div>
     );
-};
+}
 
 export type { User, Position, AvatarProps };

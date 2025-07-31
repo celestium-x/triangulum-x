@@ -10,6 +10,14 @@ export enum TemplateEnum {
     BLUE = 'BLUE',
 }
 
+export enum Interactions {
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
 const questionSchema = z.object({
     question: z.string(),
     options: z.array(z.string().min(1)).min(4),
@@ -26,7 +34,7 @@ export const createQuizSchema = z.object({
     id: z.string(),
     title: z.string().min(1).max(50),
     description: z.string().optional(),
-    theme: z.enum(Object.values(TemplateEnum) as [string, ...string[]]),
+    theme: z.enum(Object.values(TemplateEnum)),
     prizePool: z.coerce.number().nonnegative(),
     currency: z.string().default('SOL'),
     basePointsPerQuestion: z.coerce.number().optional(),
@@ -40,4 +48,5 @@ export const createQuizSchema = z.object({
     liveChat: z.coerce.boolean().optional(),
     spectatorMode: z.coerce.boolean().optional(),
     questions: z.array(questionSchema),
+    interactions: z.array(z.enum(Interactions)),
 });

@@ -1,11 +1,11 @@
-"use client"
-import { useState, useEffect } from "react";
-import { Template } from "@/lib/templates";
-import WaitingLobbyAvatar from "./WaitingLobbyAvatar";
+'use client';
+import { useState, useEffect } from 'react';
+// import { Template } from '@/lib/templates';
+import WaitingLobbyAvatar from './WaitingLobbyAvatar';
 
-interface WaitingLobbyLeftCommonProps {
-    template: Template
-}
+// interface WaitingLobbyLeftCommonProps {
+//     template: Template;
+// }
 
 interface Position {
     x: number;
@@ -34,9 +34,7 @@ export const users = [
     { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
 ];
 
-
 export default function WaitingLobbyLeftCommon() {
-
     const avatarSize = 100;
     const minDistance = avatarSize + 20;
 
@@ -70,8 +68,7 @@ export default function WaitingLobbyLeftCommon() {
                 let validPosition = true;
                 for (const existingPos of positions) {
                     const distance = Math.sqrt(
-                        Math.pow(pos.x - existingPos.x, 2) +
-                        Math.pow(pos.y - existingPos.y, 2)
+                        Math.pow(pos.x - existingPos.x, 2) + Math.pow(pos.y - existingPos.y, 2),
                     );
                     if (distance < minDistance - 1) {
                         validPosition = false;
@@ -95,8 +92,8 @@ export default function WaitingLobbyLeftCommon() {
             const row = Math.floor(index / gridSize);
             const col = index % gridSize;
 
-            const offsetX = (gridSize - 1) * gridSpacing / 2;
-            const offsetY = (gridSize - 1) * gridSpacing / 2;
+            const offsetX = ((gridSize - 1) * gridSpacing) / 2;
+            const offsetY = ((gridSize - 1) * gridSpacing) / 2;
 
             const x = col * gridSpacing - offsetX;
             const y = row * gridSpacing - offsetY;
@@ -104,8 +101,7 @@ export default function WaitingLobbyLeftCommon() {
             let validPosition = true;
             for (const existingPos of positions) {
                 const distance = Math.sqrt(
-                    Math.pow(x - existingPos.x, 2) +
-                    Math.pow(y - existingPos.y, 2)
+                    Math.pow(x - existingPos.x, 2) + Math.pow(y - existingPos.y, 2),
                 );
                 if (distance < minDistance - 1) {
                     validPosition = false;
@@ -124,7 +120,7 @@ export default function WaitingLobbyLeftCommon() {
         }
 
         return positions;
-    };
+    }
 
     const [positions, setPositions] = useState<Position[]>(() => generatePositions(users.length));
 
@@ -134,7 +130,6 @@ export default function WaitingLobbyLeftCommon() {
 
     return (
         <div className="w-full max-w-5xl h-screen max-h-[900px] flex items-center justify-center relative">
-
             {users.length === 0 && (
                 <div className="text-3xl font-extralight tracking-wider text-wrap">
                     Getting ready to start when the team&apos;s all here!!
@@ -150,7 +145,7 @@ export default function WaitingLobbyLeftCommon() {
                     <WaitingLobbyAvatar
                         key={index}
                         avatar={p.avatar}
-                        name={"rishi"}
+                        name={'rishi'}
                         position={position}
                         index={index}
                         size={avatarSize}
@@ -160,5 +155,5 @@ export default function WaitingLobbyLeftCommon() {
                 );
             })}
         </div>
-    )
+    );
 }
