@@ -40,6 +40,7 @@ export default class QuizAction {
             },
         });
     }
+
     static async validOwner(hostId: number, quizId: string): Promise<boolean> {
         const quiz = await prisma.quiz.findUnique({
             where: {
@@ -52,43 +53,30 @@ export default class QuizAction {
         }
         return true;
     }
+
     public static generateTokenId(): string {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
     }
 
-    public static generateHostToken(userId: string, quizId: string, gameSessionId: string): string {
+    public static generateUserToken(
+        userId: string,
+        quizId: string,
+        gameSessionId: string,
+        role: USER_TYPE
+    ): string {
         const tokenId = QuizAction.generateTokenId();
         const payload: CookiePayload = {
             userId,
             quizId,
             gameSessionId,
-            role: USER_TYPE.HOST,
+            role,
             tokenId,
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-        };
+        }
+
         return jwt.sign(payload, JWT_SECRET!);
     }
-
-    public static generateParticipantToken(
-        participantId: string,
-        quizId: string,
-        gameSessionId: string,
-    ): string {
-        const tokenId = QuizAction.generateTokenId();
-        const payload: CookiePayload = {
-            userId: participantId,
-            quizId,
-            gameSessionId,
-            role: USER_TYPE.PARTICIPANT,
-            tokenId,
-            iat: Math.floor(Date.now() / 1000),
-            exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-        };
-        return jwt.sign(payload, JWT_SECRET!);
-    }
-
-    // generateSpectatorToken
 
     public static sanitizeGameSession(gameSession: any, role: string) {
         switch (role) {

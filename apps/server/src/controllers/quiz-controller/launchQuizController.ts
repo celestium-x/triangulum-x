@@ -1,6 +1,7 @@
 import prisma from '@repo/db/client';
 import { Request, Response } from 'express';
 import QuizAction from '../../class/quizAction';
+import { USER_TYPE } from '../../types/web-socket-types';
 
 export default async function launchQuizController(req: Request, res: Response) {
     const userId = req.user?.id;
@@ -112,10 +113,11 @@ export default async function launchQuizController(req: Request, res: Response) 
             return { updatedQuiz, gameSession };
         });
 
-        const secureTokenData = QuizAction.generateHostToken(
+        const secureTokenData = QuizAction.generateUserToken(
             String(userId),
             quizId,
             result.gameSession.id,
+            USER_TYPE.HOST
         );
 
         res.cookie('token', secureTokenData, {

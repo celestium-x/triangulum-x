@@ -10,6 +10,7 @@ import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
 import { URL } from 'url';
 import ParticipantManager from './ParticipantManager';
+import SpectatorManager from './SpectatorManager';
 dotenv.config();
 
 const REDIS_URL = process.env.REDIS_URL;
@@ -28,6 +29,7 @@ export default class WebsocketServer {
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
     private participant_manager!: ParticipantManager;
+    private spectator_manager!: SpectatorManager;
 
     constructor(server: Server) {
         this.wss = new WebSocketServer({ server });
@@ -57,6 +59,13 @@ export default class WebsocketServer {
             socket_mapping: this.socket_mapping,
             session_participants_mapping: this.session_participants_mapping,
             quizManager: this.quizManager,
+        });
+        this.spectator_manager = new SpectatorManager({
+            publisher: this.publisher,
+            subscriber: this.subscriber,
+            socket_mapping: this.socket_mapping,
+            session_spectator_mapping: this.session_spectators_mapping,
+            quizManager: this.quizManager
         });
     }
 
