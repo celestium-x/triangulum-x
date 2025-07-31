@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 // import { Template } from '@/lib/templates';
 import WaitingLobbyAvatar from './WaitingLobbyAvatar';
 
@@ -38,7 +38,7 @@ export default function WaitingLobbyLeftCommon() {
     const avatarSize = 100;
     const minDistance = avatarSize + 20;
 
-    function generatePositions(total: number): Position[] {
+    const generatePositions = useCallback((total: number): Position[] => {
         const positions: Position[] = [];
 
         if (total > 0) {
@@ -120,13 +120,13 @@ export default function WaitingLobbyLeftCommon() {
         }
 
         return positions;
-    }
+    }, [minDistance]);
 
     const [positions, setPositions] = useState<Position[]>(() => generatePositions(users.length));
 
     useEffect(() => {
         setPositions(generatePositions(users.length));
-    }, [users.length]);
+    }, [generatePositions]);
 
     return (
         <div className="w-full max-w-5xl h-screen max-h-[900px] flex items-center justify-center relative">
