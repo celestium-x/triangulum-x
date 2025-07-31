@@ -1,6 +1,7 @@
 'use client';
-import { useWebSocket } from '@/hooks/useWebSocket';
-import { templates } from '@/lib/templates';
+import LiveUserRendererScreens from '@/components/quiz/live/LiveUserRendererScreens';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+// import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
     useLiveHostStore,
@@ -21,7 +22,6 @@ export interface NewProps {
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
     const { quiz, updateQuiz, updateGameSession } = useLiveQuizStore();
-    const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
     const { updateHostData } = useLiveHostStore();
     const { updateParticipantData } = useLiveParticipantStore();
     const { updateSpectatorData } = useLiveSpectatorStore();
@@ -75,13 +75,8 @@ export default function New({ params }: NewProps) {
     }
 
     return (
-        <div
-            className="w-screen h-screen"
-            style={{
-                backgroundColor: template?.background_color,
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        ></div>
+        <div className="w-full h-screen">
+            <LiveUserRendererScreens />
+        </div>
     );
 }
