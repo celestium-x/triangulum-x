@@ -13,6 +13,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
     const cookies = cookieHeader ? parse(cookieHeader) : {};
     const token = cookies['token'];
     const { quizId: quizIdParams } = req.params;
+
     if (!token) {
         unauthorized(res);
         return;
@@ -22,7 +23,8 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
         const decoded = QuizAction.verifyCookie(token);
         if (typeof decoded !== 'object' || !decoded) return unauthorized(res);
 
-        const { quizId, gameSessionId, role } = decoded as CookiePayload;
+        const { quizId, gameSessionId, role, userId } = decoded as CookiePayload;
+
         if (!quizId || !gameSessionId || !role || !quizIdParams || quizIdParams !== quizId) {
             return unauthorized(res);
         }
@@ -65,10 +67,69 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     totalParticipants: true,
                     activeParticipants: true,
                     currentQuestionIndex: true,
+                    totalSpectators: true,
+                    avgResponseTime: true,
+                    correctAnswerRate: true,
                 },
             });
 
-            return { quiz, gameSession };
+            // Role-specific data
+            let userData = null;
+
+            switch (role) {
+                case 'HOST':
+                    userData = await tx.user.findUnique({
+                        where: { id: userId },
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            image: true,
+                            walletAddress: true,
+                            isVerified: true,
+                        },
+                    });
+                    break;
+
+                case 'PARTICIPANT':
+                    userData = await tx.participant.findFirst({
+                        where: {
+                            quizId: quizId,
+                            id: userId,
+                        },
+                        select: {
+                            id: true,
+                            nickname: true,
+                            avatar: true,
+                            isEliminated: true,
+                            eliminatedAt: true,
+                            eliminatedAtQuestion: true,
+                            finalRank: true,
+                            totalScore: true,
+                            correctAnswers: true,
+                            longestStreak: true,
+                            walletAddress: true,
+                        },
+                    });
+                    break;
+
+                case 'SPECTATOR':
+                    userData = await tx.spectator.findFirst({
+                        where: {
+                            quizId: quizId,
+                            id: userId,
+                        },
+                        select: {
+                            id: true,
+                            nickname: true,
+                            avatar: true,
+                            joinedAt: true,
+                        },
+                    });
+                    break;
+            }
+
+            return { quiz, gameSession, userData };
         });
 
         if (!result.quiz || !result.gameSession) {
@@ -79,10 +140,20 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
             return;
         }
 
+        if (!result.userData) {
+            res.status(404).json({
+                success: false,
+                message: `${role} data not found`,
+            });
+            return;
+        }
+
+        const sanitizedGameSession = QuizAction.sanitizeGameSession(result.gameSession, role);
         res.status(200).json({
             success: true,
             quiz: result.quiz,
-            gameSession: QuizAction.sanitizeGameSession(result.gameSession, role),
+            gameSession: sanitizedGameSession,
+            userData: result.userData,
             role,
         });
         return;

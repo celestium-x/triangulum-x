@@ -213,3 +213,9 @@ export enum HostScreenEnum {
     LEADERBOARD = 'LEADERBOARD',
     FINAL_RESULTS = 'FINAL_RESULTS',
 }
+
+export enum USER_TYPE {
+    HOST = 'HOST',
+    PARTICIPANT = 'PARTICIPANT',
+    SPECTATOR = 'SPECTATOR',
+}

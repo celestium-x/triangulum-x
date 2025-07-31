@@ -1,11 +1,17 @@
 'use client';
-
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { templates } from '@/lib/templates';
-import { useLiveQuizStore } from '@/store/useLiveQuizStore';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import {
+    useLiveHostStore,
+    useLiveParticipantStore,
+    useLiveSpectatorStore,
+    useUserRoleStore,
+} from '@/store/live-quiz/useLiveQuizUserStore';
 import axios from 'axios';
 import { use, useEffect } from 'react';
 import { LIVE_QUIZ_DATA_URL } from 'routes/api_routes';
+
 export interface NewProps {
     params: Promise<{
         quizId: string;
@@ -14,33 +20,68 @@ export interface NewProps {
 
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
-    const { quiz, gameSession, updateQuiz, updateGameSession } = useLiveQuizStore();
-    const template = templates.find((template) => template.id === quiz?.theme);
+    const { quiz, updateQuiz, updateGameSession } = useLiveQuizStore();
+    const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
+    const { updateHostData } = useLiveHostStore();
+    const { updateParticipantData } = useLiveParticipantStore();
+    const { updateSpectatorData } = useLiveSpectatorStore();
+    const { setCurrentUserType } = useUserRoleStore();
     useWebSocket();
-
     useEffect(() => {
         async function getLiveData() {
-            const { data } = await axios.get(`${LIVE_QUIZ_DATA_URL}/${quizId}`, {
-                withCredentials: true,
-            });
-
-            if (data.success) {
-                updateQuiz(data.quiz);
-                updateGameSession(data.gameSession);
+            try {
+                const { data } = await axios.get(`${LIVE_QUIZ_DATA_URL}/${quizId}`, {
+                    withCredentials: true,
+                });
+                if (data.success) {
+                    updateQuiz(data.quiz);
+                    updateGameSession(data.gameSession);
+                    setCurrentUserType(data.role);
+                    switch (data.role) {
+                        case 'HOST':
+                            updateHostData(data.userData);
+                            break;
+                        case 'PARTICIPANT':
+                            updateParticipantData(data.userData);
+                            break;
+                        case 'SPECTATOR':
+                            updateSpectatorData(data.userData);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching live data:', error);
             }
         }
         getLiveData();
-    }, [quizId, updateGameSession, updateQuiz]);
+    }, [
+        quizId,
+        updateGameSession,
+        updateQuiz,
+        setCurrentUserType,
+        updateHostData,
+        updateParticipantData,
+        updateSpectatorData,
+    ]);
+
+    if (!quiz) {
+        return (
+            <div className="h-screen w-full flex items-center justify-center">
+                <div>Loading...</div>
+            </div>
+        );
+    }
 
     return (
         <div
+            className="w-screen h-screen"
             style={{
                 backgroundColor: template?.background_color,
+                display: 'flex',
+                flexDirection: 'column',
             }}
-            className="h-screen w-full"
-        >
-            {gameSession?.participantScreen}
-            {quiz?.title}
-        </div>
+        ></div>
     );
 }
