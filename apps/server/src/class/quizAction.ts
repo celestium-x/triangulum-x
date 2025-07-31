@@ -62,7 +62,7 @@ export default class QuizAction {
         userId: string,
         quizId: string,
         gameSessionId: string,
-        role: USER_TYPE
+        role: USER_TYPE,
     ): string {
         const tokenId = QuizAction.generateTokenId();
         const payload: CookiePayload = {
@@ -73,7 +73,7 @@ export default class QuizAction {
             tokenId,
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
-        }
+        };
 
         return jwt.sign(payload, JWT_SECRET!);
     }

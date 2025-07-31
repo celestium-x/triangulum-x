@@ -1,9 +1,9 @@
-import { useUserRoleStore } from "@/store/live-quiz/useLiveQuizUserStore";
-import HostMainScreen from "./host/HostMainScreen";
-import ParticipantMainScreen from "./participant/ParticipantMainScreen";
-import SpectatorMainScreen from "./spectator/SpectatorMainScreen";
-import { templates } from "@/lib/templates";
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
+import { useUserRoleStore } from '@/store/live-quiz/useLiveQuizUserStore';
+import HostMainScreen from './host/HostMainScreen';
+import ParticipantMainScreen from './participant/ParticipantMainScreen';
+import SpectatorMainScreen from './spectator/SpectatorMainScreen';
+import { templates } from '@/lib/templates';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
@@ -24,11 +24,14 @@ export default function LiveUserRendererScreens() {
     }
 
     return (
-        <div className="h-full w-full" style={{
-            backgroundColor: template?.background_color,
-            color: template?.text_color,
-        }}>
+        <div
+            className="h-full w-full"
+            style={{
+                backgroundColor: template?.background_color,
+                color: template?.text_color,
+            }}
+        >
             {renderCurrentUserScreen()}
         </div>
-    )
+    );
 }

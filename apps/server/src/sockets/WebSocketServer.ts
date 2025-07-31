@@ -65,7 +65,7 @@ export default class WebsocketServer {
             subscriber: this.subscriber,
             socket_mapping: this.socket_mapping,
             session_spectator_mapping: this.session_spectators_mapping,
-            quizManager: this.quizManager
+            quizManager: this.quizManager,
         });
     }
 

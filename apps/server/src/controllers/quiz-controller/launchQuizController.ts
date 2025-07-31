@@ -117,7 +117,7 @@ export default async function launchQuizController(req: Request, res: Response) 
             String(userId),
             quizId,
             result.gameSession.id,
-            USER_TYPE.HOST
+            USER_TYPE.HOST,
         );
 
         res.cookie('token', secureTokenData, {
