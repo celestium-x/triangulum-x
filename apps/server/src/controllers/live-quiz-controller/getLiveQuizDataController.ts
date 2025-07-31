@@ -54,6 +54,13 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                             participants: true,
                         },
                     },
+                    host: {
+                        select: {
+                            name: true,
+                            image: true,
+                            email: true,
+                        },
+                    },
                 },
             });
 

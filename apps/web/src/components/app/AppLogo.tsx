@@ -1,8 +1,14 @@
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 
-export default function AppLogo() {
+export default function AppLogo({ className }: { className?: string }) {
     return (
-        <div className="flex items-center justify-center gap-x-2 cursor-pointer group">
+        <div
+            className={cn(
+                'flex items-center justify-center gap-x-2 cursor-pointer group',
+                className,
+            )}
+        >
             {/* <TbSquareLetterTFilled size={24} className="group-hover:-translate-x-1 transition-transform ease-in" /> */}
             <Image
                 src={'/images/logo.jpg'}

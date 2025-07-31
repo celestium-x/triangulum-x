@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import WebsocketServer from './sockets/WebSocketServer.ts';
 import http from 'http';
+import RedisCache from './cache/RedisCache.ts';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,9 @@ app.use(
         credentials: true,
     }),
 );
+
+const redisCacheInstance: RedisCache = new RedisCache();
+export default redisCacheInstance;
 
 app.use('/api/v1', router);
 

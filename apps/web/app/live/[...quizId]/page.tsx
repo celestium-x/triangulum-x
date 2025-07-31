@@ -1,7 +1,6 @@
 'use client';
 import LiveUserRendererScreens from '@/components/quiz/live/LiveUserRendererScreens';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
-// import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
     useLiveHostStore,
@@ -22,11 +21,13 @@ export interface NewProps {
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
     const { quiz, updateQuiz, updateGameSession } = useLiveQuizStore();
-    const { updateHostData } = useLiveHostStore();
-    const { updateParticipantData } = useLiveParticipantStore();
-    const { updateSpectatorData } = useLiveSpectatorStore();
+    const { setHostData } = useLiveHostStore();
+    const { setParticipantData } = useLiveParticipantStore();
+    const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
+
     useWebSocket();
+
     useEffect(() => {
         async function getLiveData() {
             try {
@@ -37,15 +38,16 @@ export default function New({ params }: NewProps) {
                     updateQuiz(data.quiz);
                     updateGameSession(data.gameSession);
                     setCurrentUserType(data.role);
+
                     switch (data.role) {
                         case 'HOST':
-                            updateHostData(data.userData);
+                            setHostData(data.userData);
                             break;
                         case 'PARTICIPANT':
-                            updateParticipantData(data.userData);
+                            setParticipantData(data.userData);
                             break;
                         case 'SPECTATOR':
-                            updateSpectatorData(data.userData);
+                            setSpectatorData(data.userData);
                             break;
                         default:
                             break;
@@ -61,9 +63,9 @@ export default function New({ params }: NewProps) {
         updateGameSession,
         updateQuiz,
         setCurrentUserType,
-        updateHostData,
-        updateParticipantData,
-        updateSpectatorData,
+        setHostData,
+        setParticipantData,
+        setSpectatorData,
     ]);
 
     if (!quiz) {

@@ -1,5 +1,6 @@
 import { GameSession } from '@repo/db/client';
 import Redis from 'ioredis';
+import { Participant } from '@repo/db/client';
 
 const SECONDS = 60;
 const MINUTES = 60;
@@ -27,6 +28,35 @@ export default class RedisCache {
         } catch (err) {
             console.error('Error in session management while creating session', err);
         }
+    }
+
+    public async get_participant(game_session_id: string, participant_id: string) {
+        const key = this.get_participants_key(game_session_id);
+        try {
+            const data = await this.redis_cache.hget(key, participant_id);
+            return data ? JSON.parse(data) : null;
+        } catch (err) {
+            console.error('Error in get_participant:', err);
+            return null;
+        }
+    }
+
+    public async set_participants(
+        game_session_id: string,
+        participant_id: string,
+        particpant: Partial<Participant>,
+    ) {
+        try {
+            const key = this.get_participants_key(game_session_id);
+            await this.redis_cache.hset(key, participant_id, JSON.stringify(particpant));
+            await this.redis_cache.expire(key, 60 * 60 * 24);
+        } catch (err) {
+            console.error('Error while setting partiicpant in cahche : ', err);
+        }
+    }
+
+    private get_participants_key(game_session_id: string) {
+        return `game_session:${game_session_id}:participants`;
     }
 
     public async get_game_session(sessionId: string): Promise<Partial<GameSession> | null> {

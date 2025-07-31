@@ -75,7 +75,6 @@ export default class DatabaseQueue {
                 },
                 data: quiz,
             });
-
             return { success: true, quiz: updateQuiz };
         } catch (err) {
             console.error('Error while processing quiz update', err);

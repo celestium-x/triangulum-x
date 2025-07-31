@@ -1,6 +1,7 @@
 import Redis from 'ioredis';
 import RedisCache from '../cache/RedisCache';
-import prisma from '@repo/db/client';
+import prisma, { Participant } from '@repo/db/client';
+import { CookiePayload } from '../types/web-socket-types';
 
 export interface QuizManagerDependencies {
     publisher: Redis;
@@ -27,5 +28,27 @@ export default class QuizManager {
             throw new Error('Game session not found');
         }
         this.redis_cache.set_game_session(game_session_id, game_session);
+    }
+
+    public async onParticipantConnect(payload: CookiePayload) {
+        const particpant_id = payload.userId;
+        const particicpant_cache = await this.redis_cache.get_participant(
+            payload.gameSessionId,
+            particpant_id,
+        );
+
+        const participant: Partial<Participant> = {
+            avatar: particicpant_cache.avatar,
+            nickname: particicpant_cache.nickname,
+        };
+
+        this.publisher.publish(
+            this.get_redis_key(payload.gameSessionId),
+            JSON.stringify(participant),
+        );
+    }
+
+    private get_redis_key(game_session_id: string) {
+        return `game_session:${game_session_id}`;
     }
 }

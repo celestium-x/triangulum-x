@@ -5,6 +5,7 @@ import { create } from 'zustand';
 interface LiveHostStore {
     hostData: UserType | null;
     updateHostData: (updatedFields: Partial<UserType>) => void;
+    setHostData: (data: UserType) => void;
 }
 
 export const useLiveHostStore = create<LiveHostStore>((set) => ({
@@ -16,8 +17,11 @@ export const useLiveHostStore = create<LiveHostStore>((set) => ({
                       ...state.hostData,
                       ...updatedFields,
                   }
-                : null,
+                : (updatedFields as UserType),
         }));
+    },
+    setHostData: (data: UserType) => {
+        set({ hostData: data });
     },
 }));
 
@@ -25,11 +29,11 @@ export const useLiveHostStore = create<LiveHostStore>((set) => ({
 interface LiveParticipantStore {
     participantData: ParticipantType | null;
     updateParticipantData: (updatedFields: Partial<ParticipantType>) => void;
+    setParticipantData: (data: ParticipantType) => void;
 }
 
 export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
     participantData: null,
-
     updateParticipantData: (updatedFields: Partial<ParticipantType>) => {
         set((state) => ({
             participantData: state.participantData
@@ -37,8 +41,11 @@ export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
                       ...state.participantData,
                       ...updatedFields,
                   }
-                : null,
+                : (updatedFields as ParticipantType),
         }));
+    },
+    setParticipantData: (data: ParticipantType) => {
+        set({ participantData: data });
     },
 }));
 
@@ -46,11 +53,11 @@ export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
 interface LiveSpectatorStore {
     spectatorData: SpectatorType | null;
     updateSpectatorData: (updatedFields: Partial<SpectatorType>) => void;
+    setSpectatorData: (data: SpectatorType) => void;
 }
 
 export const useLiveSpectatorStore = create<LiveSpectatorStore>((set) => ({
     spectatorData: null,
-
     updateSpectatorData: (updatedFields: Partial<SpectatorType>) => {
         set((state) => ({
             spectatorData: state.spectatorData
@@ -58,8 +65,11 @@ export const useLiveSpectatorStore = create<LiveSpectatorStore>((set) => ({
                       ...state.spectatorData,
                       ...updatedFields,
                   }
-                : null,
+                : (updatedFields as SpectatorType),
         }));
+    },
+    setSpectatorData: (data: SpectatorType) => {
+        set({ spectatorData: data });
     },
 }));
 
@@ -68,7 +78,6 @@ interface UserRoleStore {
     currentUserType: USER_TYPE | null;
     setCurrentUserType: (userType: USER_TYPE) => void;
     clearCurrentUserType: () => void;
-
     isHost: () => boolean;
     isParticipant: () => boolean;
     isSpectator: () => boolean;
