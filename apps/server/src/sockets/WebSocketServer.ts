@@ -74,29 +74,21 @@ export default class WebsocketServer {
 
     private validate_connection(ws: CustomWebSocket, req: any, quizId: string) {
         const cookies = req.headers.cookie;
-
         if (!cookies) {
             ws.close();
             return false;
         }
 
         const parsedCookies = parse(cookies);
-        const hostToken = parsedCookies['host-token'];
-        const participantToken = parsedCookies['participant-token'];
-
-        if (hostToken) {
-            this.extract_token(ws, hostToken, quizId, 'HOST');
-        } else if (participantToken) {
-            this.extract_token(ws, participantToken, quizId, 'PARTICIPANT');
+        const token = parsedCookies['token'];
+        if (!token) {
+            ws.close();
+            return false;
         }
+        this.extract_token(ws, token, quizId);
     }
 
-    private async extract_token(
-        ws: CustomWebSocket,
-        token: string,
-        quizId: string,
-        role: 'HOST' | 'PARTICIPANT',
-    ): Promise<void> {
+    private async extract_token(ws: CustomWebSocket, token: string, quizId: string): Promise<void> {
         try {
             jwt.verify(token, JWT_SECRET!, async (err, decoded) => {
                 if (err) {
@@ -107,12 +99,11 @@ export default class WebsocketServer {
 
                 const payload = decoded as CookiePayload;
 
-                if (payload.quizId !== quizId || payload.role !== role) {
+                if (payload.quizId !== quizId) {
                     console.error('Token validation failed');
                     ws.close();
                     return;
                 }
-
                 switch (payload.role) {
                     case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, payload as CookiePayload);

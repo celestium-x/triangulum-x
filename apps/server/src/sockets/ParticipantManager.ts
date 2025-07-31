@@ -52,9 +52,12 @@ export default class ParticipantManager {
         const session_participants_socket_ids = this.session_participants_mapping.get(
             payload.gameSessionId,
         );
-        if (session_participants_socket_ids) {
-            session_participants_socket_ids.add(new_participant_socket_id);
+        if (!session_participants_socket_ids) {
+            this.session_participants_mapping.set(payload.gameSessionId, new Set());
         }
+        this.session_participants_mapping
+            .get(payload.gameSessionId)
+            ?.add(new_participant_socket_id);
         this.setup_message_handlers(ws);
     }
 
