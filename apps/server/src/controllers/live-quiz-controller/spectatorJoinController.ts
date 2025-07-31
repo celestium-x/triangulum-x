@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
+import { spectatorJoinSchema } from '../../schemas/spectatorJoinSchema';
 import prisma from '@repo/db/client';
 import GenerateUser from '../../class/generateUser';
 import QuizAction from '../../class/quizAction';
-import { participantJoinSchema } from '../../schemas/participantJoinSchema';
 import { USER_TYPE } from '../../types/web-socket-types';
 
-export default async function participantJoinController(req: Request, res: Response) {
-    const parseResult = participantJoinSchema.safeParse(req.body);
-    if (!parseResult.success) {
+export default async function spectatorJoinController(req: Request, res: Response) {
+    const parsedData = spectatorJoinSchema.safeParse(req.body);
+    if (!parsedData.success) {
         res.status(400).json({
             success: false,
             message: 'Invalid request data',
@@ -15,11 +15,13 @@ export default async function participantJoinController(req: Request, res: Respo
         return;
     }
 
-    const { code } = parseResult.data;
+    const code = parsedData.data.code;
 
     try {
         const quiz = await prisma.quiz.findUnique({
-            where: { participantCode: code },
+            where: {
+                spectatorCode: code,
+            },
             select: {
                 id: true,
                 status: true,
@@ -58,16 +60,8 @@ export default async function participantJoinController(req: Request, res: Respo
             return;
         }
 
-        if (!['WAITING', 'STARTING'].includes(gameSession.status)) {
-            res.status(403).json({
-                success: false,
-                message: 'Quiz has already started. New participants cannot join.',
-            });
-            return;
-        }
-
         const result = await prisma.$transaction(async (tx) => {
-            const participant = await tx.participant.create({
+            const spectator = await prisma.spectator.create({
                 data: {
                     quizId: quiz.id,
                     nickname: GenerateUser.getRandomName(),
@@ -77,25 +71,24 @@ export default async function participantJoinController(req: Request, res: Respo
             });
 
             await tx.gameSession.update({
-                where: { id: gameSession.id },
+                where: {
+                    id: gameSession.id,
+                },
                 data: {
-                    totalParticipants: {
-                        increment: 1,
-                    },
-                    activeParticipants: {
+                    totalSpectators: {
                         increment: 1,
                     },
                 },
             });
 
-            return { participant };
+            return { spectator };
         });
 
         const secureTokenData = QuizAction.generateUserToken(
-            result.participant.id,
+            result.spectator.id,
             quiz.id,
             gameSession.id,
-            USER_TYPE.PARTICIPANT,
+            USER_TYPE.SPECTATOR,
         );
 
         try {
@@ -109,14 +102,15 @@ export default async function participantJoinController(req: Request, res: Respo
             console.error('Cookie setting error:', cookieErr);
             await prisma
                 .$transaction(async (tx) => {
-                    await tx.participant.delete({
-                        where: { id: result.participant.id },
+                    await tx.spectator.delete({
+                        where: { id: result.spectator.id },
                     });
                     await tx.gameSession.update({
                         where: { id: gameSession.id },
                         data: {
-                            totalParticipants: { decrement: 1 },
-                            activeParticipants: { decrement: 1 },
+                            totalSpectators: {
+                                decrement: 1,
+                            },
                         },
                     });
                 })
@@ -137,8 +131,8 @@ export default async function participantJoinController(req: Request, res: Respo
             quizId: quiz.id,
         });
         return;
-    } catch (err) {
-        console.error('Error during participant join:', err);
+    } catch (error) {
+        console.error('Error during spectator join:', error);
         res.status(500).json({
             success: false,
             message: 'Something went wrong while trying to join the quiz. Please try again.',

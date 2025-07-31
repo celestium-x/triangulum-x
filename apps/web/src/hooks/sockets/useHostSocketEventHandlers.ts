@@ -1,3 +1,1 @@
-export const useHostSocketEventHandlers = () => {
-    
-}
+export const useHostSocketEventHandlers = () => {};
