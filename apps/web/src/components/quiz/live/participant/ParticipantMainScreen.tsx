@@ -13,7 +13,7 @@ export default function ParticipantWaitingScreen() {
     }
     return (
         <div>
-
+            {renderHostScreenPanels()}
         </div>
     )
 }

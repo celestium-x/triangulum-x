@@ -1,4 +1,4 @@
-import WaitingLobbyAvatar from "../Avatars";
+'use client';
 import WaitingLobbyAvatars from "../common/WaitingLobbyAvatars";
 
 export default function HostLobbyScreen() {
