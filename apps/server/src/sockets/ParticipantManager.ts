@@ -45,20 +45,27 @@ export default class ParticipantManager {
         this.cleanup_existing_partiicpant_socket(payload.userId, payload.gameSessionId);
 
         const new_participant_socket_id = this.generateSocketId();
+
         ws.id = new_participant_socket_id;
         ws.user = payload;
+
         this.socket_mapping.set(new_participant_socket_id, ws);
         this.participant_socket_mapping.set(payload.userId, new_participant_socket_id);
+
         const session_participants_socket_ids = this.session_participants_mapping.get(
             payload.gameSessionId,
         );
+
         if (!session_participants_socket_ids) {
             this.session_participants_mapping.set(payload.gameSessionId, new Set());
         }
+
         this.session_participants_mapping
             .get(payload.gameSessionId)
             ?.add(new_participant_socket_id);
         this.setup_message_handlers(ws);
+
+        this.quizManager.onParticipantConnect(payload);
     }
 
     private setup_message_handlers(ws: CustomWebSocket) {

@@ -11,6 +11,7 @@ import RedisCache from '../cache/RedisCache';
 import { URL } from 'url';
 import ParticipantManager from './ParticipantManager';
 import SpectatorManager from './SpectatorManager';
+import redisCacheInstance from '..';
 dotenv.config();
 
 const REDIS_URL = process.env.REDIS_URL;
@@ -35,7 +36,7 @@ export default class WebsocketServer {
         this.wss = new WebSocketServer({ server });
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
-        this.redis_cache = new RedisCache();
+        this.redis_cache = redisCacheInstance;
         this.initialize_managers();
         this.initialize();
     }
@@ -108,6 +109,8 @@ export default class WebsocketServer {
 
                 const payload = decoded as CookiePayload;
 
+                const redis_key: string = `game_session_id:${payload.gameSessionId}`;
+                this.subscriber.subscribe(redis_key);
                 if (payload.quizId !== quizId) {
                     console.error('Token validation failed');
                     ws.close();

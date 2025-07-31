@@ -1,8 +1,8 @@
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
-import { ParticipantScreenEnum } from "@/types/prisma-types";
-import ParticipantLobbyScreen from "./ParticipantLobbyScreen";
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { ParticipantScreenEnum } from '@/types/prisma-types';
+import ParticipantLobbyScreen from './ParticipantLobbyScreen';
 
-export default function ParticipantWaitingScreen() {
+export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
 
     function renderHostScreenPanels() {
@@ -11,9 +11,5 @@ export default function ParticipantWaitingScreen() {
                 return <ParticipantLobbyScreen />;
         }
     }
-    return (
-        <div>
-            {renderHostScreenPanels()}
-        </div>
-    )
+    return <div className="h-full">{renderHostScreenPanels()}</div>;
 }

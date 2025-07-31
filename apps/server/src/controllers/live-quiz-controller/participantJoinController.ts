@@ -4,9 +4,11 @@ import GenerateUser from '../../class/generateUser';
 import QuizAction from '../../class/quizAction';
 import { participantJoinSchema } from '../../schemas/participantJoinSchema';
 import { USER_TYPE } from '../../types/web-socket-types';
+import redisCacheInstance from '../..';
 
 export default async function participantJoinController(req: Request, res: Response) {
     const parseResult = participantJoinSchema.safeParse(req.body);
+    const redisCache = redisCacheInstance;
     if (!parseResult.success) {
         res.status(400).json({
             success: false,
@@ -75,7 +77,7 @@ export default async function participantJoinController(req: Request, res: Respo
                     ipAddress: req.ip || 'unknown',
                 },
             });
-
+            redisCache.set_participants(gameSession.id, participant.id, participant);
             await tx.gameSession.update({
                 where: { id: gameSession.id },
                 data: {
