@@ -1,4 +1,4 @@
-import { GameSession } from '@repo/db/client';
+import { GameSession, Spectator } from '@repo/db/client';
 import Redis from 'ioredis';
 import { Participant } from '@repo/db/client';
 
@@ -28,35 +28,6 @@ export default class RedisCache {
         } catch (err) {
             console.error('Error in session management while creating session', err);
         }
-    }
-
-    public async get_participant(game_session_id: string, participant_id: string) {
-        const key = this.get_participants_key(game_session_id);
-        try {
-            const data = await this.redis_cache.hget(key, participant_id);
-            return data ? JSON.parse(data) : null;
-        } catch (err) {
-            console.error('Error in get_participant:', err);
-            return null;
-        }
-    }
-
-    public async set_participants(
-        game_session_id: string,
-        participant_id: string,
-        particpant: Partial<Participant>,
-    ) {
-        try {
-            const key = this.get_participants_key(game_session_id);
-            await this.redis_cache.hset(key, participant_id, JSON.stringify(particpant));
-            await this.redis_cache.expire(key, 60 * 60 * 24);
-        } catch (err) {
-            console.error('Error while setting partiicpant in cahche : ', err);
-        }
-    }
-
-    private get_participants_key(game_session_id: string) {
-        return `game_session:${game_session_id}:participants`;
     }
 
     public async get_game_session(sessionId: string): Promise<Partial<GameSession> | null> {
@@ -93,5 +64,72 @@ export default class RedisCache {
 
     private get_game_session_key(game_live_session_id: string) {
         return `game_session:${game_live_session_id}`;
+    }
+
+    public async get_participant(game_session_id: string, participant_id: string) {
+        const key = this.get_participants_key(game_session_id);
+        try {
+            const data = await this.redis_cache.hget(key, participant_id);
+            return data ? JSON.parse(data) : null;
+        } catch (err) {
+            console.error('Error in get_participant:', err);
+            return null;
+        }
+    }
+
+    public async set_participants(
+        game_session_id: string,
+        participant_id: string,
+        particpant: Partial<Participant>,
+    ) {
+        try {
+            const key = this.get_participants_key(game_session_id);
+            await this.redis_cache.hset(key, participant_id, JSON.stringify(particpant));
+            await this.redis_cache.expire(key, 60 * 60 * 24);
+        } catch (err) {
+            console.error('Error while setting participant in cache : ', err);
+        }
+    }
+
+    private get_participants_key(game_session_id: string) {
+        return `game_session:${game_session_id}:participants`;
+    }
+
+    public async set_spectator(
+        game_session_id: string,
+        spectator_id: string,
+        spectator: Partial<Spectator>
+    ) {
+        try {
+            const key = this.get_spectator_key(game_session_id);
+            await this.redis_cache.hset(key, spectator_id, JSON.stringify(spectator));
+            await this.redis_cache.expire(key, 60 * 60 * 24);
+        } catch (error) {
+            console.error("Error while setting spectator in cache: ", error);
+        }
+    }
+
+    public async get_spectator(game_session_id: string, spectator_id: string) {
+        const key = this.get_spectator_key(game_session_id);
+        try {
+            const data = await this.redis_cache.hget(key, spectator_id);
+            return data ? JSON.parse(data) : null;
+        } catch (error) {
+            console.error('Error in get-spectator: ', error);
+            return null;
+        }
+    }
+
+    public async delete_spectator(game_session_id: string, spectator_id: string) {
+        const key = this.get_spectator_key(game_session_id);
+        try {
+            await this.redis_cache.del(key);
+        } catch (error) {
+            console.error('Error in delete-spectator: ', error);
+        }
+    }
+
+    public get_spectator_key(game_session_id: string) {
+        return `game_session:${game_session_id}:spectators`;
     }
 }
