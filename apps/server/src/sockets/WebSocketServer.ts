@@ -187,7 +187,6 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-                console.log('validated token');
 
                 switch (payload.role) {
                     case USER_TYPE.HOST:

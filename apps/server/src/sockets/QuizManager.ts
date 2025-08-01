@@ -38,6 +38,7 @@ export default class QuizManager {
         );
 
         const participant: Partial<Participant> = {
+            id: particicpant_cache.id,
             avatar: particicpant_cache.avatar,
             nickname: particicpant_cache.nickname,
         };

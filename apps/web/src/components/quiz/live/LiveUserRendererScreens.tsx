@@ -6,13 +6,15 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import CanvasAccents from '@/components/utility/CanvasAccents';
 import ParticipantMainScreen from './participant/ParticipantMainScreen';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { useSubscribeEventHandlers } from '@/hooks/sockets/useSubscribeEventHandlers';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
     const { quiz } = useLiveQuizStore();
     const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
-    console.log('renderer ');
     useWebSocket();
+
+    useSubscribeEventHandlers();
     function renderCurrentUserScreen() {
         switch (currentUserType) {
             case 'HOST':
@@ -35,7 +37,6 @@ export default function LiveUserRendererScreens() {
             }}
         >
             <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
-            {/* <AppLogo className='absolute top-4 left-4' /> */}
             {renderCurrentUserScreen()}
         </div>
     );

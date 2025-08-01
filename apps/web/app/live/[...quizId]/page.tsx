@@ -1,6 +1,7 @@
 'use client';
 import LiveUserRendererScreens from '@/components/quiz/live/LiveUserRendererScreens';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
     useLiveHostStore,
@@ -25,6 +26,7 @@ export default function New({ params }: NewProps) {
     const { setParticipantData } = useLiveParticipantStore();
     const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
+    const { setParticipants } = useLiveParticipantsStore();
 
     useEffect(() => {
         async function getLiveData() {
@@ -36,6 +38,7 @@ export default function New({ params }: NewProps) {
                     updateQuiz(data.quiz);
                     updateGameSession(data.gameSession);
                     setCurrentUserType(data.role);
+                    setParticipants(data.participants);
 
                     switch (data.role) {
                         case 'HOST':
@@ -73,6 +76,7 @@ export default function New({ params }: NewProps) {
             </div>
         );
     }
+
 
     return (
         <div className="w-full h-screen">

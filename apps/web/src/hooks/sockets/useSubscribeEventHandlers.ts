@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useWebSocket } from "./useWebSocket";
 import { MESSAGE_TYPES } from "@/types/web-socket-types";
+import { useLiveParticipantsStore } from "@/store/live-quiz/useLiveParticipantsStore";
 
 export const useSubscribeEventHandlers = () => {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
-
-    function handleIncomingMessage(message: any) {
-        console.log('Incoming message:', message);
+    const { upsertParticipant } = useLiveParticipantsStore();
+    function handleIncomingMessage(payload: any) {
+        console.log('Incoming message from web socket at handler is ', payload);
+        upsertParticipant(payload);
     }
 
     useEffect(() => {
