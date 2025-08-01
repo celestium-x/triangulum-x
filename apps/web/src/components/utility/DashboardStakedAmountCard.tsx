@@ -6,9 +6,9 @@ import { Input } from '../ui/input';
 import { MdChevronRight } from 'react-icons/md';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import ParticipantQuizAction from '@/lib/backend/participant-quiz-action';
 // import { useLiveQuizStore } from '@/store/useLiveQuizStore';
 import { useRouter } from 'next/navigation';
+import userQuizAction from '@/lib/backend/user-quiz-action';
 
 export default function DashboardStakedAmountCard() {
     const [code, setCode] = useState<string>('');
@@ -17,7 +17,8 @@ export default function DashboardStakedAmountCard() {
 
     async function joinQuizHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        const quizId = await ParticipantQuizAction.joinQuiz(code);
+        
+        const quizId = await userQuizAction.joinQuiz(code);
         if (!quizId) return;
         router.push(`/live/${quizId}`);
     }

@@ -11,6 +11,7 @@ import launchQuizController from '../controllers/quiz-controller/launchQuizContr
 import reviewAppController from '../controllers/appReview-controller/reviewAppController';
 import participantJoinController from '../controllers/live-quiz-controller/participantJoinController';
 import getLiveQuizDataController from '../controllers/live-quiz-controller/getLiveQuizDataController';
+import spectatorJoinController from '../controllers/live-quiz-controller/spectatorJoinController';
 
 const router = Router();
 
@@ -35,6 +36,7 @@ router.get(
 );
 router.post('/user/review', authMiddleware, reviewAppController);
 router.post('/quiz/participant-join-quiz', participantJoinController);
+router.post('/quiz/spectator-join-quiz', spectatorJoinController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
 
 export default router;
