@@ -1,10 +1,6 @@
 import Redis from 'ioredis';
 import QuizManager from './QuizManager';
-import {
-    CookiePayload,
-    CustomWebSocket,
-    PARTICIPANT_MESSAGE_TYPES,
-} from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket, MESSAGE_TYPES } from '../types/web-socket-types';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 
@@ -91,7 +87,7 @@ export default class ParticipantManager {
     private handle_host_message(ws: CustomWebSocket, message: any) {
         const { type } = message;
         switch (type) {
-            case PARTICIPANT_MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
+            case MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
                 // this.handle_join_game_session(ws, payload);
                 break;
             default:

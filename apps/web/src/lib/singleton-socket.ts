@@ -1,12 +1,32 @@
 import WebSocketClient from '@/socket/socket';
 
-let client: WebSocketClient;
+let client: WebSocketClient | null = null;
+let currentQuizId: string | null = null;
 
 export function getWebSocketClient(quizId: string) {
-    // const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-    if (!client) {
-        // console.log('creating new client------------------ >');
-        client = new WebSocketClient(`ws://localhost:8080/ws?quizId=${quizId}`);
+    if (client && currentQuizId === quizId) {
+        return client;
     }
+
+    if (client && currentQuizId !== quizId) {
+        client.close();
+        client = null;
+    }
+
+    client = new WebSocketClient(`ws://localhost:8080/ws?quizId=${quizId}`);
+    currentQuizId = quizId;
+
     return client;
+}
+
+export function cleanWebSocketClient() {
+    if (client) {
+        client.close();
+    }
+    client = null;
+    currentQuizId = null;
+}
+
+export function getCurrentQuizId() {
+    return currentQuizId;
 }

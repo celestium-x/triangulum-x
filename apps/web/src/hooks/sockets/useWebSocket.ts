@@ -1,4 +1,4 @@
-import { getWebSocketClient } from '@/lib/singleton-socket';
+import { cleanWebSocketClient, getWebSocketClient, getCurrentQuizId } from '@/lib/singleton-socket';
 import WebSocketClient from '@/socket/socket';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -6,26 +6,55 @@ import { useEffect, useRef } from 'react';
 export const useWebSocket = () => {
     const socket = useRef<WebSocketClient | null>(null);
     const pathname = usePathname();
+    const lastQuizIdRef = useRef<string | null>(null);
+
     useEffect(() => {
         const segments = pathname.split('/');
         const quizId = segments[segments.length - 1];
-        if (!quizId) return;
-        if (!socket.current) {
-            socket.current = getWebSocketClient(quizId);
+
+        if (!quizId || quizId === 'undefined' || quizId === '') {
+            return;
         }
+
+        if (lastQuizIdRef.current === quizId) {
+            console.log('new client is creating with quiz id - ', quizId);
+            socket.current = getWebSocketClient(quizId);
+            return;
+        }
+
+        lastQuizIdRef.current = quizId;
+        socket.current = getWebSocketClient(quizId);
+
+        return () => {
+            if (lastQuizIdRef.current === quizId) {
+                console.log('new client is closing with quiz id - ', quizId);
+                cleanWebSocketClient();
+                socket.current = null;
+                lastQuizIdRef.current = null;
+            }
+        };
     }, [pathname]);
 
     function subscribeToHandler(type: string, handler: (payload: unknown) => void) {
-        if (!socket.current) return;
+        if (!socket.current) {
+            console.warn('Attempting to subscribe but no socket connection available');
+            return;
+        }
         socket.current.subscribe_to_handlers(type, handler);
     }
 
-    function ubsubscribeToHandler(type: string, handler: (payload: unknown) => void) {
-        if (!socket.current) return;
+    function unsubscribeToHandler(type: string, handler: (payload: unknown) => void) {
+        if (!socket.current) {
+            console.warn('Attempting to unsubscribe but no socket connection available');
+            return;
+        }
         socket.current.unsubscribe_to_handlers(type, handler);
     }
+
     return {
         subscribeToHandler,
-        ubsubscribeToHandler,
+        unsubscribeToHandler,
+        socket: socket.current,
+        isConnected: socket.current?.is_connected || false,
     };
 };

@@ -1,6 +1,6 @@
 'use client';
+import WaitingLobbyAvatar from '@/components/waitingRoom/WaitingLobbyAvatar';
 import { useState, useEffect, useCallback } from 'react';
-import WaitingLobbyAvatar from '../Avatars';
 
 interface Position {
     x: number;

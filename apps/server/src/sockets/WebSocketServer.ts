@@ -1,10 +1,9 @@
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { Server } from 'http';
 import Redis from 'ioredis';
 import { parse } from 'cookie';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { CookiePayload, CustomWebSocket, USER_TYPE } from '../types/web-socket-types';
 import HostManager from './HostManager';
 import QuizManager from './QuizManager';
 import RedisCache from '../cache/RedisCache';
@@ -12,8 +11,14 @@ import { URL } from 'url';
 import ParticipantManager from './ParticipantManager';
 import SpectatorManager from './SpectatorManager';
 import redisCacheInstance from '..';
-dotenv.config();
+import {
+    CookiePayload,
+    CustomWebSocket,
+    MESSAGE_TYPES,
+    USER_TYPE,
+} from '../types/web-socket-types';
 
+dotenv.config();
 const REDIS_URL = process.env.REDIS_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -37,8 +42,76 @@ export default class WebsocketServer {
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
         this.redis_cache = redisCacheInstance;
+        this.initialize_redis_subscribers();
         this.initialize_managers();
         this.initialize();
+    }
+
+    private initialize_redis_subscribers() {
+        this.subscriber.on('message', (channel: string, message: string) => {
+            try {
+                const parsed_subscriber_message = JSON.parse(message);
+                this.handle_incoming_message_from_subscriber(channel, parsed_subscriber_message);
+            } catch (err) {
+                console.error('Error while handling redis message', err);
+            }
+        });
+    }
+
+    private handle_incoming_message_from_subscriber(channel: string, message: any) {
+        const game_session_id = this.extract_session_id_from_channel(channel);
+        if (!game_session_id) {
+            console.error('Invalid game session id in channel', channel);
+            return;
+        }
+
+        switch (message.type) {
+            case MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.PARTICIPANT,
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+        }
+    }
+
+    private broadcast_to_session(game_session_id: string, message: any, messages_to: USER_TYPE[]) {
+        if (messages_to.includes(USER_TYPE.HOST)) {
+            const host_socket_id = this.session_host_mapping.get(game_session_id);
+            if (host_socket_id) {
+                const host_socket = this.socket_mapping.get(host_socket_id);
+
+                if (host_socket && host_socket.readyState === WebSocket.OPEN) {
+                    host_socket.send(JSON.stringify(message));
+                }
+            }
+        }
+
+        if (messages_to.includes(USER_TYPE.PARTICIPANT)) {
+            const participant_socket_ids = this.session_participants_mapping.get(game_session_id);
+            participant_socket_ids?.forEach((socket_id: string) => {
+                const participant_socket = this.socket_mapping.get(socket_id);
+                if (participant_socket && participant_socket.readyState === WebSocket.OPEN) {
+                    participant_socket.send(JSON.stringify(message));
+                }
+            });
+        }
+
+        if (messages_to.includes(USER_TYPE.SPECTATOR)) {
+            const spectator_socket_ids = this.session_spectators_mapping.get(game_session_id);
+            spectator_socket_ids?.forEach((socket_id: string) => {
+                const spectator_socket = this.socket_mapping.get(socket_id);
+                if (spectator_socket && spectator_socket.readyState === WebSocket.OPEN) {
+                    spectator_socket.send(JSON.stringify(message));
+                }
+            });
+        }
+    }
+
+    private extract_session_id_from_channel(channel: string): string | null {
+        const match = channel.match(/game_session:(.+)/);
+        return match ? match[1]! : null;
     }
 
     private initialize_managers() {
@@ -88,7 +161,6 @@ export default class WebsocketServer {
             ws.close();
             return false;
         }
-
         const parsedCookies = parse(cookies);
         const token = parsedCookies['token'];
         if (!token) {
@@ -106,16 +178,17 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-
                 const payload = decoded as CookiePayload;
-
-                const redis_key: string = `game_session_id:${payload.gameSessionId}`;
+                const redis_key: string = `game_session:${payload.gameSessionId}`;
                 this.subscriber.subscribe(redis_key);
+
                 if (payload.quizId !== quizId) {
                     console.error('Token validation failed');
                     ws.close();
                     return;
                 }
+                console.log('validated token');
+
                 switch (payload.role) {
                     case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, payload as CookiePayload);

@@ -1,5 +1,5 @@
 import Redis from 'ioredis';
-import { CookiePayload, CustomWebSocket, SPECTATOR_MESSAGE_TYPES } from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket, MESSAGE_TYPES } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
@@ -96,7 +96,7 @@ export default class SpectatorManager {
     private handle_spectator_message(ws: CustomWebSocket, message: any) {
         const { type } = message;
         switch (type) {
-            case SPECTATOR_MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION:
+            case MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION:
                 // joint the spectator
                 break;
             default:

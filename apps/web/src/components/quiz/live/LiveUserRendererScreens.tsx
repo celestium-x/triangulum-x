@@ -5,12 +5,14 @@ import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import CanvasAccents from '@/components/utility/CanvasAccents';
 import ParticipantMainScreen from './participant/ParticipantMainScreen';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
     const { quiz } = useLiveQuizStore();
     const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
-
+    console.log('renderer ');
+    useWebSocket();
     function renderCurrentUserScreen() {
         switch (currentUserType) {
             case 'HOST':

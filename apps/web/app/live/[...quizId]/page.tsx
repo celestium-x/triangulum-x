@@ -26,8 +26,6 @@ export default function New({ params }: NewProps) {
     const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
 
-    useWebSocket();
-
     useEffect(() => {
         async function getLiveData() {
             try {

@@ -15,16 +15,15 @@ export interface CookiePayload {
     exp: number;
 }
 
-export enum HOST_MESSAGE_TYPES {
+export interface PubSubMessageTypes {
+    type: MESSAGE_TYPES;
+    payload: any;
+}
+
+export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
-}
-
-export enum PARTICIPANT_MESSAGE_TYPES {
-    PARTICIPANT_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
-}
-
-export enum SPECTATOR_MESSAGE_TYPES {
-    SPECTATOR_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+    PARTICIPANT_JOIN_GAME_SESSION = 'PARTICIPANT_JOIN_GAME_SESSION',
+    SPECTATOR_JOIN_GAME_SESSION = 'SPECTATOR_JOIN_GAME_SESSION',
 }
 
 export enum USER_TYPE {
