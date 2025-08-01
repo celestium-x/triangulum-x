@@ -98,14 +98,14 @@ export default class RedisCache {
     public async set_spectator(
         game_session_id: string,
         spectator_id: string,
-        spectator: Partial<Spectator>
+        spectator: Partial<Spectator>,
     ) {
         try {
             const key = this.get_spectator_key(game_session_id);
             await this.redis_cache.hset(key, spectator_id, JSON.stringify(spectator));
             await this.redis_cache.expire(key, 60 * 60 * 24);
         } catch (error) {
-            console.error("Error while setting spectator in cache: ", error);
+            console.error('Error while setting spectator in cache: ', error);
         }
     }
 
@@ -120,14 +120,14 @@ export default class RedisCache {
         }
     }
 
-    public async delete_spectator(game_session_id: string, spectator_id: string) {
-        const key = this.get_spectator_key(game_session_id);
-        try {
-            await this.redis_cache.del(key);
-        } catch (error) {
-            console.error('Error in delete-spectator: ', error);
-        }
-    }
+    // public async delete_spectator(game_session_id: string, spectator_id: string) {
+    //     const key = this.get_spectator_key(game_session_id);
+    //     try {
+    //         await this.redis_cache.del(key);
+    //     } catch (error) {
+    //         console.error('Error in delete-spectator: ', error);
+    //     }
+    // }
 
     public get_spectator_key(game_session_id: string) {
         return `game_session:${game_session_id}:spectators`;

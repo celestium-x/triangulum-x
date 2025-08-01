@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { PiDetectiveFill } from "react-icons/pi";
+import { Button } from '@/components/ui/button';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { PiDetectiveFill } from 'react-icons/pi';
 
 interface SpectatorButtonProps {
     onClick: () => void;

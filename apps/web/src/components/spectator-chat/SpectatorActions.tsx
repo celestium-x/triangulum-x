@@ -1,48 +1,53 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { Message, User } from "./specTypes";
-import { AnimatePresence } from "framer-motion";
-import SpectatorChatToggleButton from "./chat/SpectatorChatToggleButton";
-import SpectatorsDisplay from "./chat/SpectatorsDisplay";
-import SpectatorChatHeader from "./chat/SpectatorChatHeader";
-import SpectatorMessageItem from "./chat/SpectatorMessageItem";
-import SpectatorChatInput from "./chat/SpectatorChatInput";
-import SpectatorButton from "./chat/SpectatorButton";
-import UtilityCard from "../utility/UtilityCard";
-import { FaGlobeAmericas } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from 'react';
+import { Message, User } from './specTypes';
+import { AnimatePresence } from 'framer-motion';
+import SpectatorChatToggleButton from './chat/SpectatorChatToggleButton';
+import SpectatorsDisplay from './chat/SpectatorsDisplay';
+import SpectatorChatHeader from './chat/SpectatorChatHeader';
+import SpectatorMessageItem from './chat/SpectatorMessageItem';
+import SpectatorChatInput from './chat/SpectatorChatInput';
+import SpectatorButton from './chat/SpectatorButton';
+import UtilityCard from '../utility/UtilityCard';
+import { FaGlobeAmericas } from 'react-icons/fa';
 
 const roomUsers: User[] = [
     {
-        id: "global",
-        name: "Global Chat",
+        id: 'global',
+        name: 'Global Chat',
         isOnline: true,
-        svg: <FaGlobeAmericas className="text-neutral-200" style={{ width: '28px', height: '28px' }} />,
+        svg: (
+            <FaGlobeAmericas
+                className="text-neutral-200"
+                style={{ width: '28px', height: '28px' }}
+            />
+        ),
     },
     {
-        id: "2",
-        name: "Alex",
+        id: '2',
+        name: 'Alex',
         isOnline: true,
-        avatar: "https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg",
+        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg',
     },
     {
-        id: "3",
-        name: "Maya",
+        id: '3',
+        name: 'Maya',
         isOnline: true,
-        avatar: "https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg",
+        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg',
     },
     {
-        id: "4",
-        name: "Raj",
+        id: '4',
+        name: 'Raj',
         isOnline: true,
-        avatar: "https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg",
+        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg',
     },
     {
-        id: "5",
-        name: "Lena",
+        id: '5',
+        name: 'Lena',
         isOnline: true,
-        avatar: "https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg",
-    }
+        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg',
+    },
 ];
 
 export default function SpectatorActions() {
@@ -56,14 +61,14 @@ export default function SpectatorActions() {
     const newMessage = messages[selectedUser.id];
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [newMessage]);
 
     const handleSendMessage = (text: string) => {
         const newMessage: Message = {
             id: Date.now().toString(),
             text,
-            sender: "user",
+            sender: 'user',
             timestamp: new Date(),
         };
 
@@ -72,35 +77,37 @@ export default function SpectatorActions() {
             [selectedUser.id]: [...(prev[selectedUser.id] || []), newMessage],
         }));
 
-        setTimeout(() => {
-            const responses = [
-                "Kaise ho g!",
-                "Mai bhi badiya!",
-                "Kuch nahi timepass",
-                "This chat is so fun!",
-                "Keep the good vibes coming!",
-            ];
+        setTimeout(
+            () => {
+                const responses = [
+                    'Kaise ho g!',
+                    'Mai bhi badiya!',
+                    'Kuch nahi timepass',
+                    'This chat is so fun!',
+                    'Keep the good vibes coming!',
+                ];
 
-            const response: Message = {
-                id: (Date.now() + 1).toString(),
-                text: responses[Math.floor(Math.random() * responses.length)],
-                sender: "other",
-                timestamp: new Date(),
-            };
+                const response: Message = {
+                    id: (Date.now() + 1).toString(),
+                    text: responses[Math.floor(Math.random() * responses.length)],
+                    sender: 'other',
+                    timestamp: new Date(),
+                };
 
-            setMessages((prev) => ({
-                ...prev,
-                [selectedUser.id]: [...(prev[selectedUser.id] || []), response],
-            }));
-        }, 1000 + Math.random() * 2000);
+                setMessages((prev) => ({
+                    ...prev,
+                    [selectedUser.id]: [...(prev[selectedUser.id] || []), response],
+                }));
+            },
+            1000 + Math.random() * 2000,
+        );
     };
 
     return (
         <>
             <div
-                className={`fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2 ${isExpanded ? openPeopleDropdown || openChatDropdown ? openPeopleDropdown ? "right-4" : "right-150" : "right-4" : "right-4" }`}
+                className={`fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2 ${isExpanded ? (openPeopleDropdown || openChatDropdown ? (openPeopleDropdown ? 'right-4' : 'right-150') : 'right-4') : 'right-4'}`}
             >
-
                 <SpectatorButton
                     onClick={() => {
                         setOpenChatDropdown(false);
@@ -131,10 +138,12 @@ export default function SpectatorActions() {
                 {openChatDropdown && (
                     <UtilityCard
                         key="chatbox"
-                        className={`fixed p-0 z-40 rounded-3xl border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 transition-all duration-300 ease-in-out ${isExpanded ? "right-0 rounded-r-none w-[36rem] h-full" : "bottom-22 right-15 w-md h-[45rem] rounded-br-none"
-                            }`}
+                        className={`fixed p-0 z-40 rounded-3xl border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 transition-all duration-300 ease-in-out ${
+                            isExpanded
+                                ? 'right-0 rounded-r-none w-[36rem] h-full'
+                                : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none'
+                        }`}
                     >
-
                         <div className="relative h-full flex flex-col pb-1">
                             <SpectatorChatHeader
                                 user={selectedUser}
@@ -146,7 +155,7 @@ export default function SpectatorActions() {
                                         <SpectatorMessageItem
                                             key={message.id}
                                             message={message}
-                                            isUser={message.sender === "user"}
+                                            isUser={message.sender === 'user'}
                                             avatarUrl={selectedUser.avatar}
                                         />
                                     ))}

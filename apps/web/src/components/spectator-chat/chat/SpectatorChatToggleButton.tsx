@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { JSX } from "react";
-import { RiMessage3Fill } from "react-icons/ri";
+import { Button } from '@/components/ui/button';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { JSX } from 'react';
+import { RiMessage3Fill } from 'react-icons/ri';
 
 interface ChatToggleButtonProps {
     onClick: () => void;

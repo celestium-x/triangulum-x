@@ -1,4 +1,3 @@
-
 export interface Message {
     id: string;
     text: string | undefined;
@@ -11,5 +10,5 @@ export interface User {
     name: string;
     isOnline: boolean;
     avatar?: string | React.SVGElementType;
-    svg?: React.ReactElement
+    svg?: React.ReactElement;
 }

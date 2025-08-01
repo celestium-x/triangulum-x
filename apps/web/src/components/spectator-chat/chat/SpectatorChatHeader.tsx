@@ -10,7 +10,10 @@ interface ChatHeaderProps {
     onToggleExpand: () => void;
 }
 
-export default function SpectatorChatHeader({ user, onToggleExpand }: ChatHeaderProps): JSX.Element {
+export default function SpectatorChatHeader({
+    user,
+    onToggleExpand,
+}: ChatHeaderProps): JSX.Element {
     return (
         <div className="relative p-6 border-b">
             <div className="flex items-center justify-between">

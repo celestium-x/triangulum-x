@@ -8,11 +8,7 @@ interface MascotAvatarProps {
     isOnline?: boolean;
 }
 
-export default function SpectatorHeaderMascot({
-    name,
-    avatar,
-    svg,
-}: MascotAvatarProps) {
+export default function SpectatorHeaderMascot({ name, avatar, svg }: MascotAvatarProps) {
     const [isAnimating, setIsAnimating] = useState(false);
 
     return (

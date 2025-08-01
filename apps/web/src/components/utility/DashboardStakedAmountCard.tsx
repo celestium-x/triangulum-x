@@ -17,7 +17,7 @@ export default function DashboardStakedAmountCard() {
 
     async function joinQuizHandler(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        
+
         const quizId = await userQuizAction.joinQuiz(code);
         if (!quizId) return;
         router.push(`/live/${quizId}`);
