@@ -1,7 +1,6 @@
 import SessionSetter from '@/components/utility/SessionSetter';
 import { authOption } from 'app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth';
-
 import React from 'react';
 
 interface LayoutProps {
