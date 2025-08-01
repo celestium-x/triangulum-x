@@ -1,9 +1,10 @@
 import React, { JSX } from 'react';
 import { User } from '../specTypes';
 import SpectatorHeaderMascot from './SpectatorHeaderMascot';
-import SpectatorChunkyButton from './SpectatorChunkyButton';
 import { BiExpandAlt } from 'react-icons/bi';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ChatHeaderProps {
     user: User;
@@ -24,17 +25,23 @@ export default function SpectatorChatHeader({
                         avatar={user.avatar}
                         svg={user.svg}
                     />
-                    <div className="ml-2 text-[18px] tracking-wide">{user.name}</div>
+                    <div
+                        className={cn(
+                            'ml-2 text-[18px] tracking-wide',
+                            'text-dark-base dark:text-light-base'
+                        )}
+                    >{user.name}</div>
                 </div>
                 <ToolTipComponent content="Click to expand">
                     <div>
-                        <SpectatorChunkyButton
-                            className="bg-[#e7ab1ed0] text-white"
-                            size="md"
+                        <Button
+                            className="bg-[#e7ab1e] hover:bg-[#e7ab1e]/90 hover:dark:bg-[#e7ab1e]/90 text-dark-base dark:text-dark-base cursor-pointer"
+                            variant={"ghost"}
                             onClick={onToggleExpand}
                         >
                             <BiExpandAlt className="dark:text-neutral-900" strokeWidth={0.8} />
-                        </SpectatorChunkyButton>
+
+                        </Button>
                     </div>
                 </ToolTipComponent>
             </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
+import { cn } from '@/lib/utils';
 
 interface SpeechBubbleProps {
     children: React.ReactNode;
@@ -37,7 +38,7 @@ export default function SpectatorSpeechBubble({
                             isUser
                                 ? senderAvatar
                                 : (avatarUrl ??
-                                  'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg')
+                                    'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg')
                         }
                         alt="Avatar"
                         width={32}
@@ -47,12 +48,12 @@ export default function SpectatorSpeechBubble({
                 </div>
 
                 <div
-                    className={`
-                        max-w-xs px-5 py-3 rounded-2xl
-                        ${isUser ? ' dark:bg-[#e7ab1ed0] text-white' : 'dark:bg-neutral-800 text-white'}
-                        shadow-sm
-                        break-words
-                    `}
+                    className={cn(
+                        `max-w-xs px-5 py-3 rounded-2xl`,
+                        isUser ? ' bg-blue-600 dark:bg-blue-600 text-light-base dark:text-light-base ' : 'dark:bg-neutral-800 text-dark-base dark:text-light-base',
+                        `shadow-sm`,
+                        `break-words select-text text-sm`,
+                    )}
                 >
                     {children}
                 </div>
@@ -61,7 +62,7 @@ export default function SpectatorSpeechBubble({
             {formattedTime && (
                 <div
                     className={`
-                        text-xs text-neutral-500 font-medium px-1
+                        text-[10px] text-neutral-500 font-medium px-1
                         ${isUser ? 'pr-12 text-left' : 'pl-12 text-right'}
                     `}
                 >

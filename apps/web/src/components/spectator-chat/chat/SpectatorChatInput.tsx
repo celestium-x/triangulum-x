@@ -1,22 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Smile } from 'lucide-react';
 import { gsap } from 'gsap';
-import SpectatorChunkyButton from './SpectatorChunkyButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+import UtilityCard from '@/components/utility/UtilityCard';
 
 interface ChatInputProps {
     onSendMessage: (text: string) => void;
 }
 
 export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
-    const [message, setMessage] = useState('');
-    const [isEmojiVisible, setIsEmojiVisible] = useState(false);
+    const [message, setMessage] = useState<string>('');
+    const [isEmojiVisible, setIsEmojiVisible] = useState<boolean>(false);
     const quickEmojis = ['👋', '😄', '❤️', '🎉', '🔥', '👍'];
 
     const inputRef = useRef<HTMLInputElement>(null);
-    const emojiPanelRef = useRef<HTMLDivElement>(null);
-    const emojiButtonRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const emojiItemsRef = useRef<HTMLButtonElement[]>([]);
 
@@ -31,7 +30,6 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
 
         if (inputRef.current) {
             gsap.to(inputRef.current, {
-                boxShadow: '0 6px 0 0 rgba(0,0,0,0.2), 0 0 0 0 rgba(245,157,42,0.3)',
                 duration: 2,
                 repeat: -1,
                 yoyo: true,
@@ -39,56 +37,6 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
             });
         }
     }, []);
-
-    useEffect(() => {
-        if (emojiPanelRef.current) {
-            if (isEmojiVisible) {
-                gsap.set(emojiPanelRef.current, { display: 'flex' });
-                gsap.fromTo(
-                    emojiPanelRef.current,
-                    {
-                        opacity: 0,
-                        y: 10,
-                        scale: 0.9,
-                        rotationX: -15,
-                    },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        rotationX: 0,
-                        duration: 0.3,
-                        ease: 'back.out(1.7)',
-                    },
-                );
-
-                gsap.fromTo(
-                    emojiItemsRef.current,
-                    { scale: 0, rotation: 180 },
-                    {
-                        scale: 1,
-                        rotation: 0,
-                        duration: 0.4,
-                        stagger: 0.05,
-                        ease: 'back.out(2)',
-                    },
-                );
-            } else {
-                gsap.to(emojiPanelRef.current, {
-                    opacity: 0,
-                    y: 10,
-                    scale: 0.9,
-                    duration: 0.2,
-                    ease: 'power2.in',
-                    onComplete: () => {
-                        if (emojiPanelRef.current) {
-                            gsap.set(emojiPanelRef.current, { display: 'none' });
-                        }
-                    },
-                });
-            }
-        }
-    }, [isEmojiVisible]);
 
     const handleSend = () => {
         if (message.trim()) {
@@ -127,7 +75,6 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
     const handleInputFocus = () => {
         if (inputRef.current) {
             gsap.to(inputRef.current, {
-                boxShadow: '0 8px 0 0 rgba(0,0,0,0.2), 0 0 0 3px rgba(245,157,42,0.5)',
                 duration: 0.3,
                 ease: 'power2.out',
             });
@@ -137,35 +84,10 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
     const handleInputBlur = () => {
         if (inputRef.current) {
             gsap.to(inputRef.current, {
-                boxShadow: '0 6px 0 0 rgba(0,0,0,0.2)',
                 duration: 0.3,
                 ease: 'power2.out',
             });
         }
-    };
-
-    const handleEmojiHover = () => {
-        if (emojiButtonRef.current) {
-            gsap.to(emojiButtonRef.current, {
-                rotation: 5,
-                scale: 1.1,
-                duration: 0.3,
-                ease: 'back.out(2)',
-            });
-        }
-        setIsEmojiVisible(true);
-    };
-
-    const handleEmojiLeave = () => {
-        if (emojiButtonRef.current) {
-            gsap.to(emojiButtonRef.current, {
-                rotation: 0,
-                scale: 1,
-                duration: 0.3,
-                ease: 'back.out(1.7)',
-            });
-        }
-        setIsEmojiVisible(false);
     };
 
     const handleEmojiClick = (emoji: string) => {
@@ -205,45 +127,50 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}
                         placeholder="Type here"
-                        className="w-full px-6 py-6 bg-neutral-200 rounded-3xl
-                         font-normal text-neutral-200 placeholder:text-neutral-400 !text-lg
-                         focus:outline-none transition-all duration-300 placeholder:text-base"
+                        className={cn(
+                            'w-full px-6 py-6 bg-neutral-200 rounded-3xl',
+                            'font-normal text-dark-base dark:text-light-base placeholder:text-neutral-400 !text-sm',
+                            'focus:outline-none transition-all duration-300 placeholder:text-sm',
+                            'focus-visible:ring-[1px]'
+                        )}
                     />
                 </div>
 
                 <div
                     className="relative"
-                    onMouseEnter={handleEmojiHover}
-                    onMouseLeave={handleEmojiLeave}
+                    onClick={() => setIsEmojiVisible(prev => !prev)}
                 >
-                    <div ref={emojiButtonRef}>
-                        <SpectatorChunkyButton
-                            className="border-none shadow-none dark:bg-neutral-800 dark:text-neutral-400"
-                            size="md"
-                        >
-                            <Smile className="w-6 h-6" />
-                        </SpectatorChunkyButton>
-                    </div>
-
-                    <div
-                        ref={emojiPanelRef}
-                        className="absolute bottom-14 mb-1 -right-14 -translate-x-1/2 hidden space-x-2
-                        dark:bg-neutral-700 border rounded-xl px-4 py-2 z-10"
-                        style={{ display: 'none' }}
+                    <Button
+                        className={cn(
+                            '!py-[22px] rounded-xl shadow-none aspect-square cursor-pointer transition-colors',
+                            'bg-neutral-200 hover:bg-neutral-400/30 dark:bg-neutral-800 text-neutral-500 hover:text-neutral-500 dark:text-neutral-400',
+                            'border border-neutral-300 dark:border-neutral-700'
+                        )}
+                        variant={"ghost"}
                     >
-                        {quickEmojis.map((emoji) => (
-                            <Button
-                                variant={'ghost'}
-                                key={emoji}
-                                ref={addToEmojiRefs}
-                                onClick={() => handleEmojiClick(emoji)}
-                                className="text-lg hover:scale-110 transition-transform cursor-pointer 
-                                          rounded-full p-1"
-                            >
-                                {emoji}
-                            </Button>
-                        ))}
-                    </div>
+                        <Smile className="size-7 stroke-1 " />
+                    </Button>
+
+                    {isEmojiVisible && (
+                        <UtilityCard
+                            className={cn(
+                                'absolute bottom-14 mb-1 right-1 flex space-x-2 dark:bg-neutral-700 border rounded-xl px-4 py-2 z-10',
+                                'shadow-md'
+                            )}
+                        >
+                            {quickEmojis.map((emoji) => (
+                                <Button
+                                    variant={'ghost'}
+                                    key={emoji}
+                                    ref={addToEmojiRefs}
+                                    onClick={() => handleEmojiClick(emoji)}
+                                    className="text-lg hover:scale-105 transition-transform cursor-pointer rounded-full p-1"
+                                >
+                                    {emoji}
+                                </Button>
+                            ))}
+                        </UtilityCard>
+                    )}
                 </div>
             </div>
         </div>

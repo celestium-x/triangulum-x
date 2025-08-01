@@ -3,7 +3,7 @@ import SpectatorActions from './SpectatorActions';
 
 export default function SpectatorChatMain() {
     return (
-        <div className="h-full w-full flex">
+        <div className="h-full w-full flex select-none">
             <SpectatorChatLeft />
             <SpectatorActions />
         </div>
