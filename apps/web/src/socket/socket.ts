@@ -28,11 +28,9 @@ export default class WebSocketClient {
             return;
         }
 
-        console.log('Initializing WebSocket connection to:', this.url);
         this.ws = new WebSocket(this.url);
 
         this.ws.onopen = () => {
-            console.log('WebSocket connection opened successfully');
             this.is_connected = true;
             this.reconnect_attempts = 0;
             this.reconnect_delay = 1000;
@@ -42,7 +40,6 @@ export default class WebSocketClient {
         this.ws.onmessage = (event: MessageEvent<string>) => {
             try {
                 const parsed_data: ParsedMessage = JSON.parse(event.data);
-                console.log('Incoming WebSocket message:', parsed_data);
                 this.handle_incoming_message(parsed_data);
             } catch (error) {
                 console.error('Failed to parse incoming WebSocket message:', event.data, error);
@@ -51,7 +48,6 @@ export default class WebSocketClient {
 
         this.ws.onclose = (event: CloseEvent) => {
             this.is_connected = false;
-            console.log('WebSocket connection closed. Code:', event.code, 'Reason:', event.reason);
 
             if (this.reconnect_timeout) {
                 clearTimeout(this.reconnect_timeout);
@@ -87,7 +83,6 @@ export default class WebSocketClient {
             this.handlers.set(type, []);
         }
         this.handlers.get(type)!.push(handler);
-        console.log(`Subscribed to handler for type: ${type}`);
     }
 
     public unsubscribe_to_handlers(type: string, handler: MessageHandler) {
@@ -97,7 +92,6 @@ export default class WebSocketClient {
         const index = handler_list.indexOf(handler);
         if (index !== -1) {
             handler_list.splice(index, 1);
-            console.log(`Unsubscribed from handler for type: ${type}`);
         }
 
         if (handler_list.length === 0) {
@@ -109,24 +103,17 @@ export default class WebSocketClient {
         if (this.is_connected && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify(message));
         } else {
-            console.log('WebSocket not ready, queuing message');
             this.message_queue.push(message);
         }
     }
 
     private attempt_reconnect() {
         if (this.is_manually_closed) return;
-
         this.reconnect_attempts++;
-        console.log(
-            `Attempting reconnection ${this.reconnect_attempts}/${this.max_reconnect_attempts} in ${this.reconnect_delay}ms`,
-        );
-
         this.reconnect_timeout = setTimeout(() => {
             this.initialize_connection();
         }, this.reconnect_delay);
 
-        // Exp
         this.reconnect_delay = Math.min(this.reconnect_delay * 2, 30000);
     }
 
@@ -140,7 +127,6 @@ export default class WebSocketClient {
     }
 
     public close(code: number = 1000, reason: string = 'Client disconnect') {
-        console.log('Manually closing WebSocket connection');
         this.is_manually_closed = true;
 
         if (this.reconnect_timeout) {
@@ -156,9 +142,7 @@ export default class WebSocketClient {
         }
 
         this.is_connected = false;
-
         this.handlers.clear();
-
         this.message_queue = [];
     }
 }

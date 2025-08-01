@@ -1,6 +1,5 @@
 'use client';
 import LiveUserRendererScreens from '@/components/quiz/live/LiveUserRendererScreens';
-import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
@@ -64,6 +63,7 @@ export default function New({ params }: NewProps) {
         updateGameSession,
         updateQuiz,
         setCurrentUserType,
+        setParticipants,
         setHostData,
         setParticipantData,
         setSpectatorData,

@@ -1,4 +1,4 @@
-import { cleanWebSocketClient, getWebSocketClient, getCurrentQuizId } from '@/lib/singleton-socket';
+import { cleanWebSocketClient, getWebSocketClient } from '@/lib/singleton-socket';
 import WebSocketClient from '@/socket/socket';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
@@ -17,7 +17,6 @@ export const useWebSocket = () => {
         }
 
         if (lastQuizIdRef.current === quizId) {
-            console.log('new client is creating with quiz id - ', quizId);
             socket.current = getWebSocketClient(quizId);
             return;
         }
@@ -27,7 +26,6 @@ export const useWebSocket = () => {
 
         return () => {
             if (lastQuizIdRef.current === quizId) {
-                console.log('new client is closing with quiz id - ', quizId);
                 cleanWebSocketClient();
                 socket.current = null;
                 lastQuizIdRef.current = null;

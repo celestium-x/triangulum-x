@@ -1,10 +1,8 @@
 'use client';
 import WaitingLobbyAvatars from '../common/WaitingLobbyAvatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-
 import Image from 'next/image';
 import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
-import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
 

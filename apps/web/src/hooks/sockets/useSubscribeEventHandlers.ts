@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { useWebSocket } from "./useWebSocket";
 import { MESSAGE_TYPES } from "@/types/web-socket-types";
 import { useLiveParticipantsStore } from "@/store/live-quiz/useLiveParticipantsStore";
+import { ParticipantType } from "@/types/prisma-types";
 
 export const useSubscribeEventHandlers = () => {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
     const { upsertParticipant } = useLiveParticipantsStore();
-    function handleIncomingMessage(payload: any) {
-        console.log('Incoming message from web socket at handler is ', payload);
-        upsertParticipant(payload);
+    function handleIncomingMessage(payload: unknown) {
+        upsertParticipant(payload as ParticipantType);
     }
 
     useEffect(() => {
