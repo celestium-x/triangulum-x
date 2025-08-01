@@ -4,6 +4,15 @@
 @custom-variant dark (&:is(.dark *));
 @import './theme.css';
 
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
