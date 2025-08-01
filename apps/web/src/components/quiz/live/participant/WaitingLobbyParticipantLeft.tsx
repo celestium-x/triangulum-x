@@ -2,34 +2,14 @@ import WaitingLobbyAvatars from '../common/WaitingLobbyAvatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
 import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
-
-export const participants = [
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-5.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-6.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-7.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-8.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-10.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-5.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-6.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-7.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-8.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
-];
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
 export default function WaitingLobbyParticipantLeft() {
     const { quiz } = useLiveQuizStore();
+    const { participants } = useLiveParticipantsStore()
     return (
         <div className="w-full max-h-full flex flex-col relative">
-            <WaitingLobbyAvatars />
+            <WaitingLobbyAvatars participants={participants} />
             <h1 className="absolute left-1/2 -translate-x-1/2 top-20 text-3xl font-medium w-full text-center">
                 {quiz?.title}
             </h1>
@@ -43,13 +23,15 @@ export default function WaitingLobbyParticipantLeft() {
                             key={idx}
                             className="w-8 h-8 rounded-full border-2 border-white overflow-hidden"
                         >
-                            <Image
-                                src={participant.avatar}
-                                alt={'rishi'}
-                                width={32}
-                                height={32}
-                                className="object-cover w-full h-full"
-                            />
+                            {participant.avatar && (
+                                <Image
+                                    src={participant.avatar}
+                                    alt={'rishi'}
+                                    width={32}
+                                    height={32}
+                                    className="object-cover w-full h-full"
+                                />
+                            )}
                         </div>
                     ))}
                     {participants.length > 3 && (

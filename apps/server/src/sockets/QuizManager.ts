@@ -1,7 +1,7 @@
 import Redis from 'ioredis';
 import RedisCache from '../cache/RedisCache';
 import prisma, { Participant } from '@repo/db/client';
-import { CookiePayload } from '../types/web-socket-types';
+import { CookiePayload, MESSAGE_TYPES, PubSubMessageTypes } from '../types/web-socket-types';
 
 export interface QuizManagerDependencies {
     publisher: Redis;
@@ -38,14 +38,24 @@ export default class QuizManager {
         );
 
         const participant: Partial<Participant> = {
+            id: particicpant_cache.id,
             avatar: particicpant_cache.avatar,
             nickname: particicpant_cache.nickname,
         };
+        const pub_sub_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
+            payload: participant,
+        };
+        this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
+    }
 
-        this.publisher.publish(
-            this.get_redis_key(payload.gameSessionId),
-            JSON.stringify(participant),
-        );
+    private publish_event_to_redis(game_session_id: string, event: PubSubMessageTypes) {
+        try {
+            const key = this.get_redis_key(game_session_id);
+            this.publisher.publish(key, JSON.stringify(event));
+        } catch (err) {
+            console.error('Error while publishing event to redis', err);
+        }
     }
 
     public async onSpectatorConnect(payload: CookiePayload) {

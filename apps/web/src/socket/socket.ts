@@ -7,7 +7,7 @@ export type ParsedMessage = {
 
 export default class WebSocketClient {
     private ws!: WebSocket;
-    private is_connected: boolean = false;
+    public is_connected: boolean = false;
     private url: string;
     private reconnect_attempts = 0;
     private max_reconnect_attempts = 5;
@@ -15,17 +15,25 @@ export default class WebSocketClient {
     private reconnect_delay: number = 1000;
     private message_queue: MessagePayload[] = [];
     private handlers: Map<string, MessageHandler[]> = new Map();
+    private is_manually_closed: boolean = false;
 
     constructor(url: string) {
         this.url = url;
+        this.is_manually_closed = false;
         this.initialize_connection();
     }
 
     private initialize_connection() {
+        if (this.is_manually_closed) {
+            return;
+        }
+
         this.ws = new WebSocket(this.url);
+
         this.ws.onopen = () => {
             this.is_connected = true;
             this.reconnect_attempts = 0;
+            this.reconnect_delay = 1000;
             this.flush_message_queue();
         };
 
@@ -33,8 +41,8 @@ export default class WebSocketClient {
             try {
                 const parsed_data: ParsedMessage = JSON.parse(event.data);
                 this.handle_incoming_message(parsed_data);
-            } catch {
-                console.error('Failed to parse incoming WebSocket message:', event.data);
+            } catch (error) {
+                console.error('Failed to parse incoming WebSocket message:', event.data, error);
             }
         };
 
@@ -46,17 +54,28 @@ export default class WebSocketClient {
                 this.reconnect_timeout = null;
             }
 
-            if (event.code !== 1000 && this.reconnect_attempts < this.max_reconnect_attempts) {
+            if (
+                !this.is_manually_closed &&
+                event.code !== 1000 &&
+                this.reconnect_attempts < this.max_reconnect_attempts
+            ) {
                 this.attempt_reconnect();
             } else if (this.reconnect_attempts >= this.max_reconnect_attempts) {
                 console.error('Max reconnection attempts reached');
             }
         };
+
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
     }
 
     private handle_incoming_message(parsed_data: ParsedMessage) {
         const { type, payload } = parsed_data;
-        this.handlers.get(type)?.forEach((handler) => handler(payload));
+        const handlers = this.handlers.get(type);
+        if (handlers) {
+            handlers.forEach((handler) => handler(payload));
+        }
     }
 
     public subscribe_to_handlers(type: string, handler: MessageHandler) {
@@ -77,8 +96,6 @@ export default class WebSocketClient {
 
         if (handler_list.length === 0) {
             this.handlers.delete(type);
-        } else {
-            this.handlers.set(type, handler_list);
         }
     }
 
@@ -91,19 +108,41 @@ export default class WebSocketClient {
     }
 
     private attempt_reconnect() {
+        if (this.is_manually_closed) return;
         this.reconnect_attempts++;
         this.reconnect_timeout = setTimeout(() => {
             this.initialize_connection();
         }, this.reconnect_delay);
+
         this.reconnect_delay = Math.min(this.reconnect_delay * 2, 30000);
     }
 
     private flush_message_queue() {
-        this.message_queue.forEach((message) => this.send_message(message));
-        this.message_queue = [];
+        while (this.message_queue.length > 0) {
+            const message = this.message_queue.shift();
+            if (message) {
+                this.send_message(message);
+            }
+        }
     }
 
     public close(code: number = 1000, reason: string = 'Client disconnect') {
-        this.ws.close(code, reason);
+        this.is_manually_closed = true;
+
+        if (this.reconnect_timeout) {
+            clearTimeout(this.reconnect_timeout);
+            this.reconnect_timeout = null;
+        }
+
+        if (
+            this.ws &&
+            (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)
+        ) {
+            this.ws.close(code, reason);
+        }
+
+        this.is_connected = false;
+        this.handlers.clear();
+        this.message_queue = [];
     }
 }

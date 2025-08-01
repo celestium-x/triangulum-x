@@ -1,35 +1,18 @@
 'use client';
+import WaitingLobbyAvatar from '@/components/waitingRoom/WaitingLobbyAvatar';
+import { ParticipantType } from '@/types/prisma-types';
 import { useState, useEffect, useCallback } from 'react';
-import WaitingLobbyAvatar from '../Avatars';
 
 interface Position {
     x: number;
     y: number;
 }
 
-export const users = [
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-5.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-6.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-7.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-8.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-10.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-5.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-6.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-7.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-8.jpg' },
-    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
-];
+interface WaitingLobbyAvatarsProps {
+    participants: ParticipantType[];
+}
 
-export default function WaitingLobbyAvatars() {
+export default function WaitingLobbyAvatars({ participants = [] }: WaitingLobbyAvatarsProps) {
     const avatarSize = 100;
     const minDistance = avatarSize + 20;
 
@@ -120,20 +103,21 @@ export default function WaitingLobbyAvatars() {
         [minDistance],
     );
 
-    const [positions, setPositions] = useState<Position[]>(() => generatePositions(users.length));
+    const safeParticipants = participants || [];
+    const [positions, setPositions] = useState<Position[]>(() => generatePositions(safeParticipants.length));
 
     useEffect(() => {
-        setPositions(generatePositions(users.length));
-    }, [generatePositions]);
+        setPositions(generatePositions(safeParticipants.length));
+    }, [generatePositions, safeParticipants.length]);
 
     return (
         <div className="w-full  flex-1 max-h-[900px] flex items-center justify-center relative z-[20]">
-            {users.length === 0 && (
+            {safeParticipants.length === 0 && (
                 <div className="text-3xl font-extralight tracking-wider text-wrap">
                     Getting ready to start when the team&apos;s all here!!
                 </div>
             )}
-            {users.slice(0, 20).map((p, index) => {
+            {safeParticipants.slice(0, 20).map((p, index) => {
                 const position = positions[index];
                 if (!position) {
                     return null;
@@ -142,8 +126,8 @@ export default function WaitingLobbyAvatars() {
                 return (
                     <WaitingLobbyAvatar
                         key={index}
-                        avatar={p.avatar}
-                        name={'rishi'}
+                        avatar={p.avatar!}
+                        name={p.nickname}
                         position={position}
                         index={index}
                         size={avatarSize}
