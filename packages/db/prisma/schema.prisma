@@ -132,6 +132,7 @@ model GameSession {
   status               SessionStatus     @default(WAITING)
   hostScreen           HostScreen        @default(LOBBY)
   participantScreen    ParticipantScreen @default(LOBBY)
+  spectatorScreen      SpectatorScreen   @default(LOBBY)
   questionStartedAt    DateTime?
   questionEndsAt       DateTime?
 
@@ -245,6 +246,14 @@ enum SessionStatus {
 }
 
 enum ParticipantScreen {
+  LOBBY
+  COUNTDOWN
+  MOTIVATION
+  QUESTION_READING
+  QUESTION_ACTIVE
+}
+
+enum SpectatorScreen {
   LOBBY
   COUNTDOWN
   MOTIVATION

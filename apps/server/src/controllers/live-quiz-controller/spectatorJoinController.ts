@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
-import { spectatorJoinSchema } from '../../schemas/spectatorJoinSchema';
-import prisma from '@repo/db/client';
-import GenerateUser from '../../class/generateUser';
-import QuizAction from '../../class/quizAction';
-import { USER_TYPE } from '../../types/web-socket-types';
+import { Request, Response } from "express";
+import { spectatorJoinSchema } from "../../schemas/spectatorJoinSchema";
+import prisma from "@repo/db/client";
+import GenerateUser from "../../class/generateUser";
+import QuizAction from "../../class/quizAction";
+import { USER_TYPE } from "../../types/web-socket-types";
+
+
 
 export default async function spectatorJoinController(req: Request, res: Response) {
     const parsedData = spectatorJoinSchema.safeParse(req.body);
@@ -18,14 +20,15 @@ export default async function spectatorJoinController(req: Request, res: Respons
     const code = parsedData.data.code;
 
     try {
+
         const quiz = await prisma.quiz.findUnique({
             where: {
-                spectatorCode: code,
+                spectatorCode: code
             },
             select: {
                 id: true,
-                status: true,
-            },
+                status: true
+            }
         });
 
         if (!quiz) {
@@ -66,19 +69,19 @@ export default async function spectatorJoinController(req: Request, res: Respons
                     quizId: quiz.id,
                     nickname: GenerateUser.getRandomName(),
                     avatar: GenerateUser.getRandomAvatar(),
-                    ipAddress: req.ip || 'unknown',
-                },
+                    ipAddress: req.ip || 'unknown'
+                }
             });
 
             await tx.gameSession.update({
                 where: {
-                    id: gameSession.id,
+                    id: gameSession.id
                 },
                 data: {
                     totalSpectators: {
-                        increment: 1,
-                    },
-                },
+                        increment: 1
+                    }
+                }
             });
 
             return { spectator };
@@ -88,16 +91,18 @@ export default async function spectatorJoinController(req: Request, res: Respons
             result.spectator.id,
             quiz.id,
             gameSession.id,
-            USER_TYPE.SPECTATOR,
+            USER_TYPE.SPECTATOR
         );
 
         try {
+
             res.cookie('token', secureTokenData, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 maxAge: 24 * 60 * 60 * 1000,
             });
+
         } catch (cookieErr) {
             console.error('Cookie setting error:', cookieErr);
             await prisma
@@ -109,7 +114,7 @@ export default async function spectatorJoinController(req: Request, res: Respons
                         where: { id: gameSession.id },
                         data: {
                             totalSpectators: {
-                                decrement: 1,
+                                decrement: 1
                             },
                         },
                     });
@@ -131,6 +136,7 @@ export default async function spectatorJoinController(req: Request, res: Respons
             quizId: quiz.id,
         });
         return;
+
     } catch (error) {
         console.error('Error during spectator join:', error);
         res.status(500).json({
