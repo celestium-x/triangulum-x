@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Message, User } from "./specTypes";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import SpectatorChatToggleButton from "./chat/SpectatorChatToggleButton";
 import SpectatorsDisplay from "./chat/SpectatorsDisplay";
 import SpectatorChatHeader from "./chat/SpectatorChatHeader";
