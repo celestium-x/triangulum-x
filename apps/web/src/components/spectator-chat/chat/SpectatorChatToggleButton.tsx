@@ -14,7 +14,7 @@ export default function SpectatorChatToggleButton({ onClick }: ChatToggleButtonP
         <ToolTipComponent content="Chat with others">
             <Button
                 onClick={onClick}
-                className="fixed bg-transparent hover:bg-transparent bottom-6 right-6 z-50 text-4xl hover:scale-105 transition-transform duration-300"
+                className="bg-transparent hover:bg-transparent text-4xl hover:scale-105 transition-transform duration-300"
             >
                 <RiMessage3Fill
                     className="text-neutral-400"
@@ -22,5 +22,5 @@ export default function SpectatorChatToggleButton({ onClick }: ChatToggleButtonP
                 />
             </Button>
         </ToolTipComponent>
-    )
+    );
 }

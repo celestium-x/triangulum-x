@@ -12,9 +12,9 @@ export default function SpectatorButton({ onClick }: SpectatorButtonProps) {
     return (
         <ToolTipComponent content="People in Room">
             <Button
-                variant={"ghost"}
+                variant="ghost"
                 onClick={onClick}
-                className="fixed bottom-6 right-20 z-50 hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
+                className="hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
             >
                 <PiDetectiveFill
                     className="text-neutral-400"
@@ -22,5 +22,5 @@ export default function SpectatorButton({ onClick }: SpectatorButtonProps) {
                 />
             </Button>
         </ToolTipComponent>
-    )
+    );
 }

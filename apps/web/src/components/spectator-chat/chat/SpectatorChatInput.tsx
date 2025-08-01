@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Smile } from 'lucide-react';
 import { gsap } from 'gsap';
 import SpectatorChunkyButton from './SpectatorChunkyButton';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface ChatInputProps {
     onSendMessage: (text: string) => void;
@@ -198,7 +200,7 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
         <div ref={containerRef} className="px-5 py-3">
             <div className="flex items-center space-x-3">
                 <div className="flex-1">
-                    <input
+                    <Input
                         ref={inputRef}
                         type="text"
                         value={message}
@@ -207,9 +209,9 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                         onFocus={handleInputFocus}
                         onBlur={handleInputBlur}
                         placeholder="Type here"
-                        className="w-full px-6 py-2 font-mono bg-neutral-200 rounded-3xl
-                         font-bold text-gray-800 placeholder-gray-500 text-lg
-                         focus:outline-none transition-all duration-300"
+                        className="w-full px-6 py-6 bg-neutral-200 rounded-3xl
+                         font-normal text-neutral-200 placeholder:text-neutral-400 !text-lg
+                         focus:outline-none transition-all duration-300 placeholder:text-base"
                     />
                 </div>
 
@@ -219,27 +221,28 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                     onMouseLeave={handleEmojiLeave}
                 >
                     <div ref={emojiButtonRef}>
-                        <SpectatorChunkyButton className='border-none shadow-none dark:text-neutral-400' size="md">
+                        <SpectatorChunkyButton className='border-none shadow-none dark:bg-neutral-800 dark:text-neutral-400' size="md">
                             <Smile className="w-6 h-6" />
                         </SpectatorChunkyButton>
                     </div>
 
                     <div
                         ref={emojiPanelRef}
-                        className="absolute bottom-10 mb-2 -right-14 -translate-x-1/2 hidden space-x-2
-                        bg-neutral-200 border border-neutral-300  rounded-xl px-4 py-2 z-10"
+                        className="absolute bottom-14 mb-1 -right-14 -translate-x-1/2 hidden space-x-2
+                        dark:bg-neutral-700 border rounded-xl px-4 py-2 z-10"
                         style={{ display: 'none' }}
                     >
                         {quickEmojis.map((emoji) => (
-                            <button
+                            <Button
+                                variant={"ghost"}
                                 key={emoji}
                                 ref={addToEmojiRefs}
                                 onClick={() => handleEmojiClick(emoji)}
-                                className="text-lg hover:scale-110 transition-transform cursor-pointer
-                                         hover:bg-neutral-300 rounded-full p-1"
+                                className="text-lg hover:scale-110 transition-transform cursor-pointer 
+                                          rounded-full p-1"
                             >
                                 {emoji}
-                            </button>
+                            </Button>
                         ))}
                     </div>
                 </div>

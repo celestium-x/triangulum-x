@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Message, User } from "./specTypes";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import SpectatorChatToggleButton from "./chat/SpectatorChatToggleButton";
 import SpectatorsDisplay from "./chat/SpectatorsDisplay";
 import SpectatorChatHeader from "./chat/SpectatorChatHeader";
@@ -12,16 +12,12 @@ import SpectatorButton from "./chat/SpectatorButton";
 import UtilityCard from "../utility/UtilityCard";
 import { FaGlobeAmericas } from "react-icons/fa";
 
-
 const roomUsers: User[] = [
     {
         id: "global",
         name: "Global Chat",
         isOnline: true,
-        svg: <FaGlobeAmericas
-            className="text-neutral-200"
-            style={{ width: '28px', height: '28px' }}
-        />,
+        svg: <FaGlobeAmericas className="text-neutral-200" style={{ width: '28px', height: '28px' }} />,
     },
     {
         id: "2",
@@ -52,16 +48,15 @@ const roomUsers: User[] = [
 export default function SpectatorActions() {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Record<string, Message[]>>({});
-    const [openChatDropdown, setOpenChatDropdown] = useState<boolean>(false);
-    const [openPeopleDropdown, setOpenPeopleDropdown] = useState<boolean>(false);
+    const [openChatDropdown, setOpenChatDropdown] = useState(false);
+    const [openPeopleDropdown, setOpenPeopleDropdown] = useState(false);
     const [selectedUser, setSelectedUser] = useState<User>(roomUsers[0]!);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     const newMessage = messages[selectedUser.id];
 
     useEffect(() => {
-
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-
     }, [newMessage]);
 
     const handleSendMessage = (text: string) => {
@@ -102,16 +97,23 @@ export default function SpectatorActions() {
 
     return (
         <>
-            <div className="gap-x-5">
-                <SpectatorChatToggleButton onClick={() => {
-                    setOpenPeopleDropdown(false)
-                    setOpenChatDropdown(prev => !prev)
-                }} />
+            <div
+                className={`fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2 ${isExpanded ? openPeopleDropdown || openChatDropdown ? openPeopleDropdown ? "right-4" : "right-150" : "right-4" : "right-4" }`}
+            >
 
-                <SpectatorButton onClick={() => {
-                    setOpenChatDropdown(false)
-                    setOpenPeopleDropdown(prev => !prev)
-                }} />
+                <SpectatorButton
+                    onClick={() => {
+                        setOpenChatDropdown(false);
+                        setOpenPeopleDropdown((prev) => !prev);
+                    }}
+                />
+
+                <SpectatorChatToggleButton
+                    onClick={() => {
+                        setOpenPeopleDropdown(false);
+                        setOpenChatDropdown((prev) => !prev);
+                    }}
+                />
             </div>
 
             {openPeopleDropdown && (
@@ -119,37 +121,40 @@ export default function SpectatorActions() {
                     users={roomUsers}
                     onSelectUser={(user) => {
                         setSelectedUser(user);
-                        setOpenChatDropdown(prev => !prev);
+                        setOpenChatDropdown(true);
                         setOpenPeopleDropdown(false);
                     }}
                 />
             )}
+
             <AnimatePresence>
                 {openChatDropdown && (
                     <UtilityCard
                         key="chatbox"
-                        className="fixed bottom-20 p-0 right-12 w-full max-w-md h-[45rem] z-40 rounded-3xl dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700"
+                        className={`fixed p-0 z-40 rounded-3xl border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 transition-all duration-300 ease-in-out ${isExpanded ? "right-0 rounded-r-none w-[36rem] h-full" : "bottom-22 right-15 w-md h-[45rem] rounded-br-none"
+                            }`}
                     >
 
-                        <div className="relative h-full flex flex-col">
-                            <SpectatorChatHeader user={selectedUser} />
+                        <div className="relative h-full flex flex-col pb-1">
+                            <SpectatorChatHeader
+                                user={selectedUser}
+                                onToggleExpand={() => setIsExpanded((prev) => !prev)}
+                            />
                             <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
                                 <div className="min-h-full flex flex-col justify-end">
                                     {(messages[selectedUser.id] || []).map((message) => (
                                         <SpectatorMessageItem
                                             key={message.id}
                                             message={message}
-                                            isUser={message.sender === 'user'}
+                                            isUser={message.sender === "user"}
                                             avatarUrl={selectedUser.avatar}
                                         />
-
                                     ))}
                                     <div ref={bottomRef} />
                                 </div>
                             </div>
                             <SpectatorChatInput onSendMessage={handleSendMessage} />
                         </div>
-
                     </UtilityCard>
                 )}
             </AnimatePresence>

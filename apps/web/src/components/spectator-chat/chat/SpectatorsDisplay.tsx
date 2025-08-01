@@ -18,7 +18,7 @@ export default function SpectatorsDisplay({
         <AnimatePresence>
             <UtilityCard
                 key="people-list"
-                className="fixed bottom-18 right-28 h-full p-0 z-40 max-h-[500px] bg-neutral-900 border shadow-xl rounded-2xl rounded-br-none w-[20rem] overflow-hidden"
+                className="fixed bottom-22 right-28 h-full p-0 z-40 max-h-[500px] bg-neutral-900 border shadow-xl rounded-2xl rounded-br-none w-[20rem] overflow-hidden"
 
             >
                 <div className="overflow-y-auto h-full max-h-[500px] custom-scrollbar overflow-hidden pt-4 pb-2">
@@ -47,7 +47,7 @@ export default function SpectatorsDisplay({
                                         </div>
                                     )}
                                 </div>
-                                <div className="mt-2 text-xs text-white text-center truncate w-full">
+                                <div className="mt-2 text-xs text-neutral-100 text-center truncate w-full">
                                     {user.name}
                                 </div>
                             </button>

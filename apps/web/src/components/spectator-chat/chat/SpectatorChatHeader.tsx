@@ -1,5 +1,4 @@
 import React, { JSX } from 'react';
-
 import { User } from '../specTypes';
 import SpectatorHeaderMascot from './SpectatorHeaderMascot';
 import SpectatorChunkyButton from './SpectatorChunkyButton';
@@ -8,9 +7,10 @@ import ToolTipComponent from '@/components/utility/TooltipComponent';
 
 interface ChatHeaderProps {
     user: User;
+    onToggleExpand: () => void;
 }
 
-export default function SpectatorChatHeader({ user }: ChatHeaderProps): JSX.Element {
+export default function SpectatorChatHeader({ user, onToggleExpand }: ChatHeaderProps): JSX.Element {
     return (
         <div className="relative p-6 border-b">
             <div className="flex items-center justify-between">
@@ -21,24 +21,20 @@ export default function SpectatorChatHeader({ user }: ChatHeaderProps): JSX.Elem
                         avatar={user.avatar}
                         svg={user.svg}
                     />
-
-                    <div className="ml-2 text-[18px] tracking-wide ">
-                        {user.name}
-                    </div>
-
+                    <div className="ml-2 text-[18px] tracking-wide">{user.name}</div>
                 </div>
-
-                <ToolTipComponent content="click to expand">
+                <ToolTipComponent content="Click to expand">
                     <div>
-                        <SpectatorChunkyButton className="bg-[#e7ab1ed0] text-white" size="md">
-                            <BiExpandAlt
-                                className='dark:text-neutral-900'
-                                strokeWidth={0.8}
-                            />
+                        <SpectatorChunkyButton
+                            className="bg-[#e7ab1ed0] text-white"
+                            size="md"
+                            onClick={onToggleExpand}
+                        >
+                            <BiExpandAlt className="dark:text-neutral-900" strokeWidth={0.8} />
                         </SpectatorChunkyButton>
                     </div>
                 </ToolTipComponent>
             </div>
         </div>
     );
-};
+}
