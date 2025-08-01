@@ -9,7 +9,7 @@ interface SpeechBubbleProps {
     avatarUrl?: string;
 }
 
-export default function SpectatorSpeechBubble ({
+export default function SpectatorSpeechBubble({
     children,
     direction,
     time,
@@ -28,10 +28,17 @@ export default function SpectatorSpeechBubble ({
 
     return (
         <div className={`flex flex-col gap-1 ${isUser ? 'items-end' : 'items-start'}`}>
-            <div className={`flex justify-center items-center gap-2 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div
+                className={`flex justify-center items-center gap-2 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+            >
                 <div className="w-8 h-8 rounded-lg overflow-hidden border border-zinc-700 shrink-0">
                     <Image
-                        src={isUser ? senderAvatar : avatarUrl ?? 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg'}
+                        src={
+                            isUser
+                                ? senderAvatar
+                                : (avatarUrl ??
+                                  'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg')
+                        }
                         alt="Avatar"
                         width={32}
                         height={32}
@@ -63,4 +70,4 @@ export default function SpectatorSpeechBubble ({
             )}
         </div>
     );
-};
+}

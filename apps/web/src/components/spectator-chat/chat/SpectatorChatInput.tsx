@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Smile } from 'lucide-react';
 import { gsap } from 'gsap';
@@ -10,11 +9,11 @@ interface ChatInputProps {
     onSendMessage: (text: string) => void;
 }
 
-export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
+export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
     const [message, setMessage] = useState('');
     const [isEmojiVisible, setIsEmojiVisible] = useState(false);
     const quickEmojis = ['👋', '😄', '❤️', '🎉', '🔥', '👍'];
-    
+
     const inputRef = useRef<HTMLInputElement>(null);
     const emojiPanelRef = useRef<HTMLDivElement>(null);
     const emojiButtonRef = useRef<HTMLDivElement>(null);
@@ -23,21 +22,20 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
 
     useEffect(() => {
         if (containerRef.current) {
-    
-            gsap.fromTo(containerRef.current, 
+            gsap.fromTo(
+                containerRef.current,
                 { y: 50, opacity: 0 },
-                { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }
+                { y: 0, opacity: 1, duration: 0.6, ease: 'back.out(1.7)' },
             );
         }
 
         if (inputRef.current) {
-    
             gsap.to(inputRef.current, {
-                boxShadow: "0 6px 0 0 rgba(0,0,0,0.2), 0 0 0 0 rgba(245,157,42,0.3)",
+                boxShadow: '0 6px 0 0 rgba(0,0,0,0.2), 0 0 0 0 rgba(245,157,42,0.3)',
                 duration: 2,
                 repeat: -1,
                 yoyo: true,
-                ease: "power2.inOut"
+                ease: 'power2.inOut',
             });
         }
     }, []);
@@ -46,33 +44,34 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
         if (emojiPanelRef.current) {
             if (isEmojiVisible) {
                 gsap.set(emojiPanelRef.current, { display: 'flex' });
-                gsap.fromTo(emojiPanelRef.current,
-                    { 
-                        opacity: 0, 
-                        y: 10, 
+                gsap.fromTo(
+                    emojiPanelRef.current,
+                    {
+                        opacity: 0,
+                        y: 10,
                         scale: 0.9,
-                        rotationX: -15
+                        rotationX: -15,
                     },
-                    { 
-                        opacity: 1, 
-                        y: 0, 
+                    {
+                        opacity: 1,
+                        y: 0,
                         scale: 1,
                         rotationX: 0,
-                        duration: 0.3, 
-                        ease: "back.out(1.7)"
-                    }
+                        duration: 0.3,
+                        ease: 'back.out(1.7)',
+                    },
                 );
 
-        
-                gsap.fromTo(emojiItemsRef.current,
+                gsap.fromTo(
+                    emojiItemsRef.current,
                     { scale: 0, rotation: 180 },
                     {
                         scale: 1,
                         rotation: 0,
                         duration: 0.4,
                         stagger: 0.05,
-                        ease: "back.out(2)"
-                    }
+                        ease: 'back.out(2)',
+                    },
                 );
             } else {
                 gsap.to(emojiPanelRef.current, {
@@ -80,12 +79,12 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                     y: 10,
                     scale: 0.9,
                     duration: 0.2,
-                    ease: "power2.in",
+                    ease: 'power2.in',
                     onComplete: () => {
                         if (emojiPanelRef.current) {
                             gsap.set(emojiPanelRef.current, { display: 'none' });
                         }
-                    }
+                    },
                 });
             }
         }
@@ -93,27 +92,25 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
 
     const handleSend = () => {
         if (message.trim()) {
-    
             if (inputRef.current) {
                 gsap.to(inputRef.current, {
                     scale: 0.95,
                     duration: 0.1,
                     yoyo: true,
                     repeat: 1,
-                    ease: "power2.inOut"
+                    ease: 'power2.inOut',
                 });
             }
-            
+
             onSendMessage(message.trim());
             setMessage('');
-            
-    
+
             setTimeout(() => {
                 if (inputRef.current) {
                     gsap.to(inputRef.current, {
                         scale: 1,
                         duration: 0.3,
-                        ease: "back.out(1.7)"
+                        ease: 'back.out(1.7)',
                     });
                 }
             }, 200);
@@ -130,9 +127,9 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
     const handleInputFocus = () => {
         if (inputRef.current) {
             gsap.to(inputRef.current, {
-                boxShadow: "0 8px 0 0 rgba(0,0,0,0.2), 0 0 0 3px rgba(245,157,42,0.5)",
+                boxShadow: '0 8px 0 0 rgba(0,0,0,0.2), 0 0 0 3px rgba(245,157,42,0.5)',
                 duration: 0.3,
-                ease: "power2.out"
+                ease: 'power2.out',
             });
         }
     };
@@ -140,9 +137,9 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
     const handleInputBlur = () => {
         if (inputRef.current) {
             gsap.to(inputRef.current, {
-                boxShadow: "0 6px 0 0 rgba(0,0,0,0.2)",
+                boxShadow: '0 6px 0 0 rgba(0,0,0,0.2)',
                 duration: 0.3,
-                ease: "power2.out"
+                ease: 'power2.out',
             });
         }
     };
@@ -153,7 +150,7 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                 rotation: 5,
                 scale: 1.1,
                 duration: 0.3,
-                ease: "back.out(2)"
+                ease: 'back.out(2)',
             });
         }
         setIsEmojiVisible(true);
@@ -165,25 +162,24 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                 rotation: 0,
                 scale: 1,
                 duration: 0.3,
-                ease: "back.out(1.7)"
+                ease: 'back.out(1.7)',
             });
         }
         setIsEmojiVisible(false);
     };
 
     const handleEmojiClick = (emoji: string) => {
-
-        const clickedEmoji = emojiItemsRef.current.find(el => el?.textContent === emoji);
+        const clickedEmoji = emojiItemsRef.current.find((el) => el?.textContent === emoji);
         if (clickedEmoji) {
             gsap.to(clickedEmoji, {
                 scale: 1.5,
                 duration: 0.2,
                 yoyo: true,
                 repeat: 1,
-                ease: "power2.inOut"
+                ease: 'power2.inOut',
             });
         }
-        
+
         setTimeout(() => {
             onSendMessage(emoji);
             setIsEmojiVisible(false);
@@ -215,13 +211,16 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                     />
                 </div>
 
-                <div 
+                <div
                     className="relative"
                     onMouseEnter={handleEmojiHover}
                     onMouseLeave={handleEmojiLeave}
                 >
                     <div ref={emojiButtonRef}>
-                        <SpectatorChunkyButton className='border-none shadow-none dark:bg-neutral-800 dark:text-neutral-400' size="md">
+                        <SpectatorChunkyButton
+                            className="border-none shadow-none dark:bg-neutral-800 dark:text-neutral-400"
+                            size="md"
+                        >
                             <Smile className="w-6 h-6" />
                         </SpectatorChunkyButton>
                     </div>
@@ -234,7 +233,7 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
                     >
                         {quickEmojis.map((emoji) => (
                             <Button
-                                variant={"ghost"}
+                                variant={'ghost'}
                                 key={emoji}
                                 ref={addToEmojiRefs}
                                 onClick={() => handleEmojiClick(emoji)}
@@ -249,4 +248,4 @@ export default function SpectatorChatInput ({ onSendMessage }: ChatInputProps) {
             </div>
         </div>
     );
-};
+}

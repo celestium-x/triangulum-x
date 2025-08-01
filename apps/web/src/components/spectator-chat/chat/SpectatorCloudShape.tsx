@@ -5,18 +5,14 @@ interface CloudShapeProps {
     className?: string;
 }
 
-export default function SpectatorCloudShape ({
-    children,
-    className = '',
-}: CloudShapeProps) {
-
-
-
+export default function SpectatorCloudShape({ children, className = '' }: CloudShapeProps) {
     return (
-        <div className={`
+        <div
+            className={`
       relative  px-6 py-3 text-white ${className}  transform transition-all duration-200
-    `}>
+    `}
+        >
             {children}
         </div>
     );
-};
+}

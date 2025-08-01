@@ -1,12 +1,9 @@
-import axios from "axios";
-import { PARTICIPANT_JOIN_QUIZ_URL, SPECTATOR_JOIN_QUIZ_URL } from "routes/api_routes";
-import { toast } from "sonner";
-
+import axios from 'axios';
+import { PARTICIPANT_JOIN_QUIZ_URL, SPECTATOR_JOIN_QUIZ_URL } from 'routes/api_routes';
+import { toast } from 'sonner';
 
 class UserQuizAction {
-
     public async joinQuiz(code: string): Promise<unknown> {
-
         switch (code.length) {
             case 6:
                 return await this.spectatorJoinQuiz(code);
@@ -16,7 +13,6 @@ class UserQuizAction {
                 toast.error('Please enter a valid code');
                 return;
         }
-
     }
 
     private async participantJoinQuiz(code: string): Promise<unknown> {
@@ -74,7 +70,6 @@ class UserQuizAction {
             console.error('Error while joining quiz', err);
         }
     }
-
 }
 
 const userQuizAction = new UserQuizAction();

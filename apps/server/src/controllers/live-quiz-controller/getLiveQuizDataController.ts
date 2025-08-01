@@ -71,6 +71,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     status: true,
                     hostScreen: true,
                     participantScreen: true,
+                    spectatorScreen: true,
                     totalParticipants: true,
                     activeParticipants: true,
                     currentQuestionIndex: true,

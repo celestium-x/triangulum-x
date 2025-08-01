@@ -102,6 +102,7 @@ export interface GameSessionType {
     status: SessionStatusEnum;
     hostScreen: HostScreenEnum;
     participantScreen: ParticipantScreenEnum;
+    spectatorScreen: SpectatorScreenEnum;
     questionStartedAt?: Date | null;
     questionEndsAt?: Date | null;
 
@@ -199,6 +200,14 @@ export enum SessionStatusEnum {
 }
 
 export enum ParticipantScreenEnum {
+    LOBBY = 'LOBBY',
+    COUNTDOWN = 'COUNTDOWN',
+    MOTIVATION = 'MOTIVATION',
+    QUESTION_READING = 'QUESTION_READING',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+}
+
+export enum SpectatorScreenEnum {
     LOBBY = 'LOBBY',
     COUNTDOWN = 'COUNTDOWN',
     MOTIVATION = 'MOTIVATION',
