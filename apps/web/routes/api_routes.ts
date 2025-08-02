@@ -12,5 +12,6 @@ export const LAUNCH_QUIZ_URL = QUIZ_URL + '/launch-quiz';
 export const PARTICIPANT_JOIN_QUIZ_URL = QUIZ_URL + '/participant-join-quiz';
 export const SPECTATOR_JOIN_QUIZ_URL = QUIZ_URL + '/spectator-join-quiz';
 export const LIVE_QUIZ_DATA_URL = QUIZ_URL + '/get-live-quiz-data';
-export const REVIEW_URL = API_URL + '/user/review';
+export const CREATE_REVIEW_URL = API_URL + '/user/create-review';
+export const GET_REVIEW_URL = API_URL + '/user/get-review';
 export const DELETE_QUIZ_URL = API_URL + '/quiz/delete-quiz';

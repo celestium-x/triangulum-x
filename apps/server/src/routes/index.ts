@@ -13,10 +13,13 @@ import participantJoinController from '../controllers/live-quiz-controller/parti
 import getLiveQuizDataController from '../controllers/live-quiz-controller/getLiveQuizDataController';
 import spectatorJoinController from '../controllers/live-quiz-controller/spectatorJoinController';
 import deleteQuizController from '../controllers/quiz-controller/deleteQuizController';
+import getReviewController from '../controllers/appReview-controller/getReviewController';
 
 const router = Router();
 
 router.post('/sign-in', signInController);
+router.post('/user/create-review', authMiddleware, reviewAppController);
+router.get('/user/get-review', authMiddleware, getReviewController);
 
 //quiz-routes
 router.post('/quiz/create-quiz/:quizId', authMiddleware, upsertQuizController);
@@ -36,7 +39,6 @@ router.get(
     verifyQuizOwnershipMiddleware,
     launchQuizController,
 );
-router.post('/user/review', authMiddleware, reviewAppController);
 router.post('/quiz/participant-join-quiz', participantJoinController);
 router.post('/quiz/spectator-join-quiz', spectatorJoinController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
