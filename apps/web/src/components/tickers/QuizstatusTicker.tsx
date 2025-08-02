@@ -7,6 +7,12 @@ interface QuizStatusTickerProps {
 }
 
 const statusConfig = {
+    [QuizStatusEnum.NULL]: {
+        label: 'Unknown',
+        bgColor: 'bg-gray-100',
+        textColor: 'text-gray-800',
+        dotColor: 'bg-gray-500',
+    },
     [QuizStatusEnum.CREATED]: {
         label: 'Created',
         bgColor: 'bg-orange-100',
