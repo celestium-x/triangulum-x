@@ -2,15 +2,14 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Message, User } from './specTypes';
-import { AnimatePresence } from 'framer-motion';
 import SpectatorChatToggleButton from './chat/SpectatorChatToggleButton';
 import SpectatorsDisplay from './chat/SpectatorsDisplay';
 import SpectatorChatHeader from './chat/SpectatorChatHeader';
 import SpectatorMessageItem from './chat/SpectatorMessageItem';
 import SpectatorChatInput from './chat/SpectatorChatInput';
 import SpectatorButton from './chat/SpectatorButton';
-import UtilityCard from '../utility/UtilityCard';
 import { FaGlobeAmericas } from 'react-icons/fa';
+import { cn } from '@/lib/utils';
 
 const roomUsers: User[] = [
     {
@@ -19,7 +18,7 @@ const roomUsers: User[] = [
         isOnline: true,
         svg: (
             <FaGlobeAmericas
-                className="text-neutral-200"
+                className="text-dark-base dark:text-light-base "
                 style={{ width: '28px', height: '28px' }}
             />
         ),
@@ -134,39 +133,38 @@ export default function SpectatorActions() {
                 />
             )}
 
-            <AnimatePresence>
-                {openChatDropdown && (
-                    <UtilityCard
-                        key="chatbox"
-                        className={`fixed p-0 z-40 rounded-3xl border border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 transition-all duration-300 ease-in-out ${
-                            isExpanded
-                                ? 'right-0 rounded-r-none w-[36rem] h-full'
-                                : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none'
-                        }`}
-                    >
-                        <div className="relative h-full flex flex-col pb-1">
-                            <SpectatorChatHeader
-                                user={selectedUser}
-                                onToggleExpand={() => setIsExpanded((prev) => !prev)}
-                            />
-                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                                <div className="min-h-full flex flex-col justify-end">
-                                    {(messages[selectedUser.id] || []).map((message) => (
-                                        <SpectatorMessageItem
-                                            key={message.id}
-                                            message={message}
-                                            isUser={message.sender === 'user'}
-                                            avatarUrl={selectedUser.avatar}
-                                        />
-                                    ))}
-                                    <div ref={bottomRef} />
-                                </div>
+            {openChatDropdown && (
+                <div
+                    key="chatbox"
+                    className={cn(
+                        'fixed p-0 z-40 rounded-xl transition-all', 'duration-300 ease-in-out',
+                        'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
+                        'shadow-2xl',
+                        isExpanded ? 'right-0 rounded-r-none max-w-[40vw] w-[40vw] h-full' : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none'
+                    )}
+                >
+                    <div className="relative h-full flex flex-col pb-1">
+                        <SpectatorChatHeader
+                            user={selectedUser}
+                            onToggleExpand={() => setIsExpanded((prev) => !prev)}
+                        />
+                        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                            <div className="min-h-full flex flex-col justify-end">
+                                {(messages[selectedUser.id] || []).map((message) => (
+                                    <SpectatorMessageItem
+                                        key={message.id}
+                                        message={message}
+                                        isUser={message.sender === 'user'}
+                                        avatarUrl={selectedUser.avatar}
+                                    />
+                                ))}
+                                <div ref={bottomRef} />
                             </div>
-                            <SpectatorChatInput onSendMessage={handleSendMessage} />
                         </div>
-                    </UtilityCard>
-                )}
-            </AnimatePresence>
+                        <SpectatorChatInput onSendMessage={handleSendMessage} />
+                    </div>
+                </div>
+            )}
         </>
     );
 }

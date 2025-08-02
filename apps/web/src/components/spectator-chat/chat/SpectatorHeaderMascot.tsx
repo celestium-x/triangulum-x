@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -20,12 +21,14 @@ export default function SpectatorHeaderMascot({ name, avatar, svg }: MascotAvata
             }}
         >
             <div
-                className={`
-                    w-auto h-auto rounded-full flex items-center justify-center text-3xl
-                    transform transition-all duration-200
-                    ${isAnimating ? 'scale-110' : 'hover:scale-105'}
-                    relative overflow-hidden
-                `}
+                className={cn(
+                    'w-auto h-auto rounded-full relative',
+                    'flex items-center justify-center',
+                    'text-3xl text-light-base dark:text-dark-base ',
+                    'transform transition-all duration-200',
+                    isAnimating ? 'scale-110' : 'hover:scale-105',
+                    'overflow-hidden'
+                )}
             >
                 {avatar ? (
                     <Image
