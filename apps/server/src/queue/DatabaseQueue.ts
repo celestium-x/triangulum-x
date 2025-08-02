@@ -1,6 +1,8 @@
 import { JobOption, QueueJobTypes } from '../types/database-queue-types';
 import Bull from 'bull';
 import prisma, { GameSession, Participant, Prisma, Quiz } from '@repo/db/client';
+import RedisCache from '../cache/RedisCache';
+import { redisCacheInstance } from '../services/init-services';
 const REDIS_URL = process.env.REDIS_URL;
 
 interface UpdateGameSessionJobtype {
@@ -23,6 +25,7 @@ interface UpdateQuizJobType {
 
 export default class DatabaseQueue {
     private database_queue: Bull.Queue;
+    private redis_cache: RedisCache;
     private default_job_options: JobOption = {
         attempts: 3,
         delay: 1000,
@@ -31,6 +34,7 @@ export default class DatabaseQueue {
     };
 
     constructor() {
+        this.redis_cache = redisCacheInstance;
         this.database_queue = new Bull('database-operations', {
             redis: REDIS_URL,
         });
@@ -123,7 +127,7 @@ export default class DatabaseQueue {
     public async update_game_session(
         id: string,
         gameSession: Prisma.GameSessionUpdateInput,
-        game_session_id?: string,
+        game_session_id: string,
         options?: Partial<JobOption>,
     ) {
         return await this.database_queue.add(
@@ -136,12 +140,12 @@ export default class DatabaseQueue {
     public async update_quiz(
         id: string,
         quiz: Prisma.QuizUpdateInput,
-        game_session_id?: string,
+        game_session_id: string,
         options?: Partial<JobOption>,
     ) {
         return await this.database_queue.add(
             QueueJobTypes.UPDATE_QUIZ,
-            { id, quiz },
+            { id, quiz, game_session_id },
             { ...this.default_job_options, ...options },
         );
     }

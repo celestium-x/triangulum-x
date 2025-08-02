@@ -3,6 +3,7 @@ import QuizManager from './QuizManager';
 import { CookiePayload, CustomWebSocket, MESSAGE_TYPES } from '../types/web-socket-types';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
+import DatabaseQueue from '../queue/DatabaseQueue';
 
 export interface ParticipantManagerDependencies {
     publisher: Redis;
@@ -10,6 +11,7 @@ export interface ParticipantManagerDependencies {
     socket_mapping: Map<string, CustomWebSocket>;
     session_participants_mapping: Map<string, Set<string>>;
     quizManager: QuizManager;
+    databaseQueue: DatabaseQueue;
 }
 
 export default class ParticipantManager {
@@ -18,6 +20,7 @@ export default class ParticipantManager {
     private session_participants_mapping: Map<string, Set<string>>;
     private quizManager: QuizManager;
     private socket_mapping: Map<string, CustomWebSocket>;
+    private database_queue: DatabaseQueue;
 
     private participant_socket_mapping: Map<string, string> = new Map(); // Map<participantId, socketId>
 
@@ -27,6 +30,7 @@ export default class ParticipantManager {
         this.socket_mapping = dependencies.socket_mapping;
         this.session_participants_mapping = dependencies.session_participants_mapping;
         this.quizManager = dependencies.quizManager;
+        this.database_queue = dependencies.databaseQueue;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload) {

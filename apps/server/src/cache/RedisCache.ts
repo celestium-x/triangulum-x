@@ -91,7 +91,7 @@ export default class RedisCache {
         }
     }
 
-    private get_participants_key(game_session_id: string) {
+    public get_participants_key(game_session_id: string) {
         return `game_session:${game_session_id}:participants`;
     }
 

@@ -10,13 +10,14 @@ import RedisCache from '../cache/RedisCache';
 import { URL } from 'url';
 import ParticipantManager from './ParticipantManager';
 import SpectatorManager from './SpectatorManager';
-import redisCacheInstance from '..';
 import {
     CookiePayload,
     CustomWebSocket,
     MESSAGE_TYPES,
     USER_TYPE,
 } from '../types/web-socket-types';
+import { databaseQueueInstance, redisCacheInstance } from '../services/init-services';
+import DatabaseQueue from '../queue/DatabaseQueue';
 
 dotenv.config();
 const REDIS_URL = process.env.REDIS_URL;
@@ -31,6 +32,7 @@ export default class WebsocketServer {
     private publisher: Redis;
     private subscriber: Redis;
     private redis_cache: RedisCache;
+    private database_queue: DatabaseQueue;
 
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
@@ -42,6 +44,7 @@ export default class WebsocketServer {
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
         this.redis_cache = redisCacheInstance;
+        this.database_queue = databaseQueueInstance;
         this.initialize_redis_subscribers();
         this.initialize_managers();
         this.initialize();
@@ -133,6 +136,7 @@ export default class WebsocketServer {
             socket_mapping: this.socket_mapping,
             session_participants_mapping: this.session_participants_mapping,
             quizManager: this.quizManager,
+            databaseQueue: this.database_queue,
         });
         this.spectator_manager = new SpectatorManager({
             publisher: this.publisher,
