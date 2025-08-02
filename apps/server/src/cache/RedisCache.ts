@@ -16,7 +16,6 @@ export default class RedisCache {
 
     //  <------------------ GAME_SESSION ------------------>
 
-
     public async set_game_session(
         game_live_session_id: string,
         game_live_session: Partial<GameSession>,
