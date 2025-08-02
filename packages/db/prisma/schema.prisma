@@ -215,6 +215,7 @@ enum QuizStatus {
   CANCELLED
   PAYOUT_PENDING
   PAYOUT_COMPLETED
+  NULL
 }
 
 enum Template {

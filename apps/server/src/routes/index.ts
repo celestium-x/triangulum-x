@@ -12,6 +12,7 @@ import reviewAppController from '../controllers/appReview-controller/reviewAppCo
 import participantJoinController from '../controllers/live-quiz-controller/participantJoinController';
 import getLiveQuizDataController from '../controllers/live-quiz-controller/getLiveQuizDataController';
 import spectatorJoinController from '../controllers/live-quiz-controller/spectatorJoinController';
+import deleteQuizController from '../controllers/quiz-controller/deleteQuizController';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.post('/sign-in', signInController);
 router.post('/quiz/create-quiz/:quizId', authMiddleware, upsertQuizController);
 router.get('/quiz/get-quiz/:quizId', authMiddleware, getQuizController);
 router.get('/quiz/get-all-quiz', authMiddleware, getAllQuizController);
+router.delete('/quiz/delete-quiz/:quizId', authMiddleware, deleteQuizController);
 router.post('/get-presigned-url', getPreSignedUrlController);
 router.put(
     '/quiz/publish-quiz/:quizId',

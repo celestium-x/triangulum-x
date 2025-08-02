@@ -33,7 +33,7 @@ export interface NewProps {
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
     const { session } = useUserSessionStore();
-    const { updateQuiz } = useNewQuizStore();
+    const { updateQuiz, resetStore } = useNewQuizStore();
     const [allowance, setAllowance] = useState<AllowanceEnum>(AllowanceEnum.NONE);
 
     useEffect(() => {
@@ -71,6 +71,12 @@ export default function New({ params }: NewProps) {
             fetchQuiz();
         }
     }, [quizId, session?.user.token, updateQuiz]);
+
+    useEffect(() => {
+        return () => {
+            resetStore();
+        };
+    }, [resetStore]);
 
     return (
         <>

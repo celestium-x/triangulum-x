@@ -39,8 +39,16 @@ export default function NavbarQuizAction() {
         }
         setIsLoading(true);
         try {
-            await BackendActions.upsertQuizAction(quiz, session.user.token);
-            toast.success('Draft saved');
+            const isSaved = await BackendActions.upsertQuizAction(quiz, session.user.token);
+            if (isSaved) {
+                updateAllQuiz(quiz.id, {
+                    status: QuizStatusEnum.CREATED,
+                });
+                updateQuiz({ status: QuizStatusEnum.CREATED });
+                toast.success('Draft saved');
+                return;
+            }
+            toast.error('Failed to save draft');
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
@@ -63,7 +71,9 @@ export default function NavbarQuizAction() {
                 });
                 updateQuiz({ status: QuizStatusEnum.PUBLISHED });
                 toast.success('Quiz published successfully');
+                return;
             }
+            toast.error('Failed to publish quiz');
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
@@ -87,7 +97,9 @@ export default function NavbarQuizAction() {
                 updateQuiz({ status: QuizStatusEnum.LIVE });
                 toast.success('Quiz launched successfully');
                 router.push(`/live/${quiz.id}`);
+                return;
             }
+            toast.error('Failed to publish quiz');
         } catch (error) {
             console.error('Failed to save quiz:', error);
         } finally {
@@ -131,7 +143,10 @@ export default function NavbarQuizAction() {
             className="relative select-none flex flex-shrink-0 items-center gap-x-3"
             onClick={() => setActionsPanel((prev) => !prev)}
         >
-            <QuizStatusTicker className="" status={quiz?.status} />
+            {Boolean(quiz.status !== QuizStatusEnum.NULL)}
+            {quiz.status !== QuizStatusEnum.NULL && (
+                <QuizStatusTicker className="" status={quiz?.status} />
+            )}
             <AutoSaveComponent />
             <ToolTipComponent content={'this will be saved every 30sec'}>
                 <div className="w-full flex justify-around items-center gap-x-2 bg-primary/50 transition-colors rounded-full cursor-pointer px-4 py-2">

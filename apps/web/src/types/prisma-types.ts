@@ -179,6 +179,7 @@ export enum QuizStatusEnum {
     CANCELLED = 'CANCELLED',
     PAYOUT_PENDING = 'PAYOUT_PENDING',
     PAYOUT_COMPLETED = 'PAYOUT_COMPLETED',
+    NULL = 'NULL',
 }
 
 export enum InteractionEnum {

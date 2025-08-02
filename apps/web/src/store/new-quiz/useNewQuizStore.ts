@@ -23,6 +23,7 @@ interface NewQuizStoreTypes {
     setLoading: (loading: boolean) => void;
     toggleInteraction: (interaction: InteractionEnum) => void;
     setInteractions: (Interactions: InteractionEnum[]) => void;
+    resetStore: () => void;
 }
 
 export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
@@ -39,7 +40,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         eliminationThreshold: 0,
         questionTimeLimit: 0,
         breakBetweenQuestions: 0,
-        status: QuizStatusEnum.CREATED,
+        status: QuizStatusEnum.NULL,
         createdAt: new Date(),
         updatedAt: new Date(),
         scheduledAt: null,
@@ -151,5 +152,35 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
     setInteractions: (interactions: InteractionEnum[]) => {
         const quiz = get().quiz;
         set({ quiz: { ...quiz, interactions } });
+    },
+
+    resetStore: () => {
+        set({
+            quiz: {
+                id: '',
+                title: '',
+                description: '',
+                theme: TemplateEnum.CLASSIC,
+                prizePool: 0,
+                currency: '',
+                basePointsPerQuestion: 100,
+                pointsMultiplier: 1,
+                timeBonus: false,
+                eliminationThreshold: 0,
+                questionTimeLimit: 0,
+                breakBetweenQuestions: 0,
+                status: QuizStatusEnum.NULL,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                scheduledAt: null,
+                startedAt: null,
+                endedAt: null,
+                autoSave: true,
+                liveChat: false,
+                spectatorMode: false,
+                questions: generateDefaultQuestions(),
+                interactions: [],
+            },
+        });
     },
 }));

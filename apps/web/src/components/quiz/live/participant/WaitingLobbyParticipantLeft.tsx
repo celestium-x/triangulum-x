@@ -6,7 +6,7 @@ import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsS
 
 export default function WaitingLobbyParticipantLeft() {
     const { quiz } = useLiveQuizStore();
-    const { participants } = useLiveParticipantsStore()
+    const { participants } = useLiveParticipantsStore();
     return (
         <div className="w-full max-h-full flex flex-col relative">
             <WaitingLobbyAvatars participants={participants} />

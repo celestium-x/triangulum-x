@@ -28,19 +28,20 @@ export default function SpectatorChatHeader({
                     <div
                         className={cn(
                             'ml-2 text-[18px] tracking-wide',
-                            'text-dark-base dark:text-light-base'
+                            'text-dark-base dark:text-light-base',
                         )}
-                    >{user.name}</div>
+                    >
+                        {user.name}
+                    </div>
                 </div>
                 <ToolTipComponent content="Click to expand">
                     <div>
                         <Button
                             className="bg-[#e7ab1e] hover:bg-[#e7ab1e]/90 hover:dark:bg-[#e7ab1e]/90 text-dark-base dark:text-dark-base cursor-pointer"
-                            variant={"ghost"}
+                            variant={'ghost'}
                             onClick={onToggleExpand}
                         >
                             <BiExpandAlt className="dark:text-neutral-900" strokeWidth={0.8} />
-
                         </Button>
                     </div>
                 </ToolTipComponent>

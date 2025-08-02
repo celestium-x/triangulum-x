@@ -131,22 +131,19 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
                             'w-full px-6 py-6 bg-neutral-200 rounded-3xl',
                             'font-normal text-dark-base dark:text-light-base placeholder:text-neutral-400 !text-sm',
                             'focus:outline-none transition-all duration-300 placeholder:text-sm',
-                            'focus-visible:ring-[1px]'
+                            'focus-visible:ring-[1px]',
                         )}
                     />
                 </div>
 
-                <div
-                    className="relative"
-                    onClick={() => setIsEmojiVisible(prev => !prev)}
-                >
+                <div className="relative" onClick={() => setIsEmojiVisible((prev) => !prev)}>
                     <Button
                         className={cn(
                             '!py-[22px] rounded-xl shadow-none aspect-square cursor-pointer transition-colors',
                             'bg-neutral-200 hover:bg-neutral-400/30 dark:bg-neutral-800 text-neutral-500 hover:text-neutral-500 dark:text-neutral-400',
-                            'border border-neutral-300 dark:border-neutral-700'
+                            'border border-neutral-300 dark:border-neutral-700',
                         )}
-                        variant={"ghost"}
+                        variant={'ghost'}
                     >
                         <Smile className="size-7 stroke-1 " />
                     </Button>
@@ -155,7 +152,7 @@ export default function SpectatorChatInput({ onSendMessage }: ChatInputProps) {
                         <UtilityCard
                             className={cn(
                                 'absolute bottom-14 mb-1 right-1 flex space-x-2 dark:bg-neutral-700 border rounded-xl px-4 py-2 z-10',
-                                'shadow-md'
+                                'shadow-md',
                             )}
                         >
                             {quickEmojis.map((emoji) => (
