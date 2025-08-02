@@ -137,10 +137,13 @@ export default function SpectatorActions() {
                 <div
                     key="chatbox"
                     className={cn(
-                        'fixed p-0 z-40 rounded-xl transition-all', 'duration-300 ease-in-out',
+                        'fixed p-0 z-40 rounded-xl transition-all',
+                        'duration-300 ease-in-out',
                         'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
                         'shadow-2xl',
-                        isExpanded ? 'right-0 rounded-r-none max-w-[40vw] w-[40vw] h-full' : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none'
+                        isExpanded
+                            ? 'right-0 rounded-r-none max-w-[40vw] w-[40vw] h-full'
+                            : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none',
                     )}
                 >
                     <div className="relative h-full flex flex-col pb-1">

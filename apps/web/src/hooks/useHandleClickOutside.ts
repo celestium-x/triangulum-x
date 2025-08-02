@@ -2,7 +2,7 @@
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
 export const useHandleClickOutside = (
-    refs: RefObject<HTMLDivElement | null>[],
+    refs: RefObject<HTMLDivElement | HTMLElement | null>[],
     setOpen: Dispatch<SetStateAction<boolean>>,
 ) => {
     useEffect(() => {

@@ -27,7 +27,7 @@ export default function SpectatorHeaderMascot({ name, avatar, svg }: MascotAvata
                     'text-3xl text-light-base dark:text-dark-base ',
                     'transform transition-all duration-200',
                     isAnimating ? 'scale-110' : 'hover:scale-105',
-                    'overflow-hidden'
+                    'overflow-hidden',
                 )}
             >
                 {avatar ? (

@@ -104,7 +104,9 @@ export default function WaitingLobbyAvatars({ participants = [] }: WaitingLobbyA
     );
 
     const safeParticipants = participants || [];
-    const [positions, setPositions] = useState<Position[]>(() => generatePositions(safeParticipants.length));
+    const [positions, setPositions] = useState<Position[]>(() =>
+        generatePositions(safeParticipants.length),
+    );
 
     useEffect(() => {
         setPositions(generatePositions(safeParticipants.length));

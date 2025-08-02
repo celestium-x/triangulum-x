@@ -38,7 +38,7 @@ export default function SpectatorSpeechBubble({
                             isUser
                                 ? senderAvatar
                                 : (avatarUrl ??
-                                    'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg')
+                                  'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg')
                         }
                         alt="Avatar"
                         width={32}
@@ -50,7 +50,9 @@ export default function SpectatorSpeechBubble({
                 <div
                     className={cn(
                         `max-w-xs px-5 py-3 rounded-2xl`,
-                        isUser ? ' bg-blue-600 dark:bg-blue-600 text-light-base dark:text-light-base ' : 'dark:bg-neutral-800 text-dark-base dark:text-light-base',
+                        isUser
+                            ? ' bg-blue-600 dark:bg-blue-600 text-light-base dark:text-light-base '
+                            : 'dark:bg-neutral-800 text-dark-base dark:text-light-base',
                         `shadow-sm`,
                         `break-words select-text text-sm`,
                     )}

@@ -8,4 +8,5 @@ export interface JobOption {
 export enum QueueJobTypes {
     UPDATE_GAME_SESSION = 'UPDATE_GAME_SESSION',
     UPDATE_QUIZ = 'UPDATE_QUIZ',
+    UPDATE_PARTICIPANT = 'UPDATE_PARTICIPANT',
 }

@@ -68,7 +68,7 @@ export default class ParticipantManager {
         ws.on('message', (data) => {
             try {
                 const message = JSON.parse(data.toString());
-                this.handle_host_message(ws, message);
+                this.handle_participant_message(ws, message);
             } catch (err) {
                 console.error('Error parsing message', err);
             }
@@ -84,12 +84,17 @@ export default class ParticipantManager {
         });
     }
 
-    private handle_host_message(ws: CustomWebSocket, message: any) {
+    private handle_participant_message(ws: CustomWebSocket, message: any) {
         const { type } = message;
         switch (type) {
             case MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
                 // this.handle_join_game_session(ws, payload);
                 break;
+
+            // case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
+            //     this.handle_participant_name_change(payload, ws.user.userId);
+            //     break;
+
             default:
                 console.error('Unknown message type', type);
                 break;
@@ -157,6 +162,18 @@ export default class ParticipantManager {
             }
         }
     }
+
+    // private async handle_participant_name_change(payload: ParticipantNameChangeEvent, participant_id: string) {
+    //     const { }
+    //     const participant = await prisma.participant.update({
+    //         where: {
+    //             id: participant_id
+    //         },
+    //         data: {
+    //             nickname:
+    //         }
+    //     })
+    // }
 
     private generateSocketId(): string {
         return uuid();

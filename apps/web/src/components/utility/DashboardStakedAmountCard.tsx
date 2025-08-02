@@ -25,7 +25,7 @@ export default function DashboardStakedAmountCard() {
 
     return (
         <div className="flex-1 py-7 md:py-12 h-full w-full">
-            <div className="bg-primary h-full max-h-[24rem] rounded-4xl p-6 relative overflow-hidden">
+            <div className="bg-primary h-full max-h-[24rem] rounded-4xl p-6 relative overflow-hidden select-none">
                 <div className="flex flex-col justify-between gap-y-2 h-full">
                     <div className="w-full flex items-center justify-between">
                         <div className="flex flex-col items-start gap-y-2">

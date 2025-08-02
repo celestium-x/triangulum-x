@@ -22,7 +22,10 @@ export interface PubSubMessageTypes {
 
 export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+
     PARTICIPANT_JOIN_GAME_SESSION = 'PARTICIPANT_JOIN_GAME_SESSION',
+    PARTICIPANT_NAME_CHANGE = 'PARTICIPANT_NAME_CHANGE',
+
     SPECTATOR_JOIN_GAME_SESSION = 'SPECTATOR_JOIN_GAME_SESSION',
 }
 
@@ -30,4 +33,8 @@ export enum USER_TYPE {
     HOST = 'HOST',
     PARTICIPANT = 'PARTICIPANT',
     SPECTATOR = 'SPECTATOR',
+}
+
+export interface ParticipantNameChangeEvent {
+    choosenNickname: string;
 }

@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import QuizAction from '../../class/quizAction';
 
 export default async function deleteQuizController(req: Request, res: Response) {
-    const quizId = req.params.id;
+    const quizId = req.params.quizId;
     const userId = req.user?.id;
 
     if (!userId) {
@@ -48,6 +48,7 @@ export default async function deleteQuizController(req: Request, res: Response) 
             });
             return;
         }
+
         QuizAction.deleteQuiz(quizId);
         res.status(200).json({
             success: true,

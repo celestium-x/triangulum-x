@@ -5,6 +5,7 @@ interface AllQuizsStoreType {
     quizs: QuizType[];
     setAllQuizs: (quizs: QuizType[]) => void;
     updateQuiz: (quizId: string, quiz: Partial<QuizType>) => void;
+    deleteQuiz: (quizId: string) => void;
 }
 
 export const useAllQuizsStore = create<AllQuizsStoreType>((set) => ({
@@ -13,6 +14,11 @@ export const useAllQuizsStore = create<AllQuizsStoreType>((set) => ({
     updateQuiz: (quizId, quiz: Partial<QuizType>) => {
         set((state) => ({
             quizs: state.quizs.map((q) => (q.id === quizId ? { ...q, ...quiz } : q)),
+        }));
+    },
+    deleteQuiz: (quizId) => {
+        set((state) => ({
+            quizs: state.quizs.filter((q) => q.id != quizId),
         }));
     },
 }));
