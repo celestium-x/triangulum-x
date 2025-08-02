@@ -9,6 +9,13 @@ const users = [
     { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-8.jpg' },
     { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-9.jpg' },
     { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-10.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-11.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-12.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-13.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-14.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-15.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-16.jpg' },
+    { avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-17.jpg' },
 ];
 
 const names = [

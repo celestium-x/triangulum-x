@@ -126,8 +126,7 @@ model Spectator {
 }
 
 model GameSession {
-  id String @id @default(cuid())
-
+  id                   String            @id @default(cuid())
   currentQuestionIndex Int               @default(0)
   currentQuestionId    String?
   status               SessionStatus     @default(WAITING)

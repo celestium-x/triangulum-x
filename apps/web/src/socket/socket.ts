@@ -1,4 +1,9 @@
-export type MessagePayload = unknown;
+import { MESSAGE_TYPES } from '@/types/web-socket-types';
+
+export interface MessagePayload {
+    type: MESSAGE_TYPES;
+    payload: unknown;
+}
 export type MessageHandler = (payload: MessagePayload) => void;
 export type ParsedMessage = {
     type: string;

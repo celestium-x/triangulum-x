@@ -10,13 +10,14 @@ import RedisCache from '../cache/RedisCache';
 import { URL } from 'url';
 import ParticipantManager from './ParticipantManager';
 import SpectatorManager from './SpectatorManager';
-import redisCacheInstance from '..';
 import {
     CookiePayload,
     CustomWebSocket,
     MESSAGE_TYPES,
     USER_TYPE,
 } from '../types/web-socket-types';
+import { databaseQueueInstance, redisCacheInstance } from '../services/init-services';
+import DatabaseQueue from '../queue/DatabaseQueue';
 
 dotenv.config();
 const REDIS_URL = process.env.REDIS_URL;
@@ -31,6 +32,7 @@ export default class WebsocketServer {
     private publisher: Redis;
     private subscriber: Redis;
     private redis_cache: RedisCache;
+    private database_queue: DatabaseQueue;
 
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
@@ -42,6 +44,7 @@ export default class WebsocketServer {
         this.subscriber = new Redis(REDIS_URL!);
         this.publisher = new Redis(REDIS_URL!);
         this.redis_cache = redisCacheInstance;
+        this.database_queue = databaseQueueInstance;
         this.initialize_redis_subscribers();
         this.initialize_managers();
         this.initialize();
@@ -67,6 +70,13 @@ export default class WebsocketServer {
 
         switch (message.type) {
             case MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.PARTICIPANT,
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+            case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.broadcast_to_session(game_session_id, message, [
                     USER_TYPE.PARTICIPANT,
                     USER_TYPE.HOST,
@@ -126,6 +136,7 @@ export default class WebsocketServer {
             socketMapping: this.socket_mapping,
             sessionHostMapping: this.session_host_mapping,
             quizManager: this.quizManager,
+            databaseQueue: this.database_queue,
         });
         this.participant_manager = new ParticipantManager({
             publisher: this.publisher,
@@ -133,6 +144,7 @@ export default class WebsocketServer {
             socket_mapping: this.socket_mapping,
             session_participants_mapping: this.session_participants_mapping,
             quizManager: this.quizManager,
+            databaseQueue: this.database_queue,
         });
         this.spectator_manager = new SpectatorManager({
             publisher: this.publisher,
@@ -142,7 +154,7 @@ export default class WebsocketServer {
             quizManager: this.quizManager,
         });
     }
-
+    // ws://localhost:8080?quizId=37r19273r69236r931r6
     private initialize() {
         this.wss.on('connection', (ws: CustomWebSocket, req) => {
             const url = new URL(req.url || '', `http://${req.headers.host}`);
@@ -159,13 +171,13 @@ export default class WebsocketServer {
         const cookies = req.headers.cookie;
         if (!cookies) {
             ws.close();
-            return false;
+            return;
         }
         const parsedCookies = parse(cookies);
         const token = parsedCookies['token'];
         if (!token) {
             ws.close();
-            return false;
+            return;
         }
         this.extract_token(ws, token, quizId);
     }
@@ -178,7 +190,8 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-                const payload = decoded as CookiePayload;
+                const payload: CookiePayload = decoded as CookiePayload;
+
                 const redis_key: string = `game_session:${payload.gameSessionId}`;
                 this.subscriber.subscribe(redis_key);
 
@@ -187,10 +200,9 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-
                 switch (payload.role) {
                     case USER_TYPE.HOST:
-                        await this.hostManager.handle_connection(ws, payload as CookiePayload);
+                        await this.hostManager.handle_connection(ws, payload);
                         break;
                     case USER_TYPE.PARTICIPANT:
                         await this.participant_manager.handle_connection(

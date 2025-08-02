@@ -6,12 +6,27 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { ParticipantNameChangeEvent } from '@/types/web-socket-types';
 
 export default function WaitingLobbyParticipantRight() {
     const { quiz } = useLiveQuizStore();
+    const { handleParticipantNameChangeMessage } = useWebSocket();
     const { participantData } = useLiveParticipantStore();
     const [name, setName] = useState(participantData?.nickname);
+
+    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        if (!name || name.trim() === '') {
+            return;
+        }
+        const payload: ParticipantNameChangeEvent = {
+            choosenNickname: name,
+        };
+        handleParticipantNameChangeMessage(payload);
+    }
+
     return (
         <div className="w-[40vw] max-w-[40vw] h-full flex flex-col justify-between bg-light-base dark:bg-neutral-900 rounded-l-xl border-l dark:border-neutral-700 border-neutral-200 z-[20] shadow-2xl px-6 py-6 dark:text-neutral-300 text-dark-primary">
             <div className="flex-shrink-0">
@@ -74,7 +89,7 @@ export default function WaitingLobbyParticipantRight() {
                         <p className="text-xs mb-3">
                             This name will be visible to other participants
                         </p>
-                        <form className="relative mt-8">
+                        <form onSubmit={handleSubmit} className="relative mt-8">
                             <Input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
