@@ -1,12 +1,18 @@
 import { JobOption, QueueJobTypes } from '../types/database-queue-types';
 import Bull from 'bull';
-import prisma, { GameSession, Prisma, Quiz } from '@repo/db/client';
+import prisma, { GameSession, Participant, Prisma, Quiz } from '@repo/db/client';
 const REDIS_URL = process.env.REDIS_URL;
 
 interface UpdateGameSessionJobtype {
     id: string;
     gameSessionId?: string;
     gameSession: Prisma.GameSessionUpdateInput;
+}
+
+interface UpdateParticipantJobType {
+    id: string;
+    gameSessionId?: string;
+    participant: Prisma.ParticipantUpdateInput;
 }
 
 interface UpdateQuizJobType {
@@ -37,6 +43,35 @@ export default class DatabaseQueue {
             DatabaseQueue.update_game_session_processor,
         );
         this.database_queue.process(QueueJobTypes.UPDATE_QUIZ, DatabaseQueue.update_quiz_processor);
+        this.database_queue.process(
+            QueueJobTypes.UPDATE_PARTICIPANT,
+            DatabaseQueue.update_participant,
+        );
+    }
+
+    private static async update_participant(
+        job: Bull.Job,
+    ): Promise<
+        { success: boolean; participant: Participant } | { success: boolean; error: string }
+    > {
+        const { id, participant }: UpdateParticipantJobType = job.data;
+
+        try {
+            const updatedParticipant = await prisma.participant.update({
+                where: {
+                    id: id,
+                },
+                data: participant,
+            });
+
+            return { success: true, participant: updatedParticipant };
+        } catch (error) {
+            console.error(`Error while updating participant: `, error);
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
     }
 
     private static async update_game_session_processor(
@@ -107,6 +142,19 @@ export default class DatabaseQueue {
         return await this.database_queue.add(
             QueueJobTypes.UPDATE_QUIZ,
             { id, quiz },
+            { ...this.default_job_options, ...options },
+        );
+    }
+
+    public async update_participant(
+        id: string,
+        participant: Prisma.ParticipantUpdateInput,
+        game_session_id?: string,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue.add(
+            QueueJobTypes.UPDATE_PARTICIPANT,
+            { id, participant },
             { ...this.default_job_options, ...options },
         );
     }

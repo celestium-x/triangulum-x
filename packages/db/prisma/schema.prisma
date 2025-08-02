@@ -107,6 +107,7 @@ model Participant {
   quizId               String
   quiz                 Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
   Response             Response[]
+  isNameChanged        Boolean    @default(false)
 
   @@map("participants")
 }
