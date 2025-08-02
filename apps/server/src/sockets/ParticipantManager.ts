@@ -1,6 +1,12 @@
 import Redis from 'ioredis';
 import QuizManager from './QuizManager';
-import { CookiePayload, CustomWebSocket, MESSAGE_TYPES } from '../types/web-socket-types';
+import {
+    CookiePayload,
+    CustomWebSocket,
+    MESSAGE_TYPES,
+    ParticipantNameChangeEvent,
+    PubSubMessageTypes,
+} from '../types/web-socket-types';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import DatabaseQueue from '../queue/DatabaseQueue';
@@ -89,15 +95,11 @@ export default class ParticipantManager {
     }
 
     private handle_participant_message(ws: CustomWebSocket, message: any) {
-        const { type } = message;
+        const { type, payload } = message;
         switch (type) {
-            case MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION:
-                // this.handle_join_game_session(ws, payload);
+            case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
+                this.handle_participant_name_change(payload, ws);
                 break;
-
-            // case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
-            //     this.handle_participant_name_change(payload, ws.user.userId);
-            //     break;
 
             default:
                 console.error('Unknown message type', type);
@@ -167,17 +169,26 @@ export default class ParticipantManager {
         }
     }
 
-    // private async handle_participant_name_change(payload: ParticipantNameChangeEvent, participant_id: string) {
-    //     const { }
-    //     const participant = await prisma.participant.update({
-    //         where: {
-    //             id: participant_id
-    //         },
-    //         data: {
-    //             nickname:
-    //         }
-    //     })
-    // }
+    private async handle_participant_name_change(
+        payload: ParticipantNameChangeEvent,
+        ws: CustomWebSocket,
+    ) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const { choosenNickname } = payload;
+        await this.database_queue.update_participant(
+            ws.user.userId,
+            { nickname: choosenNickname },
+            game_session_id,
+        );
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
+            payload: {
+                id: ws.user.userId,
+                nickname: choosenNickname,
+            },
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
 
     private generateSocketId(): string {
         return uuid();

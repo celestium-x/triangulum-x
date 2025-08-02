@@ -4,7 +4,7 @@ import GenerateUser from '../../class/generateUser';
 import QuizAction from '../../class/quizAction';
 import { participantJoinSchema } from '../../schemas/participantJoinSchema';
 import { USER_TYPE } from '../../types/web-socket-types';
-import redisCacheInstance from '../..';
+import { redisCacheInstance } from '../../services/init-services';
 
 export default async function participantJoinController(req: Request, res: Response) {
     const parseResult = participantJoinSchema.safeParse(req.body);

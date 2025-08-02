@@ -4,6 +4,7 @@ import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import { WebSocket } from 'ws';
+import DatabaseQueue from '../queue/DatabaseQueue';
 
 export interface HostManagerDependencies {
     publisher: Redis;
@@ -11,6 +12,7 @@ export interface HostManagerDependencies {
     socketMapping: Map<string, CustomWebSocket>;
     sessionHostMapping: Map<string, string>;
     quizManager: QuizManager;
+    databaseQueue: DatabaseQueue;
 }
 
 export default class HostManager {
@@ -19,6 +21,7 @@ export default class HostManager {
     private socketMapping: Map<string, CustomWebSocket>;
     private sessionHostMapping: Map<string, string>;
     private quizManager: QuizManager;
+    private database_queue: DatabaseQueue;
 
     constructor(dependencies: HostManagerDependencies) {
         this.publisher = dependencies.publisher;
@@ -26,6 +29,7 @@ export default class HostManager {
         this.socketMapping = dependencies.socketMapping;
         this.sessionHostMapping = dependencies.sessionHostMapping;
         this.quizManager = dependencies.quizManager;
+        this.database_queue = dependencies.databaseQueue;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {

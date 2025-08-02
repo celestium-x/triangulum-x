@@ -24,7 +24,6 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
             if (existingIndex !== -1) {
                 const updatedParticipants = [...state.participants];
                 const existingParticipant = updatedParticipants[existingIndex];
-
                 if (existingParticipant) {
                     updatedParticipants[existingIndex] = {
                         ...existingParticipant,

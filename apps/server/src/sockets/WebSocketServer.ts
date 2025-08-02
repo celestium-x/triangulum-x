@@ -76,6 +76,13 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+            case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.PARTICIPANT,
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
         }
     }
 
@@ -129,6 +136,7 @@ export default class WebsocketServer {
             socketMapping: this.socket_mapping,
             sessionHostMapping: this.session_host_mapping,
             quizManager: this.quizManager,
+            databaseQueue: this.database_queue,
         });
         this.participant_manager = new ParticipantManager({
             publisher: this.publisher,
@@ -146,7 +154,7 @@ export default class WebsocketServer {
             quizManager: this.quizManager,
         });
     }
-
+    // ws://localhost:8080?quizId=37r19273r69236r931r6
     private initialize() {
         this.wss.on('connection', (ws: CustomWebSocket, req) => {
             const url = new URL(req.url || '', `http://${req.headers.host}`);
@@ -163,13 +171,13 @@ export default class WebsocketServer {
         const cookies = req.headers.cookie;
         if (!cookies) {
             ws.close();
-            return false;
+            return;
         }
         const parsedCookies = parse(cookies);
         const token = parsedCookies['token'];
         if (!token) {
             ws.close();
-            return false;
+            return;
         }
         this.extract_token(ws, token, quizId);
     }
@@ -182,7 +190,8 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-                const payload = decoded as CookiePayload;
+                const payload: CookiePayload = decoded as CookiePayload;
+
                 const redis_key: string = `game_session:${payload.gameSessionId}`;
                 this.subscriber.subscribe(redis_key);
 
@@ -191,10 +200,9 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-
                 switch (payload.role) {
                     case USER_TYPE.HOST:
-                        await this.hostManager.handle_connection(ws, payload as CookiePayload);
+                        await this.hostManager.handle_connection(ws, payload);
                         break;
                     case USER_TYPE.PARTICIPANT:
                         await this.participant_manager.handle_connection(
