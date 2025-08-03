@@ -27,16 +27,16 @@ router.get('/quiz/get-quiz/:quizId', authMiddleware, getQuizController);
 router.get('/quiz/get-all-quiz', authMiddleware, getAllQuizController);
 router.delete('/quiz/delete-quiz/:quizId', authMiddleware, deleteQuizController);
 router.post('/get-presigned-url', getPreSignedUrlController);
-router.put(
+router.post (
     '/quiz/publish-quiz/:quizId',
     authMiddleware,
-    verifyQuizOwnershipMiddleware,
+    // verifyQuizOwnershipMiddleware,
     publishQuizController,
 );
-router.get(
+router.post(
     '/quiz/launch-quiz/:quizId',
     authMiddleware,
-    verifyQuizOwnershipMiddleware,
+    // verifyQuizOwnershipMiddleware,
     launchQuizController,
 );
 router.post('/quiz/participant-join-quiz', participantJoinController);

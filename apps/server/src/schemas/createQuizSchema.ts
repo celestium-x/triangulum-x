@@ -50,3 +50,6 @@ export const createQuizSchema = z.object({
     questions: z.array(questionSchema),
     interactions: z.array(z.enum(Interactions)),
 });
+
+export type QuestionType = z.infer<typeof questionSchema>;
+export type CreateQuizType = z.infer<typeof createQuizSchema>;

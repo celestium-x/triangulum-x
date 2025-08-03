@@ -1,7 +1,7 @@
-import prisma from '@repo/db/client';
 import { Request, Response } from 'express';
-import QuizAction from '../../class/quizAction';
 import { createQuizSchema } from '../../schemas/createQuizSchema';
+import { quizControllerInstance } from '../../services/init-services';
+import { QUIZ_STATUS } from './quizController';
 
 export default async function upsertQuizController(req: Request, res: Response) {
     const { quizId } = req.params;
@@ -38,71 +38,27 @@ export default async function upsertQuizController(req: Request, res: Response) 
     }
 
     try {
-        let quiz = await prisma.quiz.findUnique({
-            where: {
-                id: quizId,
-            },
-        });
+        const data = await quizControllerInstance.update_quiz_status(QUIZ_STATUS.SAVE_NEW_QUIZ, quizId, input, questions, hostId);
 
-        if (!quiz) {
-            quiz = await prisma.quiz.create({
-                data: {
-                    ...input,
-                    scheduledAt: input.scheduledAt ? new Date(input.scheduledAt) : undefined,
-                    hostId: String(hostId),
-                    questions: {
-                        create: questions,
-                    },
-                },
+        if(!data || !data.success || data.error || !data.quiz) {
+            console.error('[CREATE_QUIZ_ERROR] ', data?.error);
+            res.status(500).json({
+                success: false,
+                message: 'Internal Server Error',
+                value: 'INTERNAL_SERVER_ERROR'
             });
-        } else {
-            const isValidOwner = await QuizAction.validOwner(hostId, quizId);
-            if (isValidOwner) {
-                quiz = await prisma.$transaction(async (tx) => {
-                    await tx.question.deleteMany({
-                        where: {
-                            quizId,
-                        },
-                    });
-
-                    return await tx.quiz.update({
-                        where: {
-                            id: quizId,
-                        },
-                        data: {
-                            title: input.title,
-                            description: input.description,
-                            prizePool: input.prizePool,
-                            currency: input.currency,
-                            basePointsPerQuestion: input.basePointsPerQuestion,
-                            pointsMultiplier: input.pointsMultiplier,
-                            timeBonus: input.timeBonus,
-                            eliminationThreshold: input.eliminationThreshold,
-                            questionTimeLimit: input.questionTimeLimit,
-                            breakBetweenQuestions: input.breakBetweenQuestions,
-                            scheduledAt: input.scheduledAt
-                                ? new Date(input.scheduledAt)
-                                : undefined,
-                            autoSave: input.autoSave,
-                            liveChat: input.liveChat,
-                            spectatorMode: input.spectatorMode,
-                            questions: {
-                                create: questions,
-                            },
-                        },
-                    });
-                });
-            }
+            return;
         }
+
         res.status(201).json({
             success: true,
-            quiz,
+            quiz: data.quiz,
             message: 'Quiz created successfully',
             value: 'QUIZ_CREATED',
         });
         return;
     } catch (err) {
-        console.error('[CREATE_QUIZ_ERROR]', err);
+        console.error('[CREATE_QUIZ_ERROR] ', err);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error',
