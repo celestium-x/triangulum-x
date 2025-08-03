@@ -107,6 +107,37 @@ export default class ParticipantManager {
         }
     }
 
+    private send_message_to_participant(participant_id: string, message: any) {
+        const socket_id = this.participant_socket_mapping.get(participant_id);
+        if (socket_id) {
+            const socket = this.socket_mapping.get(socket_id);
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(message));
+            }
+        }
+    }
+
+    private async handle_participant_name_change(
+        payload: ParticipantNameChangeEvent,
+        ws: CustomWebSocket,
+    ) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const { choosenNickname } = payload;
+        await this.database_queue.update_participant(
+            ws.user.userId,
+            { nickname: choosenNickname },
+            game_session_id,
+        );
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
+            payload: {
+                id: ws.user.userId,
+                nickname: choosenNickname,
+            },
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
+
     private cleanup_existing_partiicpant_socket(
         participant_id: string,
         game_session_id: string,
@@ -157,37 +188,6 @@ export default class ParticipantManager {
             },
         });
         return !!participant;
-    }
-
-    private send_message_to_participant(participant_id: string, message: any) {
-        const socket_id = this.participant_socket_mapping.get(participant_id);
-        if (socket_id) {
-            const socket = this.socket_mapping.get(socket_id);
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                socket.send(JSON.stringify(message));
-            }
-        }
-    }
-
-    private async handle_participant_name_change(
-        payload: ParticipantNameChangeEvent,
-        ws: CustomWebSocket,
-    ) {
-        const { gameSessionId: game_session_id } = ws.user;
-        const { choosenNickname } = payload;
-        await this.database_queue.update_participant(
-            ws.user.userId,
-            { nickname: choosenNickname },
-            game_session_id,
-        );
-        const event_data: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
-            payload: {
-                id: ws.user.userId,
-                nickname: choosenNickname,
-            },
-        };
-        this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 
     private generateSocketId(): string {

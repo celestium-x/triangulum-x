@@ -1,4 +1,4 @@
-import WaitingLobbyAvatars from '../common/WaitingLobbyAvatars';
+import WaitingLobbyAvatars from '../common/Avatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
 import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';

@@ -1,5 +1,5 @@
 'use client';
-import WaitingLobbyAvatar from '@/components/waitingRoom/WaitingLobbyAvatar';
+import WaitingLobbyAvatar from '@/components/waitingRoom/Avatar';
 import { ParticipantType } from '@/types/prisma-types';
 import { useState, useEffect, useCallback } from 'react';
 

@@ -25,7 +25,7 @@ interface AvatarProps {
     className?: string;
 }
 
-export default function WaitingLobbyAvatar({
+export default function Avatar({
     avatar,
     name,
     position,
@@ -44,6 +44,7 @@ export default function WaitingLobbyAvatar({
                 transform: 'translate(-50%, -50%)',
                 width: size,
                 height: size,
+                zIndex: 10,
             }}
             initial={{
                 opacity: 0,
