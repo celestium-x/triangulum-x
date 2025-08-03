@@ -1,4 +1,4 @@
-import { GameSessionType, QuizType } from '@/types/prisma-types';
+import { GameSessionType, QuestionType, QuizType } from '@/types/prisma-types';
 import { create } from 'zustand';
 
 interface LiveQuizStore {
@@ -6,6 +6,8 @@ interface LiveQuizStore {
     updateQuiz: (updatedFields: Partial<QuizType>) => void;
     gameSession: GameSessionType | null;
     updateGameSession: (updatedFields: Partial<GameSessionType>) => void;
+    currentQuestion: QuestionType | null
+    updateCurrentQuestion: (updatedFields: Partial<QuestionType>) => void;
 }
 
 export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
@@ -27,4 +29,13 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             } as GameSessionType,
         }));
     },
+    currentQuestion: null,
+    updateCurrentQuestion: (updateFields: Partial<QuestionType>) => {
+        set((state) => ({
+            currentQuestion: {
+                ...state.currentQuestion,
+                ...updateFields,
+            } as QuestionType,
+        }));
+    }
 }));

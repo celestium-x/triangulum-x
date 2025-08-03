@@ -78,7 +78,7 @@ export default function New({ params }: NewProps) {
     }
 
     return (
-        <div className="w-full h-screen">
+        <div className="w-full h-screen select-none">
             <LiveUserRendererScreens />
         </div>
     );
