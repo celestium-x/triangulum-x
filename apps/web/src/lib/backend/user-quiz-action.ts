@@ -73,5 +73,4 @@ class UserQuizAction {
 }
 
 const userQuizAction = new UserQuizAction();
-
 export default userQuizAction;

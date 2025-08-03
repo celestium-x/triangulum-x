@@ -73,6 +73,7 @@ export interface ParticipantType {
     avatar?: string | null;
     ipAddress?: string | null;
     isEliminated: boolean;
+    isNameChanged: boolean;
     eliminatedAt?: Date | null;
     eliminatedAtQuestion?: string | null;
     finalRank?: number | null;

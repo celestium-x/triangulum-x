@@ -13,7 +13,6 @@ export default function LiveUserRendererScreens() {
     const { quiz } = useLiveQuizStore();
     const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
     useWebSocket();
-
     useSubscribeEventHandlers();
     function renderCurrentUserScreen() {
         switch (currentUserType) {

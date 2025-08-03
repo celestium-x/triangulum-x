@@ -14,9 +14,9 @@ export const useLiveHostStore = create<LiveHostStore>((set) => ({
         set((state) => ({
             hostData: state.hostData
                 ? {
-                      ...state.hostData,
-                      ...updatedFields,
-                  }
+                    ...state.hostData,
+                    ...updatedFields,
+                }
                 : (updatedFields as UserType),
         }));
     },
@@ -35,14 +35,17 @@ interface LiveParticipantStore {
 export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
     participantData: null,
     updateParticipantData: (updatedFields: Partial<ParticipantType>) => {
-        set((state) => ({
-            participantData: state.participantData
-                ? {
-                      ...state.participantData,
-                      ...updatedFields,
-                  }
-                : (updatedFields as ParticipantType),
-        }));
+        set((state) => {
+            if (state.participantData && updatedFields.id && state.participantData.id === updatedFields.id) {
+                return {
+                    participantData: {
+                        ...state.participantData,
+                        ...updatedFields,
+                    }
+                }
+            }
+            return state
+        });
     },
     setParticipantData: (data: ParticipantType) => {
         set({ participantData: data });
@@ -62,9 +65,9 @@ export const useLiveSpectatorStore = create<LiveSpectatorStore>((set) => ({
         set((state) => ({
             spectatorData: state.spectatorData
                 ? {
-                      ...state.spectatorData,
-                      ...updatedFields,
-                  }
+                    ...state.spectatorData,
+                    ...updatedFields,
+                }
                 : (updatedFields as SpectatorType),
         }));
     },

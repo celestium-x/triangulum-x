@@ -10,7 +10,7 @@ export default function WaitingLobbyParticipantLeft() {
     return (
         <div className="w-full max-h-full flex flex-col relative">
             <WaitingLobbyAvatars participants={participants} />
-            <h1 className="absolute left-1/2 -translate-x-1/2 top-20 text-3xl font-medium w-full text-center">
+            <h1 className="absolute left-1/2 -translate-x-1/2 top-20 text-3xl font-extralight w-full text-center">
                 {quiz?.title}
             </h1>
             <div className="absolute bottom-6 left-6 flex items-center gap-x-2 px-5 py-3 z-[20] bg-light-base dark:bg-dark-base rounded-full">
