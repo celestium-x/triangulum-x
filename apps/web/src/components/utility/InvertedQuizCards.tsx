@@ -66,7 +66,7 @@ export default function InvertedQuizCards() {
         }
 
         try {
-            const isPublished = await BackendActions.publishQuiz(quizId, session.user.token);
+            const isPublished = await BackendActions.publishQuiz(quiz, session.user.token);
             if (isPublished) {
                 updateAllQuiz(quizId, {
                     status: QuizStatusEnum.PUBLISHED,
@@ -91,7 +91,7 @@ export default function InvertedQuizCards() {
         }
 
         try {
-            const isLaunched = await BackendActions.launchQuiz(quizId, session.user.token);
+            const isLaunched = await BackendActions.launchQuiz(quiz, session.user.token);
             if (isLaunched) {
                 updateAllQuiz(quizId, {
                     status: QuizStatusEnum.LIVE,

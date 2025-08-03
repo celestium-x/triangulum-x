@@ -23,20 +23,17 @@ export default class BackendActions {
         }
     }
 
-    static async publishQuiz(quizId: string, token: string): Promise<boolean> {
-        if (!token || !quizId) {
+    static async publishQuiz(quiz: QuizType, token: string): Promise<boolean> {
+        if (!token || !quiz) {
             return false;
         }
+
         try {
-            const { data } = await axios.put(
-                `${PUBLISH_QUIZ_URL}/${quizId}`,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+            const { data } = await axios.post(`${PUBLISH_QUIZ_URL}/${quiz.id}`, quiz, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 },
-            );
+            });
             if (data.success) {
                 return true;
             }
@@ -47,12 +44,12 @@ export default class BackendActions {
         }
     }
 
-    static async launchQuiz(quizId: string, token: string): Promise<boolean> {
-        if (!token || !quizId) {
+    static async launchQuiz(quiz: QuizType, token: string): Promise<boolean> {
+        if (!token || !quiz) {
             return false;
         }
         try {
-            const { data } = await axios.get(`${LAUNCH_QUIZ_URL}/${quizId}`, {
+            const { data } = await axios.post(`${LAUNCH_QUIZ_URL}/${quiz.id}`, quiz, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

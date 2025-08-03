@@ -77,7 +77,9 @@ export default async function participantJoinController(req: Request, res: Respo
                     ipAddress: req.ip || 'unknown',
                 },
             });
+
             redisCache.set_participants(gameSession.id, participant.id, participant);
+
             await tx.gameSession.update({
                 where: { id: gameSession.id },
                 data: {

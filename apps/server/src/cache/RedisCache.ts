@@ -14,6 +14,8 @@ export default class RedisCache {
         this.redis_cache = new Redis(REDIS_URL!);
     }
 
+    //  <------------------ GAME_SESSION ------------------>
+
     public async set_game_session(
         game_live_session_id: string,
         game_live_session: Partial<GameSession>,
@@ -66,6 +68,8 @@ export default class RedisCache {
         return `game_session:${game_live_session_id}`;
     }
 
+    //  <------------------ PARTICIPANT ------------------>
+
     public async get_participant(game_session_id: string, participant_id: string) {
         const key = this.get_participants_key(game_session_id);
         try {
@@ -91,9 +95,20 @@ export default class RedisCache {
         }
     }
 
-    public get_participants_key(game_session_id: string) {
+    public async delete_participant(game_session_id: string, participant_id: string) {
+        const key = this.get_participants_key(game_session_id);
+        try {
+            await this.redis_cache.hdel(key, participant_id);
+        } catch (error) {
+            console.error('Error in delete-participant: ', error);
+        }
+    }
+
+    private get_participants_key(game_session_id: string) {
         return `game_session:${game_session_id}:participants`;
     }
+
+    //  <------------------ SPECTATOR ------------------>
 
     public async set_spectator(
         game_session_id: string,
@@ -120,14 +135,14 @@ export default class RedisCache {
         }
     }
 
-    // public async delete_spectator(game_session_id: string, spectator_id: string) {
-    //     const key = this.get_spectator_key(game_session_id);
-    //     try {
-    //         await this.redis_cache.del(key);
-    //     } catch (error) {
-    //         console.error('Error in delete-spectator: ', error);
-    //     }
-    // }
+    public async delete_spectator(game_session_id: string, spectator_id: string) {
+        const key = this.get_spectator_key(game_session_id);
+        try {
+            await this.redis_cache.hdel(key, spectator_id);
+        } catch (error) {
+            console.error('Error in delete-spectator: ', error);
+        }
+    }
 
     public get_spectator_key(game_session_id: string) {
         return `game_session:${game_session_id}:spectators`;

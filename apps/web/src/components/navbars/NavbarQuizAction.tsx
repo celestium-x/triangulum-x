@@ -64,7 +64,7 @@ export default function NavbarQuizAction() {
         }
         setIsLoading(true);
         try {
-            const isPublished = await BackendActions.publishQuiz(quiz.id, session.user.token);
+            const isPublished = await BackendActions.publishQuiz(quiz, session.user.token);
             if (isPublished) {
                 updateAllQuiz(quiz.id, {
                     status: QuizStatusEnum.PUBLISHED,
@@ -89,7 +89,7 @@ export default function NavbarQuizAction() {
         }
         setIsLoading(true);
         try {
-            const isPublished = await BackendActions.launchQuiz(quiz.id, session.user.token);
+            const isPublished = await BackendActions.launchQuiz(quiz, session.user.token);
             if (isPublished) {
                 updateAllQuiz(quiz.id, {
                     status: QuizStatusEnum.LIVE,
