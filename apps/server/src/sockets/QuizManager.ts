@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 import RedisCache from '../cache/RedisCache';
-import prisma, { Participant } from '@repo/db/client';
+import prisma, { Participant, Spectator } from '@repo/db/client';
 import { CookiePayload, MESSAGE_TYPES, PubSubMessageTypes } from '../types/web-socket-types';
 
 export interface QuizManagerDependencies {
@@ -51,7 +51,23 @@ export default class QuizManager {
 
     public async onSpectatorConnect(payload: CookiePayload) {
         const spectator_id = payload.userId;
-        console.error(spectator_id); // for passing lint tests
+        const spectator_cache = await this.redis_cache.get_spectator(
+            payload.gameSessionId,
+            spectator_id,
+        );
+
+        const spectator: Partial<Spectator> = {
+            id: spectator_cache.id,
+            avatar: spectator_cache.avatar,
+            nickname: spectator_cache.nickname,
+        };
+
+        const pub_sub_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION,
+            payload: spectator,
+        };
+
+        this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
     }
 
     public publish_event_to_redis(game_session_id: string, event: PubSubMessageTypes) {

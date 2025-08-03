@@ -76,9 +76,24 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+
             case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.broadcast_to_session(game_session_id, message, [
                     USER_TYPE.PARTICIPANT,
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+
+            case MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+
+            case MESSAGE_TYPES.SPECTATOR_NAME_CHANGE:
+                this.broadcast_to_session(game_session_id, message, [
                     USER_TYPE.HOST,
                     USER_TYPE.SPECTATOR,
                 ]);
@@ -153,6 +168,7 @@ export default class WebsocketServer {
             socket_mapping: this.socket_mapping,
             session_spectator_mapping: this.session_spectators_mapping,
             quizManager: this.quizManager,
+            database_queue: this.database_queue,
         });
     }
     // ws://localhost:8080?quizId=37r19273r69236r931r6
@@ -205,12 +221,21 @@ export default class WebsocketServer {
                     case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, decoded_cookie_payload);
                         break;
+
                     case USER_TYPE.PARTICIPANT:
                         await this.participant_manager.handle_connection(
                             ws,
                             decoded_cookie_payload as CookiePayload,
                         );
                         break;
+
+                    case USER_TYPE.SPECTATOR:
+                        await this.spectator_manager.handle_connection(
+                            ws,
+                            payload as CookiePayload,
+                        );
+                        break;
+
                     default:
                         ws.close();
                 }

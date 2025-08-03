@@ -88,6 +88,7 @@ export interface ParticipantType {
 export interface SpectatorType {
     id: string;
     nickname: string;
+    isNameChanged: boolean;
     avatar?: string | null;
     ipAddress?: string | null;
     connectionId?: string | null;

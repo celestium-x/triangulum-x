@@ -4,9 +4,11 @@ import prisma from '@repo/db/client';
 import GenerateUser from '../../class/generateUser';
 import QuizAction from '../../class/quizAction';
 import { USER_TYPE } from '../../types/web-socket-types';
+import { redisCacheInstance } from '../../services/init-services';
 
 export default async function spectatorJoinController(req: Request, res: Response) {
     const parsedData = spectatorJoinSchema.safeParse(req.body);
+    const redis_cache = redisCacheInstance;
     if (!parsedData.success) {
         res.status(400).json({
             success: false,
@@ -69,7 +71,7 @@ export default async function spectatorJoinController(req: Request, res: Respons
                     ipAddress: req.ip || 'unknown',
                 },
             });
-
+            redis_cache.set_spectator(gameSession.id, spectator.id, spectator);
             await tx.gameSession.update({
                 where: {
                     id: gameSession.id,

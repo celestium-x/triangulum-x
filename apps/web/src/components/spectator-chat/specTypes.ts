@@ -8,7 +8,7 @@ export interface Message {
 export interface User {
     id: string;
     name: string;
-    isOnline: boolean;
     avatar?: string | React.SVGElementType;
     svg?: React.ReactElement;
+    isCurrentUser?: boolean;
 }

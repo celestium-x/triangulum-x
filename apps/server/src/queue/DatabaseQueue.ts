@@ -1,6 +1,6 @@
 import { JobOption, QueueJobTypes } from '../types/database-queue-types';
 import Bull from 'bull';
-import prisma, { GameSession, Participant, Prisma, Quiz } from '@repo/db/client';
+import prisma, { GameSession, Participant, Prisma, Quiz, Spectator } from '@repo/db/client';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
 const REDIS_URL = process.env.REDIS_URL;
@@ -15,6 +15,12 @@ interface UpdateParticipantJobType {
     id: string;
     game_session_id: string;
     participant: Prisma.ParticipantUpdateInput;
+}
+
+interface UpdateSpectatorJobType {
+    id: string;
+    game_session_id: string;
+    spectator: Prisma.SpectatorUpdateInput;
 }
 
 interface UpdateQuizJobType {
@@ -54,6 +60,35 @@ export default class DatabaseQueue {
             QueueJobTypes.UPDATE_PARTICIPANT,
             this.update_participant_processor.bind(this),
         );
+        this.database_queue.process(
+            QueueJobTypes.UPDATE_SPECTATOR,
+            this.update_spectator_processor.bind(this),
+        );
+    }
+
+    private async update_spectator_processor(
+        job: Bull.Job,
+    ): Promise<{ success: boolean; spectator: Spectator } | { success: boolean; error: string }> {
+        const { id, game_session_id, spectator }: UpdateSpectatorJobType = job.data;
+
+        try {
+            const updatedSpectator = await prisma.spectator.update({
+                where: {
+                    id: id,
+                },
+                data: spectator,
+            });
+
+            this.redis_cache.set_spectator(game_session_id, updatedSpectator.id, updatedSpectator);
+
+            return { success: true, spectator: updatedSpectator };
+        } catch (error) {
+            console.error(`Error while updating spectator: `, error);
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
     }
 
     private async update_participant_processor(
@@ -167,6 +202,19 @@ export default class DatabaseQueue {
         return await this.database_queue.add(
             QueueJobTypes.UPDATE_PARTICIPANT,
             { id, participant, game_session_id },
+            { ...this.default_job_options, ...options },
+        );
+    }
+
+    public async update_spectator(
+        id: string,
+        spectator: Prisma.SpectatorUpdateInput,
+        game_session_id: string,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue.add(
+            QueueJobTypes.UPDATE_SPECTATOR,
+            { id, spectator, game_session_id },
             { ...this.default_job_options, ...options },
         );
     }
