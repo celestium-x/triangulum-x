@@ -1,7 +1,6 @@
-import prisma, { GameSession, Quiz, QuizStatus } from "@repo/db/client";
-import QuizAction from "../../class/quizAction";
-import { CreateQuizType, QuestionType } from "../../schemas/createQuizSchema";
-
+import prisma, { GameSession, Quiz, QuizStatus } from '@repo/db/client';
+import QuizAction from '../../class/quizAction';
+import { CreateQuizType, QuestionType } from '../../schemas/createQuizSchema';
 
 export enum QUIZ_STATUS {
     SAVE_NEW_QUIZ = 'SAVE_NEW_QUIZ',
@@ -11,16 +10,40 @@ export enum QUIZ_STATUS {
 }
 
 type quiz_controller =
-    | { type: QUIZ_STATUS.SAVE_NEW_QUIZ, success: boolean, quiz?: Partial<Quiz>, error?: unknown, isHost?: boolean }
-    | { type: QUIZ_STATUS.UPDATE_QUIZ, success: boolean, quiz?: Partial<Quiz>, error?: unknown }
-    | { type: QUIZ_STATUS.PUBLISH_QUIZ, success: boolean, quiz?: Partial<Quiz>, status?: QuizStatus, error?: unknown, isHost?: boolean }
-    | { type: QUIZ_STATUS.LAUNCH_QUIZ, success: boolean, quiz?: Partial<Quiz>, gameSession?: Partial<GameSession>, status?: QuizStatus, error?: unknown, isHost?: boolean };
-
+    | {
+          type: QUIZ_STATUS.SAVE_NEW_QUIZ;
+          success: boolean;
+          quiz?: Partial<Quiz>;
+          error?: unknown;
+          isHost?: boolean;
+      }
+    | { type: QUIZ_STATUS.UPDATE_QUIZ; success: boolean; quiz?: Partial<Quiz>; error?: unknown }
+    | {
+          type: QUIZ_STATUS.PUBLISH_QUIZ;
+          success: boolean;
+          quiz?: Partial<Quiz>;
+          status?: QuizStatus;
+          error?: unknown;
+          isHost?: boolean;
+      }
+    | {
+          type: QUIZ_STATUS.LAUNCH_QUIZ;
+          success: boolean;
+          quiz?: Partial<Quiz>;
+          gameSession?: Partial<GameSession>;
+          status?: QuizStatus;
+          error?: unknown;
+          isHost?: boolean;
+      };
 
 export default class QuizController {
-
-    public async update_quiz_status(status: QUIZ_STATUS, quizId: string, quiz_data: CreateQuizType, questions: QuestionType[], hostId: number): Promise<quiz_controller | null> {
-
+    public async update_quiz_status(
+        status: QUIZ_STATUS,
+        quizId: string,
+        quiz_data: CreateQuizType,
+        questions: QuestionType[],
+        hostId: number,
+    ): Promise<quiz_controller | null> {
         switch (status) {
             case QUIZ_STATUS.SAVE_NEW_QUIZ:
                 return await this.handle_save_new_quiz(quizId, quiz_data, questions, hostId);
@@ -36,21 +59,25 @@ export default class QuizController {
 
             default:
                 return null;
-
         }
-
     }
 
-    private async handle_save_new_quiz(quizId: string, quiz_data: CreateQuizType, questions: QuestionType[], hostId: number): Promise<quiz_controller> {
+    private async handle_save_new_quiz(
+        quizId: string,
+        quiz_data: CreateQuizType,
+        questions: QuestionType[],
+        hostId: number,
+    ): Promise<quiz_controller> {
         try {
-
             let quiz = await this.find_quiz(quizId);
 
             if (!quiz) {
                 quiz = await prisma.quiz.create({
                     data: {
                         ...quiz_data,
-                        scheduledAt: quiz_data.scheduledAt ? new Date(quiz_data.scheduledAt) : undefined,
+                        scheduledAt: quiz_data.scheduledAt
+                            ? new Date(quiz_data.scheduledAt)
+                            : undefined,
                         hostId: String(hostId),
                         questions: {
                             create: questions,
@@ -61,34 +88,32 @@ export default class QuizController {
                 const response: quiz_controller = {
                     type: QUIZ_STATUS.SAVE_NEW_QUIZ,
                     success: true,
-                    quiz: quiz
+                    quiz: quiz,
                 };
 
                 return response;
-
             } else {
                 const isValidOwner = await QuizAction.validOwner(hostId, quizId);
                 if (!isValidOwner) {
                     return {
                         type: QUIZ_STATUS.SAVE_NEW_QUIZ,
                         success: false,
-                        isHost: false
+                        isHost: false,
                     };
                 }
 
-                return await this.handle_update_quiz(
-                    quizId,
-                    quiz_data,
-                    questions,
-                );
+                return await this.handle_update_quiz(quizId, quiz_data, questions);
             }
-
         } catch (error) {
             return this.handle_error(QUIZ_STATUS.SAVE_NEW_QUIZ, error);
         }
     }
 
-    private async handle_update_quiz(quizId: string, quiz_data: CreateQuizType, questions: QuestionType[]): Promise<quiz_controller> {
+    private async handle_update_quiz(
+        quizId: string,
+        quiz_data: CreateQuizType,
+        questions: QuestionType[],
+    ): Promise<quiz_controller> {
         try {
             // check for the valid owner, before calling this function
             const quiz = await prisma.$transaction(async (tx) => {
@@ -129,26 +154,28 @@ export default class QuizController {
             const response: quiz_controller = {
                 type: QUIZ_STATUS.UPDATE_QUIZ,
                 success: true,
-                quiz: quiz
+                quiz: quiz,
             };
 
             return response;
-
         } catch (error) {
             return this.handle_error(QUIZ_STATUS.UPDATE_QUIZ, error);
         }
     }
 
     // add host auth
-    private async handle_publish_quiz(quizId: string, quiz_data: CreateQuizType, questions: QuestionType[], hostId: number): Promise<quiz_controller> {
+    private async handle_publish_quiz(
+        quizId: string,
+        quiz_data: CreateQuizType,
+        questions: QuestionType[],
+        hostId: number,
+    ): Promise<quiz_controller> {
         try {
-
             const quiz = await this.find_quiz(quizId);
             let publishing_quiz;
 
             // if quiz exists, update the quiz
             if (quiz) {
-
                 // add checks for other status types
 
                 // don't update if live or publish
@@ -156,7 +183,7 @@ export default class QuizController {
                     return {
                         type: QUIZ_STATUS.PUBLISH_QUIZ,
                         success: false,
-                        status: quiz.status
+                        status: quiz.status,
                     };
                 }
 
@@ -166,7 +193,7 @@ export default class QuizController {
                     return {
                         type: QUIZ_STATUS.PUBLISH_QUIZ,
                         success: false,
-                        isHost: false
+                        isHost: false,
                     };
                 }
 
@@ -176,13 +203,13 @@ export default class QuizController {
                     return {
                         type: QUIZ_STATUS.PUBLISH_QUIZ,
                         success: false,
-                        error: data.error
+                        error: data.error,
                     };
                 }
 
                 publishing_quiz = await prisma.quiz.update({
                     where: {
-                        id: data.quiz.id
+                        id: data.quiz.id,
                     },
                     data: {
                         status: 'PUBLISHED',
@@ -195,7 +222,7 @@ export default class QuizController {
                 if (!data.quiz) {
                     return {
                         type: QUIZ_STATUS.PUBLISH_QUIZ,
-                        success: false
+                        success: false,
                     };
                 }
 
@@ -204,7 +231,7 @@ export default class QuizController {
                         id: data.quiz.id,
                     },
                     data: {
-                        status: 'PUBLISHED'
+                        status: 'PUBLISHED',
                     },
                 });
             }
@@ -212,34 +239,35 @@ export default class QuizController {
             const response = {
                 type: QUIZ_STATUS.PUBLISH_QUIZ,
                 success: true,
-                quiz: publishing_quiz
+                quiz: publishing_quiz,
             };
 
             return response;
-
         } catch (error) {
             return this.handle_error(QUIZ_STATUS.PUBLISH_QUIZ, error);
         }
     }
 
     // add host auth
-    private async handle_launch_quiz(quizId: string, quiz_data: CreateQuizType, questions: QuestionType[], hostId: number): Promise<quiz_controller> {
+    private async handle_launch_quiz(
+        quizId: string,
+        quiz_data: CreateQuizType,
+        questions: QuestionType[],
+        hostId: number,
+    ): Promise<quiz_controller> {
         try {
-
             const quiz = await this.find_quiz(quizId);
-            let launching_quiz: { quiz: Partial<Quiz>, gameSession: Partial<GameSession> };
-
+            let launching_quiz: { quiz: Partial<Quiz>; gameSession: Partial<GameSession> };
 
             if (quiz?.status === 'LIVE') {
                 return {
                     type: QUIZ_STATUS.LAUNCH_QUIZ,
                     success: false,
-                    status: quiz.status
+                    status: quiz.status,
                 };
             }
 
             if (quiz?.status === 'PUBLISHED') {
-
                 // validate owner
                 const isValidOwner = await QuizAction.validOwner(hostId, quizId);
 
@@ -247,7 +275,7 @@ export default class QuizController {
                     return {
                         type: QUIZ_STATUS.LAUNCH_QUIZ,
                         success: false,
-                        isHost: false
+                        isHost: false,
                     };
                 }
 
@@ -259,7 +287,7 @@ export default class QuizController {
                     return {
                         type: QUIZ_STATUS.LAUNCH_QUIZ,
                         success: false,
-                        error: data.error
+                        error: data.error,
                     };
                 }
 
@@ -270,17 +298,18 @@ export default class QuizController {
                 type: QUIZ_STATUS.LAUNCH_QUIZ,
                 success: true,
                 quiz: launching_quiz.quiz,
-                gameSession: launching_quiz.gameSession
-            }
+                gameSession: launching_quiz.gameSession,
+            };
 
             return response;
-
         } catch (error) {
             return this.handle_error(QUIZ_STATUS.LAUNCH_QUIZ, error);
         }
     }
 
-    private async launch_quiz_tx(quizId: string): Promise<{ quiz: Partial<Quiz>, gameSession: Partial<GameSession> }> {
+    private async launch_quiz_tx(
+        quizId: string,
+    ): Promise<{ quiz: Partial<Quiz>; gameSession: Partial<GameSession> }> {
         const result = await prisma.$transaction(async (tx) => {
             const participantCode = await QuizAction.generateUniqueCode('participant');
             const spectatorCode = await QuizAction.generateUniqueCode('spectator');
@@ -358,9 +387,8 @@ export default class QuizController {
         const response: quiz_controller = {
             type,
             success: false,
-            error
+            error,
         };
         return response;
     }
-
 }

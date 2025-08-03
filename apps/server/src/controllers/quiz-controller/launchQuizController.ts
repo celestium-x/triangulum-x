@@ -1,4 +1,3 @@
-import prisma from '@repo/db/client';
 import { Request, Response } from 'express';
 import QuizAction from '../../class/quizAction';
 import { USER_TYPE } from '../../types/web-socket-types';
@@ -39,10 +38,21 @@ export default async function launchQuizController(req: Request, res: Response) 
     const questions = input.questions;
 
     try {
+        const data = await quizControllerInstance.update_quiz_status(
+            QUIZ_STATUS.LAUNCH_QUIZ,
+            quizId,
+            input,
+            questions,
+            userId,
+        );
 
-        const data = await quizControllerInstance.update_quiz_status(QUIZ_STATUS.LAUNCH_QUIZ, quizId, input, questions, userId);
-
-        if (!data || data.error || !data.quiz || data.type !== QUIZ_STATUS.LAUNCH_QUIZ || !data.gameSession) {
+        if (
+            !data ||
+            data.error ||
+            !data.quiz ||
+            data.type !== QUIZ_STATUS.LAUNCH_QUIZ ||
+            !data.gameSession
+        ) {
             console.error('Error publishing quiz:', data?.error);
             res.status(500).json({
                 success: false,

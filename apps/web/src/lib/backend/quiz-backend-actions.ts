@@ -29,15 +29,11 @@ export default class BackendActions {
         }
 
         try {
-            const { data } = await axios.post(
-                `${PUBLISH_QUIZ_URL}/${quiz.id}`,
-                quiz,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+            const { data } = await axios.post(`${PUBLISH_QUIZ_URL}/${quiz.id}`, quiz, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 },
-            );
+            });
             if (data.success) {
                 return true;
             }
@@ -53,15 +49,12 @@ export default class BackendActions {
             return false;
         }
         try {
-            const { data } = await axios.post(
-                `${LAUNCH_QUIZ_URL}/${quiz.id}`,
-                quiz,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    withCredentials: true,
-                });
+            const { data } = await axios.post(`${LAUNCH_QUIZ_URL}/${quiz.id}`, quiz, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                withCredentials: true,
+            });
             if (data.success) {
                 return true;
             }

@@ -38,14 +38,20 @@ export default async function upsertQuizController(req: Request, res: Response) 
     }
 
     try {
-        const data = await quizControllerInstance.update_quiz_status(QUIZ_STATUS.SAVE_NEW_QUIZ, quizId, input, questions, hostId);
+        const data = await quizControllerInstance.update_quiz_status(
+            QUIZ_STATUS.SAVE_NEW_QUIZ,
+            quizId,
+            input,
+            questions,
+            hostId,
+        );
 
-        if(!data || !data.success || data.error || !data.quiz) {
+        if (!data || !data.success || data.error || !data.quiz) {
             console.error('[CREATE_QUIZ_ERROR] ', data?.error);
             res.status(500).json({
                 success: false,
                 message: 'Internal Server Error',
-                value: 'INTERNAL_SERVER_ERROR'
+                value: 'INTERNAL_SERVER_ERROR',
             });
             return;
         }

@@ -1,4 +1,3 @@
-import prisma from '@repo/db/client';
 import { Request, Response } from 'express';
 import { createQuizSchema } from '../../schemas/createQuizSchema';
 import { quizControllerInstance } from '../../services/init-services';
@@ -36,7 +35,13 @@ export default async function publishQuizController(req: Request, res: Response)
     const input = parsed.data;
     const questions = input.questions;
 
-    const data = await quizControllerInstance.update_quiz_status(QUIZ_STATUS.PUBLISH_QUIZ, quizId, input, questions, userId);
+    const data = await quizControllerInstance.update_quiz_status(
+        QUIZ_STATUS.PUBLISH_QUIZ,
+        quizId,
+        input,
+        questions,
+        userId,
+    );
 
     if (!data || data.error || !data.quiz) {
         console.error('Error publishing quiz:', data?.error);
@@ -50,7 +55,7 @@ export default async function publishQuizController(req: Request, res: Response)
     const quiz = data.quiz;
     let prev_status;
 
-    if(data.type === QUIZ_STATUS.PUBLISH_QUIZ) {
+    if (data.type === QUIZ_STATUS.PUBLISH_QUIZ) {
         prev_status = data.status;
     }
 
