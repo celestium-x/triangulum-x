@@ -21,7 +21,6 @@ export default function SpectatorChatHeader({
                 <div className="flex items-center space-x-4">
                     <SpectatorHeaderMascot
                         name={user.name}
-                        isOnline={user.isOnline}
                         avatar={user.avatar}
                         svg={user.svg}
                     />
