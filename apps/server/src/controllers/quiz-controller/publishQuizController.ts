@@ -23,9 +23,7 @@ export default async function publishQuizController(req: Request, res: Response)
         return;
     }
 
-    console.log("req.body: ", req.body);
     const parsed = createQuizSchema.safeParse(req.body);
-    console.log('parsed data: ', parsed);
     if (!parsed.success) {
         res.status(400).json({
             success: false,
@@ -55,19 +53,6 @@ export default async function publishQuizController(req: Request, res: Response)
     if(data.type === QUIZ_STATUS.PUBLISH_QUIZ) {
         prev_status = data.status;
     }
-    // const quiz = await prisma.quiz.findUnique({
-    //     where: {
-    //         id: quizId,
-    //     },
-    // });
-
-    // if (!quiz) {
-    //     res.status(404).json({
-    //         success: false,
-    //         message: 'Quiz not found',
-    //     });
-    //     return;
-    // }
 
     if (prev_status === 'PUBLISHED') {
         res.status(400).json({
@@ -86,15 +71,6 @@ export default async function publishQuizController(req: Request, res: Response)
     }
 
     try {
-        // await prisma.quiz.update({
-        //     where: {
-        //         id: quizId,
-        //     },
-        //     data: {
-        //         status: 'PUBLISHED',
-        //     },
-        // });
-
         res.status(200).json({
             success: true,
             message: 'Quiz published successfully',

@@ -162,7 +162,7 @@ export default class QuizController {
 
                 const isValidOwner = await QuizAction.validOwner(hostId, quizId);
 
-                if(!isValidOwner) {
+                if (!isValidOwner) {
                     return {
                         type: QUIZ_STATUS.PUBLISH_QUIZ,
                         success: false,
@@ -241,6 +241,15 @@ export default class QuizController {
             if (quiz?.status === 'PUBLISHED') {
 
                 // validate owner
+                const isValidOwner = await QuizAction.validOwner(hostId, quizId);
+
+                if (!isValidOwner) {
+                    return {
+                        type: QUIZ_STATUS.LAUNCH_QUIZ,
+                        success: false,
+                        isHost: false
+                    };
+                }
 
                 launching_quiz = await this.launch_quiz_tx(quiz?.id);
             } else {

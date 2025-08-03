@@ -25,11 +25,8 @@ export default class BackendActions {
 
     static async publishQuiz(quiz: QuizType, token: string): Promise<boolean> {
         if (!token || !quiz) {
-            console.log("something not found: ", token, quiz);
             return false;
         }
-
-        console.log("quiz: ", quiz);
 
         try {
             const { data } = await axios.post(
