@@ -338,63 +338,6 @@
       ],
       "format": "esm"
     },
-    "node_modules/nanoid/url-alphabet/index.js": {
-      "bytes": 96,
-      "imports": [],
-      "format": "esm"
-    },
-    "node_modules/nanoid/index.js": {
-      "bytes": 1399,
-      "imports": [
-        {
-          "path": "node:crypto",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "node_modules/nanoid/url-alphabet/index.js",
-          "kind": "import-statement",
-          "original": "./url-alphabet/index.js"
-        },
-        {
-          "path": "node_modules/nanoid/url-alphabet/index.js",
-          "kind": "import-statement",
-          "original": "./url-alphabet/index.js"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/class/quizAction.ts": {
-      "bytes": 3213,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "node_modules/nanoid/index.js",
-          "kind": "import-statement",
-          "original": "nanoid"
-        },
-        {
-          "path": "jsonwebtoken",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "../../node_modules/dotenv/lib/main.js",
-          "kind": "import-statement",
-          "original": "dotenv"
-        },
-        {
-          "path": "../types/web-socket-types",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
     "../../node_modules/zod/v4/core/core.js": {
       "bytes": 2085,
       "imports": [],
@@ -1518,166 +1461,7 @@
       "format": "esm"
     },
     "src/schemas/createQuizSchema.ts": {
-      "bytes": 1561,
-      "imports": [
-        {
-          "path": "../../node_modules/zod/index.js",
-          "kind": "import-statement",
-          "original": "zod"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/quiz-controller/upsertQuizController.ts": {
-      "bytes": 3796,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "src/class/quizAction.ts",
-          "kind": "import-statement",
-          "original": "../../class/quizAction"
-        },
-        {
-          "path": "src/schemas/createQuizSchema.ts",
-          "kind": "import-statement",
-          "original": "../../schemas/createQuizSchema"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/quiz-controller/getQuizController.ts": {
-      "bytes": 2327,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/quiz-controller/getAllQuizController.ts": {
-      "bytes": 1421,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/quiz-controller/publishQuizController.ts": {
-      "bytes": 1699,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/middlewares/verifyQuizOwnershipMiddleware.ts": {
-      "bytes": 982,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/types/web-socket-types.ts": {
-      "bytes": 1036,
-      "imports": [
-        {
-          "path": "ws",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/quiz-controller/launchQuizController.ts": {
-      "bytes": 4407,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        },
-        {
-          "path": "src/class/quizAction.ts",
-          "kind": "import-statement",
-          "original": "../../class/quizAction"
-        },
-        {
-          "path": "src/types/web-socket-types.ts",
-          "kind": "import-statement",
-          "original": "../../types/web-socket-types"
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/appReview-controller/reviewAppController.ts": {
-      "bytes": 1503,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/class/generateUser.ts": {
-      "bytes": 3954,
-      "imports": [],
-      "format": "esm"
-    },
-    "src/schemas/participantJoinSchema.ts": {
-      "bytes": 132,
+      "bytes": 1684,
       "imports": [
         {
           "path": "../../node_modules/zod/index.js",
@@ -1688,7 +1472,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 4680,
+      "bytes": 5191,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1744,8 +1528,86 @@
       ],
       "format": "esm"
     },
+    "node_modules/nanoid/url-alphabet/index.js": {
+      "bytes": 96,
+      "imports": [],
+      "format": "esm"
+    },
+    "node_modules/nanoid/index.js": {
+      "bytes": 1399,
+      "imports": [
+        {
+          "path": "node:crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node_modules/nanoid/url-alphabet/index.js",
+          "kind": "import-statement",
+          "original": "./url-alphabet/index.js"
+        },
+        {
+          "path": "node_modules/nanoid/url-alphabet/index.js",
+          "kind": "import-statement",
+          "original": "./url-alphabet/index.js"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/class/quizAction.ts": {
+      "bytes": 3213,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "node_modules/nanoid/index.js",
+          "kind": "import-statement",
+          "original": "nanoid"
+        },
+        {
+          "path": "jsonwebtoken",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../../node_modules/dotenv/lib/main.js",
+          "kind": "import-statement",
+          "original": "dotenv"
+        },
+        {
+          "path": "../types/web-socket-types",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/quizController.ts": {
+      "bytes": 13008,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "src/class/quizAction.ts",
+          "kind": "import-statement",
+          "original": "../../class/quizAction"
+        },
+        {
+          "path": "../../schemas/createQuizSchema",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/services/init-services.ts": {
-      "bytes": 326,
+      "bytes": 505,
       "imports": [
         {
           "path": "src/cache/RedisCache.ts",
@@ -1756,12 +1618,180 @@
           "path": "src/queue/DatabaseQueue.ts",
           "kind": "import-statement",
           "original": "../queue/DatabaseQueue"
+        },
+        {
+          "path": "src/controllers/quiz-controller/quizController.ts",
+          "kind": "import-statement",
+          "original": "../controllers/quiz-controller/quizController"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/upsertQuizController.ts": {
+      "bytes": 2109,
+      "imports": [
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/schemas/createQuizSchema.ts",
+          "kind": "import-statement",
+          "original": "../../schemas/createQuizSchema"
+        },
+        {
+          "path": "src/services/init-services.ts",
+          "kind": "import-statement",
+          "original": "../../services/init-services"
+        },
+        {
+          "path": "src/controllers/quiz-controller/quizController.ts",
+          "kind": "import-statement",
+          "original": "./quizController"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/getQuizController.ts": {
+      "bytes": 2327,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/getAllQuizController.ts": {
+      "bytes": 1421,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/publishQuizController.ts": {
+      "bytes": 2308,
+      "imports": [
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/schemas/createQuizSchema.ts",
+          "kind": "import-statement",
+          "original": "../../schemas/createQuizSchema"
+        },
+        {
+          "path": "src/services/init-services.ts",
+          "kind": "import-statement",
+          "original": "../../services/init-services"
+        },
+        {
+          "path": "src/controllers/quiz-controller/quizController.ts",
+          "kind": "import-statement",
+          "original": "./quizController"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/types/web-socket-types.ts": {
+      "bytes": 1172,
+      "imports": [
+        {
+          "path": "ws",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/launchQuizController.ts": {
+      "bytes": 2872,
+      "imports": [
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/class/quizAction.ts",
+          "kind": "import-statement",
+          "original": "../../class/quizAction"
+        },
+        {
+          "path": "src/types/web-socket-types.ts",
+          "kind": "import-statement",
+          "original": "../../types/web-socket-types"
+        },
+        {
+          "path": "src/services/init-services.ts",
+          "kind": "import-statement",
+          "original": "../../services/init-services"
+        },
+        {
+          "path": "src/controllers/quiz-controller/quizController.ts",
+          "kind": "import-statement",
+          "original": "./quizController"
+        },
+        {
+          "path": "src/schemas/createQuizSchema.ts",
+          "kind": "import-statement",
+          "original": "../../schemas/createQuizSchema"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/appReview-controller/reviewAppController.ts": {
+      "bytes": 1503,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/class/generateUser.ts": {
+      "bytes": 3954,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/schemas/participantJoinSchema.ts": {
+      "bytes": 132,
+      "imports": [
+        {
+          "path": "../../node_modules/zod/index.js",
+          "kind": "import-statement",
+          "original": "zod"
         }
       ],
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/participantJoinController.ts": {
-      "bytes": 4921,
+      "bytes": 4923,
       "imports": [
         {
           "path": "express",
@@ -1849,7 +1879,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-      "bytes": 4583,
+      "bytes": 4584,
       "imports": [
         {
           "path": "express",
@@ -1927,7 +1957,7 @@
       "format": "esm"
     },
     "src/routes/index.ts": {
-      "bytes": 2464,
+      "bytes": 2475,
       "imports": [
         {
           "path": "express",
@@ -1968,11 +1998,6 @@
           "path": "src/controllers/quiz-controller/publishQuizController.ts",
           "kind": "import-statement",
           "original": "../controllers/quiz-controller/publishQuizController"
-        },
-        {
-          "path": "src/middlewares/verifyQuizOwnershipMiddleware.ts",
-          "kind": "import-statement",
-          "original": "../middlewares/verifyQuizOwnershipMiddleware"
         },
         {
           "path": "src/controllers/quiz-controller/launchQuizController.ts",
@@ -2112,7 +2137,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 2985,
+      "bytes": 4636,
       "imports": [
         {
           "path": "ioredis",
@@ -2347,7 +2372,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 952367
+      "bytes": 968918
     },
     "dist/index.js": {
       "imports": [
@@ -2417,22 +2442,22 @@
           "external": true
         },
         {
-          "path": "node:crypto",
-          "kind": "require-call",
-          "external": true
-        },
-        {
-          "path": "jsonwebtoken",
-          "kind": "require-call",
-          "external": true
-        },
-        {
           "path": "ioredis",
           "kind": "require-call",
           "external": true
         },
         {
           "path": "bull",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "node:crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "jsonwebtoken",
           "kind": "require-call",
           "external": true
         },
@@ -2501,7 +2526,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1122
+          "bytesInOutput": 1130
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2535,12 +2560,6 @@
         },
         "src/controllers/s3-controller/getPreSignedUrlController.ts": {
           "bytesInOutput": 824
-        },
-        "node_modules/nanoid/index.js": {
-          "bytesInOutput": 1114
-        },
-        "src/class/quizAction.ts": {
-          "bytesInOutput": 2400
         },
         "../../node_modules/zod/v4/classic/external.js": {
           "bytesInOutput": 6011
@@ -2737,8 +2756,26 @@
         "src/schemas/createQuizSchema.ts": {
           "bytesInOutput": 2262
         },
+        "src/cache/RedisCache.ts": {
+          "bytesInOutput": 4103
+        },
+        "src/queue/DatabaseQueue.ts": {
+          "bytesInOutput": 4502
+        },
+        "node_modules/nanoid/index.js": {
+          "bytesInOutput": 1114
+        },
+        "src/class/quizAction.ts": {
+          "bytesInOutput": 2400
+        },
+        "src/controllers/quiz-controller/quizController.ts": {
+          "bytesInOutput": 8429
+        },
+        "src/services/init-services.ts": {
+          "bytesInOutput": 244
+        },
         "src/controllers/quiz-controller/upsertQuizController.ts": {
-          "bytesInOutput": 2750
+          "bytesInOutput": 1558
         },
         "src/controllers/quiz-controller/getQuizController.ts": {
           "bytesInOutput": 1603
@@ -2747,13 +2784,10 @@
           "bytesInOutput": 1051
         },
         "src/controllers/quiz-controller/publishQuizController.ts": {
-          "bytesInOutput": 1306
-        },
-        "src/middlewares/verifyQuizOwnershipMiddleware.ts": {
-          "bytesInOutput": 716
+          "bytesInOutput": 1763
         },
         "src/controllers/quiz-controller/launchQuizController.ts": {
-          "bytesInOutput": 3302
+          "bytesInOutput": 2047
         },
         "src/controllers/appReview-controller/reviewAppController.ts": {
           "bytesInOutput": 1146
@@ -2763,15 +2797,6 @@
         },
         "src/schemas/participantJoinSchema.ts": {
           "bytesInOutput": 124
-        },
-        "src/cache/RedisCache.ts": {
-          "bytesInOutput": 3689
-        },
-        "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 4502
-        },
-        "src/services/init-services.ts": {
-          "bytesInOutput": 167
         },
         "src/controllers/live-quiz-controller/participantJoinController.ts": {
           "bytesInOutput": 3614
@@ -2783,7 +2808,7 @@
           "bytesInOutput": 127
         },
         "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-          "bytesInOutput": 3310
+          "bytesInOutput": 3308
         },
         "src/controllers/quiz-controller/deleteQuizController.ts": {
           "bytesInOutput": 1164
@@ -2798,7 +2823,7 @@
           "bytesInOutput": 1983
         },
         "src/sockets/QuizManager.ts": {
-          "bytesInOutput": 2124
+          "bytesInOutput": 3438
         },
         "src/sockets/ParticipantManager.ts": {
           "bytesInOutput": 5542
@@ -2807,7 +2832,7 @@
           "bytesInOutput": 5127
         }
       },
-      "bytes": 517025
+      "bytes": 524560
     }
   }
 }

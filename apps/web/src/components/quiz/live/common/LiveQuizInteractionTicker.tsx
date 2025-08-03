@@ -26,25 +26,26 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
 
     function createEmojiAnimation(emojiType: EmojiType) {
         const newEmojiId = Date.now() + Math.random();
-        setAnimatingEmojis(prev => [...prev, { id: newEmojiId, type: emojiType }]);
+        setAnimatingEmojis((prev) => [...prev, { id: newEmojiId, type: emojiType }]);
 
         setTimeout(() => {
-            setAnimatingEmojis(prev => prev.filter(emoji => emoji.id !== newEmojiId));
+            setAnimatingEmojis((prev) => prev.filter((emoji) => emoji.id !== newEmojiId));
         }, 2200);
     }
 
     function handleClick(emojiType: EmojiType) {
         createEmojiAnimation(emojiType);
-    };
+    }
 
     function renderIcon(type: EmojiType, size: number = 35) {
         const iconProps = {
             size,
             style: {
                 border: `1px solid ${template?.border_color}50`,
-                backgroundColor: `${template?.text_color}20`
+                backgroundColor: `${template?.text_color}20`,
             },
-            className: "border-[1px] dark:border-neutral-500 border-neutral-300 p-2 rounded-full hover:shadow-sm transition-all duration-200 ease-in-out cursor-pointer select-none"
+            className:
+                'border-[1px] dark:border-neutral-500 border-neutral-300 p-2 rounded-full hover:shadow-sm transition-all duration-200 ease-in-out cursor-pointer select-none',
         };
 
         switch (type) {
@@ -61,29 +62,36 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
             default:
                 return null;
         }
-    };
+    }
 
     function renderAnimatedIcon(type: EmojiType) {
         const animatedIconProps = {
             size: 22,
-            className: "drop-shadow-lg"
+            className: 'drop-shadow-lg',
         };
 
         switch (type) {
             case 'heart':
                 return <FaHeart {...animatedIconProps} style={{ color: '#ff0033' }} />;
             case 'dollar':
-                return <PiCurrencyCircleDollarFill {...animatedIconProps} style={{ color: '#10b981' }} />;
+                return (
+                    <PiCurrencyCircleDollarFill
+                        {...animatedIconProps}
+                        style={{ color: '#10b981' }}
+                    />
+                );
             case 'lightbulb':
                 return <FaLightbulb {...animatedIconProps} style={{ color: '#f59e0b' }} />;
             case 'thumbsup':
-                return <BsFillHandThumbsUpFill {...animatedIconProps} style={{ color: '#3b82f6' }} />;
+                return (
+                    <BsFillHandThumbsUpFill {...animatedIconProps} style={{ color: '#3b82f6' }} />
+                );
             case 'emoji':
                 return <MdEmojiEmotions {...animatedIconProps} style={{ color: '#f97316' }} />;
             default:
                 return null;
         }
-    };
+    }
 
     const emojiTypes: EmojiType[] = ['heart', 'dollar', 'lightbulb', 'thumbsup', 'emoji'];
 
@@ -94,15 +102,11 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
         >
             {emojiTypes.map((emojiType) => (
                 <div key={emojiType} className="relative">
-                    <div
-                        onClick={() => handleClick(emojiType)}
-                    >
-                        {renderIcon(emojiType)}
-                    </div>
+                    <div onClick={() => handleClick(emojiType)}>{renderIcon(emojiType)}</div>
 
                     <AnimatePresence>
                         {animatingEmojis
-                            .filter(emoji => emoji.type === emojiType)
+                            .filter((emoji) => emoji.type === emojiType)
                             .map((emoji) => (
                                 <motion.div
                                     key={emoji.id}
@@ -112,31 +116,31 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
                                         y: 0,
                                         x: 0,
                                         scale: 1,
-                                        rotate: 0
+                                        rotate: 0,
                                     }}
                                     animate={{
                                         opacity: 0,
                                         y: -120 - Math.random() * 400,
                                         x: Math.random() * 360 - 120,
                                         scale: 1.0 + Math.random() * 1.5,
-                                        rotate: Math.random() * 30 - 15
+                                        rotate: Math.random() * 30 - 15,
                                     }}
                                     exit={{ opacity: 0 }}
                                     transition={{
                                         duration: 2.2,
                                         ease: [0.23, 1, 0.32, 1],
-                                        opacity: { duration: 2.2, ease: "easeOut" },
+                                        opacity: { duration: 2.2, ease: 'easeOut' },
                                         rotate: {
                                             duration: 0.3,
-                                            ease: "easeInOut",
+                                            ease: 'easeInOut',
                                             repeat: Infinity,
-                                            repeatType: "reverse"
-                                        }
+                                            repeatType: 'reverse',
+                                        },
                                     }}
                                     style={{
                                         left: '50%',
                                         top: '50%',
-                                        transform: 'translate(-50%, -50%)'
+                                        transform: 'translate(-50%, -50%)',
                                     }}
                                 >
                                     {renderAnimatedIcon(emoji.type)}
