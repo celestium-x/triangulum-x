@@ -27,6 +27,8 @@ export enum MESSAGE_TYPES {
     PARTICIPANT_NAME_CHANGE = 'PARTICIPANT_NAME_CHANGE',
 
     SPECTATOR_JOIN_GAME_SESSION = 'SPECTATOR_JOIN_GAME_SESSION',
+    SPECTATOR_SEND_MESSAGE = 'SPECTATOR_SEND_MESSAGE',
+    SPECTATOR_NAME_CHANGE = 'SPECTATOR_NAME_CHANGE',
 }
 
 export enum USER_TYPE {
@@ -36,5 +38,9 @@ export enum USER_TYPE {
 }
 
 export interface ParticipantNameChangeEvent {
+    choosenNickname: string;
+}
+
+export interface SpectatorNameChangeEvent {
     choosenNickname: string;
 }

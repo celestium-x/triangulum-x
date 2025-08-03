@@ -92,6 +92,17 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                 },
             });
 
+            const spectators = await tx.spectator.findMany({
+                where: {
+                    quizId: quizId,
+                },
+                select: {
+                    id: true,
+                    nickname: true,
+                    avatar: true,
+                },
+            });
+
             // Role-specific data
             let userData = null;
 
@@ -149,7 +160,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     break;
             }
 
-            return { quiz, gameSession, userData, participants };
+            return { quiz, gameSession, userData, participants, spectators };
         });
 
         if (!result.quiz || !result.gameSession) {
@@ -175,6 +186,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
             gameSession: sanitizedGameSession,
             userData: result.userData,
             participants: result.participants,
+            spectators: result.spectators,
             role,
         });
         return;

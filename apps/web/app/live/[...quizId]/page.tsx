@@ -8,6 +8,7 @@ import {
     useLiveSpectatorStore,
     useUserRoleStore,
 } from '@/store/live-quiz/useLiveQuizUserStore';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
 import axios from 'axios';
 import { use, useEffect } from 'react';
 import { LIVE_QUIZ_DATA_URL } from 'routes/api_routes';
@@ -25,7 +26,9 @@ export default function New({ params }: NewProps) {
     const { setParticipantData } = useLiveParticipantStore();
     const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
+
     const { setParticipants } = useLiveParticipantsStore();
+    const { setSpectators, setCurrentUserId } = useLiveSpectatorsStore();
 
     useEffect(() => {
         async function getLiveData() {
@@ -38,6 +41,7 @@ export default function New({ params }: NewProps) {
                     updateGameSession(data.gameSession);
                     setCurrentUserType(data.role);
                     setParticipants(data.participants);
+                    setSpectators(data.spectators);
 
                     switch (data.role) {
                         case 'HOST':
@@ -48,6 +52,7 @@ export default function New({ params }: NewProps) {
                             break;
                         case 'SPECTATOR':
                             setSpectatorData(data.userData);
+                            setCurrentUserId(data.currentUserId);
                             break;
                         default:
                             break;
@@ -67,6 +72,8 @@ export default function New({ params }: NewProps) {
         setHostData,
         setParticipantData,
         setSpectatorData,
+        setCurrentUserId,
+        setSpectators
     ]);
 
     if (!quiz) {

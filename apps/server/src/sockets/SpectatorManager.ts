@@ -1,8 +1,15 @@
 import Redis from 'ioredis';
-import { CookiePayload, CustomWebSocket, MESSAGE_TYPES } from '../types/web-socket-types';
+import {
+    CookiePayload,
+    CustomWebSocket,
+    MESSAGE_TYPES,
+    PubSubMessageTypes,
+    SpectatorNameChangeEvent,
+} from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
+import DatabaseQueue from '../queue/DatabaseQueue';
 
 interface SpectatorManagerDependencies {
     publisher: Redis;
@@ -10,6 +17,7 @@ interface SpectatorManagerDependencies {
     socket_mapping: Map<string, CustomWebSocket>;
     session_spectator_mapping: Map<string, Set<string>>;
     quizManager: QuizManager;
+    database_queue: DatabaseQueue;
 }
 
 export default class SpectatorManager {
@@ -18,6 +26,7 @@ export default class SpectatorManager {
     private session_spectators_mapping: Map<string, Set<string>>;
     private quizManager: QuizManager;
     private socket_mapping: Map<string, CustomWebSocket>;
+    private database_queue: DatabaseQueue;
 
     private spectator_socket_mapping: Map<string, string> = new Map(); // Map<spectatorId, socketId>
 
@@ -27,10 +36,11 @@ export default class SpectatorManager {
         this.session_spectators_mapping = dependencies.session_spectator_mapping;
         this.quizManager = dependencies.quizManager;
         this.socket_mapping = dependencies.socket_mapping;
+        this.database_queue = dependencies.database_queue;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
-        const is_valid_spectator = this.validateSpectatorInDb(payload.quizId, payload.userId);
+        const is_valid_spectator = await this.validateSpectatorInDb(payload.quizId, payload.userId);
 
         if (!is_valid_spectator) {
             ws.close();
@@ -43,14 +53,20 @@ export default class SpectatorManager {
         ws.id = new_spectator_socket_id;
         ws.user = payload;
         this.socket_mapping.set(new_spectator_socket_id, ws);
+
         this.spectator_socket_mapping.set(payload.userId, new_spectator_socket_id);
         const session_spectators_socket_ids = this.session_spectators_mapping.get(
             payload.gameSessionId,
         );
-        if (session_spectators_socket_ids) {
-            session_spectators_socket_ids.add(new_spectator_socket_id);
+        if (!session_spectators_socket_ids) {
+            this.session_spectators_mapping.set(payload.gameSessionId, new Set());
         }
+
+        this.session_spectators_mapping.get(payload.gameSessionId)?.add(new_spectator_socket_id);
+
         this.setup_message_handlers(ws);
+
+        this.quizManager.onSpectatorConnect(payload);
     }
 
     private cleanup_existing_spectator_socket(spectator_id: string, game_session_id: string) {
@@ -94,11 +110,20 @@ export default class SpectatorManager {
     }
 
     private handle_spectator_message(ws: CustomWebSocket, message: any) {
-        const { type } = message;
+        const { type, payload } = message;
         switch (type) {
             case MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION:
                 // joint the spectator
                 break;
+
+            case MESSAGE_TYPES.SPECTATOR_NAME_CHANGE:
+                this.handle_spectator_name_change(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.SPECTATOR_SEND_MESSAGE:
+                this.send_message_to_spectator(payload, ws);
+                break;
+
             default:
                 console.error('Unknown message type', type);
                 break;
@@ -134,6 +159,40 @@ export default class SpectatorManager {
         });
 
         return !!spectator;
+    }
+
+    private async send_message_to_spectator(spectator_id: string, message: any) {
+        const socket_id = this.spectator_socket_mapping.get(spectator_id);
+        if (socket_id) {
+            const socket = this.socket_mapping.get(socket_id);
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send(JSON.stringify(message));
+            }
+        }
+    }
+
+    private async handle_spectator_name_change(
+        payload: SpectatorNameChangeEvent,
+        ws: CustomWebSocket,
+    ) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const { choosenNickname } = payload;
+
+        const { data } = await this.database_queue.update_spectator(
+            ws.user.userId,
+            { nickname: choosenNickname, isNameChanged: true },
+            game_session_id,
+        );
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.SPECTATOR_NAME_CHANGE,
+            payload: {
+                id: ws.user.userId,
+                nickname: data.nickname,
+            },
+        };
+
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 
     private generateSocketId(): string {

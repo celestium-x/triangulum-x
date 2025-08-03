@@ -113,14 +113,15 @@ model Participant {
 }
 
 model Spectator {
-  id           String   @id @default(cuid())
-  nickname     String
-  avatar       String?
-  ipAddress    String?
-  connectionId String?
-  joinedAt     DateTime @default(now())
-  quizId       String
-  quiz         Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  id            String   @id @default(cuid())
+  nickname      String
+  avatar        String?
+  isNameChanged Boolean  @default(false)
+  ipAddress     String?
+  connectionId  String?
+  joinedAt      DateTime @default(now())
+  quizId        String
+  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@map("spectators")
 }

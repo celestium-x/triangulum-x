@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Message, User } from './specTypes';
 import SpectatorChatToggleButton from './chat/SpectatorChatToggleButton';
 import SpectatorsDisplay from './chat/SpectatorsDisplay';
@@ -10,53 +10,40 @@ import SpectatorChatInput from './chat/SpectatorChatInput';
 import SpectatorButton from './chat/SpectatorButton';
 import { FaGlobeAmericas } from 'react-icons/fa';
 import { cn } from '@/lib/utils';
-
-const roomUsers: User[] = [
-    {
-        id: 'global',
-        name: 'Global Chat',
-        isOnline: true,
-        svg: (
-            <FaGlobeAmericas
-                className="text-dark-base dark:text-light-base "
-                style={{ width: '28px', height: '28px' }}
-            />
-        ),
-    },
-    {
-        id: '2',
-        name: 'Alex',
-        isOnline: true,
-        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-1.jpg',
-    },
-    {
-        id: '3',
-        name: 'Maya',
-        isOnline: true,
-        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-2.jpg',
-    },
-    {
-        id: '4',
-        name: 'Raj',
-        isOnline: true,
-        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-3.jpg',
-    },
-    {
-        id: '5',
-        name: 'Lena',
-        isOnline: true,
-        avatar: 'https://s3.eu-north-1.amazonaws.com/bucket.kant/avatars/avatar-4.jpg',
-    },
-];
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
 
 export default function SpectatorActions() {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Record<string, Message[]>>({});
     const [openChatDropdown, setOpenChatDropdown] = useState(false);
     const [openPeopleDropdown, setOpenPeopleDropdown] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<User>(roomUsers[0]!);
     const [isExpanded, setIsExpanded] = useState(false);
 
+    const { spectators, currentUserId } = useLiveSpectatorsStore();
+
+    const users: User[] = useMemo(() => {
+        const globalChat: User = {
+            id: 'global',
+            name: 'Global Chat',
+            svg: (
+                <FaGlobeAmericas
+                    className="text-dark-base dark:text-light-base"
+                    style={{ width: '28px', height: '28px' }}
+                />
+            ),
+        };
+
+        const spectatorUsers: User[] = spectators.map((s) => ({
+            id: s.id,
+            name: s.nickname || 'Anonymous',
+            avatar: s.avatar || '',
+            isCurrentUser: currentUserId === s.id,
+        }));
+
+        return [globalChat, ...spectatorUsers];
+    }, [spectators, currentUserId]);
+
+    const [selectedUser, setSelectedUser] = useState<User>(users[0]!);
     const newMessage = messages[selectedUser.id];
 
     useEffect(() => {
@@ -113,7 +100,6 @@ export default function SpectatorActions() {
                         setOpenPeopleDropdown((prev) => !prev);
                     }}
                 />
-
                 <SpectatorChatToggleButton
                     onClick={() => {
                         setOpenPeopleDropdown(false);
@@ -124,7 +110,7 @@ export default function SpectatorActions() {
 
             {openPeopleDropdown && (
                 <SpectatorsDisplay
-                    users={roomUsers}
+                    users={users}
                     onSelectUser={(user) => {
                         setSelectedUser(user);
                         setOpenChatDropdown(true);

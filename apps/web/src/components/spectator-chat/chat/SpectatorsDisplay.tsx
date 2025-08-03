@@ -4,6 +4,8 @@ import { AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { User } from '../specTypes';
 import UtilityCard from '@/components/utility/UtilityCard';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
+import { cn } from '@/lib/utils';
 
 interface SpectatorsDisplayProps {
     users: User[];
@@ -11,6 +13,8 @@ interface SpectatorsDisplayProps {
 }
 
 export default function SpectatorsDisplay({ users, onSelectUser }: SpectatorsDisplayProps) {
+    const { currentUserId } = useLiveSpectatorsStore();
+
     return (
         <AnimatePresence>
             <UtilityCard
@@ -25,7 +29,12 @@ export default function SpectatorsDisplay({ users, onSelectUser }: SpectatorsDis
                                 onClick={() => onSelectUser(user)}
                                 className="flex flex-col items-center hover:-translate-y-1 p-2 rounded-xl transition w-20"
                             >
-                                <div className="w-14 h-14 rounded-full overflow-hidden border border-neutral-700">
+                                <div
+                                    className={cn(
+                                        'w-14 h-14 rounded-full overflow-hidden',
+                                        `${currentUserId === user.id ? 'border border-purple-500' : 'border border-neutral-700'}`,
+                                    )}
+                                >
                                     {user.avatar && (
                                         <Image
                                             src={user.avatar}
