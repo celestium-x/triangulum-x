@@ -16,10 +16,7 @@ export default function SpectatorButton({ onClick }: SpectatorButtonProps) {
                 onClick={onClick}
                 className="hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
             >
-                <PiDetectiveFill
-                    className="text-neutral-400"
-                    style={{ width: '28px', height: '28px' }}
-                />
+                <PiDetectiveFill className="" style={{ width: '28px', height: '28px' }} />
             </Button>
         </ToolTipComponent>
     );

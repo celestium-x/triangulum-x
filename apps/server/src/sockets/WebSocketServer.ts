@@ -232,7 +232,7 @@ export default class WebsocketServer {
                     case USER_TYPE.SPECTATOR:
                         await this.spectator_manager.handle_connection(
                             ws,
-                            payload as CookiePayload,
+                            decoded_cookie_payload as CookiePayload,
                         );
                         break;
 

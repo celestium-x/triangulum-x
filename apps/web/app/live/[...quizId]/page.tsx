@@ -73,7 +73,7 @@ export default function New({ params }: NewProps) {
         setParticipantData,
         setSpectatorData,
         setCurrentUserId,
-        setSpectators
+        setSpectators,
     ]);
 
     if (!quiz) {
