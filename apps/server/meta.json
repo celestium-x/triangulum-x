@@ -1619,7 +1619,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 852,
+      "bytes": 1036,
       "imports": [
         {
           "path": "ws",
@@ -1709,12 +1709,12 @@
       "format": "esm"
     },
     "src/types/database-queue-types.ts": {
-      "bytes": 292,
+      "bytes": 335,
       "imports": [],
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 5480,
+      "bytes": 7050,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1807,7 +1807,7 @@
       "format": "cjs"
     },
     "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-      "bytes": 6333,
+      "bytes": 6691,
       "imports": [
         {
           "path": "express",
@@ -1849,7 +1849,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-      "bytes": 4393,
+      "bytes": 4583,
       "imports": [
         {
           "path": "express",
@@ -1880,6 +1880,11 @@
           "path": "src/types/web-socket-types.ts",
           "kind": "import-statement",
           "original": "../../types/web-socket-types"
+        },
+        {
+          "path": "src/services/init-services.ts",
+          "kind": "import-statement",
+          "original": "../../services/init-services"
         }
       ],
       "format": "esm"
@@ -2066,7 +2071,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 3242,
+      "bytes": 3087,
       "imports": [
         {
           "path": "ioredis",
@@ -2074,9 +2079,9 @@
           "external": true
         },
         {
-          "path": "src/types/web-socket-types.ts",
+          "path": "../types/web-socket-types",
           "kind": "import-statement",
-          "original": "../types/web-socket-types"
+          "external": true
         },
         {
           "path": "./QuizManager",
@@ -2107,7 +2112,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 2471,
+      "bytes": 2985,
       "imports": [
         {
           "path": "ioredis",
@@ -2133,7 +2138,7 @@
       "format": "esm"
     },
     "src/sockets/ParticipantManager.ts": {
-      "bytes": 7601,
+      "bytes": 7549,
       "imports": [
         {
           "path": "ioredis",
@@ -2174,7 +2179,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 5044,
+      "bytes": 6914,
       "imports": [
         {
           "path": "ioredis",
@@ -2200,12 +2205,17 @@
           "path": "../../node_modules/uuid/dist/esm-node/index.js",
           "kind": "import-statement",
           "original": "uuid"
+        },
+        {
+          "path": "../queue/DatabaseQueue",
+          "kind": "import-statement",
+          "external": true
         }
       ],
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 8858,
+      "bytes": 9684,
       "imports": [
         {
           "path": "ws",
@@ -2337,7 +2347,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 944954
+      "bytes": 952367
     },
     "dist/index.js": {
       "imports": [
@@ -2758,7 +2768,7 @@
           "bytesInOutput": 3689
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 3472
+          "bytesInOutput": 4502
         },
         "src/services/init-services.ts": {
           "bytesInOutput": 167
@@ -2767,13 +2777,13 @@
           "bytesInOutput": 3614
         },
         "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-          "bytesInOutput": 4594
+          "bytesInOutput": 4850
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
         },
         "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-          "bytesInOutput": 3194
+          "bytesInOutput": 3310
         },
         "src/controllers/quiz-controller/deleteQuizController.ts": {
           "bytesInOutput": 1164
@@ -2782,22 +2792,22 @@
           "bytesInOutput": 947
         },
         "src/sockets/WebSocketServer.ts": {
-          "bytesInOutput": 7022
+          "bytesInOutput": 7710
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 2059
+          "bytesInOutput": 1983
         },
         "src/sockets/QuizManager.ts": {
-          "bytesInOutput": 1684
+          "bytesInOutput": 2124
         },
         "src/sockets/ParticipantManager.ts": {
-          "bytesInOutput": 5591
+          "bytesInOutput": 5542
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 3683
+          "bytesInOutput": 5127
         }
       },
-      "bytes": 513176
+      "bytes": 517025
     }
   }
 }

@@ -36,7 +36,6 @@ export default class QuizManager {
             decoded_cookie_payload.gameSessionId,
             particpant_id,
         );
-
         const participant: Partial<Participant> = {
             id: particicpant_cache.id,
             avatar: particicpant_cache.avatar,

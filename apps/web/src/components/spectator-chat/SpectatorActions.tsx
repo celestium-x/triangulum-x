@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Message, User } from './specTypes';
 import SpectatorChatToggleButton from './chat/SpectatorChatToggleButton';
@@ -8,9 +7,12 @@ import SpectatorChatHeader from './chat/SpectatorChatHeader';
 import SpectatorMessageItem from './chat/SpectatorMessageItem';
 import SpectatorChatInput from './chat/SpectatorChatInput';
 import SpectatorButton from './chat/SpectatorButton';
-import { FaGlobeAmericas } from 'react-icons/fa';
+import { FcGlobe } from 'react-icons/fc';
 import { cn } from '@/lib/utils';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { templates } from '@/lib/templates';
+import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 
 export default function SpectatorActions() {
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -18,15 +20,19 @@ export default function SpectatorActions() {
     const [openChatDropdown, setOpenChatDropdown] = useState(false);
     const [openPeopleDropdown, setOpenPeopleDropdown] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
-
+    const spectatorChatRef = useRef<HTMLDivElement>(null);
+    const spectatorsDisplayRef = useRef<HTMLDivElement>(null);
+    const { quiz } = useLiveQuizStore();
+    const template = templates.find((t) => t.id === quiz?.theme);
     const { spectators, currentUserId } = useLiveSpectatorsStore();
-
+    useHandleClickOutside([spectatorChatRef], setOpenChatDropdown);
+    useHandleClickOutside([spectatorsDisplayRef], setOpenPeopleDropdown);
     const users: User[] = useMemo(() => {
         const globalChat: User = {
             id: 'global',
             name: 'Global Chat',
             svg: (
-                <FaGlobeAmericas
+                <FcGlobe
                     className="text-dark-base dark:text-light-base"
                     style={{ width: '28px', height: '28px' }}
                 />
@@ -90,7 +96,11 @@ export default function SpectatorActions() {
     };
 
     return (
-        <>
+        <div
+            style={{
+                color: template?.text_color,
+            }}
+        >
             <div
                 className={`fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2 ${isExpanded ? (openPeopleDropdown || openChatDropdown ? (openPeopleDropdown ? 'right-4' : 'right-150') : 'right-4') : 'right-4'}`}
             >
@@ -110,6 +120,7 @@ export default function SpectatorActions() {
 
             {openPeopleDropdown && (
                 <SpectatorsDisplay
+                    ref={spectatorsDisplayRef}
                     users={users}
                     onSelectUser={(user) => {
                         setSelectedUser(user);
@@ -121,6 +132,7 @@ export default function SpectatorActions() {
 
             {openChatDropdown && (
                 <div
+                    ref={spectatorChatRef}
                     key="chatbox"
                     className={cn(
                         'fixed p-0 z-40 rounded-xl transition-all',
@@ -128,8 +140,8 @@ export default function SpectatorActions() {
                         'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
                         'shadow-2xl',
                         isExpanded
-                            ? 'right-0 rounded-r-none max-w-[40vw] w-[40vw] h-full'
-                            : 'bottom-22 right-15 w-md h-[45rem] rounded-br-none',
+                            ? 'right-0 rounded-r-none w-[40vw] max-w-[40vw] h-full'
+                            : 'bottom-22 right-15 w-[26rem] h-[40rem] rounded-br-none',
                     )}
                 >
                     <div className="relative h-full flex flex-col pb-1">
@@ -154,6 +166,6 @@ export default function SpectatorActions() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

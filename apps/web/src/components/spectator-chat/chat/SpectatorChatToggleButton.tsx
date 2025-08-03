@@ -13,13 +13,11 @@ export default function SpectatorChatToggleButton({ onClick }: ChatToggleButtonP
     return (
         <ToolTipComponent content="Chat with others">
             <Button
+                variant="ghost"
                 onClick={onClick}
-                className="bg-transparent hover:bg-transparent text-4xl hover:scale-105 transition-transform duration-300"
+                className="hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
             >
-                <RiMessage3Fill
-                    className="text-neutral-400"
-                    style={{ width: '28px', height: '28px' }}
-                />
+                <RiMessage3Fill style={{ width: '28px', height: '28px' }} />
             </Button>
         </ToolTipComponent>
     );

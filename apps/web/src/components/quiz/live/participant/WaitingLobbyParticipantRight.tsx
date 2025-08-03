@@ -1,4 +1,4 @@
-import { TbClockHour3Filled } from "react-icons/tb";
+import { TbClockHour3Filled } from 'react-icons/tb';
 import Image from 'next/image';
 import { ChevronRight, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ export default function WaitingLobbyParticipantRight() {
     const { handleParticipantNameChangeMessage } = useWebSocket();
     const { participantData } = useLiveParticipantStore();
     const [name, setName] = useState(participantData?.nickname);
-    
+
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!name || name.trim() === '') {
@@ -72,20 +72,20 @@ export default function WaitingLobbyParticipantRight() {
                             className="rounded-full"
                             alt="user"
                         />
-                        {
-                            participantData?.isNameChanged && (
-                                <div className='flex flex-col gap-y-4 items-center justify-center'>
-                                    <div className='text-[29px]'>
-                                        Get ready to play {(participantData.nickname?.split(" ")[0]?.toLowerCase() ?? "player")}!
-                                    </div>
-                                    <div className='text-sm font-normal text-neutral-500'>
-                                        Answer fast to get more points!
-                                    </div>
+                        {participantData?.isNameChanged && (
+                            <div className="flex flex-col gap-y-4 items-center justify-center">
+                                <div className="text-[29px]">
+                                    Get ready to play{' '}
+                                    {participantData.nickname?.split(' ')[0]?.toLowerCase() ??
+                                        'player'}
+                                    !
                                 </div>
-                            )
-                        }
+                                <div className="text-sm font-normal text-neutral-500">
+                                    Answer fast to get more points!
+                                </div>
+                            </div>
+                        )}
                     </div>
-
                 )}
             </div>
             <div>

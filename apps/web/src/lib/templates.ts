@@ -82,7 +82,7 @@ export const templates: Template[] = [
         name: 'Blue',
         background_color: '#196cff',
         text_color: '#EEEEEE',
-        border_color: '#000000',
+        border_color: '#EEEEEE',
         accent_type: 'slash',
         accent_color: '#EEEEEE',
         bars: ['#C5172E', '#FDFAF6', '#FFCC00', '#1DCD9F', '#000000'],
