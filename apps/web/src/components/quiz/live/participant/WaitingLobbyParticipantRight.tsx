@@ -1,5 +1,4 @@
-import { FaHourglassStart } from 'react-icons/fa';
-import { GiAchievement } from 'react-icons/gi';
+import { TbClockHour3Filled } from "react-icons/tb";
 import Image from 'next/image';
 import { ChevronRight, Info } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -15,7 +14,7 @@ export default function WaitingLobbyParticipantRight() {
     const { handleParticipantNameChangeMessage } = useWebSocket();
     const { participantData } = useLiveParticipantStore();
     const [name, setName] = useState(participantData?.nickname);
-
+    console.log("participantData is : ", participantData);
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!name || name.trim() === '') {
@@ -35,12 +34,8 @@ export default function WaitingLobbyParticipantRight() {
                 <div className="mt-12">
                     <div className="flex items-center justify-between mx-4">
                         <div className="text-sm flex items-center justify-start gap-x-3">
-                            <FaHourglassStart size={18} />
+                            <TbClockHour3Filled size={18} />
                             30 mins
-                        </div>
-                        <div className="text-sm flex items-center justify-start gap-x-3">
-                            <GiAchievement size={28} />
-                            {quiz?.basePointsPerQuestion} pts / qs
                         </div>
                     </div>
                 </div>
@@ -67,7 +62,7 @@ export default function WaitingLobbyParticipantRight() {
             </div>
             <div className="w-full flex items-center justify-center">
                 {participantData?.avatar && (
-                    <div className="w-full flex items-center justify-center">
+                    <div className="w-full flex flex-col items-center justify-center gap-y-4">
                         <Image
                             src={participantData.avatar}
                             width={200}
@@ -77,36 +72,51 @@ export default function WaitingLobbyParticipantRight() {
                             className="rounded-full"
                             alt="user"
                         />
+                        {
+                            participantData?.isNameChanged && (
+                                <div className='flex flex-col gap-y-4 items-center justify-center'>
+                                    <div className='text-[29px]'>
+                                        Get ready to play {(participantData.nickname?.split(" ")[0]?.toLowerCase() ?? "player")}!
+                                    </div>
+                                    <div className='text-sm font-normal text-neutral-500'>
+                                        Answer fast to get more points!
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
+
                 )}
             </div>
             <div>
-                <div className="mb-4 flex flex-col space-y-4">
-                    <div className="bg-neutral-800 dark:bg-neutral-200 rounded-xl border border-neutral-300 dark:border-neutral-700 p-4 shadow-lg dark:text-neutral-900 text-neutral-300 ">
-                        <label className="block text-sm font-medium mb-2">
-                            Choose your display name
-                        </label>
-                        <p className="text-xs mb-3">
-                            This name will be visible to other participants
-                        </p>
-                        <form onSubmit={handleSubmit} className="relative mt-8">
-                            <Input
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                type="text"
-                                placeholder="Choose your name"
-                                className="w-full px-5 py-5 text-base rounded-xl border border-neutral-300 dark:border-neutral-400 bg-neutral-50 text-neutral-900 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-neutral-300"
-                            />
+                {!participantData?.isNameChanged && (
+                    <div className="mb-4 flex flex-col space-y-4">
+                        <div className="bg-neutral-800 dark:bg-neutral-200 rounded-xl border border-neutral-300 dark:border-neutral-700 p-4 shadow-lg dark:text-neutral-900 text-neutral-300 ">
+                            <label className="block text-sm font-medium mb-2">
+                                Choose your display name
+                            </label>
+                            <p className="text-xs mb-3">
+                                This name will be visible to other participants
+                            </p>
+                            <form onSubmit={handleSubmit} className="relative mt-8">
+                                <Input
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    type="text"
+                                    placeholder="Choose your name"
+                                    className="w-full px-5 py-5 text-base rounded-xl border border-neutral-300 dark:border-neutral-400 bg-neutral-50 text-neutral-900 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-neutral-300"
+                                />
 
-                            <Button
-                                type="submit"
-                                className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-neutral-900 text-white rounded-full p-0 flex items-center justify-center shadow-md"
-                            >
-                                <ChevronRight className="w-5 h-5" />
-                            </Button>
-                        </form>
+                                <Button
+                                    type="submit"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 bg-neutral-900 text-white rounded-full p-0 flex items-center justify-center shadow-md"
+                                >
+                                    <ChevronRight className="w-5 h-5" />
+                                </Button>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className="p-4 bg-neutral-300 dark:bg-neutral-800 rounded-xl border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-300 ">
                     <div className="flex items-start gap-x-3">
                         <Info size={16} className="mt-0.5" />

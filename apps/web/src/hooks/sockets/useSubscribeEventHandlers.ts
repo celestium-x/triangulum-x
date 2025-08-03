@@ -15,8 +15,8 @@ export const useSubscribeEventHandlers = () => {
 
     function handleIncomingNameChangeMessage(payload: unknown) {
         const message = payload as ParticipantType;
-        upsertParticipant({ id: message.id, nickname: message.nickname } as ParticipantType);
-        updateParticipantData({ id: message.id, nickname: message.nickname } as ParticipantType);
+        upsertParticipant({ id: message.id, nickname: message.nickname, isNameChanged: true } as ParticipantType);
+        updateParticipantData({ id: message.id, nickname: message.nickname, isNameChanged: true } as ParticipantType);
     }
 
     useEffect(() => {

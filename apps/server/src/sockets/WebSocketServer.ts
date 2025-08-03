@@ -145,6 +145,7 @@ export default class WebsocketServer {
             session_participants_mapping: this.session_participants_mapping,
             quizManager: this.quizManager,
             databaseQueue: this.database_queue,
+            redis_cache: this.redis_cache,
         });
         this.spectator_manager = new SpectatorManager({
             publisher: this.publisher,
@@ -190,24 +191,24 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
-                const payload: CookiePayload = decoded as CookiePayload;
+                const decoded_cookie_payload: CookiePayload = decoded as CookiePayload;
 
-                const redis_key: string = `game_session:${payload.gameSessionId}`;
+                const redis_key: string = `game_session:${decoded_cookie_payload.gameSessionId}`;
                 this.subscriber.subscribe(redis_key);
 
-                if (payload.quizId !== quizId) {
+                if (decoded_cookie_payload.quizId !== quizId) {
                     console.error('Token validation failed');
                     ws.close();
                     return;
                 }
-                switch (payload.role) {
+                switch (decoded_cookie_payload.role) {
                     case USER_TYPE.HOST:
-                        await this.hostManager.handle_connection(ws, payload);
+                        await this.hostManager.handle_connection(ws, decoded_cookie_payload);
                         break;
                     case USER_TYPE.PARTICIPANT:
                         await this.participant_manager.handle_connection(
                             ws,
-                            payload as CookiePayload,
+                            decoded_cookie_payload as CookiePayload,
                         );
                         break;
                     default:

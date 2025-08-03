@@ -122,6 +122,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                             avatar: true,
                             isEliminated: true,
                             eliminatedAt: true,
+                            isNameChanged: true,
                             eliminatedAtQuestion: true,
                             finalRank: true,
                             totalScore: true,

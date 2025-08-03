@@ -30,10 +30,10 @@ export default class QuizManager {
         this.redis_cache.set_game_session(game_session_id, game_session);
     }
 
-    public async onParticipantConnect(payload: CookiePayload) {
-        const particpant_id = payload.userId;
+    public async onParticipantConnect(decoded_cookie_payload: CookiePayload) {
+        const particpant_id = decoded_cookie_payload.userId;
         const particicpant_cache = await this.redis_cache.get_participant(
-            payload.gameSessionId,
+            decoded_cookie_payload.gameSessionId,
             particpant_id,
         );
 
@@ -46,7 +46,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
             payload: participant,
         };
-        this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
+        this.publish_event_to_redis(decoded_cookie_payload.gameSessionId, pub_sub_message);
     }
 
     public async onSpectatorConnect(payload: CookiePayload) {

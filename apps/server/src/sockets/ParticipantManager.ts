@@ -10,6 +10,7 @@ import {
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import DatabaseQueue from '../queue/DatabaseQueue';
+import RedisCache from '../cache/RedisCache';
 
 export interface ParticipantManagerDependencies {
     publisher: Redis;
@@ -18,6 +19,7 @@ export interface ParticipantManagerDependencies {
     session_participants_mapping: Map<string, Set<string>>;
     quizManager: QuizManager;
     databaseQueue: DatabaseQueue;
+    redis_cache: RedisCache;
 }
 
 export default class ParticipantManager {
@@ -27,6 +29,7 @@ export default class ParticipantManager {
     private quizManager: QuizManager;
     private socket_mapping: Map<string, CustomWebSocket>;
     private database_queue: DatabaseQueue;
+    private redis_cache: RedisCache;
 
     private participant_socket_mapping: Map<string, string> = new Map(); // Map<participantId, socketId>
 
@@ -37,41 +40,48 @@ export default class ParticipantManager {
         this.session_participants_mapping = dependencies.session_participants_mapping;
         this.quizManager = dependencies.quizManager;
         this.database_queue = dependencies.databaseQueue;
+        this.redis_cache = dependencies.redis_cache;
     }
 
-    public async handle_connection(ws: CustomWebSocket, payload: CookiePayload) {
+    public async handle_connection(ws: CustomWebSocket, decoded_cookie_payload: CookiePayload) {
         const is_valid_participant = await this.validate_participant_in_db(
-            payload.quizId,
-            payload.userId,
+            decoded_cookie_payload.quizId,
+            decoded_cookie_payload.userId,
         );
         if (!is_valid_participant) {
             ws.close();
             return;
         }
-        this.cleanup_existing_partiicpant_socket(payload.userId, payload.gameSessionId);
+        this.cleanup_existing_partiicpant_socket(
+            decoded_cookie_payload.userId,
+            decoded_cookie_payload.gameSessionId,
+        );
 
         const new_participant_socket_id = this.generateSocketId();
 
         ws.id = new_participant_socket_id;
-        ws.user = payload;
+        ws.user = decoded_cookie_payload;
 
         this.socket_mapping.set(new_participant_socket_id, ws);
-        this.participant_socket_mapping.set(payload.userId, new_participant_socket_id);
+        this.participant_socket_mapping.set(
+            decoded_cookie_payload.userId,
+            new_participant_socket_id,
+        );
 
         const session_participants_socket_ids = this.session_participants_mapping.get(
-            payload.gameSessionId,
+            decoded_cookie_payload.gameSessionId,
         );
 
         if (!session_participants_socket_ids) {
-            this.session_participants_mapping.set(payload.gameSessionId, new Set());
+            this.session_participants_mapping.set(decoded_cookie_payload.gameSessionId, new Set());
         }
 
         this.session_participants_mapping
-            .get(payload.gameSessionId)
+            .get(decoded_cookie_payload.gameSessionId)
             ?.add(new_participant_socket_id);
         this.setup_message_handlers(ws);
 
-        this.quizManager.onParticipantConnect(payload);
+        this.quizManager.onParticipantConnect(decoded_cookie_payload);
     }
 
     private setup_message_handlers(ws: CustomWebSocket) {
@@ -123,16 +133,22 @@ export default class ParticipantManager {
     ) {
         const { gameSessionId: game_session_id } = ws.user;
         const { choosenNickname } = payload;
-        await this.database_queue.update_participant(
+        const participant = await this.redis_cache.get_participant(game_session_id, ws.user.userId);
+        if (participant.isNameChanged) {
+            return;
+        }
+        const { data } = await this.database_queue.update_participant(
             ws.user.userId,
-            { nickname: choosenNickname },
+            { nickname: choosenNickname, isNameChanged: true },
             game_session_id,
         );
+
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
             payload: {
                 id: ws.user.userId,
-                nickname: choosenNickname,
+                nickname: data.participant.nickname,
+                isNameChanged: data.participant.isNameChanged,
             },
         };
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
