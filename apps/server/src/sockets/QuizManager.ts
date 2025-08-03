@@ -119,7 +119,7 @@ export default class QuizManager {
         this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
     }
 
-    private publish_event_to_redis(game_session_id: string, event: PubSubMessageTypes) {
+    public publish_event_to_redis(game_session_id: string, event: PubSubMessageTypes) {
         try {
             const key = this.get_redis_key(game_session_id);
             this.publisher.publish(key, JSON.stringify(event));
