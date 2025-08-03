@@ -44,7 +44,7 @@ export default function Avatar({
                 transform: 'translate(-50%, -50%)',
                 width: size,
                 height: size,
-                zIndex: 10
+                zIndex: 10,
             }}
             initial={{
                 opacity: 0,

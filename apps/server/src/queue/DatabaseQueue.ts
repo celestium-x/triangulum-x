@@ -62,7 +62,6 @@ export default class DatabaseQueue {
         { success: boolean; participant: Participant } | { success: boolean; error: string }
     > {
         const { id, game_session_id, participant }: UpdateParticipantJobType = job.data;
-
         try {
             const updatedParticipant = await prisma.participant.update({
                 where: {
@@ -71,7 +70,7 @@ export default class DatabaseQueue {
                 data: participant,
             });
 
-            this.redis_cache.set_participants(
+            await this.redis_cache.set_participants(
                 game_session_id,
                 updatedParticipant.id,
                 updatedParticipant,
@@ -101,7 +100,7 @@ export default class DatabaseQueue {
                 data: gameSession,
             });
 
-            this.redis_cache.set_game_session(game_session_id, updatedGameSession);
+            await this.redis_cache.set_game_session(game_session_id, updatedGameSession);
             return { success: true, gameSession: updatedGameSession };
         } catch (err) {
             console.error('Error while processing game session update', err);

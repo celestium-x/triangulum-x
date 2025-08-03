@@ -6,7 +6,7 @@ interface LiveQuizStore {
     updateQuiz: (updatedFields: Partial<QuizType>) => void;
     gameSession: GameSessionType | null;
     updateGameSession: (updatedFields: Partial<GameSessionType>) => void;
-    currentQuestion: QuestionType | null
+    currentQuestion: QuestionType | null;
     updateCurrentQuestion: (updatedFields: Partial<QuestionType>) => void;
 }
 
@@ -37,5 +37,5 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
                 ...updateFields,
             } as QuestionType,
         }));
-    }
+    },
 }));

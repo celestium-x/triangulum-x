@@ -8,7 +8,7 @@ import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore'
 export const useSubscribeEventHandlers = () => {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
     const { upsertParticipant } = useLiveParticipantsStore();
-    const { updateParticipantData } = useLiveParticipantStore()
+    const { updateParticipantData } = useLiveParticipantStore();
     function handleIncomingMessage(payload: unknown) {
         upsertParticipant(payload as ParticipantType);
     }

@@ -6,9 +6,8 @@ import ParticipantQuestionReadingScreen from './ParticipantQuestionReadingScreen
 
 export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
-    const screen: ParticipantScreenEnum = ParticipantScreenEnum.QUESTION_READING
     function renderHostScreenPanels() {
-        switch (screen) {
+        switch (gameSession?.participantScreen) {
             case ParticipantScreenEnum.LOBBY:
                 return <ParticipantLobbyScreen />;
             case ParticipantScreenEnum.MOTIVATION:
