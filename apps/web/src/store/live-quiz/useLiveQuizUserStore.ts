@@ -36,8 +36,6 @@ export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
     participantData: null,
     updateParticipantData: (updatedFields: Partial<ParticipantType>) => {
         set((state) => {
-            console.log("updated field is : ", updatedFields);
-            console.log("state is : ", state);
             if (state.participantData && updatedFields.id && state.participantData.id === updatedFields.id) {
                 return {
                     participantData: {

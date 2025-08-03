@@ -14,7 +14,7 @@ export default function WaitingLobbyParticipantRight() {
     const { handleParticipantNameChangeMessage } = useWebSocket();
     const { participantData } = useLiveParticipantStore();
     const [name, setName] = useState(participantData?.nickname);
-    console.log("participantData is : ", participantData);
+    
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!name || name.trim() === '') {
