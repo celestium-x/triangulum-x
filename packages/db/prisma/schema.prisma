@@ -96,6 +96,8 @@ model Participant {
   nickname             String
   avatar               String?
   ipAddress            String?
+  isNameChanged        Boolean    @default(false)
+  warningCount         Int        @default(0)
   isEliminated         Boolean    @default(false)
   eliminatedAt         DateTime?
   eliminatedAtQuestion String?
@@ -107,7 +109,6 @@ model Participant {
   quizId               String
   quiz                 Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
   Response             Response[]
-  isNameChanged        Boolean    @default(false)
 
   @@map("participants")
 }
@@ -257,17 +258,10 @@ enum ParticipantScreen {
 
 enum SpectatorScreen {
   LOBBY
-  COUNTDOWN
-  MOTIVATION
-  QUESTION_READING
-  QUESTION_ACTIVE
+  QUESTION_PREVIEW
 }
 
 enum HostScreen {
   LOBBY
   QUESTION_PREVIEW
-  QUESTION_ACTIVE
-  QUESTION_RESULTS
-  LEADERBOARD
-  FINAL_RESULTS
 }
