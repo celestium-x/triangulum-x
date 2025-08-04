@@ -1606,8 +1606,8 @@
       ],
       "format": "esm"
     },
-    "src/services/init-services.ts": {
-      "bytes": 505,
+    "src/types/web-socket-types.ts": {
+      "bytes": 852,
       "imports": [
         {
           "path": "src/cache/RedisCache.ts",
@@ -1711,8 +1711,13 @@
       ],
       "format": "esm"
     },
-    "src/types/web-socket-types.ts": {
-      "bytes": 1172,
+    "src/types/database-queue-types.ts": {
+      "bytes": 292,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/queue/DatabaseQueue.ts": {
+      "bytes": 5480,
       "imports": [
         {
           "path": "ws",
@@ -1879,7 +1884,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-      "bytes": 4584,
+      "bytes": 4393,
       "imports": [
         {
           "path": "express",
@@ -2137,7 +2142,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 4636,
+      "bytes": 2471,
       "imports": [
         {
           "path": "ioredis",
@@ -2240,7 +2245,7 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 9684,
+      "bytes": 8858,
       "imports": [
         {
           "path": "ws",
@@ -2372,7 +2377,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 968918
+      "bytes": 944954
     },
     "dist/index.js": {
       "imports": [
@@ -2561,6 +2566,12 @@
         "src/controllers/s3-controller/getPreSignedUrlController.ts": {
           "bytesInOutput": 824
         },
+        "node_modules/nanoid/index.js": {
+          "bytesInOutput": 1114
+        },
+        "src/class/quizAction.ts": {
+          "bytesInOutput": 2400
+        },
         "../../node_modules/zod/v4/classic/external.js": {
           "bytesInOutput": 6011
         },
@@ -2583,7 +2594,7 @@
           "bytesInOutput": 5197
         },
         "../../node_modules/zod/v4/core/checks.js": {
-          "bytesInOutput": 15900
+          "bytesInOutput": 15994
         },
         "../../node_modules/zod/v4/core/doc.js": {
           "bytesInOutput": 924
@@ -2592,7 +2603,7 @@
           "bytesInOutput": 54
         },
         "../../node_modules/zod/v4/core/schemas.js": {
-          "bytesInOutput": 50887
+          "bytesInOutput": 51203
         },
         "../../node_modules/zod/v4/locales/index.js": {
           "bytesInOutput": 1010
@@ -2718,7 +2729,7 @@
           "bytesInOutput": 1248
         },
         "../../node_modules/zod/v4/core/api.js": {
-          "bytesInOutput": 18158
+          "bytesInOutput": 18161
         },
         "../../node_modules/zod/v4/core/function.js": {
           "bytesInOutput": 2106
@@ -2742,7 +2753,7 @@
           "bytesInOutput": 240
         },
         "../../node_modules/zod/v4/classic/schemas.js": {
-          "bytesInOutput": 30607
+          "bytesInOutput": 30627
         },
         "../../node_modules/zod/v4/classic/compat.js": {
           "bytesInOutput": 641
@@ -2798,6 +2809,15 @@
         "src/schemas/participantJoinSchema.ts": {
           "bytesInOutput": 124
         },
+        "src/cache/RedisCache.ts": {
+          "bytesInOutput": 3689
+        },
+        "src/queue/DatabaseQueue.ts": {
+          "bytesInOutput": 3472
+        },
+        "src/services/init-services.ts": {
+          "bytesInOutput": 167
+        },
         "src/controllers/live-quiz-controller/participantJoinController.ts": {
           "bytesInOutput": 3614
         },
@@ -2808,7 +2828,7 @@
           "bytesInOutput": 127
         },
         "src/controllers/live-quiz-controller/spectatorJoinController.ts": {
-          "bytesInOutput": 3308
+          "bytesInOutput": 3194
         },
         "src/controllers/quiz-controller/deleteQuizController.ts": {
           "bytesInOutput": 1164
@@ -2817,22 +2837,22 @@
           "bytesInOutput": 947
         },
         "src/sockets/WebSocketServer.ts": {
-          "bytesInOutput": 7710
+          "bytesInOutput": 7022
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 1983
+          "bytesInOutput": 2059
         },
         "src/sockets/QuizManager.ts": {
-          "bytesInOutput": 3438
+          "bytesInOutput": 1684
         },
         "src/sockets/ParticipantManager.ts": {
-          "bytesInOutput": 5542
+          "bytesInOutput": 5591
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5127
+          "bytesInOutput": 3683
         }
       },
-      "bytes": 524560
+      "bytes": 513176
     }
   }
 }
