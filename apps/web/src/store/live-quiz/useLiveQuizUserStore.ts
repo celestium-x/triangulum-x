@@ -48,6 +48,7 @@ export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
                     },
                 };
             }
+
             return state;
         });
     },

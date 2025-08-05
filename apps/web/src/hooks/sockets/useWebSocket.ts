@@ -70,6 +70,17 @@ export const useWebSocket = () => {
         }
     }
 
+    function handleHostQuestionPreviewPageChange(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+
     return {
         subscribeToHandler,
         unsubscribeToHandler,
@@ -77,5 +88,6 @@ export const useWebSocket = () => {
         isConnected: socket.current?.is_connected || false,
         handleParticipantNameChangeMessage,
         handleSpectatorNameChangeMessage,
+        handleHostQuestionPreviewPageChange,
     };
 };

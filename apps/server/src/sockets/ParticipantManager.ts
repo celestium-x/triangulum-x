@@ -137,6 +137,7 @@ export default class ParticipantManager {
         if (participant.isNameChanged) {
             return;
         }
+
         const { data } = await this.database_queue.update_participant(
             ws.user.userId,
             { nickname: choosenNickname, isNameChanged: true },

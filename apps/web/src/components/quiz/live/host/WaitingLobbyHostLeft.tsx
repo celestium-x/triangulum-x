@@ -4,10 +4,21 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
 import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
+import { Button } from '@/components/ui/button';
+import { HostScreenEnum } from '@/types/prisma-types';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 
 export default function WaitingLobbyHostLeft() {
-    const { quiz } = useLiveQuizStore();
+    const { quiz, updateGameSession } = useLiveQuizStore();
     const { participants } = useLiveParticipantsStore();
+    const { handleHostQuestionPreviewPageChange } = useWebSocket();
+
+    function handleOnClick() {
+        handleHostQuestionPreviewPageChange(HostScreenEnum.QUESTION_PREVIEW);
+        updateGameSession?.({ hostScreen: HostScreenEnum.QUESTION_PREVIEW });
+        return;
+    }
+
     return (
         <div className="w-full max-h-full flex flex-col relative">
             <WaitingLobbyAvatars participants={participants} />
@@ -42,6 +53,13 @@ export default function WaitingLobbyHostLeft() {
                     )}
                 </div>
             </div>
+
+            <Button
+                className="absolute right-65 bottom-6 dark:bg-dark-base dark:text-neutral-100 bg-neutral-300 text-black dark:hover:-translate-y-0.5 z-20"
+                onClick={handleOnClick}
+            >
+                Get Started
+            </Button>
             <LiveQuizInteractionTicker className="absolute bottom-6 right-6" />
         </div>
     );

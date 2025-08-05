@@ -5,6 +5,15 @@ export interface CustomWebSocket extends WebSocket {
     user: CookiePayload;
 }
 
+export enum HostScreenEnum {
+    LOBBY = 'LOBBY',
+    QUESTION_PREVIEW = 'QUESTION_PREVIEW',
+    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_RESULTS = 'QUESTION_RESULTS',
+    LEADERBOARD = 'LEADERBOARD',
+    FINAL_RESULTS = 'FINAL_RESULTS',
+}
+
 export interface CookiePayload {
     userId: string;
     quizId: string;
@@ -22,6 +31,8 @@ export interface PubSubMessageTypes {
 
 export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
+    HOST_CHANGE_QUESTION_PREVIEW = 'HOST_CHANGE_QUESTION_PREVIEW',
+
     PARTICIPANT_JOIN_GAME_SESSION = 'PARTICIPANT_JOIN_GAME_SESSION',
     PARTICIPANT_NAME_CHANGE = 'PARTICIPANT_NAME_CHANGE',
     PARTICIPANT_LEAVE_GAME_SESSION = 'PARTICIPANT_LEAVE_GAME_SESSION',
@@ -43,4 +54,8 @@ export interface ParticipantNameChangeEvent {
 
 export interface SpectatorNameChangeEvent {
     choosenNickname: string;
+}
+
+export interface HostScreenChangeEvent {
+    currentScreen: HostScreenEnum;
 }

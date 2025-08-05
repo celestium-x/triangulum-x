@@ -2,6 +2,7 @@
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { HostScreenEnum } from '@/types/prisma-types';
 import HostLobbyScreen from './HostLobbyScreen';
+import HostQuestionPreviewScreen from './HostQuestionPreviewScreen';
 
 export default function HostMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -10,6 +11,9 @@ export default function HostMainScreen() {
         switch (gameSession?.hostScreen) {
             case HostScreenEnum.LOBBY:
                 return <HostLobbyScreen />;
+
+            case HostScreenEnum.QUESTION_PREVIEW:
+                return <HostQuestionPreviewScreen />;
         }
     }
 

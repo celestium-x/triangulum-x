@@ -1498,7 +1498,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 7050,
+      "bytes": 7058,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1712,7 +1712,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1172,
+      "bytes": 1569,
       "imports": [
         {
           "path": "ws",
@@ -1956,8 +1956,40 @@
       ],
       "format": "esm"
     },
+    "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
+      "bytes": 1053,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
+      "bytes": 1034,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/routes/index.ts": {
-      "bytes": 2475,
+      "bytes": 2870,
       "imports": [
         {
           "path": "express",
@@ -2033,6 +2065,16 @@
           "path": "src/controllers/appReview-controller/getReviewController.ts",
           "kind": "import-statement",
           "original": "../controllers/appReview-controller/getReviewController"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getLiveQuizSummarizedData"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getSelectedQuestionDetails"
         }
       ],
       "format": "esm"
@@ -2096,7 +2138,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 3087,
+      "bytes": 4436,
       "imports": [
         {
           "path": "ioredis",
@@ -2104,9 +2146,9 @@
           "external": true
         },
         {
-          "path": "../types/web-socket-types",
+          "path": "src/types/web-socket-types.ts",
           "kind": "import-statement",
-          "external": true
+          "original": "../types/web-socket-types"
         },
         {
           "path": "./QuizManager",
@@ -2130,6 +2172,11 @@
         },
         {
           "path": "../queue/DatabaseQueue",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../cache/RedisCache",
           "kind": "import-statement",
           "external": true
         }
@@ -2163,7 +2210,7 @@
       "format": "esm"
     },
     "src/sockets/ParticipantManager.ts": {
-      "bytes": 7549,
+      "bytes": 7550,
       "imports": [
         {
           "path": "ioredis",
@@ -2240,7 +2287,7 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 9684,
+      "bytes": 9987,
       "imports": [
         {
           "path": "ws",
@@ -2372,7 +2419,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 968918
+      "bytes": 975201
     },
     "dist/index.js": {
       "imports": [
@@ -2526,7 +2573,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1130
+          "bytesInOutput": 1312
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2760,7 +2807,7 @@
           "bytesInOutput": 4103
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 4502
+          "bytesInOutput": 4515
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2816,11 +2863,17 @@
         "src/controllers/appReview-controller/getReviewController.ts": {
           "bytesInOutput": 947
         },
+        "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
+          "bytesInOutput": 808
+        },
+        "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
+          "bytesInOutput": 782
+        },
         "src/sockets/WebSocketServer.ts": {
-          "bytesInOutput": 7710
+          "bytesInOutput": 7995
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 1983
+          "bytesInOutput": 2985
         },
         "src/sockets/QuizManager.ts": {
           "bytesInOutput": 3438
@@ -2832,7 +2885,7 @@
           "bytesInOutput": 5127
         }
       },
-      "bytes": 524560
+      "bytes": 527773
     }
   }
 }

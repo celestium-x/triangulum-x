@@ -125,16 +125,15 @@ export default class DatabaseQueue {
     ): Promise<
         { success: boolean; gameSession: GameSession } | { success: boolean; error: string }
     > {
-        const { id, gameSession, game_session_id }: UpdateGameSessionJobtype = job.data;
+        const { gameSession, game_session_id }: UpdateGameSessionJobtype = job.data;
 
         try {
             const updatedGameSession = await prisma.gameSession.update({
                 where: {
-                    id: id,
+                    id: game_session_id,
                 },
                 data: gameSession,
             });
-
             await this.redis_cache.set_game_session(game_session_id, updatedGameSession);
             return { success: true, gameSession: updatedGameSession };
         } catch (err) {
