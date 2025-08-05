@@ -39,7 +39,7 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
 
     useEffect(() => {
         onChatExpandChange?.(isExpanded);
-    }, [isExpanded,onChatExpandChange]);
+    }, [isExpanded, onChatExpandChange]);
 
     const users: User[] = useMemo(() => {
         const globalChat: User = {
@@ -110,7 +110,8 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
     };
 
     return (
-        <div className='bg-green-500'
+        <div
+            className="bg-green-500"
             style={{
                 color: template?.text_color,
             }}
