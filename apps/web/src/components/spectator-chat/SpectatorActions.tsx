@@ -14,7 +14,11 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { templates } from '@/lib/templates';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 
-export default function SpectatorActions() {
+interface SpectatorActionsProps {
+    onChatExpandChange?: (isExpanded: boolean) => void;
+}
+
+export default function SpectatorActions({ onChatExpandChange }: SpectatorActionsProps) {
     const bottomRef = useRef<HTMLDivElement>(null);
     const [messages, setMessages] = useState<Record<string, Message[]>>({});
     const [openChatDropdown, setOpenChatDropdown] = useState(false);
@@ -25,8 +29,18 @@ export default function SpectatorActions() {
     const { quiz } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
     const { spectators, currentUserId } = useLiveSpectatorsStore();
-    useHandleClickOutside([spectatorChatRef], setOpenChatDropdown);
+    useHandleClickOutside([spectatorChatRef], () => {
+        if (!isExpanded) {
+            setOpenChatDropdown(false);
+        }
+    });
+
     useHandleClickOutside([spectatorsDisplayRef], setOpenPeopleDropdown);
+
+    useEffect(() => {
+        onChatExpandChange?.(isExpanded);
+    }, [isExpanded, onChatExpandChange]);
+
     const users: User[] = useMemo(() => {
         const globalChat: User = {
             id: 'global',
@@ -97,6 +111,7 @@ export default function SpectatorActions() {
 
     return (
         <div
+            className="bg-green-500"
             style={{
                 color: template?.text_color,
             }}
