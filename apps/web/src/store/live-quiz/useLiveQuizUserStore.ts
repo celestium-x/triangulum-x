@@ -49,7 +49,7 @@ export const useLiveParticipantStore = create<LiveParticipantStore>((set) => ({
                 };
             }
 
-            return state
+            return state;
         });
     },
     setParticipantData: (data: ParticipantType) => {

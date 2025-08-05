@@ -11,5 +11,5 @@ export const useLiveQuizHostStore = create<LiveQuizHostStoreProps>((set) => ({
 
     setCurrentScreen: (currentScreen: HostScreenEnum) => {
         set({ currentScreen });
-    }
+    },
 }));

@@ -1,7 +1,12 @@
 import Redis from 'ioredis';
-import { CookiePayload, CustomWebSocket, HostScreenChangeEvent, HostScreenEnum, MESSAGE_TYPES, PubSubMessageTypes } from '../types/web-socket-types';
+import {
+    CookiePayload,
+    CustomWebSocket,
+    MESSAGE_TYPES,
+    PubSubMessageTypes,
+} from '../types/web-socket-types';
 import QuizManager from './QuizManager';
-import prisma, { HostScreen } from '@repo/db/client';
+import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import { WebSocket } from 'ws';
 import DatabaseQueue from '../queue/DatabaseQueue';
@@ -96,30 +101,27 @@ export default class HostManager {
 
     private async handle_host_question_preview_page_change(ws: CustomWebSocket) {
         const { gameSessionId: game_session_id } = ws.user;
-        const gameSession = await this.redis_cache.get_game_session(
-            game_session_id,
-        );
+        const gameSession = await this.redis_cache.get_game_session(game_session_id);
 
-        if (gameSession?.hostScreen === "QUESTION_PREVIEW") {
+        if (gameSession?.hostScreen === 'QUESTION_PREVIEW') {
             return;
         }
 
         const { data } = await this.database_queue.update_game_session(
             ws.user.userId,
             { hostScreen: 'QUESTION_PREVIEW' },
-            game_session_id
-        )
+            game_session_id,
+        );
 
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
             payload: {
                 id: ws.user.userId,
-                hostScreen: data.hostScreen
-            }
-        }
+                hostScreen: data.hostScreen,
+            },
+        };
 
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
-
     }
 
     private generateSocketId(): string {

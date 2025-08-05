@@ -55,7 +55,7 @@ export default function WaitingLobbyHostLeft() {
             </div>
 
             <Button
-                className='absolute right-65 bottom-6 dark:bg-dark-base dark:text-neutral-100 bg-neutral-300 text-black dark:hover:-translate-y-0.5 z-20'
+                className="absolute right-65 bottom-6 dark:bg-dark-base dark:text-neutral-100 bg-neutral-300 text-black dark:hover:-translate-y-0.5 z-20"
                 onClick={handleOnClick}
             >
                 Get Started

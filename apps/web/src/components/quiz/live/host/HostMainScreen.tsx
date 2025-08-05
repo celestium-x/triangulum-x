@@ -13,7 +13,7 @@ export default function HostMainScreen() {
                 return <HostLobbyScreen />;
 
             case HostScreenEnum.QUESTION_PREVIEW:
-                return <HostQuestionPreviewScreen/>
+                return <HostQuestionPreviewScreen />;
         }
     }
 

@@ -79,7 +79,7 @@ export default function MiniCanvas({
                     onClick?.();
                 }}
                 className={cn(
-                    'w-full rounded-md h-18 p-0.5 cursor-pointer relative',
+                    'w-full rounded-md h-18 p-0.5 cursor-pointer relative ',
                     currentQuestionIndex === question.orderIndex && selectedStyles,
                 )}
                 style={{ boxSizing: 'border-box' }}
@@ -89,7 +89,7 @@ export default function MiniCanvas({
                         backgroundColor: template?.background_color,
                         color: template?.text_color,
                     }}
-                    className="w-full h-full rounded-sm flex items-center justify-center relative group"
+                    className="w-full h-full rounded-sm flex justify-center items-center relative group"
                 >
                     <div className="text-[5px] text-center text-light-base bg-dark-base rounded-full absolute top-2 left-2 px-2 py-1 hidden group-hover:block">
                         Question {questionIndex + 1}

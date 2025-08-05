@@ -57,5 +57,5 @@ export interface SpectatorNameChangeEvent {
 }
 
 export interface HostScreenChangeEvent {
-    currentScreen: HostScreenEnum
+    currentScreen: HostScreenEnum;
 }
