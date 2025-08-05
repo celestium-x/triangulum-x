@@ -15,3 +15,6 @@ export const LIVE_QUIZ_DATA_URL = QUIZ_URL + '/get-live-quiz-data';
 export const CREATE_REVIEW_URL = API_URL + '/user/create-review';
 export const GET_REVIEW_URL = API_URL + '/user/get-review';
 export const DELETE_QUIZ_URL = API_URL + '/quiz/delete-quiz';
+
+export const GET_SELECTED_QUIZ_DATA = API_URL + '/quiz/get-selected-data';
+export const GET_LIVE_QUIZ_SUMMARIZED_DATA = API_URL + '/quiz/get-sumarized-quiz';

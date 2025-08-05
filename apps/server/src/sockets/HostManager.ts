@@ -1,10 +1,11 @@
 import Redis from 'ioredis';
-import { CookiePayload, CustomWebSocket } from '../types/web-socket-types';
+import { CookiePayload, CustomWebSocket, HostScreenChangeEvent, HostScreenEnum, MESSAGE_TYPES, PubSubMessageTypes } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
-import prisma from '@repo/db/client';
+import prisma, { HostScreen } from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import { WebSocket } from 'ws';
 import DatabaseQueue from '../queue/DatabaseQueue';
+import RedisCache from '../cache/RedisCache';
 
 export interface HostManagerDependencies {
     publisher: Redis;
@@ -13,6 +14,7 @@ export interface HostManagerDependencies {
     sessionHostMapping: Map<string, string>;
     quizManager: QuizManager;
     databaseQueue: DatabaseQueue;
+    redis_cache: RedisCache;
 }
 
 export default class HostManager {
@@ -22,6 +24,7 @@ export default class HostManager {
     private sessionHostMapping: Map<string, string>;
     private quizManager: QuizManager;
     private database_queue: DatabaseQueue;
+    private redis_cache: RedisCache;
 
     constructor(dependencies: HostManagerDependencies) {
         this.publisher = dependencies.publisher;
@@ -30,6 +33,7 @@ export default class HostManager {
         this.sessionHostMapping = dependencies.sessionHostMapping;
         this.quizManager = dependencies.quizManager;
         this.database_queue = dependencies.databaseQueue;
+        this.redis_cache = dependencies.redis_cache;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
@@ -69,6 +73,14 @@ export default class HostManager {
     private handle_host_message(ws: CustomWebSocket, message: any) {
         const { type } = message;
         switch (type) {
+            case MESSAGE_TYPES.HOST_JOIN_GAME_SESSION:
+                // this.handle_join_game_session(ws, payload);
+                break;
+
+            case MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW:
+                this.handle_host_question_preview_page_change(ws);
+                break;
+
             default:
                 console.error('Unknown message type', type);
                 break;
@@ -80,6 +92,34 @@ export default class HostManager {
             where: { id: quizId, hostId },
         });
         return !!quiz;
+    }
+
+    private async handle_host_question_preview_page_change(ws: CustomWebSocket) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const gameSession = await this.redis_cache.get_game_session(
+            game_session_id,
+        );
+
+        if (gameSession?.hostScreen === "QUESTION_PREVIEW") {
+            return;
+        }
+
+        const { data } = await this.database_queue.update_game_session(
+            ws.user.userId,
+            { hostScreen: 'QUESTION_PREVIEW' },
+            game_session_id
+        )
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
+            payload: {
+                id: ws.user.userId,
+                hostScreen: data.hostScreen
+            }
+        }
+
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+
     }
 
     private generateSocketId(): string {

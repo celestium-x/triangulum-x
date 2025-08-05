@@ -1461,7 +1461,170 @@
       "format": "esm"
     },
     "src/schemas/createQuizSchema.ts": {
+<<<<<<< HEAD
       "bytes": 1684,
+=======
+      "bytes": 1561,
+      "imports": [
+        {
+          "path": "../../node_modules/zod/index.js",
+          "kind": "import-statement",
+          "original": "zod"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/upsertQuizController.ts": {
+      "bytes": 3796,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/class/quizAction.ts",
+          "kind": "import-statement",
+          "original": "../../class/quizAction"
+        },
+        {
+          "path": "src/schemas/createQuizSchema.ts",
+          "kind": "import-statement",
+          "original": "../../schemas/createQuizSchema"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/getQuizController.ts": {
+      "bytes": 2327,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/getAllQuizController.ts": {
+      "bytes": 1421,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/publishQuizController.ts": {
+      "bytes": 1699,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/middlewares/verifyQuizOwnershipMiddleware.ts": {
+      "bytes": 982,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/types/web-socket-types.ts": {
+      "bytes": 1430,
+      "imports": [
+        {
+          "path": "ws",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/quiz-controller/launchQuizController.ts": {
+      "bytes": 4407,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/class/quizAction.ts",
+          "kind": "import-statement",
+          "original": "../../class/quizAction"
+        },
+        {
+          "path": "src/types/web-socket-types.ts",
+          "kind": "import-statement",
+          "original": "../../types/web-socket-types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/appReview-controller/reviewAppController.ts": {
+      "bytes": 1503,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/class/generateUser.ts": {
+      "bytes": 3954,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/schemas/participantJoinSchema.ts": {
+      "bytes": 132,
+>>>>>>> 4adab0c (host question preview screen and ws logic)
       "imports": [
         {
           "path": "../../node_modules/zod/index.js",
@@ -1498,7 +1661,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 7050,
+      "bytes": 7172,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1961,8 +2124,44 @@
       ],
       "format": "esm"
     },
+    "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
+      "bytes": 1057,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
+      "bytes": 1034,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/routes/index.ts": {
+<<<<<<< HEAD
       "bytes": 2475,
+=======
+      "bytes": 2859,
+>>>>>>> 4adab0c (host question preview screen and ws logic)
       "imports": [
         {
           "path": "express",
@@ -2038,6 +2237,16 @@
           "path": "src/controllers/appReview-controller/getReviewController.ts",
           "kind": "import-statement",
           "original": "../controllers/appReview-controller/getReviewController"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getLiveQuizSummarizedData"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getSelectedQuestionDetails"
         }
       ],
       "format": "esm"
@@ -2101,7 +2310,11 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
+<<<<<<< HEAD
       "bytes": 3087,
+=======
+      "bytes": 4492,
+>>>>>>> 4adab0c (host question preview screen and ws logic)
       "imports": [
         {
           "path": "ioredis",
@@ -2137,6 +2350,11 @@
           "path": "../queue/DatabaseQueue",
           "kind": "import-statement",
           "external": true
+        },
+        {
+          "path": "../cache/RedisCache",
+          "kind": "import-statement",
+          "external": true
         }
       ],
       "format": "esm"
@@ -2168,7 +2386,7 @@
       "format": "esm"
     },
     "src/sockets/ParticipantManager.ts": {
-      "bytes": 7549,
+      "bytes": 7558,
       "imports": [
         {
           "path": "ioredis",
@@ -2245,7 +2463,11 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
+<<<<<<< HEAD
       "bytes": 8858,
+=======
+      "bytes": 10072,
+>>>>>>> 4adab0c (host question preview screen and ws logic)
       "imports": [
         {
           "path": "ws",
@@ -2377,7 +2599,11 @@
       "imports": [],
       "exports": [],
       "inputs": {},
+<<<<<<< HEAD
       "bytes": 944954
+=======
+      "bytes": 958972
+>>>>>>> 4adab0c (host question preview screen and ws logic)
     },
     "dist/index.js": {
       "imports": [
@@ -2531,7 +2757,11 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
+<<<<<<< HEAD
           "bytesInOutput": 1130
+=======
+          "bytesInOutput": 1304
+>>>>>>> 4adab0c (host question preview screen and ws logic)
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2594,7 +2824,7 @@
           "bytesInOutput": 5197
         },
         "../../node_modules/zod/v4/core/checks.js": {
-          "bytesInOutput": 15994
+          "bytesInOutput": 15900
         },
         "../../node_modules/zod/v4/core/doc.js": {
           "bytesInOutput": 924
@@ -2603,7 +2833,7 @@
           "bytesInOutput": 54
         },
         "../../node_modules/zod/v4/core/schemas.js": {
-          "bytesInOutput": 51203
+          "bytesInOutput": 50887
         },
         "../../node_modules/zod/v4/locales/index.js": {
           "bytesInOutput": 1010
@@ -2729,7 +2959,7 @@
           "bytesInOutput": 1248
         },
         "../../node_modules/zod/v4/core/api.js": {
-          "bytesInOutput": 18161
+          "bytesInOutput": 18158
         },
         "../../node_modules/zod/v4/core/function.js": {
           "bytesInOutput": 2106
@@ -2753,7 +2983,7 @@
           "bytesInOutput": 240
         },
         "../../node_modules/zod/v4/classic/schemas.js": {
-          "bytesInOutput": 30627
+          "bytesInOutput": 30607
         },
         "../../node_modules/zod/v4/classic/compat.js": {
           "bytesInOutput": 641
@@ -2813,7 +3043,11 @@
           "bytesInOutput": 3689
         },
         "src/queue/DatabaseQueue.ts": {
+<<<<<<< HEAD
           "bytesInOutput": 3472
+=======
+          "bytesInOutput": 4515
+>>>>>>> 4adab0c (host question preview screen and ws logic)
         },
         "src/services/init-services.ts": {
           "bytesInOutput": 167
@@ -2836,7 +3070,14 @@
         "src/controllers/appReview-controller/getReviewController.ts": {
           "bytesInOutput": 947
         },
+        "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
+          "bytesInOutput": 808
+        },
+        "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
+          "bytesInOutput": 782
+        },
         "src/sockets/WebSocketServer.ts": {
+<<<<<<< HEAD
           "bytesInOutput": 7022
         },
         "src/sockets/HostManager.ts": {
@@ -2853,6 +3094,24 @@
         }
       },
       "bytes": 513176
+=======
+          "bytesInOutput": 8073
+        },
+        "src/sockets/HostManager.ts": {
+          "bytesInOutput": 2997
+        },
+        "src/sockets/QuizManager.ts": {
+          "bytesInOutput": 2124
+        },
+        "src/sockets/ParticipantManager.ts": {
+          "bytesInOutput": 5542
+        },
+        "src/sockets/SpectatorManager.ts": {
+          "bytesInOutput": 5127
+        }
+      },
+      "bytes": 520328
+>>>>>>> 4adab0c (host question preview screen and ws logic)
     }
   }
 }

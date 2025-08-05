@@ -14,6 +14,8 @@ import getLiveQuizDataController from '../controllers/live-quiz-controller/getLi
 import spectatorJoinController from '../controllers/live-quiz-controller/spectatorJoinController';
 import deleteQuizController from '../controllers/quiz-controller/deleteQuizController';
 import getReviewController from '../controllers/appReview-controller/getReviewController';
+import { getLiveQuizSummarizedData } from '../controllers/live-quiz-controller/getLiveQuizSummarizedData';
+import getSelectedQuestionDetails from '../controllers/live-quiz-controller/getSelectedQuestionDetails';
 
 const router = Router();
 
@@ -42,5 +44,8 @@ router.post(
 router.post('/quiz/participant-join-quiz', participantJoinController);
 router.post('/quiz/spectator-join-quiz', spectatorJoinController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
+
+router.get('/quiz/get-sumarized-quiz/:quizId', authMiddleware, getLiveQuizSummarizedData);
+router.get('/quiz/get-selected-data/:quizId', authMiddleware, getSelectedQuestionDetails);
 
 export default router;

@@ -98,6 +98,13 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+
+            case MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.PARTICIPANT,
+                    USER_TYPE.SPECTATOR
+                ]);
+                break;
         }
     }
 
@@ -152,6 +159,7 @@ export default class WebsocketServer {
             sessionHostMapping: this.session_host_mapping,
             quizManager: this.quizManager,
             databaseQueue: this.database_queue,
+            redis_cache: this.redis_cache,
         });
         this.participant_manager = new ParticipantManager({
             publisher: this.publisher,
@@ -217,6 +225,8 @@ export default class WebsocketServer {
                     ws.close();
                     return;
                 }
+                console.log("payload received by host is: ", decoded_cookie_payload);
+
                 switch (decoded_cookie_payload.role) {
                     case USER_TYPE.HOST:
                         await this.hostManager.handle_connection(ws, decoded_cookie_payload);
