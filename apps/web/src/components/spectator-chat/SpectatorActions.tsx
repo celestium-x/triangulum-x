@@ -39,7 +39,7 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
 
     useEffect(() => {
         onChatExpandChange?.(isExpanded);
-    }, [isExpanded]);
+    }, [isExpanded,onChatExpandChange]);
 
     const users: User[] = useMemo(() => {
         const globalChat: User = {
