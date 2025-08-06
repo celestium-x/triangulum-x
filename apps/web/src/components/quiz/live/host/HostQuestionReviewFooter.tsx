@@ -5,7 +5,7 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { useState } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
-import { IoIosReturnLeft } from "react-icons/io";
+import { IoIosReturnLeft } from 'react-icons/io';
 import { FaLightbulb } from 'react-icons/fa';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
 import DifficultyTicker from '@/components/tickers/DifficultyTicker';
@@ -39,10 +39,13 @@ export default function HostQuestionReviewFooter() {
     return (
         <div className="absolute bottom-4 z-100 w-full">
             <div className="flex items-center justify-evenly">
-                <section className='flex items-center flex-shrink-0 gap-x-6 relative'>
-                    <DifficultyTicker className='font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full' difficulty={currentQuestion?.difficulty} />
+                <section className="flex items-center flex-shrink-0 gap-x-6 relative">
+                    <DifficultyTicker
+                        className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
+                        difficulty={currentQuestion?.difficulty}
+                    />
                     <div className="w-fit flex items-center justify-center gap-x-4 relative">
-                        <ToolTipComponent content='previous question'>
+                        <ToolTipComponent content="previous question">
                             <BsArrowLeft
                                 strokeWidth={0.8}
                                 style={{
@@ -68,12 +71,14 @@ export default function HostQuestionReviewFooter() {
                                 className="rounded-full p-1.5 cursor-pointer"
                             />
                             {openExplanation && currentQuestion?.explanation && (
-                                <UtilityCard className='absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap'>
-                                    <div className='text-sm tracking-wide dark:text-light-base text-dark-primary'>{currentQuestion?.explanation}</div>
+                                <UtilityCard className="absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap">
+                                    <div className="text-sm tracking-wide dark:text-light-base text-dark-primary">
+                                        {currentQuestion?.explanation}
+                                    </div>
                                 </UtilityCard>
                             )}
                         </div>
-                        <ToolTipComponent content='next question'>
+                        <ToolTipComponent content="next question">
                             <BsArrowRight
                                 onClick={handleGetNextQuestion}
                                 strokeWidth={0.8}
@@ -93,7 +98,7 @@ export default function HostQuestionReviewFooter() {
                         <div className="text-xs text-neutral-700 font-light tracking-wide">
                             Press
                         </div>
-                        <ToolTipComponent content='Pressing enter will launch the current question previewing on the screen'>
+                        <ToolTipComponent content="Pressing enter will launch the current question previewing on the screen">
                             <span className="bg-neutral-900 text-neutral-100 text-xs font-light tracking-wider px-3 py-1 rounded-lg flex items-center justify-center gap-x-2 cursor-pointer">
                                 <IoIosReturnLeft className="max-w-0 group-hover:max-w-3 opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden" />
                                 ENTER

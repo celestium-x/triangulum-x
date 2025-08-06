@@ -18,7 +18,10 @@ export default function HostQuestionPreviewOptions() {
                 )}
             >
                 {currentQuestion.options.map((option, idx) => (
-                    <div key={idx} className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1">
+                    <div
+                        key={idx}
+                        className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1"
+                    >
                         <div
                             className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
                             style={{
