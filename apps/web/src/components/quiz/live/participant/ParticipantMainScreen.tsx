@@ -3,6 +3,8 @@ import { ParticipantScreenEnum } from '@/types/prisma-types';
 import ParticipantLobbyScreen from './ParticipantLobbyScreen';
 import ParticipantMotivationScreen from './ParticipantMotivationScreen';
 import ParticipantQuestionReadingScreen from './ParticipantQuestionReadingScreen';
+import ParticipantMainFooter from './ParticipantMainFooter';
+import ParticipantPanelRenderer from './ParticipantChannelRenderer';
 
 export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -16,5 +18,11 @@ export default function ParticipantMainScreen() {
                 return <ParticipantQuestionReadingScreen />;
         }
     }
-    return <div className="h-full">{renderHostScreenPanels()}</div>;
+    return (
+        <div className="h-full relative w-full flex">
+            {renderHostScreenPanels()}
+            <ParticipantMainFooter />
+            <ParticipantPanelRenderer />
+        </div>
+    );
 }

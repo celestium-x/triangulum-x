@@ -1,14 +1,13 @@
-import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 import { useRef } from 'react';
 import ExpandableCard from '../common/ExpandableCard';
-import SpectatorChatPanel from './SpectatorChatPanel';
-import SpectatorPeoplePanel from './SpectatorPeoplePanel';
-import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
+import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
+import { useLiveQuizExpandableCardForParticipantStore } from '@/store/live-quiz/useLiveQuizExpandableCardForParticipantStore';
+import ParticipantSettingPanel from './ParticipantSettingsPanel';
 
-export default function SpectatorPanelRenderer() {
+export default function ParticipantPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
     const { type, setType, setIsExpanded, isExpanded } =
-        useLiveQuizExpandableCardForSpectatorStore();
+        useLiveQuizExpandableCardForParticipantStore();
     function handleClickOutside() {
         setType(null);
         setIsExpanded(false);
@@ -16,10 +15,8 @@ export default function SpectatorPanelRenderer() {
 
     function renderer() {
         switch (type) {
-            case 'CHAT':
-                return <SpectatorChatPanel />;
-            case 'PEOPLE':
-                return <SpectatorPeoplePanel />;
+            case 'SETTINGS':
+                return <ParticipantSettingPanel />;
         }
     }
 

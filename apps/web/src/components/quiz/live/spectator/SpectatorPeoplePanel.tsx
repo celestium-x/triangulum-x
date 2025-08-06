@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
-import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForParticipantStore';
+import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
 import { BiExpandAlt } from 'react-icons/bi';
 
 export default function SpectatorPeoplePanel() {

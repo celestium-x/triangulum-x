@@ -8,7 +8,7 @@ interface LiveQuizExpandableCardStore {
 }
 
 export const useLiveQuizExpandableCardForHostStore = create<LiveQuizExpandableCardStore>((set) => ({
-    type: 'CHAT',
+    type: null,
     setType: (type: 'CHAT' | 'LEADERBOARD' | 'PEOPLE' | 'SETTINGS' | null) => {
         set(() => ({
             type,

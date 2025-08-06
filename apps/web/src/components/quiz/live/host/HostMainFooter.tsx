@@ -6,7 +6,7 @@ export default function HostMainFooter() {
     const { isExpanded, setType } = useLiveQuizExpandableCardForHostStore();
 
     return (
-        <div className={cn('absolute bottom-4 right-4 z-100', isExpanded && '-translate-x-[36vw]')}>
+        <div className={cn('absolute bottom-4 right-4 z-100', isExpanded && '-translate-x-[32vw]')}>
             <HostControls
                 onClickPeople={() => {
                     setType('PEOPLE');

@@ -1,7 +1,6 @@
 import WaitingLobbyAvatars from '../common/Avatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
-import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
 export default function WaitingLobbyParticipantLeft() {
@@ -41,7 +40,6 @@ export default function WaitingLobbyParticipantLeft() {
                     )}
                 </div>
             </div>
-            <LiveQuizInteractionTicker className="absolute bottom-6 right-6" />
         </div>
     );
 }
