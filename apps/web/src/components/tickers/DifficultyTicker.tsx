@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 type DifficultyLevel = 1 | 2 | 3 | 4 | 5;
@@ -81,10 +82,10 @@ export default function DifficultyTicker({
     const currentConfig = difficultyConfig[level];
 
     return (
-        <div className={`flex items-center gap-3 bg-light-base px-3 py-1 rounded-md ${className}`}>
+        <div className={cn('flex items-center gap-3 px-3 py-1 rounded-md ', className)}>
             {/* Label */}
             {showLabel && (
-                <span className={`font-medium ${currentConfig.textColor} ${config.text}`}>
+                <span className={` ${currentConfig.textColor} ${config.text}`}>
                     {currentConfig.label}
                 </span>
             )}
