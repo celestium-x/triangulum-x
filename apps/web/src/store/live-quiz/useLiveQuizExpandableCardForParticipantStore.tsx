@@ -7,9 +7,9 @@ interface LiveQuizExpandableCardStore {
     setIsExpanded: (open: boolean) => void;
 }
 
-export const useLiveQuizExpandableCardForSpectatorStore = create<LiveQuizExpandableCardStore>(
+export const useLiveQuizExpandableCardForParticipantStore = create<LiveQuizExpandableCardStore>(
     (set) => ({
-        type: 'CHAT',
+        type: null,
         setType: (type: 'CHAT' | 'LEADERBOARD' | 'PEOPLE' | 'SETTINGS' | null) => {
             set(() => ({
                 type,

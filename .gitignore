@@ -27,6 +27,7 @@ out/
 build
 dist
 
+meta.json
 
 # Debug
 npm-debug.log*

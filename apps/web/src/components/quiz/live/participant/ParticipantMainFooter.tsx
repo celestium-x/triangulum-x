@@ -1,12 +1,13 @@
 import { cn } from '@/lib/utils';
-import SpectatorControls from './SpectatorControls';
-import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
+import ParticipantControls from './ParticipantControls';
+import { useLiveQuizExpandableCardForParticipantStore } from '@/store/live-quiz/useLiveQuizExpandableCardForParticipantStore';
 
-export default function SpectatorMainFooter() {
-    const { setType, isExpanded } = useLiveQuizExpandableCardForSpectatorStore();
+export default function ParticipantMainFooter() {
+    const { isExpanded, setType } = useLiveQuizExpandableCardForParticipantStore();
+
     return (
         <div className={cn('absolute bottom-4 right-4 z-100', isExpanded && '-translate-x-[32vw]')}>
-            <SpectatorControls
+            <ParticipantControls
                 onClickPeople={() => {
                     setType('PEOPLE');
                 }}

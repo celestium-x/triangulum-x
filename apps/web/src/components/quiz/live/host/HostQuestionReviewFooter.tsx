@@ -106,10 +106,6 @@ export default function HostQuestionReviewFooter() {
     return (
         <div className="absolute bottom-4 left-4 z-100">
             <section className="flex items-center flex-shrink-0 gap-x-6 relative">
-                <DifficultyTicker
-                    className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
-                    difficulty={currentQuestion?.difficulty}
-                />
                 <div className="w-fit flex items-center justify-center gap-x-4 relative">
                     <ToolTipComponent content="previous question">
                         <BsArrowLeft
@@ -160,6 +156,10 @@ export default function HostQuestionReviewFooter() {
                         />
                     </ToolTipComponent>
                 </div>
+                <DifficultyTicker
+                    className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
+                    difficulty={currentQuestion?.difficulty}
+                />
                 <div className="flex justify-center group">
                     <div className="flex items-center gap-x-1.5 bg-neutral-100 w-fit px-4 py-2.5 rounded-full shadow-md">
                         <div className="text-xs text-neutral-700 font-light tracking-wide">
