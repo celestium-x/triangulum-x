@@ -1,4 +1,4 @@
-import SpectatorChatMain from '@/components/spectator-chat/SpectatorChatMain';
+import SpectatorChatMain from '@/components/spectator-controls/SpectatorChatMain';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { SpectatorScreenEnum } from '@/types/prisma-types';
 

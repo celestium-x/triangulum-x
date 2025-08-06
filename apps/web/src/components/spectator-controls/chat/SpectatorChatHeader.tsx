@@ -23,7 +23,7 @@ export default function SpectatorChatHeader({
                         {user.avatar ? (
                             <Image
                                 src={user.avatar}
-                                alt={`${name}'s avatar`}
+                                alt={`${user.name}'s avatar`}
                                 width={50}
                                 height={50}
                                 className="object-cover rounded-full"

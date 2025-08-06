@@ -38,7 +38,7 @@ export default function WaitingLobbyHostLeft() {
                             {participant.avatar && (
                                 <Image
                                     src={participant.avatar}
-                                    alt={'rishi'}
+                                    alt={'participant'}
                                     width={32}
                                     height={32}
                                     className="object-cover w-full h-full"

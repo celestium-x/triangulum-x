@@ -1,18 +1,16 @@
 'use client';
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { Message, User } from './specTypes';
-import SpectatorChatToggleButton from './chat/SpectatorChatToggleButton';
 import SpectatorsDisplay from './chat/SpectatorsDisplay';
-import SpectatorChatHeader from './chat/SpectatorChatHeader';
-import SpectatorMessageItem from './chat/SpectatorMessageItem';
-import SpectatorChatInput from './chat/SpectatorChatInput';
-import SpectatorButton from './chat/SpectatorButton';
 import { FcGlobe } from 'react-icons/fc';
 import { cn } from '@/lib/utils';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { templates } from '@/lib/templates';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
+import SpectatorControls from './SpectatorControls';
+import { MdLeaderboard } from 'react-icons/md';
+import ExpandablePanel from './ExpandablePanel';
 
 interface SpectatorActionsProps {
     onChatExpandChange?: (isExpanded: boolean) => void;
@@ -20,26 +18,31 @@ interface SpectatorActionsProps {
 
 export default function SpectatorActions({ onChatExpandChange }: SpectatorActionsProps) {
     const bottomRef = useRef<HTMLDivElement>(null);
-    const [messages, setMessages] = useState<Record<string, Message[]>>({});
-    const [openChatDropdown, setOpenChatDropdown] = useState(false);
-    const [openPeopleDropdown, setOpenPeopleDropdown] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false);
     const spectatorChatRef = useRef<HTMLDivElement>(null);
     const spectatorsDisplayRef = useRef<HTMLDivElement>(null);
-    const { quiz } = useLiveQuizStore();
-    const template = templates.find((t) => t.id === quiz?.theme);
-    const { spectators, currentUserId } = useLiveSpectatorsStore();
-    useHandleClickOutside([spectatorChatRef], () => {
-        if (!isExpanded) {
-            setOpenChatDropdown(false);
-        }
-    });
 
-    useHandleClickOutside([spectatorsDisplayRef], setOpenPeopleDropdown);
+    const [messages, setMessages] = useState<Record<string, Message[]>>({});
+    const [openChatDropdown, setOpenChatDropdown] = useState<boolean>(false);
+    const [isChatExpanded, setIsChatExpanded] = useState<boolean>(false);
+
+    const [openLeaderBoardDropdown, setOpenLeaderBoardDropDown] = useState<boolean>(false);
+    const [isLeaderBoardExpanded, setIsLeaderBoardExpanded] = useState<boolean>(false);
+
+    const [openPeopleDropdown, setOpenPeopleDropdown] = useState<boolean>(false);
+
+    const { quiz } = useLiveQuizStore();
+
+    const template = templates.find((t) => t.id === quiz?.theme);
+
+    const { spectators, currentUserId } = useLiveSpectatorsStore();
 
     useEffect(() => {
-        onChatExpandChange?.(isExpanded);
-    }, [isExpanded, onChatExpandChange]);
+        onChatExpandChange?.(isChatExpanded);
+    }, [isChatExpanded, onChatExpandChange]);
+
+
+    useHandleClickOutside([spectatorChatRef], setOpenChatDropdown);
+    useHandleClickOutside([spectatorsDisplayRef], setOpenPeopleDropdown);
 
     const users: User[] = useMemo(() => {
         const globalChat: User = {
@@ -117,20 +120,30 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
             }}
         >
             <div
-                className={`fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2 ${isExpanded ? (openPeopleDropdown || openChatDropdown ? (openPeopleDropdown ? 'right-4' : 'right-150') : 'right-4') : 'right-4'}`}
+                className={cn(
+                    `fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2`,
+                    isChatExpanded ? (openPeopleDropdown || openChatDropdown ? (openPeopleDropdown ? 'right-4' : 'right-150') : 'right-4') : 'right-4'
+                )}
             >
-                <SpectatorButton
-                    onClick={() => {
+
+                <SpectatorControls
+                    onClickPeople={() => {
                         setOpenChatDropdown(false);
+                        setOpenLeaderBoardDropDown(false);
                         setOpenPeopleDropdown((prev) => !prev);
                     }}
-                />
-                <SpectatorChatToggleButton
-                    onClick={() => {
+                    onClickChat={() => {
                         setOpenPeopleDropdown(false);
+                        setOpenLeaderBoardDropDown(false);
                         setOpenChatDropdown((prev) => !prev);
                     }}
+                    onClickLeaderboard={() => {
+                        setOpenChatDropdown(false);
+                        setOpenPeopleDropdown(false);
+                        setOpenLeaderBoardDropDown(prev => !prev);
+                    }}
                 />
+
             </div>
 
             {openPeopleDropdown && (
@@ -146,40 +159,29 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
             )}
 
             {openChatDropdown && (
-                <div
+                <ExpandablePanel
+                    type='chat'
                     ref={spectatorChatRef}
-                    key="chatbox"
-                    className={cn(
-                        'fixed p-0 z-40 rounded-xl transition-all',
-                        'duration-300 ease-in-out',
-                        'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
-                        'shadow-2xl',
-                        isExpanded
-                            ? 'right-0 rounded-r-none w-[40vw] max-w-[40vw] h-full'
-                            : 'bottom-22 right-15 w-[26rem] h-[40rem] rounded-br-none',
-                    )}
-                >
-                    <div className="relative h-full flex flex-col pb-1">
-                        <SpectatorChatHeader
-                            user={selectedUser}
-                            onToggleExpand={() => setIsExpanded((prev) => !prev)}
-                        />
-                        <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                            <div className="min-h-full flex flex-col justify-end">
-                                {(messages[selectedUser.id] || []).map((message) => (
-                                    <SpectatorMessageItem
-                                        key={message.id}
-                                        message={message}
-                                        isUser={message.sender === 'user'}
-                                        avatarUrl={selectedUser.avatar}
-                                    />
-                                ))}
-                                <div ref={bottomRef} />
-                            </div>
-                        </div>
-                        <SpectatorChatInput onSendMessage={handleSendMessage} />
-                    </div>
-                </div>
+                    bottomRef={bottomRef}
+                    data={selectedUser}
+                    selectedUser={selectedUser}
+                    messages={messages}
+                    onToggleExpand={() => setIsChatExpanded(prev => !prev)}
+                    isExpanded={isChatExpanded}
+                    onSendMessage={handleSendMessage}
+                />
+            )}
+            {openLeaderBoardDropdown && (
+                <ExpandablePanel
+                    type='leaderboard'
+                    ref={spectatorChatRef}
+                    data={{
+                        title: "Leaderboard",
+                        svg: <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />
+                    }}
+                    onToggleExpand={() => setIsLeaderBoardExpanded(prev => !prev)}
+                    isExpanded={isLeaderBoardExpanded}
+                />
             )}
         </div>
     );
