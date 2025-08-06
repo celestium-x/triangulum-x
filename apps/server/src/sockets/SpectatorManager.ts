@@ -112,18 +112,9 @@ export default class SpectatorManager {
     private handle_spectator_message(ws: CustomWebSocket, message: any) {
         const { type, payload } = message;
         switch (type) {
-            case MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION:
-                // joint the spectator
-                break;
-
             case MESSAGE_TYPES.SPECTATOR_NAME_CHANGE:
                 this.handle_spectator_name_change(payload, ws);
                 break;
-
-            case MESSAGE_TYPES.SPECTATOR_SEND_MESSAGE:
-                this.send_message_to_spectator(payload, ws);
-                break;
-
             default:
                 console.error('Unknown message type', type);
                 break;

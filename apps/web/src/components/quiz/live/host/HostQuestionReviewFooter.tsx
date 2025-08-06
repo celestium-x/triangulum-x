@@ -15,30 +15,76 @@ export default function HostQuestionReviewFooter() {
     const template = templates.find((t) => t.id === quiz?.theme);
     const { session } = useUserSessionStore();
     const [openExplanation, setOpenExplanation] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const totalQuestions = (quiz as any)?._count.questions;
 
-    async function handleGetNextQuestion() {
-        if (!quiz?.id || currentQuestion?.orderIndex == null || !session?.user.token) {
+    function isQuestionDataComplete(question: any) {
+        return question &&
+            question.question &&
+            question.options &&
+            question.explanation !== undefined &&
+            question.difficulty !== undefined &&
+            question.basePoints !== undefined &&
+            question.timeLimit !== undefined;
+    };
+
+    async function navigateToQuestion(targetIndex: number) {
+        if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
+        if (loading) return;
+        const targetQuestion = quiz.questions[targetIndex];
+        if (isQuestionDataComplete(targetQuestion)) {
+            updateCurrentQuestion(targetQuestion!);
             return;
         }
+        if (!quiz?.id || !session?.user.token) return;
+        setLoading(true);
+        try {
+            const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
+                quiz.id,
+                targetIndex,
+                session.user.token,
+            );
 
-        const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
-            quiz.id,
-            currentQuestion.orderIndex,
-            session.user.token,
-        );
-        updateQuiz({
-            questions: [
-                ...quiz.questions.slice(0, currentQuestion.orderIndex),
-                data,
-                ...quiz.questions.slice(currentQuestion.orderIndex + 1),
-            ],
-        });
-        updateCurrentQuestion(data);
-    }
+            if (data) {
+                const updatedQuestions = [...quiz.questions];
+                updatedQuestions[targetIndex] = data;
+                updateQuiz({
+                    questions: updatedQuestions,
+                });
+                updateCurrentQuestion(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch question data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    function handlePreviousQuestion() {
+        if (!currentQuestion || currentQuestion.orderIndex <= 0) {
+            return;
+        }
+        navigateToQuestion(currentQuestion.orderIndex - 1);
+    };
+
+    function handleNextQuestion() {
+        console.log("next called");
+        if (!currentQuestion || !quiz?.questions) {
+            return;
+        }
+        if (currentQuestion.orderIndex >= totalQuestions - 1) {
+            return;
+        }
+        navigateToQuestion(currentQuestion.orderIndex + 1);
+    };
+
+    const isPrevDisabled = !currentQuestion || currentQuestion.orderIndex <= 0 || loading;
+    const isNextDisabled = !currentQuestion || !quiz?.questions ||
+        currentQuestion.orderIndex >= totalQuestions - 1 || loading;
 
     return (
-        <div className="absolute bottom-4 z-100 w-full">
-            <div className="flex items-center justify-evenly">
+        <div className="absolute bottom-4 left-4 z-100">
+            <div className="flex items-center justify-center">
                 <section className="flex items-center flex-shrink-0 gap-x-6 relative">
                     <DifficultyTicker
                         className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
@@ -47,13 +93,15 @@ export default function HostQuestionReviewFooter() {
                     <div className="w-fit flex items-center justify-center gap-x-4 relative">
                         <ToolTipComponent content="previous question">
                             <BsArrowLeft
+                                onClick={handlePreviousQuestion}
                                 strokeWidth={0.8}
                                 style={{
                                     border: `1px solid ${template?.border_color}50`,
                                     backgroundColor: `${template?.text_color}20`,
+                                    opacity: isPrevDisabled ? 0.5 : 1,
                                 }}
                                 size={32}
-                                className="rounded-full p-1.5 cursor-pointer"
+                                className={`rounded-full p-1.5 ${isPrevDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                             />
                         </ToolTipComponent>
                         <div
@@ -80,14 +128,15 @@ export default function HostQuestionReviewFooter() {
                         </div>
                         <ToolTipComponent content="next question">
                             <BsArrowRight
-                                onClick={handleGetNextQuestion}
+                                onClick={handleNextQuestion}
                                 strokeWidth={0.8}
                                 style={{
                                     border: `1px solid ${template?.border_color}50`,
                                     backgroundColor: `${template?.text_color}20`,
+                                    opacity: isNextDisabled ? 0.5 : 1,
                                 }}
                                 size={32}
-                                className="rounded-full p-1.5 cursor-pointer"
+                                className={`rounded-full p-1.5 ${isNextDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                             />
                         </ToolTipComponent>
                     </div>

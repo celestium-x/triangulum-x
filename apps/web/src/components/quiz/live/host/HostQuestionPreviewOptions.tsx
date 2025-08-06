@@ -13,7 +13,7 @@ export default function HostQuestionPreviewOptions() {
         <div className="w-full flex flex-col items-center justify-center gap-y-5 p-8 rounded-xl z-50">
             <div
                 className={cn(
-                    'w-full h-full flex items-end justify-center ',
+                    'w-full h-full flex items-end justify-center',
                     getResponsiveGap(currentQuestion),
                 )}
             >

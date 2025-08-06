@@ -1,5 +1,4 @@
 'use client';
-
 import SpectatorChatLeft from './SpectatorChatLeft';
 import SpectatorActions from './SpectatorActions';
 import { useState } from 'react';

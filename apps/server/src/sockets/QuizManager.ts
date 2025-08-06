@@ -48,30 +48,6 @@ export default class QuizManager {
         this.publish_event_to_redis(decoded_cookie_payload.gameSessionId, pub_sub_message);
     }
 
-    public async onParticipantDisconnect(payload: CookiePayload) {
-        const participant_id = payload.userId;
-
-        const participant_cache = await this.redis_cache.get_participant(
-            payload.gameSessionId,
-            participant_id,
-        );
-
-        const participant: Partial<Participant> = {
-            id: participant_cache.id,
-            avatar: participant_cache.avatar,
-            nickname: participant_cache.nickname,
-        };
-
-        const pub_sub_message: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
-            payload: participant,
-        };
-
-        await this.redis_cache.delete_participant(payload.gameSessionId, participant_id);
-
-        this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
-    }
-
     public async onSpectatorConnect(payload: CookiePayload) {
         const spectator_id = payload.userId;
 
@@ -90,31 +66,6 @@ export default class QuizManager {
             type: MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION,
             payload: spectator,
         };
-
-        this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
-    }
-
-    public async onSpectatorDisconnect(payload: CookiePayload) {
-        const spectator_id = payload.userId;
-
-        const spectator_cache = await this.redis_cache.get_spectator(
-            payload.gameSessionId,
-            spectator_id,
-        );
-
-        const spectator: Partial<Spectator> = {
-            id: spectator_cache.id,
-            avatar: spectator_cache.avatar,
-            nickname: spectator_cache.nickname,
-        };
-
-        // publish message type should contain SPECTATOR_LEAVE_GAME_SESSION
-        const pub_sub_message: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION,
-            payload: spectator,
-        };
-
-        await this.redis_cache.delete_spectator(payload.gameSessionId, spectator_id);
 
         this.publish_event_to_redis(payload.gameSessionId, pub_sub_message);
     }

@@ -11,5 +11,9 @@ export default function SpectatorMainScreen() {
                 return <SpectatorChatMain />;
         }
     }
-    return <div className="h-full">{renderHostScreenPanels()}</div>;
+    return (
+        <div className="h-full">
+            {renderHostScreenPanels()}
+        </div>
+    );
 }
