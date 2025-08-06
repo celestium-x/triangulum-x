@@ -41,7 +41,7 @@ export const templates: Template[] = [
         border_color: '#000000',
         accent_type: 'staircase',
         accent_color: '#EEEEEE',
-        bars: ['#FF6500', '#0A5EB0', '#FFE5CF', '#EEDF7A', '#7A1CAC'],
+        bars: ['#FF6500', '#0A5EB0', '#FFE5CF', '#FFE700', '#7A1CAC'],
         src: 'neon-template',
     },
     {

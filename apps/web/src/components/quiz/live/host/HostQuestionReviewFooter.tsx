@@ -3,49 +3,127 @@ import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
+import { IoIosReturnLeft } from 'react-icons/io';
 import { FaLightbulb } from 'react-icons/fa';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import DifficultyTicker from '@/components/tickers/DifficultyTicker';
+import { QuestionType } from '@/types/prisma-types';
 
 export default function HostQuestionReviewFooter() {
     const { quiz, currentQuestion, updateQuiz, updateCurrentQuestion } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
     const { session } = useUserSessionStore();
     const [openExplanation, setOpenExplanation] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    // @ts-expect-error: _count is not typed but exists on quiz
+    const totalQuestions = quiz?._count.questions;
 
-    async function handleGetNextQuestion() {
-        if (!quiz?.id || currentQuestion?.orderIndex == null || !session?.user.token) {
-            return;
+    function handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'ArrowLeft') {
+            handlePreviousQuestion();
+        } else if (event.key === 'ArrowRight') {
+            handleNextQuestion();
         }
-
-        const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
-            quiz.id,
-            currentQuestion.orderIndex,
-            session.user.token,
-        );
-        updateQuiz({
-            questions: [
-                ...quiz.questions.slice(0, currentQuestion.orderIndex),
-                data,
-                ...quiz.questions.slice(currentQuestion.orderIndex + 1),
-            ],
-        });
-        updateCurrentQuestion(data);
     }
 
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    });
+
+    function isQuestionDataComplete(question: QuestionType | undefined) {
+        return (
+            question &&
+            question.question &&
+            question.options &&
+            question.explanation !== undefined &&
+            question.difficulty !== undefined &&
+            question.basePoints !== undefined &&
+            question.timeLimit !== undefined
+        );
+    }
+
+    async function navigateToQuestion(targetIndex: number) {
+        if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
+        if (loading) return;
+        const targetQuestion = quiz.questions[targetIndex];
+        if (isQuestionDataComplete(targetQuestion)) {
+            updateCurrentQuestion(targetQuestion!);
+            return;
+        }
+        if (!quiz?.id || !session?.user.token) return;
+        setLoading(true);
+        try {
+            const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
+                quiz.id,
+                targetIndex,
+                session.user.token,
+            );
+
+            if (data) {
+                const updatedQuestions = [...quiz.questions];
+                updatedQuestions[targetIndex] = data;
+                updateQuiz({
+                    questions: updatedQuestions,
+                });
+                updateCurrentQuestion(data);
+            }
+        } catch (error) {
+            console.error('Failed to fetch question data:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    function handlePreviousQuestion() {
+        if (!currentQuestion || currentQuestion.orderIndex <= 0) {
+            return;
+        }
+        navigateToQuestion(currentQuestion.orderIndex - 1);
+    }
+
+    function handleNextQuestion() {
+        if (!currentQuestion || !quiz?.questions) {
+            return;
+        }
+        if (currentQuestion.orderIndex >= totalQuestions - 1) {
+            return;
+        }
+        navigateToQuestion(currentQuestion.orderIndex + 1);
+    }
+
+    const isPrevDisabled = !currentQuestion || currentQuestion.orderIndex <= 0 || loading;
+    const isNextDisabled =
+        !currentQuestion ||
+        !quiz?.questions ||
+        currentQuestion.orderIndex >= totalQuestions - 1 ||
+        loading;
+
     return (
-        <div className="absolute bottom-4 z-100 w-full">
-            <div className="flex items-center justify-evenly">
+        <div className="absolute bottom-4 left-4 z-100">
+            <section className="flex items-center flex-shrink-0 gap-x-6 relative">
+                <DifficultyTicker
+                    className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
+                    difficulty={currentQuestion?.difficulty}
+                />
                 <div className="w-fit flex items-center justify-center gap-x-4 relative">
-                    <BsArrowLeft
-                        strokeWidth={0.8}
-                        style={{
-                            border: `1px solid ${template?.border_color}50`,
-                            backgroundColor: `${template?.text_color}20`,
-                        }}
-                        size={32}
-                        className="rounded-full p-1.5"
-                    />
+                    <ToolTipComponent content="previous question">
+                        <BsArrowLeft
+                            onClick={handlePreviousQuestion}
+                            strokeWidth={0.8}
+                            style={{
+                                border: `1px solid ${template?.border_color}50`,
+                                backgroundColor: `${template?.text_color}20`,
+                                opacity: isPrevDisabled ? 0.5 : 1,
+                            }}
+                            size={32}
+                            className={`rounded-full p-1.5 ${isPrevDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                        />
+                    </ToolTipComponent>
                     <div
                         className="relative"
                         onMouseEnter={() => setOpenExplanation(true)}
@@ -58,40 +136,47 @@ export default function HostQuestionReviewFooter() {
                                 backgroundColor: `${template?.text_color}20`,
                             }}
                             size={32}
-                            className="rounded-full p-1.5"
+                            className="rounded-full p-1.5 cursor-pointer"
                         />
                         {openExplanation && currentQuestion?.explanation && (
-                            <UtilityCard className='absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap'>
-                                <div className='text-sm tracking-wide dark:text-light-base text-dark-primary'>{currentQuestion?.explanation}</div>
+                            <UtilityCard className="absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap">
+                                <div className="text-sm tracking-wide dark:text-light-base text-dark-primary font-light">
+                                    {currentQuestion?.explanation}
+                                </div>
                             </UtilityCard>
                         )}
                     </div>
-                    <BsArrowRight
-                        onClick={handleGetNextQuestion}
-                        strokeWidth={0.8}
-                        style={{
-                            border: `1px solid ${template?.border_color}50`,
-                            backgroundColor: `${template?.text_color}20`,
-                        }}
-                        size={32}
-                        className="rounded-full p-1.5"
-                    />
+                    <ToolTipComponent content="next question">
+                        <BsArrowRight
+                            onClick={handleNextQuestion}
+                            strokeWidth={0.8}
+                            style={{
+                                border: `1px solid ${template?.border_color}50`,
+                                backgroundColor: `${template?.text_color}20`,
+                                opacity: isNextDisabled ? 0.5 : 1,
+                            }}
+                            size={32}
+                            className={`rounded-full p-1.5 ${isNextDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                        />
+                    </ToolTipComponent>
                 </div>
-
-                <div className="flex justify-center">
+                <div className="flex justify-center group">
                     <div className="flex items-center gap-x-1.5 bg-neutral-100 w-fit px-4 py-2.5 rounded-full shadow-md">
                         <div className="text-xs text-neutral-700 font-light tracking-wide">
                             Press
                         </div>
-                        <span className="bg-neutral-900 text-neutral-100 text-xs font-light tracking-wider px-3 py-1 rounded-lg">
-                            ENTER
-                        </span>
+                        <ToolTipComponent content="Pressing enter will launch the current question previewing on the screen">
+                            <span className="bg-neutral-900 text-neutral-100 text-xs font-light tracking-wider px-3 py-1 rounded-lg flex items-center justify-center gap-x-2 cursor-pointer">
+                                <IoIosReturnLeft className="max-w-0 group-hover:max-w-3 opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden" />
+                                ENTER
+                            </span>
+                        </ToolTipComponent>
                         <div className="text-xs text-neutral-700 font-light tracking-wide">
                             to launch this question
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

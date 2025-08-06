@@ -13,12 +13,15 @@ export default function HostQuestionPreviewOptions() {
         <div className="w-full flex flex-col items-center justify-center gap-y-5 p-8 rounded-xl z-50">
             <div
                 className={cn(
-                    'w-full h-full flex items-end justify-center ',
+                    'w-full h-full flex items-end justify-center',
                     getResponsiveGap(currentQuestion),
                 )}
             >
                 {currentQuestion.options.map((option, idx) => (
-                    <div key={idx} className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1">
+                    <div
+                        key={idx}
+                        className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1"
+                    >
                         <div
                             className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
                             style={{

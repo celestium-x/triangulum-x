@@ -78,10 +78,6 @@ export default class HostManager {
     private handle_host_message(ws: CustomWebSocket, message: any) {
         const { type } = message;
         switch (type) {
-            case MESSAGE_TYPES.HOST_JOIN_GAME_SESSION:
-                // this.handle_join_game_session(ws, payload);
-                break;
-
             case MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW:
                 this.handle_host_question_preview_page_change(ws);
                 break;

@@ -27,7 +27,7 @@ export default function HostQuestionPreviewRenderer() {
         <div
             ref={canvasRef}
             className={cn(
-                'w-full h-full overflow-hidden flex flex-col items-center justify-center',
+                'w-full h-full overflow-hidden flex flex-col items-center justify-center ',
                 'relative',
             )}
         >

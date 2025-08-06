@@ -3,6 +3,8 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { HostScreenEnum } from '@/types/prisma-types';
 import HostLobbyScreen from './HostLobbyScreen';
 import HostQuestionPreviewScreen from './HostQuestionPreviewScreen';
+import HostMainFooter from './HostMainFooter';
+import HostPanelRenderer from './HostPanelRenderer';
 
 export default function HostMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -16,5 +18,11 @@ export default function HostMainScreen() {
         }
     }
 
-    return <div className="h-full">{renderHostScreenPanels()}</div>;
+    return (
+        <div className="h-full relative w-full flex">
+            {renderHostScreenPanels()}
+            <HostMainFooter />
+            <HostPanelRenderer />
+        </div>
+    );
 }

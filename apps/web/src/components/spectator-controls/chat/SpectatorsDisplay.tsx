@@ -32,7 +32,9 @@ export default function SpectatorsDisplay({ users, onSelectUser, ref }: Spectato
                                 className={cn(
                                     'size-11 rounded-full overflow-hidden',
                                     'border',
-                                    currentUserId === user.id ? 'border-purple-500' : 'border-neutral-700',
+                                    currentUserId === user.id
+                                        ? 'border-purple-500'
+                                        : 'border-neutral-700',
                                 )}
                             >
                                 {user.avatar && (

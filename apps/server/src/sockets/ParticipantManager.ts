@@ -110,7 +110,6 @@ export default class ParticipantManager {
             case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.handle_participant_name_change(payload, ws);
                 break;
-
             default:
                 console.error('Unknown message type', type);
                 break;

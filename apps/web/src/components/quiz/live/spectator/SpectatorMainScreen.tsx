@@ -1,6 +1,8 @@
-import SpectatorChatMain from '@/components/spectator-controls/SpectatorChatMain';
+import SpectatorLobbyScreen from '@/components/spectator-controls/SpectatorLobbyScreen';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { SpectatorScreenEnum } from '@/types/prisma-types';
+import SpectatorMainFooter from './SpectatorMainFooter';
+import SpectatorPanelRenderer from './SpectatorPanelRenderer';
 
 export default function SpectatorMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -8,8 +10,14 @@ export default function SpectatorMainScreen() {
     function renderHostScreenPanels() {
         switch (gameSession?.spectatorScreen) {
             case SpectatorScreenEnum.LOBBY:
-                return <SpectatorChatMain />;
+                return <SpectatorLobbyScreen />;
         }
     }
-    return <div className="h-full">{renderHostScreenPanels()}</div>;
+    return (
+        <div className="h-full relative w-full flex">
+            {renderHostScreenPanels()}
+            <SpectatorMainFooter />
+            <SpectatorPanelRenderer />
+        </div>
+    );
 }

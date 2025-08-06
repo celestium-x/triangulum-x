@@ -1712,7 +1712,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1569,
+      "bytes": 1377,
       "imports": [
         {
           "path": "ws",
@@ -1837,7 +1837,7 @@
       "format": "cjs"
     },
     "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-      "bytes": 7610,
+      "bytes": 7636,
       "imports": [
         {
           "path": "express",
@@ -1973,7 +1973,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-      "bytes": 1480,
+      "bytes": 1996,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2138,7 +2138,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 4436,
+      "bytes": 4294,
       "imports": [
         {
           "path": "ioredis",
@@ -2184,7 +2184,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 4636,
+      "bytes": 2986,
       "imports": [
         {
           "path": "ioredis",
@@ -2210,7 +2210,7 @@
       "format": "esm"
     },
     "src/sockets/ParticipantManager.ts": {
-      "bytes": 7550,
+      "bytes": 7549,
       "imports": [
         {
           "path": "ioredis",
@@ -2251,7 +2251,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 6914,
+      "bytes": 6650,
       "imports": [
         {
           "path": "ioredis",
@@ -2419,7 +2419,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 977315
+      "bytes": 975217
     },
     "dist/index.js": {
       "imports": [
@@ -2849,7 +2849,7 @@
           "bytesInOutput": 3614
         },
         "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-          "bytesInOutput": 5459
+          "bytesInOutput": 5477
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2867,25 +2867,25 @@
           "bytesInOutput": 861
         },
         "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-          "bytesInOutput": 1124
+          "bytesInOutput": 1572
         },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 7995
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 2985
+          "bytesInOutput": 2909
         },
         "src/sockets/QuizManager.ts": {
-          "bytesInOutput": 3438
+          "bytesInOutput": 2124
         },
         "src/sockets/ParticipantManager.ts": {
           "bytesInOutput": 5542
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5127
+          "bytesInOutput": 4902
         }
       },
-      "bytes": 528809
+      "bytes": 527660
     }
   }
 }
