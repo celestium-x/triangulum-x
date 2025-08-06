@@ -108,6 +108,8 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     id: true,
                     nickname: true,
                     avatar: true,
+                    totalScore: true,
+                    finalRank: true,
                 },
             });
 

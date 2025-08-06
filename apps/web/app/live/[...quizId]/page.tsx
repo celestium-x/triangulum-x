@@ -52,7 +52,7 @@ export default function New({ params }: NewProps) {
                             break;
                         case 'SPECTATOR':
                             setSpectatorData(data.userData);
-                            setCurrentUserId(data.currentUserId);
+                            setCurrentUserId(data.userData.id);
                             break;
                         default:
                             break;

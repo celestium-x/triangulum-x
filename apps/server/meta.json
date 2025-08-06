@@ -1837,7 +1837,7 @@
       "format": "cjs"
     },
     "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-      "bytes": 7535,
+      "bytes": 7610,
       "imports": [
         {
           "path": "express",
@@ -1973,7 +1973,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-      "bytes": 1549,
+      "bytes": 1480,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2419,7 +2419,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 977310
+      "bytes": 977315
     },
     "dist/index.js": {
       "imports": [
@@ -2849,7 +2849,7 @@
           "bytesInOutput": 3614
         },
         "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-          "bytesInOutput": 5404
+          "bytesInOutput": 5459
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2867,7 +2867,7 @@
           "bytesInOutput": 861
         },
         "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-          "bytesInOutput": 1192
+          "bytesInOutput": 1124
         },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 7995
@@ -2885,7 +2885,7 @@
           "bytesInOutput": 5127
         }
       },
-      "bytes": 528822
+      "bytes": 528809
     }
   }
 }
