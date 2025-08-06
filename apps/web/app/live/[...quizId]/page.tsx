@@ -43,8 +43,6 @@ export default function New({ params }: NewProps) {
                     setParticipants(data.participants);
                     setSpectators(data.spectators);
 
-                    console.log("got data: ", data);
-
                     switch (data.role) {
                         case 'HOST':
                             setHostData(data.userData);
