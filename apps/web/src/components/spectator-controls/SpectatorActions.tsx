@@ -10,7 +10,7 @@ import { templates } from '@/lib/templates';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 import SpectatorControls from './SpectatorControls';
 import { MdLeaderboard } from 'react-icons/md';
-import ExpandablePanel from './ExpandablePanel';
+import ExpandablePanel from '../quiz/live/common/ExpandablePanel';
 
 interface SpectatorActionsProps {
     onChatExpandChange?: (isExpanded: boolean) => void;

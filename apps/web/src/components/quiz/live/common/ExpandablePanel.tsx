@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils"
-import SpectatorChatHeader from "./chat/SpectatorChatHeader"
-import { Message, User } from "./specTypes"
-import SpectatorMessageItem from "./chat/SpectatorMessageItem"
-import SpectatorChatInput from "./chat/SpectatorChatInput"
-import ToolTipComponent from "../utility/TooltipComponent"
-import { Button } from "../ui/button"
+import SpectatorChatHeader from "../../../spectator-controls/chat/SpectatorChatHeader"
+import { Message, User } from "../../../spectator-controls/specTypes"
+import SpectatorMessageItem from "../../../spectator-controls/chat/SpectatorMessageItem"
+import SpectatorChatInput from "../../../spectator-controls/chat/SpectatorChatInput"
+import ToolTipComponent from "../../../utility/TooltipComponent"
+import { Button } from "../../../ui/button"
 import { BiExpandAlt } from "react-icons/bi"
 
 type ExpandablePanel =
@@ -36,7 +36,7 @@ export default function ExpandablePanel(props: ExpandablePanel) {
             'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
             'shadow-2xl',
             props.isExpanded
-                ? 'fixed right-0 rounded-r-none w-full max-w-[32vw] h-full border-r-0 border-t-0'
+                ? 'relative right-0 rounded-r-none w-[32vw] max-w-[32vw] h-full border-r-0 border-t-0'
                 : 'absolute bottom-22 right-15 w-[26rem] h-[40rem] rounded-br-none',
         )}
     >
