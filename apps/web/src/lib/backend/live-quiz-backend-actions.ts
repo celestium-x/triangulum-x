@@ -24,12 +24,8 @@ export default class LiveQuizBackendActions {
                 console.error('Backend returned unsuccessful response:', data.message);
                 return null;
             }
-        } catch (err: any) {
-            if (err.response?.status === 404) {
-                console.warn(`Question at index ${questionIndex} not found`);
-            } else {
-                console.error('Failed to fetch question data', err.response?.data || err.message);
-            }
+        } catch (err) {
+            console.warn(`Question at index ${questionIndex} not found`, err);
             return null;
         }
     }

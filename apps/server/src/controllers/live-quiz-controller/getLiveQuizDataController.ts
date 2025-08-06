@@ -111,6 +111,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     totalScore: true,
                     finalRank: true,
                 },
+                take: 20,
             });
 
             const spectators = await tx.spectator.findMany({

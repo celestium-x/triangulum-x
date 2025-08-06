@@ -3,12 +3,13 @@ import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IoIosReturnLeft } from 'react-icons/io';
 import { FaLightbulb } from 'react-icons/fa';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
 import DifficultyTicker from '@/components/tickers/DifficultyTicker';
+import { QuestionType } from '@/types/prisma-types';
 
 export default function HostQuestionReviewFooter() {
     const { quiz, currentQuestion, updateQuiz, updateCurrentQuestion } = useLiveQuizStore();
@@ -16,17 +17,35 @@ export default function HostQuestionReviewFooter() {
     const { session } = useUserSessionStore();
     const [openExplanation, setOpenExplanation] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const totalQuestions = (quiz as any)?._count.questions;
+    // @ts-expect-error: _count is not typed but exists on quiz
+    const totalQuestions = quiz?._count.questions;
 
-    function isQuestionDataComplete(question: any) {
-        return question &&
+    function handleKeyDown(event: KeyboardEvent) {
+        if (event.key === 'ArrowLeft') {
+            handlePreviousQuestion();
+        } else if (event.key === 'ArrowRight') {
+            handleNextQuestion();
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    });
+
+    function isQuestionDataComplete(question: QuestionType | undefined) {
+        return (
+            question &&
             question.question &&
             question.options &&
             question.explanation !== undefined &&
             question.difficulty !== undefined &&
             question.basePoints !== undefined &&
-            question.timeLimit !== undefined;
-    };
+            question.timeLimit !== undefined
+        );
+    }
 
     async function navigateToQuestion(targetIndex: number) {
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
@@ -58,17 +77,16 @@ export default function HostQuestionReviewFooter() {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     function handlePreviousQuestion() {
         if (!currentQuestion || currentQuestion.orderIndex <= 0) {
             return;
         }
         navigateToQuestion(currentQuestion.orderIndex - 1);
-    };
+    }
 
     function handleNextQuestion() {
-        console.log("next called");
         if (!currentQuestion || !quiz?.questions) {
             return;
         }
@@ -76,72 +94,72 @@ export default function HostQuestionReviewFooter() {
             return;
         }
         navigateToQuestion(currentQuestion.orderIndex + 1);
-    };
+    }
 
     const isPrevDisabled = !currentQuestion || currentQuestion.orderIndex <= 0 || loading;
-    const isNextDisabled = !currentQuestion || !quiz?.questions ||
-        currentQuestion.orderIndex >= totalQuestions - 1 || loading;
+    const isNextDisabled =
+        !currentQuestion ||
+        !quiz?.questions ||
+        currentQuestion.orderIndex >= totalQuestions - 1 ||
+        loading;
 
     return (
         <div className="absolute bottom-4 left-4 z-100">
-            <div className="flex items-center justify-center">
-                <section className="flex items-center flex-shrink-0 gap-x-6 relative">
-                    <DifficultyTicker
-                        className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
-                        difficulty={currentQuestion?.difficulty}
-                    />
-                    <div className="w-fit flex items-center justify-center gap-x-4 relative">
-                        <ToolTipComponent content="previous question">
-                            <BsArrowLeft
-                                onClick={handlePreviousQuestion}
-                                strokeWidth={0.8}
-                                style={{
-                                    border: `1px solid ${template?.border_color}50`,
-                                    backgroundColor: `${template?.text_color}20`,
-                                    opacity: isPrevDisabled ? 0.5 : 1,
-                                }}
-                                size={32}
-                                className={`rounded-full p-1.5 ${isPrevDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            />
-                        </ToolTipComponent>
-                        <div
-                            className="relative"
-                            onMouseEnter={() => setOpenExplanation(true)}
-                            onMouseLeave={() => setOpenExplanation(false)}
-                        >
-                            <FaLightbulb
-                                strokeWidth={0.8}
-                                style={{
-                                    border: `1px solid ${template?.border_color}50`,
-                                    backgroundColor: `${template?.text_color}20`,
-                                }}
-                                size={32}
-                                className="rounded-full p-1.5 cursor-pointer"
-                            />
-                            {openExplanation && currentQuestion?.explanation && (
-                                <UtilityCard className="absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap">
-                                    <div className="text-sm tracking-wide dark:text-light-base text-dark-primary">
-                                        {currentQuestion?.explanation}
-                                    </div>
-                                </UtilityCard>
-                            )}
-                        </div>
-                        <ToolTipComponent content="next question">
-                            <BsArrowRight
-                                onClick={handleNextQuestion}
-                                strokeWidth={0.8}
-                                style={{
-                                    border: `1px solid ${template?.border_color}50`,
-                                    backgroundColor: `${template?.text_color}20`,
-                                    opacity: isNextDisabled ? 0.5 : 1,
-                                }}
-                                size={32}
-                                className={`rounded-full p-1.5 ${isNextDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            />
-                        </ToolTipComponent>
+            <section className="flex items-center flex-shrink-0 gap-x-6 relative">
+                <DifficultyTicker
+                    className="font-light tracking-wide bg-light-base dark:bg-dark-base px-4 rounded-full"
+                    difficulty={currentQuestion?.difficulty}
+                />
+                <div className="w-fit flex items-center justify-center gap-x-4 relative">
+                    <ToolTipComponent content="previous question">
+                        <BsArrowLeft
+                            onClick={handlePreviousQuestion}
+                            strokeWidth={0.8}
+                            style={{
+                                border: `1px solid ${template?.border_color}50`,
+                                backgroundColor: `${template?.text_color}20`,
+                                opacity: isPrevDisabled ? 0.5 : 1,
+                            }}
+                            size={32}
+                            className={`rounded-full p-1.5 ${isPrevDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                        />
+                    </ToolTipComponent>
+                    <div
+                        className="relative"
+                        onMouseEnter={() => setOpenExplanation(true)}
+                        onMouseLeave={() => setOpenExplanation(false)}
+                    >
+                        <FaLightbulb
+                            strokeWidth={0.8}
+                            style={{
+                                border: `1px solid ${template?.border_color}50`,
+                                backgroundColor: `${template?.text_color}20`,
+                            }}
+                            size={32}
+                            className="rounded-full p-1.5 cursor-pointer"
+                        />
+                        {openExplanation && currentQuestion?.explanation && (
+                            <UtilityCard className="absolute bottom-10 min-w-[16rem] w-fit px-4 py-2 text-wrap">
+                                <div className="text-sm tracking-wide dark:text-light-base text-dark-primary font-light">
+                                    {currentQuestion?.explanation}
+                                </div>
+                            </UtilityCard>
+                        )}
                     </div>
-                </section>
-
+                    <ToolTipComponent content="next question">
+                        <BsArrowRight
+                            onClick={handleNextQuestion}
+                            strokeWidth={0.8}
+                            style={{
+                                border: `1px solid ${template?.border_color}50`,
+                                backgroundColor: `${template?.text_color}20`,
+                                opacity: isNextDisabled ? 0.5 : 1,
+                            }}
+                            size={32}
+                            className={`rounded-full p-1.5 ${isNextDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                        />
+                    </ToolTipComponent>
+                </div>
                 <div className="flex justify-center group">
                     <div className="flex items-center gap-x-1.5 bg-neutral-100 w-fit px-4 py-2.5 rounded-full shadow-md">
                         <div className="text-xs text-neutral-700 font-light tracking-wide">
@@ -158,7 +176,7 @@ export default function HostQuestionReviewFooter() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     );
 }

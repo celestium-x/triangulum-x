@@ -1,27 +1,30 @@
+import { Button } from '@/components/ui/button';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { MdLeaderboard } from 'react-icons/md';
 import { PiDetectiveFill } from 'react-icons/pi';
 import { RiMessage3Fill } from 'react-icons/ri';
-import { MdLeaderboard } from 'react-icons/md';
-import ToolTipComponent from '../utility/TooltipComponent';
-import { Button } from '../ui/button';
+import { IoMdSettings } from 'react-icons/io';
 
-interface SpectatorControlsType {
+interface HostControlsType {
     tooltip: string;
     icon: React.ReactNode;
     onClick: () => void;
 }
 
-interface SpectatorControls {
+interface HostControlsProps {
     onClickPeople: () => void;
     onClickChat: () => void;
     onClickLeaderboard: () => void;
+    onClickSettings: () => void;
 }
 
-export default function SpectatorControls({
+export default function HostControls({
     onClickPeople,
+    onClickSettings,
     onClickChat,
     onClickLeaderboard,
-}: SpectatorControls) {
-    const allSpectatorControls: SpectatorControlsType[] = [
+}: HostControlsProps) {
+    const allHostControls: HostControlsType[] = [
         {
             tooltip: 'Leaderboard',
             icon: <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />,
@@ -37,11 +40,16 @@ export default function SpectatorControls({
             icon: <RiMessage3Fill style={{ width: '28px', height: '28px' }} />,
             onClick: onClickChat,
         },
+        {
+            tooltip: 'Settings',
+            icon: <IoMdSettings style={{ width: '28px', height: '28px' }} />,
+            onClick: onClickSettings,
+        },
     ];
 
     return (
         <div className="flex">
-            {allSpectatorControls.map((control, index) => (
+            {allHostControls.map((control, index) => (
                 <ToolTipComponent content={control.tooltip} key={index}>
                     <Button
                         variant="ghost"
