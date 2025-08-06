@@ -11,7 +11,9 @@ export async function getLiveQuizSummarizedData(req: Request, res: Response) {
                 id: true,
                 question: true,
                 difficulty: true,
+                basePoints: true,
                 orderIndex: true,
+                explanation: true,
             },
             orderBy: {
                 orderIndex: 'asc',

@@ -46,6 +46,10 @@ router.post('/quiz/spectator-join-quiz', spectatorJoinController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
 
 router.get('/quiz/get-sumarized-quiz/:quizId', authMiddleware, getLiveQuizSummarizedData);
-router.get('/quiz/get-selected-data/:quizId', authMiddleware, getSelectedQuestionDetails);
+router.get(
+    '/quiz/get-selected-question-data/:quizId/:questionIndex',
+    authMiddleware,
+    getSelectedQuestionDetails,
+);
 
 export default router;

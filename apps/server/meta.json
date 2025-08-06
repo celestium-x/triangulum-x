@@ -1837,7 +1837,7 @@
       "format": "cjs"
     },
     "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-      "bytes": 6691,
+      "bytes": 7535,
       "imports": [
         {
           "path": "express",
@@ -1957,7 +1957,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
-      "bytes": 1053,
+      "bytes": 1122,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -1973,7 +1973,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-      "bytes": 1034,
+      "bytes": 1549,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -1989,7 +1989,7 @@
       "format": "esm"
     },
     "src/routes/index.ts": {
-      "bytes": 2870,
+      "bytes": 2909,
       "imports": [
         {
           "path": "express",
@@ -2419,7 +2419,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 975201
+      "bytes": 977310
     },
     "dist/index.js": {
       "imports": [
@@ -2573,7 +2573,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1312
+          "bytesInOutput": 1344
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2849,7 +2849,7 @@
           "bytesInOutput": 3614
         },
         "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-          "bytesInOutput": 4850
+          "bytesInOutput": 5404
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2864,10 +2864,10 @@
           "bytesInOutput": 947
         },
         "src/controllers/live-quiz-controller/getLiveQuizSummarizedData.ts": {
-          "bytesInOutput": 808
+          "bytesInOutput": 861
         },
         "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
-          "bytesInOutput": 782
+          "bytesInOutput": 1192
         },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 7995
@@ -2885,7 +2885,7 @@
           "bytesInOutput": 5127
         }
       },
-      "bytes": 527773
+      "bytes": 528822
     }
   }
 }
