@@ -11,7 +11,6 @@ export default function HostMainScreen() {
         switch (gameSession?.hostScreen) {
             case HostScreenEnum.LOBBY:
                 return <HostLobbyScreen />;
-
             case HostScreenEnum.QUESTION_PREVIEW:
                 return <HostQuestionPreviewScreen />;
         }

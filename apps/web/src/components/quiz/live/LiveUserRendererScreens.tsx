@@ -7,6 +7,8 @@ import CanvasAccents from '@/components/utility/CanvasAccents';
 import ParticipantMainScreen from './participant/ParticipantMainScreen';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { useSubscribeEventHandlers } from '@/hooks/sockets/useSubscribeEventHandlers';
+import { TbSquareLetterTFilled } from 'react-icons/tb';
+import { cn } from '@/lib/utils';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
@@ -35,6 +37,17 @@ export default function LiveUserRendererScreens() {
                 color: template?.text_color,
             }}
         >
+            <div
+                className={cn(
+                    'flex items-center justify-center gap-x-2 cursor-pointer group absolute top-7 left-7',
+                )}
+            >
+                <TbSquareLetterTFilled
+                    size={28}
+                    className="group-hover:-translate-x-1 transition-transform ease-in"
+                />
+                <span className="text-xl font-medium">Triangulum</span>
+            </div>
             <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
             {renderCurrentUserScreen()}
         </div>

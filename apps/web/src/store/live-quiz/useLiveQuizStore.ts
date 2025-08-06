@@ -13,18 +13,27 @@ interface LiveQuizStore {
 export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
     quiz: null,
     updateQuiz: (updatedFields: Partial<QuizType>) => {
-        set((state) => ({
-            quiz: {
+        set((state) => {
+            const updatedQuiz = {
                 ...state.quiz,
                 ...updatedFields,
-            } as QuizType,
-        }));
+            } as QuizType;
+
+            let currentQuestion = state.currentQuestion;
+            if (updatedFields.questions && updatedFields.questions.length > 0) {
+                currentQuestion = updatedFields.questions?.[0] ?? null;
+            }
+            return {
+                quiz: updatedQuiz,
+                currentQuestion,
+            };
+        });
     },
     gameSession: null,
     updateGameSession: (updatedFields: Partial<GameSessionType>) => {
         set((state) => ({
             gameSession: {
-                ...state.quiz,
+                ...state.gameSession,
                 ...updatedFields,
             } as GameSessionType,
         }));

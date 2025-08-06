@@ -1,11 +1,11 @@
-import QuestionPreviewHostLeft from './QuestionPreviewHostRight';
-import QuestionPreviewHostRight from './QuestionPreviewHostLeft';
+import HostQuestionPreviewRenderer from './HostQuestionPreviewRenderer';
+import HostQuestionReviewFooter from './HostQuestionReviewFooter';
 
 export default function HostQuestionPreviewScreen() {
     return (
-        <div className="flex h-full w-full">
-            <QuestionPreviewHostLeft />
-            <QuestionPreviewHostRight />
+        <div className="flex h-full w-full relative">
+            <HostQuestionPreviewRenderer />
+            <HostQuestionReviewFooter />
         </div>
     );
 }

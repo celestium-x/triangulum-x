@@ -1,8 +1,6 @@
 import Navbar from '../src/components/navbars/Navbar';
 import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';
-import JoinQuizBar from '@/components/base/JoinQuizBar';
-import LandingPageCards from '@/components/utility/LandingPageCards';
 import { Spotlight } from '@/components/ui/Spotlight';
 
 export default function Home() {

@@ -110,7 +110,8 @@ export default function SpectatorActions({ onChatExpandChange }: SpectatorAction
     };
 
     return (
-        <div className='h-full'
+        <div
+            className="h-full"
             style={{
                 color: template?.text_color,
             }}

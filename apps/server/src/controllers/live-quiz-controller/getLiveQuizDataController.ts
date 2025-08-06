@@ -61,6 +61,25 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                             email: true,
                         },
                     },
+                    ...(role === 'HOST' && {
+                        questions: {
+                            select: {
+                                id: true,
+                                question: true,
+                                options: true,
+                                explanation: true,
+                                difficulty: true,
+                                basePoints: true,
+                                timeLimit: true,
+                                orderIndex: true,
+                                imageUrl: true,
+                            },
+                            orderBy: {
+                                orderIndex: 'asc',
+                            },
+                            take: 1,
+                        },
+                    }),
                 },
             });
 
@@ -180,7 +199,8 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
         }
 
         const sanitizedGameSession = QuizAction.sanitizeGameSession(result.gameSession, role);
-        res.status(200).json({
+
+        const responseData: any = {
             success: true,
             quiz: result.quiz,
             gameSession: sanitizedGameSession,
@@ -188,7 +208,8 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
             participants: result.participants,
             spectators: result.spectators,
             role,
-        });
+        };
+        res.status(200).json(responseData);
         return;
     } catch (err: any) {
         console.error('Unexpected error in getLiveQuizDataController:', err);
