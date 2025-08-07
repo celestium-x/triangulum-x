@@ -16,6 +16,7 @@ import deleteQuizController from '../controllers/quiz-controller/deleteQuizContr
 import getReviewController from '../controllers/appReview-controller/getReviewController';
 import { getLiveQuizSummarizedData } from '../controllers/live-quiz-controller/getLiveQuizSummarizedData';
 import getSelectedQuestionDetails from '../controllers/live-quiz-controller/getSelectedQuestionDetails';
+import getSpectatorOnCall from '../controllers/live-quiz-controller/getSpectatorOnCall';
 
 const router = Router();
 
@@ -51,5 +52,6 @@ router.get(
     authMiddleware,
     getSelectedQuestionDetails,
 );
+router.get('/quiz/:quizId/spectators', authMiddleware, getSpectatorOnCall);
 
 export default router;
