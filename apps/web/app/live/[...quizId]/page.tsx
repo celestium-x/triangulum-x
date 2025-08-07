@@ -8,7 +8,7 @@ import {
     useLiveSpectatorStore,
     useUserRoleStore,
 } from '@/store/live-quiz/useLiveQuizUserStore';
-import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 import axios from 'axios';
 import { use, useEffect } from 'react';
 import { LIVE_QUIZ_DATA_URL } from 'routes/api_routes';
@@ -28,7 +28,7 @@ export default function New({ params }: NewProps) {
     const { setCurrentUserType } = useUserRoleStore();
 
     const { setParticipants } = useLiveParticipantsStore();
-    const { setSpectators, setCurrentUserId } = useLiveSpectatorsStore();
+    const { setSpectators } = useLiveSpectatorsStore();
 
     useEffect(() => {
         async function getLiveData() {
@@ -52,7 +52,6 @@ export default function New({ params }: NewProps) {
                             break;
                         case 'SPECTATOR':
                             setSpectatorData(data.userData);
-                            setCurrentUserId(data.userData.id);
                             break;
                         default:
                             break;
@@ -72,7 +71,6 @@ export default function New({ params }: NewProps) {
         setHostData,
         setParticipantData,
         setSpectatorData,
-        setCurrentUserId,
         setSpectators,
     ]);
 

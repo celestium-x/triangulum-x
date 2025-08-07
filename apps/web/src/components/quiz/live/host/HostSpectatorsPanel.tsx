@@ -2,15 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
-import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorStore';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { SpectatorType } from '@/types/prisma-types';
 import axios from 'axios';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { BiExpandAlt } from 'react-icons/bi';
+import { IoSearch } from 'react-icons/io5';
 import { GET_SPECTATOR_ON_CALL_URL } from 'routes/api_routes';
 
 interface SpectatorResponseProps {
@@ -21,7 +20,6 @@ interface SpectatorResponseProps {
 
 export default function HostSpectatorsPanel() {
     const { quiz } = useLiveQuizStore();
-    const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForHostStore();
     const { session } = useUserSessionStore();
     const { spectators, setSpectators, upsertSpectator } = useLiveSpectatorsStore();
 
@@ -31,10 +29,6 @@ export default function HostSpectatorsPanel() {
     const containerRef = useRef<HTMLDivElement>(null);
 
     const quizId = quiz?.id;
-
-    const handleToggleExpand = () => {
-        setIsExpanded(!isExpanded);
-    };
 
     const fetchSpectators = useCallback(
         async (pageNum: number) => {
@@ -105,9 +99,8 @@ export default function HostSpectatorsPanel() {
                         <Button
                             className="text-dark-base dark:text-light-base cursor-pointer dark:bg-neutral-600/30"
                             variant="ghost"
-                            onClick={handleToggleExpand}
                         >
-                            <BiExpandAlt className="dark:text-light-base" strokeWidth={0.5} />
+                            <IoSearch className="dark:text-light-base" strokeWidth={0.5} />
                         </Button>
                     </div>
                 </ToolTipComponent>

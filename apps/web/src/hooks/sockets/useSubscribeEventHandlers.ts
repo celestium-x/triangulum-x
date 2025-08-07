@@ -2,15 +2,17 @@ import { useEffect } from 'react';
 import { useWebSocket } from './useWebSocket';
 import { MESSAGE_TYPES } from '@/types/web-socket-types';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
-import { GameSessionType, ParticipantType } from '@/types/prisma-types';
+import { GameSessionType, ParticipantType, SpectatorType } from '@/types/prisma-types';
 import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 
 export const useSubscribeEventHandlers = () => {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
     const { upsertParticipant } = useLiveParticipantsStore();
     const { updateParticipantData } = useLiveParticipantStore();
     const { updateGameSession } = useLiveQuizStore();
+    const { upsertSpectator } = useLiveSpectatorsStore();
 
     function handleIncomingMessage(payload: unknown) {
         upsertParticipant(payload as ParticipantType);
@@ -35,9 +37,14 @@ export const useSubscribeEventHandlers = () => {
         updateGameSession({ id: message.id, hostScreen: message.hostScreen } as GameSessionType);
     }
 
+    function handleIncomingNewSpectator(payload: unknown) {
+        upsertSpectator(payload as SpectatorType);
+    }
+
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION, handleIncomingMessage);
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE, handleIncomingNameChangeMessage);
+        subscribeToHandler(MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION, handleIncomingNewSpectator);
         subscribeToHandler(
             MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
             handleIncomingQuestionPreviewPageChange,
