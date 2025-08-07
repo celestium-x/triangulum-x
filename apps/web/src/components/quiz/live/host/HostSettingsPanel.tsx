@@ -25,22 +25,16 @@ export default function HostSettingsPanel() {
 
     return (
         <div className="w-full h-full flex flex-col overflow-hidden py-2 overflow-y-auto custom-scrollbar relative">
-            <div className="sticky top-0 z-20 py-4 border-b bg-light-base dark:bg-dark-base">
-                <span className="text-md dark:text-light-base text-dark-primary px-7">
-                    Settings
-                </span>
-            </div>
-
-            <div className="sticky top-[3.7rem] z-10 w-full px-6 py-2">
-                <div className="flex justify-center gap-3 dark:bg-transparent backdrop-blur-md rounded-xl border shadow-md">
+            <div className="sticky top-0 z-10 w-full px-6 py-2">
+                <div className="grid grid-cols-3 gap-3 dark:bg-neutral-800 backdrop-blur-md rounded-xl border shadow-md">
                     {Object.values(SettingsView).map((tab) => (
                         <Button
                             key={tab}
                             onClick={() => setView(tab)}
                             className={cn(
-                                'px-4 py-2 rounded-lg text-sm font-medium transition-all bg-transparent dark:bg-transparent',
+                                'px-4 py-2 rounded-xl text-xs font-medium transition-all bg-transparent dark:bg-transparent col-span-1 lowercase',
                                 {
-                                    'bg-white/30 dark:bg-neutral-800 text-black dark:text-white shadow':
+                                    'bg-white/30 dark:bg-neutral-950/50 text-dark-base dark:text-white shadow':
                                         view === tab,
                                     'text-neutral-500 dark:text-neutral-400': view !== tab,
                                 },

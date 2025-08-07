@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/button';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { templates } from '@/lib/templates';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { IoMdSettings } from 'react-icons/io';
 
 interface ParticipantControlsType {
@@ -21,6 +23,8 @@ export default function ParticipantControls({
     // onClickChat,
     // onClickLeaderboard,
 }: ParticipantControlsProps) {
+    const { quiz } = useLiveQuizStore();
+    const template = templates.find((t) => t.id === quiz?.theme);
     const allParticipantControls: ParticipantControlsType[] = [
         // {
         //     tooltip: 'Leaderboard',
@@ -49,9 +53,10 @@ export default function ParticipantControls({
             {allParticipantControls.map((control, index) => (
                 <ToolTipComponent content={control.tooltip} key={index}>
                     <Button
+                        style={{ color: template?.text_color }}
                         variant="ghost"
                         onClick={control.onClick}
-                        className="hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
+                        className="hover:scale-105 dark:hover:bg-transparent hover:bg-transparent transition-all duration-300 dark:hover"
                     >
                         {control.icon}
                     </Button>

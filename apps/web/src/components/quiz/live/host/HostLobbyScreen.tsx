@@ -1,7 +1,6 @@
 'use client';
 import HostLobbyFooter from './HostLobbyFooter';
 import WaitingLobbyHostLeft from './WaitingLobbyHostLeft';
-import WaitingLobbyHostRight from './WaitingLobbyHostRight';
 
 export default function HostLobbyScreen() {
     return (

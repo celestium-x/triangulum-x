@@ -52,6 +52,6 @@ router.get(
     authMiddleware,
     getSelectedQuestionDetails,
 );
-router.get('/quiz/:quizId/spectators', authMiddleware, getSpectatorOnCall);
+router.get('/quiz/spectators/:quizId', authMiddleware, getSpectatorOnCall);
 
 export default router;

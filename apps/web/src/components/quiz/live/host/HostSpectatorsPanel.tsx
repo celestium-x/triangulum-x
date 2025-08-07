@@ -10,7 +10,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
-import { GET_SPECTATOR_ON_CALL_URL } from 'routes/api_routes';
+import { QUIZ_URL } from 'routes/api_routes';
 
 interface SpectatorResponseProps {
     spectators: SpectatorType[];
@@ -25,7 +25,7 @@ export default function HostSpectatorsPanel() {
 
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const quizId = quiz?.id;
@@ -37,7 +37,7 @@ export default function HostSpectatorsPanel() {
             setLoading(true);
             try {
                 const response = await axios.get<SpectatorResponseProps>(
-                    GET_SPECTATOR_ON_CALL_URL(quizId, pageNum),
+                    `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
                     {
                         headers: {
                             Authorization: `Bearer ${session.user.token}`,

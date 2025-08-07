@@ -1,6 +1,5 @@
 import WaitingLobbyAvatars from '../common/Avatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import Image from 'next/image';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
 export default function WaitingLobbyParticipantLeft() {

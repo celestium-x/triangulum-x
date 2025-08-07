@@ -81,7 +81,7 @@ export const useWebSocket = () => {
         }
     }
 
-    function handleSendInteractionMessage(payload: any) {
+    function handleSendInteractionMessage(payload: unknown) {
         const message: MessagePayload = {
             type: MESSAGE_TYPES.REACTION_EVENT,
             payload: payload,

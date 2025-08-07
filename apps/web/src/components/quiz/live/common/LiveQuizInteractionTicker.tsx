@@ -43,17 +43,19 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
 
     const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } = useWebSocket();
 
-    function handleIncomingReactionEvent(message: unknown) {
-        const payload = message as { reactionType: Interactions };
-        createEmojiAnimation(payload.reactionType);
-    };
 
-    useEffect(() => {
+
+    useEffect(() => {        
+        function handleIncomingReactionEvent(message: unknown) {
+            const payload = message as { reactionType: Interactions };
+            createEmojiAnimation(payload.reactionType);
+        };
+
         subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
         return () => {
             unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
         };
-    }, []);
+    }, [subscribeToHandler, unsubscribeToHandler]);
 
     function createEmojiAnimation(emojiType: Interactions) {
         const newEmojiId = Date.now() + Math.random();

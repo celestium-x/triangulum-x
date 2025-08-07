@@ -17,5 +17,4 @@ export const GET_REVIEW_URL = API_URL + '/user/get-review';
 export const DELETE_QUIZ_URL = API_URL + '/quiz/delete-quiz';
 export const GET_SELECTED_QUESTION_DATA = API_URL + '/quiz/get-selected-question-data';
 
-export const GET_SPECTATOR_ON_CALL_URL = (quizId: string, page: number = 0) =>
-    `${API_URL}/quiz/${quizId}/spectators?page=${page}`;
+export const SPECTATOR_URL = QUIZ_URL + '/spectators';
