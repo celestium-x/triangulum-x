@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import ParticipantControls from './ParticipantControls';
 import { useLiveQuizExpandableCardForParticipantStore } from '@/store/live-quiz/useLiveQuizExpandableCardForParticipantStore';
+import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
 
 export default function ParticipantMainFooter() {
     const { isExpanded, setType } = useLiveQuizExpandableCardForParticipantStore();

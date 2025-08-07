@@ -76,16 +76,30 @@ export default class HostManager {
     }
 
     private handle_host_message(ws: CustomWebSocket, message: any) {
-        const { type } = message;
+        const { type, payload } = message;
         switch (type) {
             case MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW:
                 this.handle_host_question_preview_page_change(ws);
                 break;
-
+            case MESSAGE_TYPES.REACTION_EVENT:
+                this.handle_incoming_reaction_event(payload, ws);
+                break;
             default:
                 console.error('Unknown message type', type);
                 break;
         }
+    }
+
+    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
+        const { reactionType } = payload;
+        const published_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.REACTION_EVENT,
+            payload: {
+                reactionType,
+            },
+            exclude_socket_id: ws.id,
+        };
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
     }
 
     private async validateHostInDB(quizId: string, hostId: string): Promise<boolean> {
