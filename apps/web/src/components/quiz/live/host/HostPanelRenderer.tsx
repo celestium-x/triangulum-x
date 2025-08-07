@@ -4,6 +4,7 @@ import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 import HostSpectatorsPanel from './HostSpectatorsPanel';
 import HostChatsPanel from './HostChatsPanel';
 import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
+import HostSettingsPanel from './HostSettingsPanel';
 
 export default function HostPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
@@ -19,6 +20,8 @@ export default function HostPanelRenderer() {
                 return <HostChatsPanel />;
             case 'PEOPLE':
                 return <HostSpectatorsPanel />;
+            case 'SETTINGS':
+                return <HostSettingsPanel/>
         }
     }
 

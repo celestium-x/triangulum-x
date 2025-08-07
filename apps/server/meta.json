@@ -1988,8 +1988,24 @@
       ],
       "format": "esm"
     },
+    "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
+      "bytes": 1518,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/routes/index.ts": {
-      "bytes": 2909,
+      "bytes": 3074,
       "imports": [
         {
           "path": "express",
@@ -2075,6 +2091,11 @@
           "path": "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts",
           "kind": "import-statement",
           "original": "../controllers/live-quiz-controller/getSelectedQuestionDetails"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getSpectatorOnCall.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getSpectatorOnCall"
         }
       ],
       "format": "esm"
@@ -2419,7 +2440,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 975217
+      "bytes": 977865
     },
     "dist/index.js": {
       "imports": [
@@ -2573,7 +2594,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1344
+          "bytesInOutput": 1420
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2869,6 +2890,9 @@
         "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
           "bytesInOutput": 1572
         },
+        "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
+          "bytesInOutput": 1035
+        },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 7995
         },
@@ -2885,7 +2909,7 @@
           "bytesInOutput": 4902
         }
       },
-      "bytes": 527660
+      "bytes": 528834
     }
   }
 }
