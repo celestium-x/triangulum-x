@@ -1989,7 +1989,7 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
-      "bytes": 1518,
+      "bytes": 1348,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2440,7 +2440,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 977865
+      "bytes": 977683
     },
     "dist/index.js": {
       "imports": [

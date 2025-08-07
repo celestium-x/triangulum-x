@@ -9,7 +9,7 @@ import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { SpectatorType } from '@/types/prisma-types';
 import axios from 'axios';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { GET_SPECTATOR_ON_CALL_URL } from 'routes/api_routes';
 
@@ -36,43 +36,55 @@ export default function HostSpectatorsPanel() {
         setIsExpanded(!isExpanded);
     };
 
-    const fetchSpectators = async (pageNum: number) => {
-        if (!quizId || loading || !hasMore || !session?.user.token) return;
+    const fetchSpectators = useCallback(
+        async (pageNum: number) => {
+            if (!quizId || loading || !hasMore || !session?.user.token) return;
 
-        setLoading(true);
-        try {
-            const response = await axios.get<SpectatorResponseProps>(
-                GET_SPECTATOR_ON_CALL_URL(quizId, pageNum),
-                {
-                    headers: {
-                        Authorization: `Bearer ${session.user.token}`,
+            setLoading(true);
+            try {
+                const response = await axios.get<SpectatorResponseProps>(
+                    GET_SPECTATOR_ON_CALL_URL(quizId, pageNum),
+                    {
+                        headers: {
+                            Authorization: `Bearer ${session.user.token}`,
+                        },
                     },
-                }
-            );
+                );
 
-            const data = response.data;
+                const data = response.data;
 
-            if (data.success) {
-                if (pageNum === 0) {
-                    setSpectators(data.spectators);
-                } else {
-                    data.spectators.forEach(upsertSpectator);
+                if (data.success) {
+                    if (pageNum === 0) {
+                        setSpectators(data.spectators);
+                    } else {
+                        data.spectators.forEach(upsertSpectator);
+                    }
+                    setHasMore(data.hasMore);
+                    setPage(pageNum + 1);
                 }
-                setHasMore(data.hasMore);
-                setPage(pageNum + 1);
+            } catch (err) {
+                console.error('Failed to fetch spectators:', err);
+            } finally {
+                setLoading(false);
             }
-        } catch (err) {
-            console.error('Failed to fetch spectators:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
+        },
+        [
+            quizId,
+            loading,
+            hasMore,
+            session?.user.token,
+            setSpectators,
+            upsertSpectator,
+            setPage,
+            setHasMore,
+        ],
+    );
 
     useEffect(() => {
         if (quizId) {
             fetchSpectators(0);
         }
-    }, [quizId]);
+    }, [quizId, fetchSpectators]);
 
     const handleScroll = () => {
         const container = containerRef.current;
@@ -141,7 +153,9 @@ export default function HostSpectatorsPanel() {
                 )}
 
                 {!loading && spectators.length > 0 && !hasMore && (
-                    <div className="text-xs text-neutral-600 text-center mt-4">No more spectators</div>
+                    <div className="text-xs text-neutral-600 text-center mt-4">
+                        No more spectators
+                    </div>
                 )}
             </div>
         </div>

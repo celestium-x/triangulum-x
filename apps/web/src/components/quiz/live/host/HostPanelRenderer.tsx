@@ -21,7 +21,7 @@ export default function HostPanelRenderer() {
             case 'PEOPLE':
                 return <HostSpectatorsPanel />;
             case 'SETTINGS':
-                return <HostSettingsPanel/>
+                return <HostSettingsPanel />;
         }
     }
 
