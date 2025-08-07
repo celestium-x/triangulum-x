@@ -76,6 +76,14 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+            case MESSAGE_TYPES.REACTION_EVENT:
+                this.broadcast_to_session(
+                    game_session_id,
+                    message,
+                    [USER_TYPE.PARTICIPANT, USER_TYPE.HOST, USER_TYPE.SPECTATOR],
+                    message.exclude_socket_id,
+                );
+                break;
 
             case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.broadcast_to_session(game_session_id, message, [
@@ -108,12 +116,16 @@ export default class WebsocketServer {
         }
     }
 
-    private broadcast_to_session(game_session_id: string, message: any, messages_to: USER_TYPE[]) {
+    private broadcast_to_session(
+        game_session_id: string,
+        message: any,
+        messages_to: USER_TYPE[],
+        exclude_socket_id?: string,
+    ) {
         if (messages_to.includes(USER_TYPE.HOST)) {
             const host_socket_id = this.session_host_mapping.get(game_session_id);
             if (host_socket_id) {
                 const host_socket = this.socket_mapping.get(host_socket_id);
-
                 if (host_socket && host_socket.readyState === WebSocket.OPEN) {
                     host_socket.send(JSON.stringify(message));
                 }
@@ -123,6 +135,9 @@ export default class WebsocketServer {
         if (messages_to.includes(USER_TYPE.PARTICIPANT)) {
             const participant_socket_ids = this.session_participants_mapping.get(game_session_id);
             participant_socket_ids?.forEach((socket_id: string) => {
+                if (exclude_socket_id === socket_id) {
+                    return;
+                }
                 const participant_socket = this.socket_mapping.get(socket_id);
                 if (participant_socket && participant_socket.readyState === WebSocket.OPEN) {
                     participant_socket.send(JSON.stringify(message));
@@ -133,6 +148,9 @@ export default class WebsocketServer {
         if (messages_to.includes(USER_TYPE.SPECTATOR)) {
             const spectator_socket_ids = this.session_spectators_mapping.get(game_session_id);
             spectator_socket_ids?.forEach((socket_id: string) => {
+                if (exclude_socket_id === socket_id) {
+                    return;
+                }
                 const spectator_socket = this.socket_mapping.get(socket_id);
                 if (spectator_socket && spectator_socket.readyState === WebSocket.OPEN) {
                     spectator_socket.send(JSON.stringify(message));

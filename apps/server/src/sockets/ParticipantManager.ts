@@ -110,10 +110,25 @@ export default class ParticipantManager {
             case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.handle_participant_name_change(payload, ws);
                 break;
+            case MESSAGE_TYPES.REACTION_EVENT:
+                this.handle_incoming_reaction_event(payload, ws);
+                break;
             default:
-                console.error('Unknown message type', type);
+                console.error('Unknown message type at participant manager', type);
                 break;
         }
+    }
+
+    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
+        const { reactionType } = payload;
+        const published_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.REACTION_EVENT,
+            payload: {
+                reactionType,
+            },
+            exclude_socket_id: ws.id,
+        };
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
     }
 
     private send_message_to_participant(participant_id: string, message: any) {

@@ -27,6 +27,7 @@ export interface CookiePayload {
 export interface PubSubMessageTypes {
     type: MESSAGE_TYPES;
     payload: any;
+    exclude_socket_id?: string;
 }
 
 export enum MESSAGE_TYPES {
@@ -38,6 +39,8 @@ export enum MESSAGE_TYPES {
 
     SPECTATOR_JOIN_GAME_SESSION = 'SPECTATOR_JOIN_GAME_SESSION',
     SPECTATOR_NAME_CHANGE = 'SPECTATOR_NAME_CHANGE',
+
+    REACTION_EVENT = 'REACTION_EVENT',
 }
 
 export enum USER_TYPE {

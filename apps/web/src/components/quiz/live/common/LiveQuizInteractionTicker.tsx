@@ -3,20 +3,36 @@ import { BsFillHandThumbsUpFill } from 'react-icons/bs';
 import { MdEmojiEmotions } from 'react-icons/md';
 import { FaHeart, FaLightbulb } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { templates } from '@/lib/templates';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { MESSAGE_TYPES } from '@/types/web-socket-types';
 
 interface LiveQuizInteractionTickerProps {
     className?: string;
 }
 
-type EmojiType = 'heart' | 'dollar' | 'lightbulb' | 'thumbsup' | 'emoji';
+export enum Interactions {
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
+const emojiTypes: Interactions[] = [
+    Interactions.HEART,
+    Interactions.DOLLAR,
+    Interactions.BULB,
+    Interactions.THUMBS_UP,
+    Interactions.SMILE,
+];
 
 interface AnimatingEmoji {
     id: number;
-    type: EmojiType;
+    type: Interactions;
 }
 
 export default function LiveQuizInteractionTicker({ className }: LiveQuizInteractionTickerProps) {
@@ -24,7 +40,22 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
     const template = templates.find((t) => t.id === quiz?.theme);
     const [animatingEmojis, setAnimatingEmojis] = useState<AnimatingEmoji[]>([]);
 
-    function createEmojiAnimation(emojiType: EmojiType) {
+    const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } =
+        useWebSocket();
+
+    useEffect(() => {
+        function handleIncomingReactionEvent(message: unknown) {
+            const payload = message as { reactionType: Interactions };
+            createEmojiAnimation(payload.reactionType);
+        }
+
+        subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
+        return () => {
+            unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
+        };
+    }, [subscribeToHandler, unsubscribeToHandler]);
+
+    function createEmojiAnimation(emojiType: Interactions) {
         const newEmojiId = Date.now() + Math.random();
         setAnimatingEmojis((prev) => [...prev, { id: newEmojiId, type: emojiType }]);
 
@@ -33,11 +64,12 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
         }, 2200);
     }
 
-    function handleClick(emojiType: EmojiType) {
+    function handleClick(emojiType: Interactions) {
         createEmojiAnimation(emojiType);
+        handleSendInteractionMessage({ reactionType: emojiType });
     }
 
-    function renderIcon(type: EmojiType, size: number = 35) {
+    function renderIcon(type: Interactions, size: number = 35) {
         const iconProps = {
             size,
             style: {
@@ -49,51 +81,49 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
         };
 
         switch (type) {
-            case 'heart':
+            case Interactions.HEART:
                 return <FaHeart {...iconProps} />;
-            case 'dollar':
+            case Interactions.DOLLAR:
                 return <PiCurrencyCircleDollarFill {...iconProps} />;
-            case 'lightbulb':
+            case Interactions.BULB:
                 return <FaLightbulb {...iconProps} />;
-            case 'thumbsup':
+            case Interactions.THUMBS_UP:
                 return <BsFillHandThumbsUpFill {...iconProps} />;
-            case 'emoji':
+            case Interactions.SMILE:
                 return <MdEmojiEmotions {...iconProps} />;
             default:
                 return null;
         }
     }
 
-    function renderAnimatedIcon(type: EmojiType) {
+    function renderAnimatedIcon(type: Interactions) {
         const animatedIconProps = {
             size: 22,
             className: 'drop-shadow-lg',
         };
 
         switch (type) {
-            case 'heart':
+            case Interactions.HEART:
                 return <FaHeart {...animatedIconProps} style={{ color: '#ff0033' }} />;
-            case 'dollar':
+            case Interactions.DOLLAR:
                 return (
                     <PiCurrencyCircleDollarFill
                         {...animatedIconProps}
                         style={{ color: '#10b981' }}
                     />
                 );
-            case 'lightbulb':
+            case Interactions.BULB:
                 return <FaLightbulb {...animatedIconProps} style={{ color: '#f59e0b' }} />;
-            case 'thumbsup':
+            case Interactions.THUMBS_UP:
                 return (
                     <BsFillHandThumbsUpFill {...animatedIconProps} style={{ color: '#3b82f6' }} />
                 );
-            case 'emoji':
+            case Interactions.SMILE:
                 return <MdEmojiEmotions {...animatedIconProps} style={{ color: '#f97316' }} />;
             default:
                 return null;
         }
     }
-
-    const emojiTypes: EmojiType[] = ['heart', 'dollar', 'lightbulb', 'thumbsup', 'emoji'];
 
     return (
         <div

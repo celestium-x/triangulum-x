@@ -4,6 +4,8 @@ import { MdLeaderboard } from 'react-icons/md';
 import { PiDetectiveFill } from 'react-icons/pi';
 import { RiMessage3Fill } from 'react-icons/ri';
 import { IoMdSettings } from 'react-icons/io';
+import { templates } from '@/lib/templates';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 
 interface HostControlsType {
     tooltip: string;
@@ -24,6 +26,8 @@ export default function HostControls({
     onClickChat,
     onClickLeaderboard,
 }: HostControlsProps) {
+    const { quiz } = useLiveQuizStore();
+    const template = templates.find((t) => t.id === quiz?.theme);
     const allHostControls: HostControlsType[] = [
         {
             tooltip: 'Leaderboard',
@@ -52,9 +56,10 @@ export default function HostControls({
             {allHostControls.map((control, index) => (
                 <ToolTipComponent content={control.tooltip} key={index}>
                     <Button
+                        style={{ color: template?.text_color }}
                         variant="ghost"
                         onClick={control.onClick}
-                        className="hover:scale-105 dark:hover:bg-transparent transition-all duration-300"
+                        className="hover:scale-105 dark:hover:bg-transparent hover:bg-transparent transition-all duration-300 dark:hover"
                     >
                         {control.icon}
                     </Button>

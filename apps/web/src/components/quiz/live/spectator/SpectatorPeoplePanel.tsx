@@ -7,7 +7,7 @@ import { SpectatorType } from '@/types/prisma-types';
 import axios from 'axios';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { GET_SPECTATOR_ON_CALL_URL } from 'routes/api_routes';
+import { QUIZ_URL } from 'routes/api_routes';
 
 interface SpectatorPeoplePanelProps {
     spectators: SpectatorType[];
@@ -34,7 +34,7 @@ export default function SpectatorPeoplePanel() {
             setLoading(true);
             try {
                 const response = await axios.get<SpectatorPeoplePanelProps>(
-                    GET_SPECTATOR_ON_CALL_URL(quizId, pageNum),
+                    `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
                     {
                         headers: {
                             Authorization: `Bearer ${session.user.token}`,
