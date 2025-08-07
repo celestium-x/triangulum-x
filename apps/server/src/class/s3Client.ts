@@ -1,6 +1,9 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { v4 as uuid } from 'uuid';
+import dotenv from 'dotenv';
+dotenv.config();
+const cloudFrontDomain = process.env.AWS_CLOUDFRONT_DOMAIN;
 
 export default class S3ClientActions {
     private s3: S3Client;
@@ -29,7 +32,7 @@ export default class S3ClientActions {
         });
 
         const signedUrl = await getSignedUrl(this.s3, command, { expiresIn: 60 });
-        const publicUrl = `https://s3.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${key}`;
+        const publicUrl = `https://${cloudFrontDomain}/${key}`;
 
         return { signedUrl, publicUrl, key };
     }
