@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import { QUIZ_URL } from 'routes/api_routes';
 
-interface SpectatorResponseProps {
+interface HostResponseProps {
     spectators: SpectatorType[];
     hasMore: boolean;
     success: boolean;
@@ -36,7 +36,7 @@ export default function HostSpectatorsPanel() {
 
             setLoading(true);
             try {
-                const response = await axios.get<SpectatorResponseProps>(
+                const response = await axios.get<HostResponseProps>(
                     `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
                     {
                         headers: {

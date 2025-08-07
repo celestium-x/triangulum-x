@@ -1,6 +1,6 @@
-import Image from "next/image";
-import LiveQuizInteractionTicker from "../common/LiveQuizInteractionTicker";
-import { useLiveParticipantsStore } from "@/store/live-quiz/useLiveParticipantsStore";
+import Image from 'next/image';
+import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
 export default function ParticipantLobbyFooter() {
     const { participants } = useLiveParticipantsStore();

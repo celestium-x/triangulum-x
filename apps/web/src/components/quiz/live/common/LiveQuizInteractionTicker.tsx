@@ -22,13 +22,12 @@ export enum Interactions {
     SMILE = 'SMILE',
 }
 
-
 const emojiTypes: Interactions[] = [
     Interactions.HEART,
     Interactions.DOLLAR,
     Interactions.BULB,
     Interactions.THUMBS_UP,
-    Interactions.SMILE
+    Interactions.SMILE,
 ];
 
 interface AnimatingEmoji {
@@ -41,15 +40,14 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
     const template = templates.find((t) => t.id === quiz?.theme);
     const [animatingEmojis, setAnimatingEmojis] = useState<AnimatingEmoji[]>([]);
 
-    const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } = useWebSocket();
+    const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } =
+        useWebSocket();
 
-
-
-    useEffect(() => {        
+    useEffect(() => {
         function handleIncomingReactionEvent(message: unknown) {
             const payload = message as { reactionType: Interactions };
             createEmojiAnimation(payload.reactionType);
-        };
+        }
 
         subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
         return () => {
@@ -64,12 +62,12 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
         setTimeout(() => {
             setAnimatingEmojis((prev) => prev.filter((emoji) => emoji.id !== newEmojiId));
         }, 2200);
-    };
+    }
 
     function handleClick(emojiType: Interactions) {
         createEmojiAnimation(emojiType);
         handleSendInteractionMessage({ reactionType: emojiType });
-    };
+    }
 
     function renderIcon(type: Interactions, size: number = 35) {
         const iconProps = {
@@ -96,7 +94,7 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
             default:
                 return null;
         }
-    };
+    }
 
     function renderAnimatedIcon(type: Interactions) {
         const animatedIconProps = {
@@ -125,7 +123,7 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
             default:
                 return null;
         }
-    };
+    }
 
     return (
         <div
