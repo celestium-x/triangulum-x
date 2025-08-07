@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
 import {
+    ChatMessage,
     CookiePayload,
     CustomWebSocket,
     MESSAGE_TYPES,
@@ -10,6 +11,7 @@ import QuizManager from './QuizManager';
 import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import DatabaseQueue from '../queue/DatabaseQueue';
+import RedisCache from '../cache/RedisCache';
 
 interface SpectatorManagerDependencies {
     publisher: Redis;
@@ -18,6 +20,7 @@ interface SpectatorManagerDependencies {
     session_spectator_mapping: Map<string, Set<string>>;
     quizManager: QuizManager;
     database_queue: DatabaseQueue;
+    redis_cache: RedisCache;
 }
 
 export default class SpectatorManager {
@@ -27,6 +30,8 @@ export default class SpectatorManager {
     private quizManager: QuizManager;
     private socket_mapping: Map<string, CustomWebSocket>;
     private database_queue: DatabaseQueue;
+    redis_cache: RedisCache;
+
 
     private spectator_socket_mapping: Map<string, string> = new Map(); // Map<spectatorId, socketId>
 
@@ -37,6 +42,7 @@ export default class SpectatorManager {
         this.quizManager = dependencies.quizManager;
         this.socket_mapping = dependencies.socket_mapping;
         this.database_queue = dependencies.database_queue;
+        this.redis_cache = dependencies.redis_cache;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
@@ -111,15 +117,19 @@ export default class SpectatorManager {
 
     private handle_spectator_message(ws: CustomWebSocket, message: any) {
         const { type, payload } = message;
+
         switch (type) {
             case MESSAGE_TYPES.SPECTATOR_NAME_CHANGE:
                 this.handle_spectator_name_change(payload, ws);
                 break;
             case MESSAGE_TYPES.REACTION_EVENT:
                 this.handle_incoming_reaction_event(payload, ws);
+
+            case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
+                this.handle_spectator_send_message(payload, ws);
                 break;
             default:
-                console.error('Unknown message type', type);
+                console.error('Unknown message type: ', type);
                 break;
         }
     }
@@ -199,6 +209,24 @@ export default class SpectatorManager {
         };
 
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
+
+    private async handle_spectator_send_message(payload: ChatMessage, ws: CustomWebSocket) {
+
+        const { gameSessionId } = ws.user;
+
+        this.redis_cache.add_chat_message(gameSessionId, payload);
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
+            payload: {
+                id: ws.user.userId,
+                payload: payload
+            }
+        };
+
+        this.quizManager.publish_event_to_redis(gameSessionId, event_data);
+
     }
 
     private generateSocketId(): string {

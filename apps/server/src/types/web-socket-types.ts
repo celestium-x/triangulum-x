@@ -41,6 +41,7 @@ export enum MESSAGE_TYPES {
     SPECTATOR_NAME_CHANGE = 'SPECTATOR_NAME_CHANGE',
 
     REACTION_EVENT = 'REACTION_EVENT',
+    SEND_CHAT_MESSAGE = 'SEND_CHAT_MESSAGE',
 }
 
 export enum USER_TYPE {
@@ -59,4 +60,18 @@ export interface SpectatorNameChangeEvent {
 
 export interface HostScreenChangeEvent {
     currentScreen: HostScreenEnum;
+}
+
+export interface ChatMessage {
+    id: string;
+    sender_id: string;
+    sender_name: string;
+    avatar: string;
+    message: string;
+    timestamp: number;
+    chatReactions: {
+        id: string,
+        name: string,
+        avatar: string, 
+    }[]
 }

@@ -40,8 +40,7 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
     const template = templates.find((t) => t.id === quiz?.theme);
     const [animatingEmojis, setAnimatingEmojis] = useState<AnimatingEmoji[]>([]);
 
-    const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } =
-        useWebSocket();
+    const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } = useWebSocket();
 
     useEffect(() => {
         function handleIncomingReactionEvent(message: unknown) {
