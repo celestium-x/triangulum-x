@@ -15,6 +15,10 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 's3.eu-north-1.amazonaws.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'dejbzabt9zak1.cloudfront.net',
+            }
         ],
     },
 };
