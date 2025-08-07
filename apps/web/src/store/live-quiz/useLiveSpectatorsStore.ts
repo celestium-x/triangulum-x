@@ -7,8 +7,6 @@ interface LiveSpectatorProps {
     getSpectator: (spectatorId: string) => SpectatorType | undefined;
     upsertSpectator: (spectator: SpectatorType) => void;
     removeSpectator: (spectatorId: string) => void;
-    currentUserId: string | null;
-    setCurrentUserId: (userId: string) => void;
 }
 
 export const useLiveSpectatorsStore = create<LiveSpectatorProps>((set, get) => ({
@@ -50,11 +48,4 @@ export const useLiveSpectatorsStore = create<LiveSpectatorProps>((set, get) => (
             }
         });
     },
-
-    currentUserId: null,
-
-    setCurrentUserId: (userId: string) =>
-        set({
-            currentUserId: userId,
-        }),
 }));
