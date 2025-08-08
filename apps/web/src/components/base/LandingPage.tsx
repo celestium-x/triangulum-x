@@ -1,10 +1,14 @@
 import Image from 'next/image';
 import { HoverBorderGradient } from '../ui/HoverBorderGradient';
+import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
 
 export default function LandingPage() {
     return (
         <div className="">
-            <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4">
+            <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4 relative z-50">
+                <div className='absolute bottom-0 -z-10'>
+                    <AnimatedSvgCircles />
+                </div>
                 <HoverBorderGradient
                     containerClassName="rounded-full"
                     as="button"
@@ -29,13 +33,12 @@ export default function LandingPage() {
                     <br />
                     Win in crypto
                 </h1>
-
                 <div className="text-md font-normal dark:text-neutral-400 text-neutral-600 text-wrap max-w-[70%]">
                     A decentralized, gamified quiz platform where hosts stake crypto, compete in
                     live quiz challenges, and earn rewards for their knowledge.
                 </div>
             </div>
-            <div className="mx-auto flex items-center justify-center mt-8 border-dashed border dark:border-neutral-600 border-neutral-600 w-fit rounded-[24px] p-2">
+            <div className="relative mx-auto flex items-center justify-center mt-8 border-dashed border dark:border-neutral-600 border-neutral-600 w-fit rounded-[24px] p-2 z-50 dark:bg-dark-base bg-light-base">
                 <Image
                     src={'/images/dashboard-ui2.png'}
                     width={1200}
