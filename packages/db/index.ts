@@ -26,11 +26,15 @@ export type {
   GameSession,
   Response,
   Elimination,
-  // Enum types ----------------------------->
+} from "@prisma/client";
+
+// Enum types ----------------------------->
+export {
   QuizStatus,
   Template,
   Interactions,
   SessionStatus,
   ParticipantScreen,
   HostScreen,
+  SpectatorScreen,
 } from "@prisma/client";

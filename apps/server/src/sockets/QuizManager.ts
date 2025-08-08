@@ -20,14 +20,30 @@ export default class QuizManager {
         this.redis_cache = dependencies.redis_cache;
     }
 
-    public async onHostconnect(game_session_id: string, _host_socket_id: string) {
+    public async onHostconnect(game_session_id: string, quiz_id: string, _host_socket_id: string) {
         const game_session = await prisma.gameSession.findUnique({
             where: { id: game_session_id },
         });
+
         if (!game_session) {
             throw new Error('Game session not found');
         }
-        this.redis_cache.set_game_session(game_session_id, game_session);
+
+        const quiz = await prisma.quiz.findUnique({
+            where: {
+                id: quiz_id,
+            },
+            include: {
+                questions: true,
+            },
+        });
+
+        if (!quiz) {
+            throw new Error('Quiz not found');
+        }
+
+        await this.redis_cache.set_game_session(game_session_id, game_session);
+        await this.redis_cache.set_quiz(game_session_id, quiz_id, quiz);
     }
 
     public async onParticipantConnect(decoded_cookie_payload: CookiePayload) {

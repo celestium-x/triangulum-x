@@ -113,6 +113,21 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+
+            case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+
+            case MESSAGE_TYPES.HOST_LAUNCH_QUESTION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                    USER_TYPE.PARTICIPANT,
+                ]);
+                break;
         }
     }
 
@@ -195,6 +210,7 @@ export default class WebsocketServer {
             session_spectator_mapping: this.session_spectators_mapping,
             quizManager: this.quizManager,
             database_queue: this.database_queue,
+            redis_cache: this.redis_cache,
         });
     }
     // ws://localhost:8080?quizId=37r19273r69236r931r6

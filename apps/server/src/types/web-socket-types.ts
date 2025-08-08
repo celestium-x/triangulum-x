@@ -5,15 +5,6 @@ export interface CustomWebSocket extends WebSocket {
     user: CookiePayload;
 }
 
-export enum HostScreenEnum {
-    LOBBY = 'LOBBY',
-    QUESTION_PREVIEW = 'QUESTION_PREVIEW',
-    QUESTION_ACTIVE = 'QUESTION_ACTIVE',
-    QUESTION_RESULTS = 'QUESTION_RESULTS',
-    LEADERBOARD = 'LEADERBOARD',
-    FINAL_RESULTS = 'FINAL_RESULTS',
-}
-
 export interface CookiePayload {
     userId: string;
     quizId: string;
@@ -33,6 +24,7 @@ export interface PubSubMessageTypes {
 export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
     HOST_CHANGE_QUESTION_PREVIEW = 'HOST_CHANGE_QUESTION_PREVIEW',
+    HOST_LAUNCH_QUESTION = 'HOST_LAUNCH_QUESTION',
 
     PARTICIPANT_JOIN_GAME_SESSION = 'PARTICIPANT_JOIN_GAME_SESSION',
     PARTICIPANT_NAME_CHANGE = 'PARTICIPANT_NAME_CHANGE',
@@ -41,6 +33,7 @@ export enum MESSAGE_TYPES {
     SPECTATOR_NAME_CHANGE = 'SPECTATOR_NAME_CHANGE',
 
     REACTION_EVENT = 'REACTION_EVENT',
+    SEND_CHAT_MESSAGE = 'SEND_CHAT_MESSAGE',
 }
 
 export enum USER_TYPE {
@@ -57,6 +50,16 @@ export interface SpectatorNameChangeEvent {
     choosenNickname: string;
 }
 
-export interface HostScreenChangeEvent {
-    currentScreen: HostScreenEnum;
+export interface ChatMessage {
+    id: string;
+    sender_id: string;
+    sender_name: string;
+    avatar: string;
+    message: string;
+    timestamp: number;
+    chatReactions: {
+        id: string;
+        name: string;
+        avatar: string;
+    }[];
 }

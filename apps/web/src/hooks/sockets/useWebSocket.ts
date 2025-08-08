@@ -91,6 +91,17 @@ export const useWebSocket = () => {
         }
     }
 
+    function handleSendChatMessage(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+
     return {
         subscribeToHandler,
         unsubscribeToHandler,
@@ -100,5 +111,6 @@ export const useWebSocket = () => {
         handleSpectatorNameChangeMessage,
         handleHostQuestionPreviewPageChange,
         handleSendInteractionMessage,
+        handleSendChatMessage,
     };
 };
