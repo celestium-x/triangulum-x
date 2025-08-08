@@ -84,10 +84,42 @@ export default class HostManager {
             case MESSAGE_TYPES.REACTION_EVENT:
                 this.handle_incoming_reaction_event(payload, ws);
                 break;
+
+            case MESSAGE_TYPES.HOST_LAUNCH_QUESTION:
+                this.handle_question_launch(payload, ws);
             default:
                 console.error('Unknown message type', type);
                 break;
         }
+    }
+
+    private async handle_question_launch(payload: any, ws: CustomWebSocket) {
+        // payload -> questionId
+        const { questionId } = payload;
+        const { gameSessionId: game_session_id } = ws.user;
+
+
+
+        await this.database_queue.update_game_session(
+            game_session_id,
+            {
+                currentQuestionIndex: ,
+                currentQuestionId: questionId,
+                hostScreen: ,
+                spectatorScreen: ,
+                participantScreen: ,
+                questionStartedAt: ,
+            },
+            game_session_id
+        );
+
+        const message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.HOST_LAUNCH_QUESTION,
+            payload: {
+
+            }
+        }
+
     }
 
     private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {

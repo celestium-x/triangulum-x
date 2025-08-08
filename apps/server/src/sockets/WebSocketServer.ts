@@ -120,6 +120,14 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR
                 ]);
                 break;
+            
+            case MESSAGE_TYPES.HOST_LAUNCH_QUESTION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                    USER_TYPE.PARTICIPANT
+                ]);
+                break;
         }
     }
 
