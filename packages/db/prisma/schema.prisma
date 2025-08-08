@@ -79,9 +79,10 @@ model Question {
   correctAnswer Int
   explanation   String?
 
-  difficulty Int @default(1)
-  basePoints Int @default(100)
-  timeLimit  Int @default(30) // these will be in seconds
+  difficulty  Int @default(1)
+  readingTime Int @default(7) // these will be in seconds
+  basePoints  Int @default(100)
+  timeLimit   Int @default(30) // these will be in seconds
 
   orderIndex Int
   imageUrl   String?
@@ -240,10 +241,7 @@ enum Interactions {
 
 enum SessionStatus {
   WAITING
-  STARTING
-  QUESTION_ACTIVE
-  QUESTION_ENDED
-  ELIMINATING
+  LIVE
   COMPLETED
   PAUSED
 }
@@ -264,4 +262,5 @@ enum SpectatorScreen {
 enum HostScreen {
   LOBBY
   QUESTION_PREVIEW
+  QUESTION_READING // 5 seconds
 }

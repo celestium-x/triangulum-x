@@ -87,6 +87,7 @@ export default class QuizAction {
             case 'PARTICIPANT': {
                 const rest = { ...gameSession };
                 delete rest.hostScreen;
+                delete rest.spectatorScreen;
                 return rest;
             }
 
