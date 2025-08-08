@@ -155,18 +155,13 @@ export default class RedisCache {
 
     //  <------------------ CHAT ------------------>
 
-    public async add_chat_message(
-        game_session_id: string,
-        message: ChatMessage
-    ) {
+    public async add_chat_message(game_session_id: string, message: ChatMessage) {
         try {
-
             const key = this.get_game_session_chats_key(game_session_id);
 
             await this.redis_cache.lpush(key, JSON.stringify(message));
             await this.redis_cache.ltrim(key, 0, 99);
             await this.redis_cache.expire(key, SECONDS * MINUTES * HOURS);
-
         } catch (error) {
             console.error('Error adding chat message: ', error);
         }
@@ -175,23 +170,21 @@ export default class RedisCache {
     public async get_game_session_chats(
         game_session_id: string,
         limit: number = 50,
-        offset: number = 0
+        offset: number = 0,
     ) {
         try {
-
             const key = this.get_game_session_chats_key(game_session_id);
 
             const messages = await this.redis_cache.lrange(key, offset, offset + limit - 1);
 
-            return messages.map(msg => {
+            return messages.map((msg) => {
                 try {
                     return JSON.parse(msg);
                 } catch (error) {
                     console.error('Failed to parse message: ', error);
                     return null;
                 }
-            })
-
+            });
         } catch (error) {
             console.error('Error getting chat messages: ', error);
             return;
@@ -208,16 +201,12 @@ export default class RedisCache {
         try {
             const key = this.get_quiz_key(game_session_id);
 
-            const entries: [string, string][] = Object.entries(quiz).map(
-                ([key, value]) => [key, JSON.stringify(value)],
-            );
+            const entries: [string, string][] = Object.entries(quiz).map(([key, value]) => [
+                key,
+                JSON.stringify(value),
+            ]);
             await this.redis_cache.hset(key, ...entries.flat());
             await this.redis_cache.expire(key, SECONDS * MINUTES * HOURS);
-
-            const data = await this.get_quiz(game_session_id);
-            console.log("quiz data in redis: ", data)
-
-
         } catch (error) {
             console.error('Error while setting quiz in cache : ', error);
         }
@@ -237,9 +226,11 @@ export default class RedisCache {
 
                     parsed[key as keyof Quiz] = parsedValue;
                 } catch (parseError) {
-
                     if (key === 'questions') {
-                        console.error(`Critical field 'questions' failed to parse. Raw value:`, value);
+                        console.error(
+                            `Critical field 'questions' failed to parse. Raw value:`,
+                            parseError,
+                        );
                         return null;
                     }
 

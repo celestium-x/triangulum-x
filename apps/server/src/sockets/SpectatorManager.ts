@@ -32,7 +32,6 @@ export default class SpectatorManager {
     private database_queue: DatabaseQueue;
     redis_cache: RedisCache;
 
-
     private spectator_socket_mapping: Map<string, string> = new Map(); // Map<spectatorId, socketId>
 
     constructor(dependencies: SpectatorManagerDependencies) {
@@ -124,6 +123,7 @@ export default class SpectatorManager {
                 break;
             case MESSAGE_TYPES.REACTION_EVENT:
                 this.handle_incoming_reaction_event(payload, ws);
+                break;
 
             case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
                 this.handle_spectator_send_message(payload, ws);
@@ -212,7 +212,6 @@ export default class SpectatorManager {
     }
 
     private async handle_spectator_send_message(payload: ChatMessage, ws: CustomWebSocket) {
-
         const { gameSessionId } = ws.user;
 
         this.redis_cache.add_chat_message(gameSessionId, payload);
@@ -221,12 +220,11 @@ export default class SpectatorManager {
             type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
             payload: {
                 id: ws.user.userId,
-                payload: payload
-            }
+                payload: payload,
+            },
         };
 
         this.quizManager.publish_event_to_redis(gameSessionId, event_data);
-
     }
 
     private generateSocketId(): string {

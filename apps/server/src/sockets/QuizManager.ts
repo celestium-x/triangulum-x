@@ -31,11 +31,11 @@ export default class QuizManager {
 
         const quiz = await prisma.quiz.findUnique({
             where: {
-                id: quiz_id
+                id: quiz_id,
             },
             include: {
-                questions: true
-            }
+                questions: true,
+            },
         });
 
         if (!quiz) {

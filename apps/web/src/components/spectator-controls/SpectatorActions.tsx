@@ -39,12 +39,11 @@ export default function SpectatorActions({ onExpandChange }: SpectatorActionsPro
 
     useEffect(() => {
         onExpandChange?.(isChatExpanded, isLeaderBoardExpanded);
-    }, [isChatExpanded, onExpandChange, isLeaderBoardExpanded, ]);
-
+    }, [isChatExpanded, onExpandChange, isLeaderBoardExpanded]);
 
     useHandleClickOutside([spectatorChatRef], setOpenChatDropdown);
     useHandleClickOutside([spectatorsDisplayRef], setOpenPeopleDropdown);
-    useHandleClickOutside([leaderboardChatRef], setOpenLeaderBoardDropDown)
+    useHandleClickOutside([leaderboardChatRef], setOpenLeaderBoardDropDown);
 
     const users: User[] = useMemo(() => {
         const globalChat: User = {
@@ -124,10 +123,15 @@ export default function SpectatorActions({ onExpandChange }: SpectatorActionsPro
             <div
                 className={cn(
                     `fixed bottom-3 z-50 flex gap-1 border rounded-3xl p-2`,
-                    (isChatExpanded || isLeaderBoardExpanded) ? (openPeopleDropdown || openChatDropdown ? (openPeopleDropdown ? 'right-4' : 'right-150') : 'right-4') : 'right-4'
+                    isChatExpanded || isLeaderBoardExpanded
+                        ? openPeopleDropdown || openChatDropdown
+                            ? openPeopleDropdown
+                                ? 'right-4'
+                                : 'right-150'
+                            : 'right-4'
+                        : 'right-4',
                 )}
             >
-
                 <SpectatorControls
                     onClickPeople={() => {
                         setOpenChatDropdown(false);
@@ -142,10 +146,9 @@ export default function SpectatorActions({ onExpandChange }: SpectatorActionsPro
                     onClickLeaderboard={() => {
                         setOpenChatDropdown(false);
                         setOpenPeopleDropdown(false);
-                        setOpenLeaderBoardDropDown(prev => !prev);
+                        setOpenLeaderBoardDropDown((prev) => !prev);
                     }}
                 />
-
             </div>
 
             {openPeopleDropdown && (
@@ -162,26 +165,28 @@ export default function SpectatorActions({ onExpandChange }: SpectatorActionsPro
 
             {openChatDropdown && (
                 <ExpandablePanel
-                    type='chat'
+                    type="chat"
                     ref={spectatorChatRef}
                     bottomRef={bottomRef}
                     data={selectedUser}
                     selectedUser={selectedUser}
                     messages={messages}
-                    onToggleExpand={() => setIsChatExpanded(prev => !prev)}
+                    onToggleExpand={() => setIsChatExpanded((prev) => !prev)}
                     isExpanded={isChatExpanded}
                     onSendMessage={handleSendMessage}
                 />
             )}
             {openLeaderBoardDropdown && (
                 <ExpandablePanel
-                    type='leaderboard'
+                    type="leaderboard"
                     ref={leaderboardChatRef}
                     data={{
-                        title: "Leaderboard",
-                        svg: <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />
+                        title: 'Leaderboard',
+                        svg: (
+                            <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />
+                        ),
                     }}
-                    onToggleExpand={() => setIsLeaderBoardExpanded(prev => !prev)}
+                    onToggleExpand={() => setIsLeaderBoardExpanded((prev) => !prev)}
                     isExpanded={isLeaderBoardExpanded}
                 />
             )}

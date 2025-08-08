@@ -9,7 +9,11 @@ export default function SpectatorLobbyScreen() {
     return (
         <div className="h-full w-full flex select-none">
             <SpectatorLobbyLeft isChatExpanded={isExpanded} />
-            <SpectatorActions onExpandChange={(value1: boolean, value2: boolean) => setIsExpanded(value1 || value2)} />
+            <SpectatorActions
+                onExpandChange={(value1: boolean, value2: boolean) =>
+                    setIsExpanded(value1 || value2)
+                }
+            />
         </div>
     );
 }

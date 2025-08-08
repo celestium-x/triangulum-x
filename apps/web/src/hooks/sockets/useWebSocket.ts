@@ -1,6 +1,6 @@
 import { cleanWebSocketClient, getWebSocketClient } from '@/lib/singleton-socket';
 import WebSocketClient, { MessagePayload } from '@/socket/socket';
-import { ChatMessage, MESSAGE_TYPES } from '@/types/web-socket-types';
+import { MESSAGE_TYPES } from '@/types/web-socket-types';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
@@ -86,18 +86,18 @@ export const useWebSocket = () => {
             type: MESSAGE_TYPES.REACTION_EVENT,
             payload: payload,
         };
-        if(socket.current) {
+        if (socket.current) {
             socket.current.send_message(message);
         }
     }
-    
+
     function handleSendChatMessage(payload: unknown) {
         const message: MessagePayload = {
             type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
             payload: payload,
         };
 
-        if(socket.current) {
+        if (socket.current) {
             socket.current.send_message(message);
         }
     }
@@ -111,6 +111,6 @@ export const useWebSocket = () => {
         handleSpectatorNameChangeMessage,
         handleHostQuestionPreviewPageChange,
         handleSendInteractionMessage,
-        handleSendChatMessage
+        handleSendChatMessage,
     };
 };

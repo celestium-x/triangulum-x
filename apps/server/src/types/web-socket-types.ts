@@ -58,8 +58,8 @@ export interface ChatMessage {
     message: string;
     timestamp: number;
     chatReactions: {
-        id: string,
-        name: string,
-        avatar: string, 
-    }[]
+        id: string;
+        name: string;
+        avatar: string;
+    }[];
 }

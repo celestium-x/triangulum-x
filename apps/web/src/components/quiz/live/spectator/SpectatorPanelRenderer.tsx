@@ -27,7 +27,7 @@ export default function SpectatorPanelRenderer() {
             case 'SETTINGS':
                 return <SpectatorSettingsPanel />;
             default:
-                return <></>
+                return <></>;
         }
     }
 
