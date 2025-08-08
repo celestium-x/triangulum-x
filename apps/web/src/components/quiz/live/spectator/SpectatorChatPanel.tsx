@@ -5,7 +5,9 @@ import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { cn } from '@/lib/utils';
 import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
 import { useLiveSpectatorStore } from '@/store/live-quiz/useLiveQuizUserStore';
+import { InteractionEnum, SpectatorType } from '@/types/prisma-types';
 import { ChatMessage, MESSAGE_TYPES } from '@/types/web-socket-types';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from "react-icons/hi";
@@ -37,10 +39,12 @@ export default function SpectatorChatPanel() {
     }, []);
 
     function handleSendMessage() {
-        
-        if(!inputRef.current || !spectatorData) return;
+
+        if (!inputRef.current || !spectatorData) return;
 
         const message = inputRef.current.value;
+
+        if (message.length === 0) return;
 
         const chat: ChatMessage = {
             id: uuid(),
@@ -54,6 +58,7 @@ export default function SpectatorChatPanel() {
 
         setMessages([...messages, chat]);
         handleSendChatMessage(chat);
+        inputRef.current.value = '';
     }
 
     return (
@@ -74,14 +79,10 @@ export default function SpectatorChatPanel() {
             </div>
             <div className='relative h-fit w-full flex flex-col justify-end items-start p-2 overflow-y-auto'>
                 <div className='h-full w-full overflow-y-auto custom-scrollbar '>
-                    {messages.map((message, index) => (
-                        <div
-                            className='flex justify-center items-center p-2 '
-                            key={index}
-                        >
-                            {message.message}
-                        </div>
-                    ))}
+                    <MessagesRenderer
+                        messages={messages}
+                        spectatorData={spectatorData!}
+                    />
                 </div>
                 <div className={cn(
                     'w-full px-2 gap-x-2 flex justify-center items-center',
@@ -101,7 +102,7 @@ export default function SpectatorChatPanel() {
                             'bg-transparent'
                         )}
                         onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-                            if(e.key === 'Enter') {
+                            if (e.key === 'Enter') {
                                 e.preventDefault();
                                 handleSendMessage();
                             }
@@ -113,6 +114,122 @@ export default function SpectatorChatPanel() {
                     />
                 </div>
             </div>
+        </div>
+    );
+}
+
+function MessagesRenderer({ messages, spectatorData }: { messages: ChatMessage[], spectatorData: SpectatorType }) {
+
+    const [hoverMessage, setHoverMessage] = useState<string>('');
+
+    return <div className='w-full px-2 py-2 flex flex-col gap-y-2 '>
+        {messages.map((message, index) => (
+            <div
+                className={cn(
+                    'flex items-center gap-x-1',
+                    (message.sender_id === spectatorData.id) ? 'justify-end ' : 'justify-start '
+                )}
+                key={index}
+                onMouseEnter={() => setHoverMessage(message.id)}
+                onMouseLeave={() => setHoverMessage('')}
+            >
+                {message.sender_id !== spectatorData.id && <div className='size-[32px] rounded-full overflow-hidden '>
+                    <Image
+                        src={message.avatar}
+                        alt={message.sender_name}
+                        width={32}
+                        height={32}
+                    />
+                </div>}
+                <MessageBubble
+                    message={message.message}
+                    colored={message.sender_id === spectatorData.id}
+                    hovered={message.id === hoverMessage}
+                />
+                {message.sender_id === spectatorData.id && <div className='size-[32px] rounded-full overflow-hidden '>
+                    <Image
+                        src={message.avatar}
+                        alt={message.sender_name}
+                        width={32}
+                        height={32}
+                    />
+                </div>}
+                {/* <Reactions
+                    onReact={() => { }}
+                /> */}
+            </div>
+        ))}
+    </div>
+}
+
+function MessageBubble({ message, colored, hovered }: { message: string, colored: boolean, hovered: boolean }) {
+
+    const [react, setReact] = useState<boolean>(false);
+
+    return (
+        <div
+            className={cn(
+                'relative px-3 py-1 break-words max-w-[70%]', // limit to 70% of container width
+                colored ? 'bg-[#8e46f3]' : 'bg-neutral-400',
+                colored ? 'rounded-l-md rounded-tr-md' : 'rounded-r-md rounded-tl-md'
+            )}
+        >
+            <div className="whitespace-pre-wrap break-words">
+                {message}
+            </div>
+
+            {hovered && (
+                <div
+                    className={cn(
+                        'absolute top-1/2 -translate-y-1/2',
+                        colored ? 'left-0 -translate-x-2/3' : 'right-0 translate-x-2/3',
+                        'flex justify-center items-center gap-x-0.5 bg-neutral-600 px-1 rounded-full cursor-pointer text-[10px]'
+                    )}
+                    onClick={() => { }}
+                >
+                    <HiOutlineEmojiHappy className="size-2.5" />
+                    +
+                </div>
+            )}
+            {/* {react && (
+
+            )} */}
+        </div>
+    );
+}
+
+
+function Reactions({ onReact }: { onReact: (reaction: InteractionEnum) => void }) {
+    const reactions = ['👍', '💲', '💡', '❤️', '😀'];
+
+    const getReactionEnum = (emoji: string): InteractionEnum => {
+        switch (emoji) {
+            case '👍':
+                return InteractionEnum.THUMBS_UP;
+            case '💲':
+                return InteractionEnum.DOLLAR;
+            case '💡':
+                return InteractionEnum.BULB;
+            case '❤️':
+                return InteractionEnum.HEART;
+            case '😀':
+                return InteractionEnum.SMILE;
+            default:
+                throw new Error(`Unknown emoji: ${emoji}`);
+        }
+    };
+
+    return (
+        <div className="absolute flex justify-center items-center gap-x-2 p-2 rounded-md border ">
+            {reactions.map((reaction, index) => (
+                <div
+                    key={index}
+                    className="cursor-pointer text-base "
+                    onClick={() => onReact(getReactionEnum(reaction))}
+                >
+                    {reaction}
+                </div>
+            ))}
         </div>
     );
 }
