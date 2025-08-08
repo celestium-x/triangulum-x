@@ -4,7 +4,6 @@ import ExpandableCard from '../common/ExpandableCard';
 import SpectatorChatPanel from './SpectatorChatPanel';
 import SpectatorPeoplePanel from './SpectatorPeoplePanel';
 import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
-import SpectatorLeaderboardPanel from './SpectatorLeaderboardPanel';
 import SpectatorSettingsPanel from './SpectatorSettingsPanel';
 
 export default function SpectatorPanelRenderer() {
@@ -22,12 +21,8 @@ export default function SpectatorPanelRenderer() {
                 return <SpectatorChatPanel />;
             case 'PEOPLE':
                 return <SpectatorPeoplePanel />;
-            case 'LEADERBOARD':
-                return <SpectatorLeaderboardPanel />;
             case 'SETTINGS':
                 return <SpectatorSettingsPanel />;
-            default:
-                return <></>;
         }
     }
 

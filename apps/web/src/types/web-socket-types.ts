@@ -29,3 +29,7 @@ export interface ChatMessage {
         avatar: string;
     }[];
 }
+
+export interface SpectatorNameChangeEvent {
+    choosenNickname: string;
+}

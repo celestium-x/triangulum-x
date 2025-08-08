@@ -36,7 +36,7 @@
       "format": "cjs"
     },
     "../../packages/db/index.ts": {
-      "bytes": 851,
+      "bytes": 813,
       "imports": [
         {
           "path": "@prisma/client",
@@ -1482,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 9644,
+      "bytes": 8665,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -2004,7 +2004,23 @@
       "format": "esm"
     },
     "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
-      "bytes": 1348,
+      "bytes": 1397,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/controllers/live-quiz-controller/getParticipantsOnCall.ts": {
+      "bytes": 1362,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2020,7 +2036,7 @@
       "format": "esm"
     },
     "src/routes/index.ts": {
-      "bytes": 3074,
+      "bytes": 3250,
       "imports": [
         {
           "path": "express",
@@ -2111,6 +2127,11 @@
           "path": "src/controllers/live-quiz-controller/getSpectatorOnCall.ts",
           "kind": "import-statement",
           "original": "../controllers/live-quiz-controller/getSpectatorOnCall"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getParticipantsOnCall.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getParticipantsOnCall"
         }
       ],
       "format": "esm"
@@ -2174,7 +2195,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 6266,
+      "bytes": 6211,
       "imports": [
         {
           "path": "ioredis",
@@ -2220,7 +2241,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 3361,
+      "bytes": 3364,
       "imports": [
         {
           "path": "ioredis",
@@ -2287,7 +2308,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8029,
+      "bytes": 8051,
       "imports": [
         {
           "path": "ioredis",
@@ -2328,7 +2349,7 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 11163,
+      "bytes": 11153,
       "imports": [
         {
           "path": "ws",
@@ -2460,7 +2481,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 992481
+      "bytes": 993402
     },
     "dist/index.js": {
       "imports": [
@@ -2619,7 +2640,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1420
+          "bytesInOutput": 1501
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2850,7 +2871,7 @@
           "bytesInOutput": 2265
         },
         "src/cache/RedisCache.ts": {
-          "bytesInOutput": 7546
+          "bytesInOutput": 6671
         },
         "src/queue/DatabaseQueue.ts": {
           "bytesInOutput": 4515
@@ -2916,13 +2937,16 @@
           "bytesInOutput": 1572
         },
         "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
-          "bytesInOutput": 1035
+          "bytesInOutput": 1067
+        },
+        "src/controllers/live-quiz-controller/getParticipantsOnCall.ts": {
+          "bytesInOutput": 1055
         },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 8960
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 4556
+          "bytesInOutput": 4395
         },
         "src/sockets/QuizManager.ts": {
           "bytesInOutput": 2425
@@ -2931,10 +2955,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5938
+          "bytesInOutput": 5953
         }
       },
-      "bytes": 536701
+      "bytes": 536914
     }
   }
 }

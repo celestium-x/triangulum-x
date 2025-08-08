@@ -1,21 +1,21 @@
 'use client';
 
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import Image from 'next/image';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import { SpectatorType } from '@/types/prisma-types';
-import axios from 'axios';
-import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { QUIZ_URL } from 'routes/api_routes';
 
-interface SpectatorPeoplePanelProps {
+interface SpectatorApiResponse {
     spectators: SpectatorType[];
     hasMore: boolean;
     success: boolean;
 }
 
-export default function SpectatorPeoplePanel() {
+const SpectatorPeoplePanel = forwardRef<HTMLDivElement>((_, ref) => {
     const { quiz } = useLiveQuizStore();
     const { session } = useUserSessionStore();
     const { spectators, setSpectators, upsertSpectator } = useLiveSpectatorsStore();
@@ -23,7 +23,9 @@ export default function SpectatorPeoplePanel() {
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
+
     const containerRef = useRef<HTMLDivElement>(null);
+    const prevSpectatorsRef = useRef<SpectatorType[]>([]);
 
     const quizId = quiz?.id;
 
@@ -31,9 +33,10 @@ export default function SpectatorPeoplePanel() {
         async (pageNum: number) => {
             if (!quizId || loading || !hasMore || !session?.user.token) return;
 
-            setLoading(true);
+            if (pageNum > 0) setLoading(true);
+
             try {
-                const response = await axios.get<SpectatorPeoplePanelProps>(
+                const response = await axios.get<SpectatorApiResponse>(
                     `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
                     {
                         headers: {
@@ -42,33 +45,30 @@ export default function SpectatorPeoplePanel() {
                     },
                 );
 
-                const data = response.data;
+                if (response.data.success) {
+                    const isDifferent =
+                        JSON.stringify(response.data.spectators) !==
+                        JSON.stringify(prevSpectatorsRef.current);
 
-                if (data.success) {
-                    if (pageNum === 0) {
-                        setSpectators(data.spectators);
-                    } else {
-                        data.spectators.forEach(upsertSpectator);
+                    if (isDifferent) {
+                        if (pageNum === 0) {
+                            setSpectators(response.data.spectators);
+                        } else {
+                            response.data.spectators.forEach(upsertSpectator);
+                        }
+                        prevSpectatorsRef.current = response.data.spectators;
                     }
-                    setHasMore(data.hasMore);
+
+                    setHasMore(response.data.hasMore);
                     setPage(pageNum + 1);
                 }
             } catch (err) {
                 console.error('Failed to fetch spectators:', err);
             } finally {
-                setLoading(false);
+                if (pageNum > 0) setLoading(false);
             }
         },
-        [
-            quizId,
-            loading,
-            hasMore,
-            session?.user.token,
-            setSpectators,
-            upsertSpectator,
-            setPage,
-            setHasMore,
-        ],
+        [quizId, loading, hasMore, session?.user.token, setSpectators, upsertSpectator],
     );
 
     useEffect(() => {
@@ -88,7 +88,7 @@ export default function SpectatorPeoplePanel() {
     };
 
     return (
-        <div className="w-full h-full flex flex-col">
+        <div ref={ref} className="w-full h-full flex flex-col">
             <div
                 className="w-full h-full p-4 overflow-y-auto custom-scrollbar pt-6"
                 ref={containerRef}
@@ -118,11 +118,7 @@ export default function SpectatorPeoplePanel() {
                     ))}
                 </div>
 
-                {loading && (
-                    <div className="text-sm text-neutral-600 text-center mt-4">Loading...</div>
-                )}
-
-                {!loading && spectators.length === 0 && (
+                {!loading && spectators.length === 0 && !hasMore && (
                     <div className="text-xs text-neutral-600 text-center mt-4">
                         No spectators have joined yet
                     </div>
@@ -133,7 +129,15 @@ export default function SpectatorPeoplePanel() {
                         No more spectators
                     </div>
                 )}
+
+                {loading && hasMore && (
+                    <div className="text-sm text-neutral-600 text-center mt-4">Loading...</div>
+                )}
             </div>
         </div>
     );
-}
+});
+
+SpectatorPeoplePanel.displayName = 'SpectatorPeoplePanel';
+
+export default SpectatorPeoplePanel;

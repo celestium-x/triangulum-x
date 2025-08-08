@@ -1,15 +1,15 @@
 'use client';
 
 interface ToggleSwitchProps {
-    value: boolean;
-    onChange: (val: boolean) => void;
+    value?: boolean;
+    onChange?: (val: boolean) => void;
 }
 
 export default function OnOffToggle({ value, onChange }: ToggleSwitchProps) {
     return (
         <div
             className="relative flex w-28 h-8 bg-neutral-200 dark:bg-transparent border rounded-full p-1 cursor-pointer transition-colors duration-300"
-            onClick={() => onChange(!value)}
+            onClick={() => onChange?.(!value)}
         >
             <div
                 className={`absolute top-1 left-1 h-6 w-12 rounded-full bg-neutral-800 dark:bg-white transition-all duration-300 ${

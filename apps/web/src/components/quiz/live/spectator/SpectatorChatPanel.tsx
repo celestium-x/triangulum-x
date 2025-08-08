@@ -27,9 +27,9 @@ export default function SpectatorChatPanel() {
     }
 
     const handleIncomingChatMessage = useCallback((payload: unknown) => {
-        const messagePayload = payload as { id: string, payload: ChatMessage };
+        const messagePayload = payload as { id: string; payload: ChatMessage };
         const chat = messagePayload.payload;
-        setMessages(prev => [...prev, chat]);
+        setMessages((prev) => [...prev, chat]);
     }, []);
 
     useEffect(() => {
@@ -198,7 +198,7 @@ function MessageBubble({
                         colored ? 'left-0 -translate-x-2/3' : 'right-0 translate-x-2/3',
                         'flex justify-center items-center gap-x-0.5 bg-neutral-600 px-1 rounded-full cursor-pointer text-[10px]',
                     )}
-                    onClick={() => { }}
+                    onClick={() => {}}
                 >
                     <HiOutlineEmojiHappy className="size-2.5" />+
                 </div>
