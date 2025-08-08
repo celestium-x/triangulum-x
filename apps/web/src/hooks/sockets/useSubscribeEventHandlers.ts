@@ -3,7 +3,10 @@ import { useWebSocket } from './useWebSocket';
 import { MESSAGE_TYPES } from '@/types/web-socket-types';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { GameSessionType, ParticipantType, SpectatorType } from '@/types/prisma-types';
-import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
+import {
+    useLiveParticipantStore,
+    useLiveSpectatorStore,
+} from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 
@@ -12,6 +15,7 @@ export const useSubscribeEventHandlers = () => {
     const { upsertParticipant } = useLiveParticipantsStore();
     const { updateParticipantData } = useLiveParticipantStore();
     const { updateGameSession } = useLiveQuizStore();
+    const { updateSpectatorData } = useLiveSpectatorStore();
     const { upsertSpectator } = useLiveSpectatorsStore();
 
     function handleIncomingMessage(payload: unknown) {
@@ -41,9 +45,27 @@ export const useSubscribeEventHandlers = () => {
         upsertSpectator(payload as SpectatorType);
     }
 
+    function handleIncomingSpectatorNameChangeMessage(payload: unknown) {
+        const message = payload as SpectatorType;
+        upsertSpectator({
+            id: message.id,
+            nickname: message.nickname,
+            isNameChanged: true,
+        } as SpectatorType);
+        updateSpectatorData({
+            id: message.id,
+            nickname: message.nickname,
+            isNameChanged: true,
+        } as SpectatorType);
+    }
+
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION, handleIncomingMessage);
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE, handleIncomingNameChangeMessage);
+        subscribeToHandler(
+            MESSAGE_TYPES.SPECTATOR_NAME_CHANGE,
+            handleIncomingSpectatorNameChangeMessage,
+        );
         subscribeToHandler(MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION, handleIncomingNewSpectator);
         subscribeToHandler(
             MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,

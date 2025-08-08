@@ -105,11 +105,17 @@ interface SettingsRowProps {
     title: string;
     description: string;
     tooltip: string;
-    value: boolean;
-    onChange: (val: boolean) => void;
+    value?: boolean;
+    onChange?: (val: boolean) => void;
 }
 
-function SettingRow({ title, description, tooltip, value, onChange }: SettingsRowProps) {
+export function SettingRow({
+    title,
+    description,
+    tooltip,
+    value = false,
+    onChange,
+}: SettingsRowProps) {
     return (
         <div className="flex justify-between items-center">
             <div className="flex flex-col gap-y-0.5">

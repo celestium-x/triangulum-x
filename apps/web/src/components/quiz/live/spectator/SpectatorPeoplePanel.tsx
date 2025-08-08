@@ -24,6 +24,7 @@ export default function SpectatorPeoplePanel() {
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const prevSpectatorsRef = useRef<SpectatorType[]>([]);
 
     const quizId = quiz?.id;
 
@@ -31,7 +32,8 @@ export default function SpectatorPeoplePanel() {
         async (pageNum: number) => {
             if (!quizId || loading || !hasMore || !session?.user.token) return;
 
-            setLoading(true);
+            if (pageNum > 0) setLoading(true);
+
             try {
                 const response = await axios.get<SpectatorPeoplePanelProps>(
                     `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
@@ -45,30 +47,30 @@ export default function SpectatorPeoplePanel() {
                 const data = response.data;
 
                 if (data.success) {
-                    if (pageNum === 0) {
-                        setSpectators(data.spectators);
-                    } else {
-                        data.spectators.forEach(upsertSpectator);
+                    const isDifferent =
+                        JSON.stringify(data.spectators) !==
+                        JSON.stringify(prevSpectatorsRef.current);
+
+                    if (isDifferent) {
+                        if (pageNum === 0) {
+                            setSpectators(data.spectators);
+                        } else {
+                            data.spectators.forEach(upsertSpectator);
+                        }
+                        prevSpectatorsRef.current = data.spectators;
                     }
+
                     setHasMore(data.hasMore);
                     setPage(pageNum + 1);
                 }
             } catch (err) {
                 console.error('Failed to fetch spectators:', err);
             } finally {
-                setLoading(false);
+                // FIX: End loading only if it was set to true
+                if (pageNum > 0) setLoading(false);
             }
         },
-        [
-            quizId,
-            loading,
-            hasMore,
-            session?.user.token,
-            setSpectators,
-            upsertSpectator,
-            setPage,
-            setHasMore,
-        ],
+        [quizId, loading, hasMore, session?.user.token, setSpectators, upsertSpectator],
     );
 
     useEffect(() => {
@@ -118,11 +120,7 @@ export default function SpectatorPeoplePanel() {
                     ))}
                 </div>
 
-                {loading && (
-                    <div className="text-sm text-neutral-600 text-center mt-4">Loading...</div>
-                )}
-
-                {!loading && spectators.length === 0 && (
+                {!loading && spectators.length === 0 && !hasMore && (
                     <div className="text-xs text-neutral-600 text-center mt-4">
                         No spectators have joined yet
                     </div>
@@ -132,6 +130,10 @@ export default function SpectatorPeoplePanel() {
                     <div className="text-xs text-neutral-600 text-center mt-4">
                         No more spectators
                     </div>
+                )}
+
+                {loading && hasMore && (
+                    <div className="text-sm text-neutral-600 text-center mt-4">Loading...</div>
                 )}
             </div>
         </div>

@@ -43,7 +43,10 @@ export default async function getSpectatorOnCall(req: Request, res: Response) {
         return;
     } catch (error) {
         console.error('Error in fetching spectators: ', error);
-        res.status(500).json({ success: false, message: 'Internal server error while fetching spectators' });
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error while fetching spectators',
+        });
         return;
     }
 }

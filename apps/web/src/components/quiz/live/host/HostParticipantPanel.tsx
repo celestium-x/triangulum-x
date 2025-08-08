@@ -1,41 +1,43 @@
 'use client';
 
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
-import { SpectatorType } from '@/types/prisma-types';
+import { ParticipantType } from '@/types/prisma-types';
 import axios from 'axios';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { QUIZ_URL } from 'routes/api_routes';
 
 interface HostResponseProps {
-    spectators: SpectatorType[];
+    participants: ParticipantType[];
     hasMore: boolean;
     success: boolean;
 }
 
-export default function HostSpectatorsPanel() {
+export default function HostParticipantsPanel() {
     const { quiz } = useLiveQuizStore();
     const { session } = useUserSessionStore();
-    const { spectators, setSpectators, upsertSpectator } = useLiveSpectatorsStore();
+    const { participants, setParticipants, upsertParticipant } = useLiveParticipantsStore();
 
-    const [page, setPage] = useState<number>(0);
+    const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
-
+    const [dataFetched, setDataFetched] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const hasFetchedOnce = useRef(false);
 
     const quizId = quiz?.id;
 
-    const fetchSpectators = useCallback(
+    const fetchParticipants = useCallback(
         async (pageNum: number) => {
             if (!quizId || loading || !hasMore || !session?.user.token) return;
 
             setLoading(true);
             try {
                 const response = await axios.get<HostResponseProps>(
-                    `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
+                    `${QUIZ_URL}/${quizId}/participants?page=${pageNum}`,
                     {
                         headers: {
                             Authorization: `Bearer ${session.user.token}`,
@@ -47,27 +49,40 @@ export default function HostSpectatorsPanel() {
 
                 if (data.success) {
                     if (pageNum === 0) {
-                        setSpectators(data.spectators);
+                        setParticipants(data.participants);
                     } else {
-                        data.spectators.forEach(upsertSpectator);
+                        data.participants.forEach(upsertParticipant);
                     }
                     setHasMore(data.hasMore);
                     setPage(pageNum + 1);
+
+                    if (!data.hasMore) {
+                        setDataFetched(true);
+                    }
                 }
             } catch (err) {
-                console.error('Failed to fetch spectators:', err);
+                console.error('Failed to fetch participants:', err);
             } finally {
                 setLoading(false);
             }
         },
-        [quizId, loading, hasMore, session?.user.token, setSpectators, upsertSpectator],
+        [
+            quizId,
+            loading,
+            hasMore,
+            session?.user.token,
+            setParticipants,
+            upsertParticipant,
+            setPage,
+            setHasMore,
+        ],
     );
 
     useEffect(() => {
-        if (quizId && spectators.length === 0 && !loading) {
-            fetchSpectators(0);
-        }
-    }, [quizId, fetchSpectators, spectators.length, loading]);
+        if (!quizId || loading || dataFetched || hasFetchedOnce.current) return;
+        hasFetchedOnce.current = true;
+        fetchParticipants(0);
+    }, [quizId, fetchParticipants, loading, dataFetched]);
 
     const handleScroll = () => {
         const container = containerRef.current;
@@ -75,11 +90,9 @@ export default function HostSpectatorsPanel() {
 
         const { scrollTop, scrollHeight, clientHeight } = container;
         if (scrollTop + clientHeight >= scrollHeight - 100) {
-            fetchSpectators(page);
+            fetchParticipants(page);
         }
     };
-
-    const initialLoadDone = spectators.length > 0 || !loading;
 
     return (
         <div className="w-full h-full flex flex-col">
@@ -89,13 +102,13 @@ export default function HostSpectatorsPanel() {
                 onScroll={handleScroll}
             >
                 <div className="grid grid-cols-3 gap-6 px-4 py-3">
-                    {spectators.map((spectator) => (
+                    {participants.map((participant) => (
                         <div
-                            key={spectator.id}
+                            key={participant.id}
                             className="flex flex-col items-center text-center hover:-translate-y-0.5 transition-all transform duration-200 ease-in-out"
                         >
                             <Image
-                                src={spectator.avatar || '/default-avatar.png'}
+                                src={participant.avatar || '/default-avatar.png'}
                                 alt="userImage"
                                 width={56}
                                 height={56}
@@ -106,25 +119,25 @@ export default function HostSpectatorsPanel() {
                                 }}
                             />
                             <span className="mt-2 text-[13px] text-dark-primary dark:text-neutral-300 break-words max-w-[5rem]">
-                                {spectator.nickname?.split(' ')[0]}
+                                {participant.nickname?.split(' ')[0]}
                             </span>
                         </div>
                     ))}
                 </div>
 
-                {loading && initialLoadDone && (
+                {loading && (
                     <div className="text-sm text-neutral-600 text-center mt-4">Loading...</div>
                 )}
 
-                {!loading && spectators.length === 0 && (
+                {!loading && participants.length === 0 && (
                     <div className="text-xs text-neutral-600 text-center mt-4">
-                        No spectators have joined yet
+                        No participants have joined yet
                     </div>
                 )}
 
-                {!loading && spectators.length > 0 && !hasMore && (
+                {!loading && participants.length > 0 && !hasMore && (
                     <div className="text-xs text-neutral-600 text-center mt-4">
-                        No more spectators
+                        No more participants
                     </div>
                 )}
             </div>

@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import ExpandableCard from '../common/ExpandableCard';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
-import HostSpectatorsPanel from './HostSpectatorsPanel';
 import HostChatsPanel from './HostChatsPanel';
 import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
 import HostSettingsPanel from './HostSettingsPanel';
+import HostPeoplePanel from './HostPeoplePanel';
 
 export default function HostPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ export default function HostPanelRenderer() {
             case 'CHAT':
                 return <HostChatsPanel />;
             case 'PEOPLE':
-                return <HostSpectatorsPanel />;
+                return <HostPeoplePanel />;
             case 'SETTINGS':
                 return <HostSettingsPanel />;
         }
