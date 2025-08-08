@@ -6,7 +6,7 @@ import {
     PubSubMessageTypes,
 } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
-import prisma from '@repo/db/client';
+import prisma, { HostScreen, ParticipantScreen, Quiz, SpectatorScreen } from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import { WebSocket } from 'ws';
 import DatabaseQueue from '../queue/DatabaseQueue';
@@ -60,7 +60,7 @@ export default class HostManager {
         ws.id = this.generateSocketId();
         this.socketMapping.set(ws.id, ws);
         this.sessionHostMapping.set(payload.gameSessionId, ws.id);
-        this.quizManager.onHostconnect(payload.gameSessionId, ws.id);
+        this.quizManager.onHostconnect(payload.gameSessionId, payload.quizId, ws.id);
         this.setup_message_handlers(ws);
     }
 
@@ -94,21 +94,29 @@ export default class HostManager {
     }
 
     private async handle_question_launch(payload: any, ws: CustomWebSocket) {
-        // payload -> questionId
-        const { questionId } = payload;
+        const { questionId, questionIndex } = payload;
         const { gameSessionId: game_session_id } = ws.user;
 
+        const quiz = await this.redis_cache.get_quiz(game_session_id);
 
+        if (!quiz) {
+            throw new Error('Quiz doesn\'t exist in game_session');
+        }
+
+        const question = quiz.questions?.[questionIndex];
+
+        if (!question) {
+            throw new Error('Questions doesn\'t exist in quiz');
+        }
 
         await this.database_queue.update_game_session(
             game_session_id,
             {
-                currentQuestionIndex: ,
+                currentQuestionIndex: questionIndex,
                 currentQuestionId: questionId,
-                hostScreen: ,
-                spectatorScreen: ,
-                participantScreen: ,
-                questionStartedAt: ,
+                hostScreen: HostScreen.QUESTION_READING,
+                spectatorScreen: SpectatorScreen.QUESTION_READING,
+                participantScreen: ParticipantScreen.QUESTION_READING,
             },
             game_session_id
         );

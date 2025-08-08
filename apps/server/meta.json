@@ -36,8 +36,13 @@
       "format": "cjs"
     },
     "../../packages/db/index.ts": {
-      "bytes": 761,
+      "bytes": 851,
       "imports": [
+        {
+          "path": "@prisma/client",
+          "kind": "import-statement",
+          "external": true
+        },
         {
           "path": "@prisma/client",
           "kind": "import-statement",
@@ -302,7 +307,7 @@
       "format": "esm"
     },
     "src/class/s3Client.ts": {
-      "bytes": 1732,
+      "bytes": 1784,
       "imports": [
         {
           "path": "@aws-sdk/client-s3",
@@ -318,6 +323,11 @@
           "path": "../../node_modules/uuid/dist/esm-node/index.js",
           "kind": "import-statement",
           "original": "uuid"
+        },
+        {
+          "path": "../../node_modules/dotenv/lib/main.js",
+          "kind": "import-statement",
+          "original": "dotenv"
         }
       ],
       "format": "esm"
@@ -1472,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 6666,
+      "bytes": 9644,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1560,7 +1570,7 @@
       "format": "esm"
     },
     "src/class/quizAction.ts": {
-      "bytes": 3213,
+      "bytes": 3258,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -1717,7 +1727,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1681,
+      "bytes": 1474,
       "imports": [
         {
           "path": "ws",
@@ -1780,7 +1790,7 @@
       "format": "esm"
     },
     "src/class/generateUser.ts": {
-      "bytes": 3954,
+      "bytes": 3767,
       "imports": [],
       "format": "esm"
     },
@@ -1993,8 +2003,24 @@
       ],
       "format": "esm"
     },
+    "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
+      "bytes": 1348,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/routes/index.ts": {
-      "bytes": 2909,
+      "bytes": 3074,
       "imports": [
         {
           "path": "express",
@@ -2080,6 +2106,11 @@
           "path": "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts",
           "kind": "import-statement",
           "original": "../controllers/live-quiz-controller/getSelectedQuestionDetails"
+        },
+        {
+          "path": "src/controllers/live-quiz-controller/getSpectatorOnCall.ts",
+          "kind": "import-statement",
+          "original": "../controllers/live-quiz-controller/getSpectatorOnCall"
         }
       ],
       "format": "esm"
@@ -2143,7 +2174,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 4294,
+      "bytes": 6266,
       "imports": [
         {
           "path": "ioredis",
@@ -2189,7 +2220,7 @@
       "format": "esm"
     },
     "src/sockets/QuizManager.ts": {
-      "bytes": 2986,
+      "bytes": 3361,
       "imports": [
         {
           "path": "ioredis",
@@ -2215,7 +2246,7 @@
       "format": "esm"
     },
     "src/sockets/ParticipantManager.ts": {
-      "bytes": 7549,
+      "bytes": 8149,
       "imports": [
         {
           "path": "ioredis",
@@ -2256,7 +2287,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 7475,
+      "bytes": 8029,
       "imports": [
         {
           "path": "ioredis",
@@ -2297,7 +2328,7 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 10270,
+      "bytes": 11163,
       "imports": [
         {
           "path": "ws",
@@ -2429,7 +2460,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 979017
+      "bytes": 992481
     },
     "dist/index.js": {
       "imports": [
@@ -2470,6 +2501,11 @@
         },
         {
           "path": "jsonwebtoken",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "@prisma/client",
           "kind": "require-call",
           "external": true
         },
@@ -2583,19 +2619,19 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1344
+          "bytesInOutput": 1420
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
         },
         "../../packages/db/index.ts": {
-          "bytesInOutput": 296
+          "bytesInOutput": 344
         },
         "src/middlewares/authMiddleware.ts": {
           "bytesInOutput": 950
         },
         "src/class/s3Client.ts": {
-          "bytesInOutput": 1421
+          "bytesInOutput": 1502
         },
         "../../node_modules/uuid/dist/esm-node/rng.js": {
           "bytesInOutput": 301
@@ -2811,10 +2847,10 @@
           "bytesInOutput": 0
         },
         "src/schemas/createQuizSchema.ts": {
-          "bytesInOutput": 2262
+          "bytesInOutput": 2265
         },
         "src/cache/RedisCache.ts": {
-          "bytesInOutput": 5236
+          "bytesInOutput": 7546
         },
         "src/queue/DatabaseQueue.ts": {
           "bytesInOutput": 4515
@@ -2823,7 +2859,7 @@
           "bytesInOutput": 1114
         },
         "src/class/quizAction.ts": {
-          "bytesInOutput": 2400
+          "bytesInOutput": 2439
         },
         "src/controllers/quiz-controller/quizController.ts": {
           "bytesInOutput": 8429
@@ -2850,7 +2886,7 @@
           "bytesInOutput": 1146
         },
         "src/class/generateUser.ts": {
-          "bytesInOutput": 3669
+          "bytesInOutput": 3482
         },
         "src/schemas/participantJoinSchema.ts": {
           "bytesInOutput": 124
@@ -2879,23 +2915,26 @@
         "src/controllers/live-quiz-controller/getSelectedQuestionDetails.ts": {
           "bytesInOutput": 1572
         },
+        "src/controllers/live-quiz-controller/getSpectatorOnCall.ts": {
+          "bytesInOutput": 1035
+        },
         "src/sockets/WebSocketServer.ts": {
-          "bytesInOutput": 8244
+          "bytesInOutput": 8960
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 2909
+          "bytesInOutput": 4556
         },
         "src/sockets/QuizManager.ts": {
-          "bytesInOutput": 2124
+          "bytesInOutput": 2425
         },
         "src/sockets/ParticipantManager.ts": {
-          "bytesInOutput": 5542
+          "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5485
+          "bytesInOutput": 5938
         }
       },
-      "bytes": 529625
+      "bytes": 536701
     }
   }
 }

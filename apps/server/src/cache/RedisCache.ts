@@ -1,12 +1,16 @@
-import { GameSession, Spectator } from '@repo/db/client';
+import { GameSession, Question, Spectator } from '@repo/db/client';
 import Redis from 'ioredis';
-import { Participant } from '@repo/db/client';
+import { Participant, Quiz } from '@repo/db/client';
 import { ChatMessage } from '../types/web-socket-types';
 
 const SECONDS = 60;
 const MINUTES = 60;
 const HOURS = 24;
 const REDIS_URL = process.env.REDIS_URL;
+
+type QuizWithQuestions = Quiz & {
+    questions: Question[];
+};
 
 export default class RedisCache {
     private redis_cache: Redis;
@@ -196,5 +200,61 @@ export default class RedisCache {
 
     private get_game_session_chats_key(game_session_id: string) {
         return `game_session:${game_session_id}:chats`;
+    }
+
+    //  <------------------ QUIZ ------------------>
+
+    public async set_quiz(game_session_id: string, quiz_id: string, quiz: Partial<Quiz>) {
+        try {
+            const key = this.get_quiz_key(game_session_id);
+
+            const entries: [string, string][] = Object.entries(quiz).map(
+                ([key, value]) => [key, JSON.stringify(value)],
+            );
+            await this.redis_cache.hset(key, ...entries.flat());
+            await this.redis_cache.expire(key, SECONDS * MINUTES * HOURS);
+
+            const data = await this.get_quiz(game_session_id);
+            console.log("quiz data in redis: ", data)
+
+
+        } catch (error) {
+            console.error('Error while setting quiz in cache : ', error);
+        }
+    }
+
+    public async get_quiz(game_session_id: string): Promise<Partial<QuizWithQuestions> | null> {
+        try {
+            const key = this.get_quiz_key(game_session_id);
+            const data = await this.redis_cache.hgetall(key);
+
+            if (Object.keys(data).length === 0) return null;
+
+            const parsed: Partial<Quiz> = {};
+            for (const [key, value] of Object.entries(data)) {
+                try {
+                    const parsedValue = JSON.parse(value);
+
+                    parsed[key as keyof Quiz] = parsedValue;
+                } catch (parseError) {
+
+                    if (key === 'questions') {
+                        console.error(`Critical field 'questions' failed to parse. Raw value:`, value);
+                        return null;
+                    }
+
+                    parsed[key as keyof Quiz] = value as any;
+                }
+            }
+
+            return parsed as Partial<QuizWithQuestions>;
+        } catch (error) {
+            console.error('RedisCache error get_quiz : ', error);
+            return null;
+        }
+    }
+
+    private get_quiz_key(game_session_id: string): string {
+        return `game_session:${game_session_id}:quiz`;
     }
 }
