@@ -129,15 +129,17 @@ model Spectator {
 }
 
 model GameSession {
-  id                   String            @id @default(cuid())
-  currentQuestionIndex Int               @default(0)
+  id                   String        @id @default(cuid())
+  currentQuestionIndex Int           @default(0)
   currentQuestionId    String?
-  status               SessionStatus     @default(WAITING)
-  hostScreen           HostScreen        @default(LOBBY)
-  participantScreen    ParticipantScreen @default(LOBBY)
-  spectatorScreen      SpectatorScreen   @default(LOBBY)
-  questionStartedAt    DateTime?
-  questionEndsAt       DateTime?
+  status               SessionStatus @default(WAITING)
+
+  hostScreen        HostScreen        @default(LOBBY)
+  participantScreen ParticipantScreen @default(LOBBY)
+  spectatorScreen   SpectatorScreen   @default(LOBBY)
+
+  questionStartedAt DateTime?
+  questionEndsAt    DateTime?
 
   lastEliminationAt Int?
   nextEliminationAt Int?
@@ -151,6 +153,10 @@ model GameSession {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  currentPhase   QuizPhase? // e.g. QUESTION_READING, QUESTION_ACTIVE, SHOW_RESULTS
+  phaseStartTime DateTime? // when current phase started (absolute time from server)
+  phaseEndTime   DateTime?
 
   quizId       String        @unique
   quiz         Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
@@ -263,4 +269,11 @@ enum HostScreen {
   LOBBY
   QUESTION_PREVIEW
   QUESTION_READING // 5 seconds
+}
+
+enum QuizPhase {
+  QUESTION_READING
+  QUESTION_ACTIVE
+  SHOW_RESULTS
+  WAITING_NEXT
 }
