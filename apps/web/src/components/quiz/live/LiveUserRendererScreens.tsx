@@ -12,11 +12,10 @@ import { cn } from '@/lib/utils';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
-    const { quiz, gameSession } = useLiveQuizStore();
+    const { quiz } = useLiveQuizStore();
     const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
     useWebSocket();
     useSubscribeEventHandlers();
-    console.log("game session is : ", gameSession);
     function renderCurrentUserScreen() {
         switch (currentUserType) {
             case 'HOST':
