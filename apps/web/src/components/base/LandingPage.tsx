@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { HoverBorderGradient } from '../ui/HoverBorderGradient';
 import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
+import SafariBrowser from '../ui/SafariBrowser';
 
 
 export default function LandingPage() {
@@ -41,7 +42,7 @@ export default function LandingPage() {
                     live quiz challenges, and earn rewards for their knowledge.
                 </div>
             </div>
-            <div className="relative mx-auto flex items-center justify-center mt-8 border-dashed border dark:border-neutral-600 border-neutral-600 w-fit rounded-[24px] p-2 z-50 dark:bg-dark-base bg-light-base">
+            {/* <div className="relative mx-auto flex items-center justify-center mt-8 border-dashed border dark:border-neutral-600 border-neutral-600 w-fit rounded-[24px] p-2 z-50 dark:bg-dark-base bg-light-base">
                 <Image
                     src={'/images/dashboard-ui2.png'}
                     width={1200}
@@ -50,7 +51,12 @@ export default function LandingPage() {
                     unoptimized={true}
                     className="rounded-[16px] border-[1px] dark:border-neutral-600 border-neutral-600"
                 />
-            </div>
+            </div> */}
+            <SafariBrowser
+                url='https://triangulum.com'
+                imageSrc='/images/dashboard-ui2.png'
+                className='relative mx-auto flex items-center justify-center mt-8 z-50'
+            />
         </div>
     );
 }
