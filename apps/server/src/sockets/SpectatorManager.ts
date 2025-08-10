@@ -222,7 +222,10 @@ export default class SpectatorManager {
                 id: ws.user.userId,
                 payload: payload,
             },
+            exclude_socket_id: ws.user.userId,
         };
+
+        
 
         this.quizManager.publish_event_to_redis(gameSessionId, event_data);
     }

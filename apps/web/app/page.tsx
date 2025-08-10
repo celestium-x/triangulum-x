@@ -7,6 +7,7 @@ import FeatureArcComponent from '@/components/base/FeatureArcComponent';
 
 export default function Home() {
     return (
+<<<<<<< HEAD
         <div
             className={cn(
                 'w-full max-h-screen h-screen relative',
@@ -18,6 +19,17 @@ export default function Home() {
             <div className="pt-30 h-full relative">
                 <Beam className="absolute top-30 left-60" />
                 <Beam className="absolute top-[40%] right-40 rotate-180" />
+=======
+        <div className={cn(
+            'w-full max-h-screen h-screen relative ',
+            'bg-light-base dark:bg-dark-primary',
+        )}>
+            <Navbar />
+            <Spotlight />
+            <div className="pt-30 h-full relative ">
+                <Beam className='absolute top-30 left-60' />
+                <Beam className='absolute top-[40%] right-40 rotate-180' />
+>>>>>>> c5555e0 (spectator buffer logic and migration delete)
                 <LandingPage />
                 <FeatureArcComponent />
             </div>

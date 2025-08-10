@@ -9,6 +9,7 @@ import { InteractionEnum, SpectatorType } from '@/types/prisma-types';
 import { ChatMessage, MESSAGE_TYPES } from '@/types/web-socket-types';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MdOutlineAddReaction } from "react-icons/md";
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
@@ -29,6 +30,9 @@ export default function SpectatorChatPanel() {
     const handleIncomingChatMessage = useCallback((payload: unknown) => {
         const messagePayload = payload as { id: string; payload: ChatMessage };
         const chat = messagePayload.payload;
+        if (chat.sender_id === spectatorData?.id) {
+            return;
+        }
         setMessages((prev) => [...prev, chat]);
     }, []);
 
@@ -196,11 +200,11 @@ function MessageBubble({
                     className={cn(
                         'absolute top-1/2 -translate-y-1/2',
                         colored ? 'left-0 -translate-x-2/3' : 'right-0 translate-x-2/3',
-                        'flex justify-center items-center gap-x-0.5 bg-neutral-600 px-1 rounded-full cursor-pointer text-[10px]',
+                        'flex justify-center items-center gap-x-0.5 dark:text-neutral-400 rounded-full cursor-pointer text-[10px]',
                     )}
-                    onClick={() => {}}
+                    onClick={() => { }}
                 >
-                    <HiOutlineEmojiHappy className="size-2.5" />+
+                    <MdOutlineAddReaction className="size-4" fill='white'/>
                 </div>
             )}
             {/* {react && (

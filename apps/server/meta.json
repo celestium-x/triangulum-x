@@ -2308,7 +2308,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8051,
+      "bytes": 8108,
       "imports": [
         {
           "path": "ioredis",
@@ -2481,7 +2481,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 993402
+      "bytes": 993490
     },
     "dist/index.js": {
       "imports": [
@@ -2955,10 +2955,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5953
+          "bytesInOutput": 5994
         }
       },
-      "bytes": 536914
+      "bytes": 536955
     }
   }
 }
