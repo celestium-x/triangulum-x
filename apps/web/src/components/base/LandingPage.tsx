@@ -3,16 +3,14 @@ import { HoverBorderGradient } from '../ui/HoverBorderGradient';
 import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
 import SafariBrowser from '../ui/SafariBrowser';
 
-
 export default function LandingPage() {
-
     return (
         <div>
             <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4 relative z-50">
-                <div className='absolute bottom-0 -z-10'>
+                <div className="absolute bottom-0 -z-10">
                     <AnimatedSvgCircles />
                 </div>
-                
+
                 <HoverBorderGradient
                     containerClassName="rounded-full"
                     as="button"
@@ -53,9 +51,9 @@ export default function LandingPage() {
                 />
             </div> */}
             <SafariBrowser
-                url='https://triangulum.com'
-                imageSrc='/images/dashboard-ui2.png'
-                className='relative mx-auto flex items-center justify-center mt-8 z-50'
+                url="https://triangulum.com"
+                imageSrc="/images/dashboard-ui2.png"
+                className="relative mx-auto flex items-center justify-center mt-8 z-50"
             />
         </div>
     );

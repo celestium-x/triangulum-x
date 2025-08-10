@@ -7,15 +7,17 @@ import FeatureArcComponent from '@/components/base/FeatureArcComponent';
 
 export default function Home() {
     return (
-        <div className={cn(
-            'w-full max-h-screen h-screen relative',
-            'bg-light-base dark:bg-dark-primary',
-        )}>
+        <div
+            className={cn(
+                'w-full max-h-screen h-screen relative',
+                'bg-light-base dark:bg-dark-primary',
+            )}
+        >
             <Navbar />
             <Spotlight />
             <div className="pt-30 h-full relative">
-                <Beam className='absolute top-30 left-60' />
-                <Beam className='absolute top-[40%] right-40 rotate-180' />
+                <Beam className="absolute top-30 left-60" />
+                <Beam className="absolute top-[40%] right-40 rotate-180" />
                 <LandingPage />
                 <FeatureArcComponent />
             </div>

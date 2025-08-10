@@ -27,7 +27,7 @@ export type {
   Response,
   Elimination,
   ChatMessage,
-  ChatReaction
+  ChatReaction,
 } from "@prisma/client";
 
 // Enum types ----------------------------->

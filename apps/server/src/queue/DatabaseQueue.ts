@@ -1,6 +1,14 @@
 import { JobOption, QueueJobTypes } from '../types/database-queue-types';
 import Bull from 'bull';
-import prisma, { GameSession, Participant, Prisma, Quiz, Spectator, ChatMessage, ChatReaction } from '@repo/db/client';
+import prisma, {
+    GameSession,
+    Participant,
+    Prisma,
+    Quiz,
+    Spectator,
+    ChatMessage,
+    ChatReaction,
+} from '@repo/db/client';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
 const REDIS_URL = process.env.REDIS_URL;
@@ -30,15 +38,15 @@ interface UpdateQuizJobType {
 }
 
 interface CreateChatMessageJobType {
-    id: string,
-    game_session_id: string,
-    chatMessage: Prisma.ChatMessageCreateInput
+    id: string;
+    game_session_id: string;
+    chatMessage: Prisma.ChatMessageCreateInput;
 }
 
 interface CreateChatReactionJobType {
-    id: string,
-    chatMessageId: string,
-    chatReaction: Prisma.ChatReactionCreateInput
+    id: string;
+    chatMessageId: string;
+    chatReaction: Prisma.ChatReactionCreateInput;
 }
 
 export default class DatabaseQueue {
@@ -83,7 +91,7 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.CREATE_CHAT_REACTION,
             this.create_chat_reaction_processor.bind(this),
-        )
+        );
     }
 
     private async update_spectator_processor(
@@ -188,7 +196,9 @@ export default class DatabaseQueue {
 
     private async create_chat_message_processor(
         job: Bull.Job,
-    ): Promise<{ success: boolean; chatMessage: ChatMessage } | { success: boolean; error: string }> {
+    ): Promise<
+        { success: boolean; chatMessage: ChatMessage } | { success: boolean; error: string }
+    > {
         try {
             const { game_session_id, chatMessage }: CreateChatMessageJobType = job.data;
 
@@ -201,8 +211,8 @@ export default class DatabaseQueue {
             await this.redis_cache.add_chat_message(game_session_id, createChatMessage);
             return {
                 success: true,
-                chatMessage: createChatMessage
-            }
+                chatMessage: createChatMessage,
+            };
         } catch (error) {
             console.error('Error while processing chat message create: ', error);
             return {
@@ -214,22 +224,23 @@ export default class DatabaseQueue {
 
     private async create_chat_reaction_processor(
         job: Bull.Job,
-    ): Promise<{ success: boolean; chatReaction: ChatReaction } | { success: boolean; error: string }> {
+    ): Promise<
+        { success: boolean; chatReaction: ChatReaction } | { success: boolean; error: string }
+    > {
         try {
             const { chatReaction }: CreateChatReactionJobType = job.data;
 
             const createChatReaction = await prisma.chatReaction.create({
                 data: {
-                    ...chatReaction
-                }
+                    ...chatReaction,
+                },
             });
 
             // add this to redis
             return {
                 success: true,
-                chatReaction: createChatReaction
+                chatReaction: createChatReaction,
             };
-
         } catch (error) {
             console.error('Error while processing chat reaction create: ', error);
             return {
@@ -296,7 +307,7 @@ export default class DatabaseQueue {
         game_session_id: string,
         quiz_id: string,
         chatMessage: Prisma.ChatMessageCreateInput,
-        options?: Partial<JobOption>
+        options?: Partial<JobOption>,
     ) {
         return await this.database_queue.add(
             QueueJobTypes.CREATE_CHAT_MESSAGE,
@@ -309,12 +320,12 @@ export default class DatabaseQueue {
         id: string,
         chat_message_id: string,
         chat_reaction: Prisma.ChatReactionCreateInput,
-        options?: Partial<JobOption>
+        options?: Partial<JobOption>,
     ) {
         return await this.database_queue.add(
             QueueJobTypes.CREATE_CHAT_REACTION,
             { id, chat_message_id, chat_reaction },
-            { ...this.default_job_options, ...options }
+            { ...this.default_job_options, ...options },
         );
     }
 }
