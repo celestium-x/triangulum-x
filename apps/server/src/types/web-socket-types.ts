@@ -50,16 +50,16 @@ export interface SpectatorNameChangeEvent {
     choosenNickname: string;
 }
 
-export interface ChatMessage {
-    id: string;
-    sender_id: string;
-    sender_name: string;
-    avatar: string;
-    message: string;
-    timestamp: number;
-    chatReactions: {
-        id: string;
-        name: string;
-        avatar: string;
-    }[];
-}
+// export interface ChatMessage {
+//     id: string;
+//     sender_id: string;
+//     sender_name: string;
+//     avatar: string;
+//     message: string;
+//     timestamp: number;
+//     chatReactions: {
+//         id: string;
+//         name: string;
+//         avatar: string;
+//     }[];
+// }
