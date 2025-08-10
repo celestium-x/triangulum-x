@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';
 import { Spotlight } from '@/components/ui/Spotlight';
 import Beam from '@/components/ui/svg/Beam';
+import FeatureArcComponent from '@/components/base/FeatureArcComponent';
 
 export default function Home() {
     return (
@@ -16,6 +17,7 @@ export default function Home() {
                 <Beam className='absolute top-30 left-60' />
                 <Beam className='absolute top-[40%] right-40 rotate-180' />
                 <LandingPage />
+                <FeatureArcComponent />
             </div>
         </div>
     );
