@@ -36,7 +36,7 @@
       "format": "cjs"
     },
     "../../packages/db/index.ts": {
-      "bytes": 813,
+      "bytes": 844,
       "imports": [
         {
           "path": "@prisma/client",
@@ -1482,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 8665,
+      "bytes": 8841,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1498,22 +1498,17 @@
           "path": "@repo/db/client",
           "kind": "import-statement",
           "external": true
-        },
-        {
-          "path": "../types/web-socket-types",
-          "kind": "import-statement",
-          "external": true
         }
       ],
       "format": "esm"
     },
     "src/types/database-queue-types.ts": {
-      "bytes": 335,
+      "bytes": 435,
       "imports": [],
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 7058,
+      "bytes": 11121,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1727,7 +1722,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1474,
+      "bytes": 1695,
       "imports": [
         {
           "path": "ws",
@@ -2308,7 +2303,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8051,
+      "bytes": 8984,
       "imports": [
         {
           "path": "ioredis",
@@ -2481,7 +2476,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 993402
+      "bytes": 1000743
     },
     "dist/index.js": {
       "imports": [
@@ -2871,10 +2866,10 @@
           "bytesInOutput": 2265
         },
         "src/cache/RedisCache.ts": {
-          "bytesInOutput": 6671
+          "bytesInOutput": 6880
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 4515
+          "bytesInOutput": 6957
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2955,10 +2950,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 5953
+          "bytesInOutput": 6693
         }
       },
-      "bytes": 536914
+      "bytes": 540305
     }
   }
 }

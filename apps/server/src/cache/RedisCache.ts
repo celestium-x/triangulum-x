@@ -190,6 +190,12 @@ export default class RedisCache {
         }
     }
 
+    // public async update_chat_message(game_session_id: string, messageId: string) {
+    //     try {
+    //         const key = this.get_game_session_chats_key(game_session_id);
+    //     } catch (error) {}
+    // }
+
     private get_game_session_chats_key(game_session_id: string) {
         return `game_session:${game_session_id}:chats`;
     }

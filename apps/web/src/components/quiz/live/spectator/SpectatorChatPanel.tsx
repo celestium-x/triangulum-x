@@ -9,6 +9,7 @@ import { InteractionEnum, SpectatorType } from '@/types/prisma-types';
 import { ChatMessage, MESSAGE_TYPES } from '@/types/web-socket-types';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MdOutlineAddReaction } from 'react-icons/md';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
@@ -18,7 +19,7 @@ export default function SpectatorChatPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForSpectatorStore();
     const { spectatorData } = useLiveSpectatorStore();
     const { subscribeToHandler, unsubscribeToHandler, handleSendChatMessage } = useWebSocket();
-
+    const [_reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
 
@@ -29,8 +30,11 @@ export default function SpectatorChatPanel() {
     const handleIncomingChatMessage = useCallback((payload: unknown) => {
         const messagePayload = payload as { id: string; payload: ChatMessage };
         const chat = messagePayload.payload;
+
+        if (chat.sender_id === spectatorData?.id) return;
+
         setMessages((prev) => [...prev, chat]);
-    }, []);
+    }, [spectatorData?.id]);
 
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
@@ -77,7 +81,7 @@ export default function SpectatorChatPanel() {
                     </div>
                 </ToolTipComponent>
             </div>
-            <div className="relative h-fit w-full flex flex-col justify-end items-start p-2 overflow-y-auto">
+            <div className="relative h-fit w-full flex flex-col justify-end items-start p-2 overflow-y-auto custom-scrollbar">
                 <div className="h-full w-full overflow-y-auto custom-scrollbar ">
                     <MessagesRenderer messages={messages} spectatorData={spectatorData!} />
                 </div>
@@ -88,15 +92,19 @@ export default function SpectatorChatPanel() {
                         'dark:bg-input/30',
                     )}
                 >
-                    <HiOutlineEmojiHappy className="size-7 p-1 hover:bg-neutral-900 rounded-full cursor-pointer " />
+                    <span
+                        onClick={() => setReactionAppear((prev) => !prev)}
+                        className="dark:text-neutral-200  rounded-full p-1.5 transition-colors duration-200"
+                    >
+                        <HiOutlineEmojiHappy className="size-4 dark:text-neutral-400 text-neutral-800 rounded-full cursor-pointer" />
+                    </span>
                     <TextArea
                         autogrow
                         ref={inputRef}
                         className={cn(
-                            'w-full min-h-10 max-h-40 overflow-y-auto resize-none border-none ',
-                            'py-2 px-1',
+                            'w-full min-h-10 max-h-40 overflow-y-auto resize-none',
                             'focus-visible:ring-0',
-                            'bg-transparent',
+                            'bg-transparent dark:text-neutral-200 text-neutral-950 text-sm',
                         )}
                         onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                             if (e.key === 'Enter') {
@@ -105,10 +113,12 @@ export default function SpectatorChatPanel() {
                             }
                         }}
                     />
-                    <MdChevronRight
-                        className="size-7 p-1 hover:bg-neutral-900 rounded-full cursor-pointer"
-                        onClick={handleSendMessage}
-                    />
+                    <span className="dark:text-neutral-200 dark:hover:bg-neutral-950 rounded-full p-1.5 transition-colors duration-200">
+                        <MdChevronRight
+                            className="size-4 rounded-full "
+                            onClick={handleSendMessage}
+                        />
+                    </span>
                 </div>
             </div>
         </div>
@@ -123,49 +133,62 @@ function MessagesRenderer({
     spectatorData: SpectatorType;
 }) {
     const [hoverMessage, setHoverMessage] = useState<string>('');
+    const [activeReactionMessage, setActiveReactionMessage] = useState<string | null>(null);
+
+    const handleToggleReaction = (messageId: string) => {
+        setActiveReactionMessage((prev) => (prev === messageId ? null : messageId));
+    };
 
     return (
         <div className="w-full px-2 py-2 flex flex-col gap-y-2 ">
-            {messages.map((message, index) => (
-                <div
-                    className={cn(
-                        'flex items-center gap-x-1',
-                        message.sender_id === spectatorData.id ? 'justify-end ' : 'justify-start ',
-                    )}
-                    key={index}
-                    onMouseEnter={() => setHoverMessage(message.id)}
-                    onMouseLeave={() => setHoverMessage('')}
-                >
-                    {message.sender_id !== spectatorData.id && (
-                        <div className="size-[32px] rounded-full overflow-hidden ">
-                            <Image
-                                src={message.avatar}
-                                alt={message.sender_name}
-                                width={32}
-                                height={32}
-                            />
-                        </div>
-                    )}
-                    <MessageBubble
-                        message={message.message}
-                        colored={message.sender_id === spectatorData.id}
-                        hovered={message.id === hoverMessage}
-                    />
-                    {message.sender_id === spectatorData.id && (
-                        <div className="size-[32px] rounded-full overflow-hidden ">
-                            <Image
-                                src={message.avatar}
-                                alt={message.sender_name}
-                                width={32}
-                                height={32}
-                            />
-                        </div>
-                    )}
-                    {/* <Reactions
-                    onReact={() => { }}
-                /> */}
-                </div>
-            ))}
+            {messages.map((message, index) => {
+                const isTop = index === 0;
+                const isBottom = index === messages.length - 1;
+                return (
+                    <div
+                        className={cn(
+                            'flex items-center gap-x-1',
+                            message.sender_id === spectatorData.id
+                                ? 'justify-end '
+                                : 'justify-start ',
+                        )}
+                        key={message.id}
+                        onMouseEnter={() => setHoverMessage(message.id)}
+                        onMouseLeave={() => setHoverMessage('')}
+                    >
+                        {message.sender_id !== spectatorData.id && (
+                            <div className="size-[32px] rounded-full overflow-hidden ">
+                                <Image
+                                    src={message.avatar}
+                                    alt={message.sender_name}
+                                    width={32}
+                                    height={32}
+                                />
+                            </div>
+                        )}
+                        <MessageBubble
+                            message={message.message}
+                            colored={message.sender_id === spectatorData.id}
+                            hovered={message.id === hoverMessage}
+                            isTop={isTop}
+                            isBottom={isBottom}
+                            active={activeReactionMessage === message.id}
+                            onToggle={() => handleToggleReaction(message.id)}
+                            closeOthers={() => setActiveReactionMessage(null)}
+                        />
+                        {message.sender_id === spectatorData.id && (
+                            <div className="size-[32px] rounded-full overflow-hidden ">
+                                <Image
+                                    src={message.avatar}
+                                    alt={message.sender_name}
+                                    width={32}
+                                    height={32}
+                                />
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
         </div>
     );
 }
@@ -174,17 +197,25 @@ function MessageBubble({
     message,
     colored,
     hovered,
+    isTop,
+    isBottom,
+    active,
+    onToggle,
+    closeOthers,
 }: {
     message: string;
     colored: boolean;
     hovered: boolean;
+    isTop: boolean;
+    isBottom: boolean;
+    active: boolean;
+    onToggle: () => void;
+    closeOthers: () => void;
 }) {
-    // const [react, setReact] = useState<boolean>(false);
-
     return (
         <div
             className={cn(
-                'relative px-3 py-1 break-words max-w-[70%]', // limit to 70% of container width
+                'relative px-3 py-1 break-words max-w-[70%]',
                 colored ? 'bg-[#8e46f3]' : 'bg-neutral-400',
                 colored ? 'rounded-l-md rounded-tr-md' : 'rounded-r-md rounded-tl-md',
             )}
@@ -194,23 +225,46 @@ function MessageBubble({
             {hovered && (
                 <div
                     className={cn(
-                        'absolute top-1/2 -translate-y-1/2',
-                        colored ? 'left-0 -translate-x-2/3' : 'right-0 translate-x-2/3',
-                        'flex justify-center items-center gap-x-0.5 bg-neutral-600 px-1 rounded-full cursor-pointer text-[10px]',
+                        'absolute',
+                        isTop
+                            ? 'bottom-full mb-1'
+                            : isBottom
+                              ? 'top-full mt-1'
+                              : 'top-1/2 -translate-y-1/2',
+                        colored ? '-left-3.5 -translate-x-2/3' : '-right-3.5 translate-x-2/3',
+                        'flex justify-center items-center gap-x-0.5 dark:text-neutral-400 rounded-full cursor-pointer text-[10px]',
                     )}
-                    onClick={() => {}}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onToggle();
+                    }}
                 >
-                    <HiOutlineEmojiHappy className="size-2.5" />+
+                    <MdOutlineAddReaction className="size-4.5" fill="white" />
                 </div>
             )}
-            {/* {react && (
 
-            )} */}
+            {active && (
+                <Reactions
+                    className={cn(
+                        'z-20 backdrop-blur-sm',
+                        isTop ? 'top-full mt-2' : 'bottom-full mb-2',
+                    )}
+                    onReact={() => {
+                        closeOthers();
+                    }}
+                />
+            )}
         </div>
     );
 }
 
-export function Reactions({ onReact }: { onReact: (reaction: InteractionEnum) => void }) {
+export function Reactions({
+    onReact,
+    className,
+}: {
+    onReact: (reaction: InteractionEnum) => void;
+    className?: string;
+}) {
     const reactions = ['👍', '💲', '💡', '❤️', '😀'];
 
     const getReactionEnum = (emoji: string): InteractionEnum => {
@@ -231,11 +285,16 @@ export function Reactions({ onReact }: { onReact: (reaction: InteractionEnum) =>
     };
 
     return (
-        <div className="absolute flex justify-center items-center gap-x-2 p-2 rounded-md border ">
+        <div
+            className={cn(
+                'absolute flex justify-center items-center gap-x-3 p-1.5 px-3.5 rounded-full border dark:bg-neutral-800',
+                className,
+            )}
+        >
             {reactions.map((reaction, index) => (
                 <div
                     key={index}
-                    className="cursor-pointer text-base "
+                    className="cursor-pointer text-base hover:scale-110 transition-transform duration-150"
                     onClick={() => onReact(getReactionEnum(reaction))}
                 >
                     {reaction}

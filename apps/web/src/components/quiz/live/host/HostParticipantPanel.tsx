@@ -26,7 +26,7 @@ export default function HostParticipantsPanel() {
     const [dataFetched, setDataFetched] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const hasFetchedOnce = useRef(false);
+    const hasFetchedOnce = useRef<boolean>(false);
 
     const quizId = quiz?.id;
 

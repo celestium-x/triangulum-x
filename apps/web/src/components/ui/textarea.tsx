@@ -34,7 +34,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 }}
                 onChange={handleChange}
                 className={cn(
-                    'flex justify-start items-between p-2 ',
+                    'flex justify-start items-between p-2',
                     'focus-visible:outline-0',
                     'selection:bg-primary',
                     'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',

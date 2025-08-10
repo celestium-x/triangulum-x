@@ -1,8 +1,8 @@
 import Redis from 'ioredis';
 import {
-    ChatMessage,
     CookiePayload,
     CustomWebSocket,
+    IncomingChatMessage,
     MESSAGE_TYPES,
     PubSubMessageTypes,
     SpectatorNameChangeEvent,
@@ -211,10 +211,42 @@ export default class SpectatorManager {
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 
-    private async handle_spectator_send_message(payload: ChatMessage, ws: CustomWebSocket) {
+    private async handle_spectator_send_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
         const { gameSessionId } = ws.user;
+        const {
+            quizId = ws.user.quizId,
+            sender_id = ws.user.userId,
+            sender_name,
+            sender_role,
+            message,
+            repliedToId,
+        } = payload;
 
-        this.redis_cache.add_chat_message(gameSessionId, payload);
+        if (!quizId || !sender_id || !message) {
+            console.error('Missing required fields in chat message payload:', {
+                quizId,
+                sender_id,
+                message,
+            });
+            return;
+        }
+
+        const chatMessage = {
+            senderId: sender_id,
+            senderRole: sender_role,
+            senderName: sender_name,
+            message,
+            repliedToId: repliedToId ?? null,
+        };
+
+        const { data } = await this.database_queue.create_chat_message(
+            gameSessionId,
+            gameSessionId,
+            quizId,
+            chatMessage,
+        );
+
+        this.redis_cache.add_chat_message(gameSessionId, data.chatMessage);
 
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
@@ -222,6 +254,7 @@ export default class SpectatorManager {
                 id: ws.user.userId,
                 payload: payload,
             },
+            exclude_socket_id: ws.user.userId,
         };
 
         this.quizManager.publish_event_to_redis(gameSessionId, event_data);

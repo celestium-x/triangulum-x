@@ -23,16 +23,17 @@ export default function HostSpectatorsPanel() {
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
-
+    const [dataFetched, setDataFetched] = useState<boolean>(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const hasFetchedOnce = useRef<boolean>(false);
 
     const quizId = quiz?.id;
 
     const fetchSpectators = useCallback(
         async (pageNum: number) => {
             if (!quizId || loading || !hasMore || !session?.user.token) return;
-
             setLoading(true);
+
             try {
                 const response = await axios.get<HostResponseProps>(
                     `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,
@@ -53,6 +54,10 @@ export default function HostSpectatorsPanel() {
                     }
                     setHasMore(data.hasMore);
                     setPage(pageNum + 1);
+
+                    if (!data.hasMore) {
+                        setDataFetched(true);
+                    }
                 }
             } catch (err) {
                 console.error('Failed to fetch spectators:', err);
@@ -64,10 +69,10 @@ export default function HostSpectatorsPanel() {
     );
 
     useEffect(() => {
-        if (quizId && spectators.length === 0 && !loading) {
-            fetchSpectators(0);
-        }
-    }, [quizId, fetchSpectators, spectators.length, loading]);
+        if (!quizId || loading || dataFetched || hasFetchedOnce.current) return;
+        hasFetchedOnce.current = true;
+        fetchSpectators(0);
+    }, [quizId, fetchSpectators, loading, dataFetched]);
 
     const handleScroll = () => {
         const container = containerRef.current;
