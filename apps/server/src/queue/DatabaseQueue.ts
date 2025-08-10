@@ -40,7 +40,14 @@ interface UpdateQuizJobType {
 interface CreateChatMessageJobType {
     id: string;
     game_session_id: string;
-    chatMessage: Prisma.ChatMessageCreateInput;
+    quiz_id: string;
+    chatMessage: {
+        senderId: string;
+        senderRole: string;
+        senderName: string;
+        message: string;
+        repliedToId?: string;
+    };
 }
 
 interface CreateChatReactionJobType {
@@ -200,11 +207,19 @@ export default class DatabaseQueue {
         { success: boolean; chatMessage: ChatMessage } | { success: boolean; error: string }
     > {
         try {
-            const { game_session_id, chatMessage }: CreateChatMessageJobType = job.data;
+            const { quiz_id, game_session_id, chatMessage }: CreateChatMessageJobType = job.data;
 
             const createChatMessage = await prisma.chatMessage.create({
                 data: {
-                    ...chatMessage,
+                    gameSession: { connect: { id: game_session_id } },
+                    quiz: { connect: { id: quiz_id } },
+                    senderId: chatMessage.senderId,
+                    senderRole: chatMessage.senderRole,
+                    senderName: chatMessage.senderName,
+                    message: chatMessage.message,
+                    repliedTo: chatMessage.repliedToId
+                        ? { connect: { id: chatMessage.repliedToId } }
+                        : undefined,
                 },
             });
 
@@ -306,7 +321,13 @@ export default class DatabaseQueue {
         id: string,
         game_session_id: string,
         quiz_id: string,
-        chatMessage: Prisma.ChatMessageCreateInput,
+        chatMessage: {
+            senderId: string;
+            senderRole: string;
+            senderName: string;
+            message: string;
+            repliedToId?: string | null;
+        },
         options?: Partial<JobOption>,
     ) {
         return await this.database_queue.add(

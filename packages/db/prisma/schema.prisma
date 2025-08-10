@@ -233,8 +233,8 @@ model ChatMessage {
     message   		String
     chatReactions	ChatReaction[]
 
-    repliedToId 	String
-    repliedTo   	ChatMessage   	@relation("Replies", fields: [repliedToId], references: [id])
+    repliedToId 	String?
+    repliedTo   	ChatMessage?   	@relation("Replies", fields: [repliedToId], references: [id])
     replies     	ChatMessage[] 	@relation("Replies")
 
     createdAt 		DateTime 		@default(now())

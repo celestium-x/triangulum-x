@@ -33,7 +33,7 @@ export default function HostSpectatorsPanel() {
         async (pageNum: number) => {
             if (!quizId || loading || !hasMore || !session?.user.token) return;
             setLoading(true);
-            
+
             try {
                 const response = await axios.get<HostResponseProps>(
                     `${QUIZ_URL}/${quizId}/spectators?page=${pageNum}`,

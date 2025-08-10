@@ -50,6 +50,15 @@ export interface SpectatorNameChangeEvent {
     choosenNickname: string;
 }
 
+export interface IncomingChatMessage {
+    quizId: string;
+    sender_id: string;
+    sender_role: string;
+    sender_name: string;
+    message: string;
+    repliedToId?: string;
+}
+
 // export interface ChatMessage {
 //     id: string;
 //     sender_id: string;
