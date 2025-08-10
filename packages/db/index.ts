@@ -26,6 +26,8 @@ export type {
   GameSession,
   Response,
   Elimination,
+  ChatMessage,
+  ChatReaction,
 } from "@prisma/client";
 
 // Enum types ----------------------------->

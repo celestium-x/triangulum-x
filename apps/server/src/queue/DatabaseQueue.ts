@@ -1,6 +1,14 @@
 import { JobOption, QueueJobTypes } from '../types/database-queue-types';
 import Bull from 'bull';
-import prisma, { GameSession, Participant, Prisma, Quiz, Spectator } from '@repo/db/client';
+import prisma, {
+    GameSession,
+    Participant,
+    Prisma,
+    Quiz,
+    Spectator,
+    ChatMessage,
+    ChatReaction,
+} from '@repo/db/client';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
 const REDIS_URL = process.env.REDIS_URL;
@@ -27,6 +35,18 @@ interface UpdateQuizJobType {
     id: string;
     game_session_id: string;
     quiz: Prisma.QuizUpdateInput;
+}
+
+interface CreateChatMessageJobType {
+    id: string;
+    game_session_id: string;
+    chatMessage: Prisma.ChatMessageCreateInput;
+}
+
+interface CreateChatReactionJobType {
+    id: string;
+    chatMessageId: string;
+    chatReaction: Prisma.ChatReactionCreateInput;
 }
 
 export default class DatabaseQueue {
@@ -63,6 +83,14 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.UPDATE_SPECTATOR,
             this.update_spectator_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.CREATE_CHAT_MESSAGE,
+            this.create_chat_message_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.CREATE_CHAT_REACTION,
+            this.create_chat_reaction_processor.bind(this),
         );
     }
 
@@ -166,6 +194,62 @@ export default class DatabaseQueue {
         }
     }
 
+    private async create_chat_message_processor(
+        job: Bull.Job,
+    ): Promise<
+        { success: boolean; chatMessage: ChatMessage } | { success: boolean; error: string }
+    > {
+        try {
+            const { game_session_id, chatMessage }: CreateChatMessageJobType = job.data;
+
+            const createChatMessage = await prisma.chatMessage.create({
+                data: {
+                    ...chatMessage,
+                },
+            });
+
+            await this.redis_cache.add_chat_message(game_session_id, createChatMessage);
+            return {
+                success: true,
+                chatMessage: createChatMessage,
+            };
+        } catch (error) {
+            console.error('Error while processing chat message create: ', error);
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
+    }
+
+    private async create_chat_reaction_processor(
+        job: Bull.Job,
+    ): Promise<
+        { success: boolean; chatReaction: ChatReaction } | { success: boolean; error: string }
+    > {
+        try {
+            const { chatReaction }: CreateChatReactionJobType = job.data;
+
+            const createChatReaction = await prisma.chatReaction.create({
+                data: {
+                    ...chatReaction,
+                },
+            });
+
+            // add this to redis
+            return {
+                success: true,
+                chatReaction: createChatReaction,
+            };
+        } catch (error) {
+            console.error('Error while processing chat reaction create: ', error);
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
+    }
+
     public async update_game_session(
         id: string,
         gameSession: Prisma.GameSessionUpdateInput,
@@ -214,6 +298,33 @@ export default class DatabaseQueue {
         return await this.database_queue.add(
             QueueJobTypes.UPDATE_SPECTATOR,
             { id, spectator, game_session_id },
+            { ...this.default_job_options, ...options },
+        );
+    }
+
+    public async create_chat_message(
+        id: string,
+        game_session_id: string,
+        quiz_id: string,
+        chatMessage: Prisma.ChatMessageCreateInput,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue.add(
+            QueueJobTypes.CREATE_CHAT_MESSAGE,
+            { id, game_session_id, quiz_id, chatMessage },
+            { ...this.default_job_options, ...options },
+        );
+    }
+
+    public async create_chat_reaction(
+        id: string,
+        chat_message_id: string,
+        chat_reaction: Prisma.ChatReactionCreateInput,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue.add(
+            QueueJobTypes.CREATE_CHAT_REACTION,
+            { id, chat_message_id, chat_reaction },
             { ...this.default_job_options, ...options },
         );
     }
