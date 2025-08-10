@@ -19,3 +19,4 @@ export const GET_SELECTED_QUESTION_DATA = API_URL + '/quiz/get-selected-question
 
 export const SPECTATOR_URL = QUIZ_URL + '/spectators';
 export const PARTICIPANT_URL = QUIZ_URL + '/participants';
+export const GET_CHATS_URL = '/quiz/get-messages';

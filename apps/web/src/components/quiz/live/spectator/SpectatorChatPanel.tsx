@@ -27,14 +27,17 @@ export default function SpectatorChatPanel() {
         setIsExpanded(!isExpanded);
     }
 
-    const handleIncomingChatMessage = useCallback((payload: unknown) => {
-        const messagePayload = payload as { id: string; payload: ChatMessage };
-        const chat = messagePayload.payload;
+    const handleIncomingChatMessage = useCallback(
+        (payload: unknown) => {
+            const messagePayload = payload as { id: string; payload: ChatMessage };
+            const chat = messagePayload.payload;
 
-        if (chat.sender_id === spectatorData?.id) return;
+            if (chat.sender_id === spectatorData?.id) return;
 
-        setMessages((prev) => [...prev, chat]);
-    }, [spectatorData?.id]);
+            setMessages((prev) => [...prev, chat]);
+        },
+        [spectatorData?.id],
+    );
 
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
@@ -139,53 +142,57 @@ function MessagesRenderer({
         setActiveReactionMessage((prev) => (prev === messageId ? null : messageId));
     };
 
+    const formatTime = (timestamp: number) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+    };
+
     return (
-        <div className="w-full px-2 py-2 flex flex-col gap-y-2 ">
-            {messages.map((message, index) => {
-                const isTop = index === 0;
-                const isBottom = index === messages.length - 1;
+        <div className="w-full px-3 py-3 flex flex-col gap-y-3 relative">
+                {messages.map((message) => {
+                const isOwnMessage = message.sender_id === spectatorData.id;
+
                 return (
                     <div
                         className={cn(
-                            'flex items-center gap-x-1',
-                            message.sender_id === spectatorData.id
-                                ? 'justify-end '
-                                : 'justify-start ',
+                            'flex items-end gap-x-2',
+                            isOwnMessage ? 'flex-row-reverse' : 'flex-row',
                         )}
                         key={message.id}
                         onMouseEnter={() => setHoverMessage(message.id)}
                         onMouseLeave={() => setHoverMessage('')}
                     >
-                        {message.sender_id !== spectatorData.id && (
-                            <div className="size-[32px] rounded-full overflow-hidden ">
-                                <Image
-                                    src={message.avatar}
-                                    alt={message.sender_name}
-                                    width={32}
-                                    height={32}
-                                />
-                            </div>
-                        )}
+                        <div className="size-[28px] rounded-full overflow-hidden flex-shrink-0">
+                            <Image
+                                src={message.avatar}
+                                alt={message.sender_name}
+                                width={28}
+                                height={28}
+                                className="object-cover"
+                            />
+                        </div>
+
                         <MessageBubble
                             message={message.message}
-                            colored={message.sender_id === spectatorData.id}
+                            colored={isOwnMessage}
                             hovered={message.id === hoverMessage}
-                            isTop={isTop}
-                            isBottom={isBottom}
+                            isOwnMessage={isOwnMessage}
                             active={activeReactionMessage === message.id}
                             onToggle={() => handleToggleReaction(message.id)}
                             closeOthers={() => setActiveReactionMessage(null)}
                         />
-                        {message.sender_id === spectatorData.id && (
-                            <div className="size-[32px] rounded-full overflow-hidden ">
-                                <Image
-                                    src={message.avatar}
-                                    alt={message.sender_name}
-                                    width={32}
-                                    height={32}
-                                />
-                            </div>
-                        )}
+
+                        <div
+                            className={cn(
+                                'text-[10px] text-neutral-500 dark:text-neutral-400 self-end pb-1 flex-shrink-0',
+                            )}
+                        >
+                            {formatTime(message.timestamp)}
+                        </div>
                     </div>
                 );
             })}
@@ -197,8 +204,7 @@ function MessageBubble({
     message,
     colored,
     hovered,
-    isTop,
-    isBottom,
+    isOwnMessage,
     active,
     onToggle,
     closeOthers,
@@ -206,8 +212,7 @@ function MessageBubble({
     message: string;
     colored: boolean;
     hovered: boolean;
-    isTop: boolean;
-    isBottom: boolean;
+    isOwnMessage: boolean;
     active: boolean;
     onToggle: () => void;
     closeOthers: () => void;
@@ -215,42 +220,48 @@ function MessageBubble({
     return (
         <div
             className={cn(
-                'relative px-3 py-1 break-words max-w-[70%]',
-                colored ? 'bg-[#8e46f3]' : 'bg-neutral-400',
-                colored ? 'rounded-l-md rounded-tr-md' : 'rounded-r-md rounded-tl-md',
+                'relative px-3 py-2 break-words max-w-[75%] min-w-[60px]',
+                colored
+                    ? 'bg-[#8e46f3] text-white'
+                    : 'bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white',
+                colored
+                    ? 'rounded-l-xl rounded-tr-xl rounded-br-md'
+                    : 'rounded-r-xl rounded-tl-xl rounded-bl-md',
+                'shadow-sm',
             )}
         >
-            <div className="whitespace-pre-wrap break-words">{message}</div>
+            <div className="whitespace-pre-wrap break-words text-sm leading-relaxed">{message}</div>
 
             {hovered && (
                 <div
                     className={cn(
-                        'absolute',
-                        isTop
-                            ? 'bottom-full mb-1'
-                            : isBottom
-                              ? 'top-full mt-1'
-                              : 'top-1/2 -translate-y-1/2',
-                        colored ? '-left-3.5 -translate-x-2/3' : '-right-3.5 translate-x-2/3',
-                        'flex justify-center items-center gap-x-0.5 dark:text-neutral-400 rounded-full cursor-pointer text-[10px]',
+                        'absolute z-10 bg-black/80 text-white rounded-full p-1.5 cursor-pointer',
+                        'hover:bg-black/90 transition-colors duration-150',
+                        'shadow-lg backdrop-blur-sm',
+
+                        isOwnMessage ? '-left-3 top-0' : '-right-3 top-0',
+                        'transform -translate-y-1/2',
                     )}
                     onClick={(e) => {
                         e.stopPropagation();
                         onToggle();
                     }}
                 >
-                    <MdOutlineAddReaction className="size-4.5" fill="white" />
+                    <MdOutlineAddReaction className="size-3.5" fill="white" />
                 </div>
             )}
 
             {active && (
                 <Reactions
                     className={cn(
-                        'z-20 backdrop-blur-sm',
-                        isTop ? 'top-full mt-2' : 'bottom-full mb-2',
+                        'absolute z-20',
+                        'bottom-full mb-2',
+
+                        isOwnMessage ? 'right-full mr-3' : 'left-full ml-3',
                     )}
-                    onReact={() => {
+                    onReact={(_reaction) => {
                         closeOthers();
+                        // on react logic here
                     }}
                 />
             )}
@@ -287,14 +298,17 @@ export function Reactions({
     return (
         <div
             className={cn(
-                'absolute flex justify-center items-center gap-x-3 p-1.5 px-3.5 rounded-full border dark:bg-neutral-800',
+                'absolute z-[999] flex justify-center items-center gap-x-2 p-2 px-4 rounded-full border',
+                'bg-white dark:bg-neutral-800 shadow-xl border-neutral-200 dark:border-neutral-600',
+                'animate-in fade-in-0 zoom-in-95 duration-150',
+                'whitespace-nowrap',
                 className,
             )}
         >
             {reactions.map((reaction, index) => (
                 <div
                     key={index}
-                    className="cursor-pointer text-base hover:scale-110 transition-transform duration-150"
+                    className="cursor-pointer text-lg hover:scale-110 transition-transform duration-150 px-1 py-0.5 rounded-full"
                     onClick={() => onReact(getReactionEnum(reaction))}
                 >
                     {reaction}
