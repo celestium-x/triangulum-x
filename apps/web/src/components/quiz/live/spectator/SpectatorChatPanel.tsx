@@ -153,7 +153,7 @@ function MessagesRenderer({
 
     return (
         <div className="w-full px-3 py-3 flex flex-col gap-y-3 relative">
-                {messages.map((message) => {
+            {messages.map((message) => {
                 const isOwnMessage = message.sender_id === spectatorData.id;
 
                 return (

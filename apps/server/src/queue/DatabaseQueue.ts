@@ -343,10 +343,12 @@ export default class DatabaseQueue {
         chat_reaction: Prisma.ChatReactionCreateInput,
         options?: Partial<JobOption>,
     ) {
-        return await this.database_queue.add(
-            QueueJobTypes.CREATE_CHAT_REACTION,
-            { id, chat_message_id, chat_reaction },
-            { ...this.default_job_options, ...options },
-        );
+        this.database_queue
+            .add(
+                QueueJobTypes.CREATE_CHAT_REACTION,
+                { id, chat_message_id, chat_reaction },
+                { ...this.default_job_options, ...options },
+            )
+            .catch((err) => console.error('Failed to enqueue chat reaction:', err));
     }
 }

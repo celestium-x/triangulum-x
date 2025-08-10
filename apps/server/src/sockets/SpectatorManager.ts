@@ -212,20 +212,12 @@ export default class SpectatorManager {
     }
 
     private async handle_spectator_send_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
-        const { gameSessionId } = ws.user;
-        const {
-            quizId = ws.user.quizId,
-            sender_id = ws.user.userId,
-            sender_name,
-            sender_role,
-            message,
-            repliedToId,
-        } = payload;
+        const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
+        const { sender_name, message, repliedToId } = payload;
 
         if (!quizId || !sender_id || !message) {
             console.error('Missing required fields in chat message payload:', {
                 quizId,
-                sender_id,
                 message,
             });
             return;
@@ -239,15 +231,6 @@ export default class SpectatorManager {
             repliedToId: repliedToId ?? null,
         };
 
-        const { data } = await this.database_queue.create_chat_message(
-            gameSessionId,
-            gameSessionId,
-            quizId,
-            chatMessage,
-        );
-
-        this.redis_cache.add_chat_message(gameSessionId, data.chatMessage);
-
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
             payload: {
@@ -258,6 +241,12 @@ export default class SpectatorManager {
         };
 
         this.quizManager.publish_event_to_redis(gameSessionId, event_data);
+
+        this.database_queue
+            .create_chat_message(gameSessionId, gameSessionId, quizId, chatMessage)
+            .catch((err) => {
+                console.error('Failed to enqueue chat message:', err);
+            });
     }
 
     private generateSocketId(): string {

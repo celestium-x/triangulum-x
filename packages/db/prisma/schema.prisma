@@ -218,39 +218,39 @@ model Review {
 }
 
 model ChatMessage {
-    id 				String 			@id 	@default(cuid())
+    id String @id @default(cuid())
 
-    gameSessionId 	String
-    gameSession   	GameSession 	@relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
+    gameSessionId String
+    gameSession   GameSession @relation(fields: [gameSessionId], references: [id], onDelete: Cascade)
 
-    quizId 			String
-    quiz   			Quiz   			@relation(fields: [quizId], references: [id], onDelete: Cascade)
+    quizId String
+    quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-    senderId   		String
-    senderRole 		String
-    senderName 		String
+    senderId   String
+    senderRole String
+    senderName String
 
-    message   		String
-    chatReactions	ChatReaction[]
+    message       String
+    chatReactions ChatReaction[]
 
-    repliedToId 	String?
-    repliedTo   	ChatMessage?   	@relation("Replies", fields: [repliedToId], references: [id])
-    replies     	ChatMessage[] 	@relation("Replies")
+    repliedToId String?
+    repliedTo   ChatMessage?  @relation("Replies", fields: [repliedToId], references: [id])
+    replies     ChatMessage[] @relation("Replies")
 
-    createdAt 		DateTime 		@default(now())
-    editedAt  		DateTime 		@updatedAt
+    createdAt DateTime @default(now())
+    editedAt  DateTime @updatedAt
 }
 
 model ChatReaction {
-  id				String		   @id		@default(cuid())
+    id String @id @default(cuid())
 
-  chatMessageId		String
-  chatMessage		ChatMessage    @relation(fields: [chatMessageId], references: [id])
+    chatMessageId String
+    chatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
 
-  userId			String
-  reaction			Interactions
+    userId   String
+    reaction Interactions
 
-  reactedAt			DateTime	   @default(now())
+    reactedAt DateTime @default(now())
 }
 
 enum QuizStatus {
