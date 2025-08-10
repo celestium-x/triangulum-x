@@ -57,8 +57,6 @@ router.get(
 router.get('/quiz/spectators/:quizId', authMiddleware, getSpectatorOnCall);
 router.get('/quiz/participants/:quizId', authMiddleware, getParticipantsOnCall);
 
-
-
 // chats-controller
 router.get('/quiz/get-messages', authMiddleware, getChatsController);
 

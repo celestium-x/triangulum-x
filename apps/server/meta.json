@@ -2030,8 +2030,24 @@
       ],
       "format": "esm"
     },
+    "src/controllers/chat-controller/getChatsController.ts": {
+      "bytes": 1251,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "express",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
     "src/routes/index.ts": {
-      "bytes": 3250,
+      "bytes": 3425,
       "imports": [
         {
           "path": "express",
@@ -2127,6 +2143,11 @@
           "path": "src/controllers/live-quiz-controller/getParticipantsOnCall.ts",
           "kind": "import-statement",
           "original": "../controllers/live-quiz-controller/getParticipantsOnCall"
+        },
+        {
+          "path": "src/controllers/chat-controller/getChatsController.ts",
+          "kind": "import-statement",
+          "original": "../controllers/chat-controller/getChatsController"
         }
       ],
       "format": "esm"
@@ -2476,7 +2497,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1000743
+      "bytes": 1002973
     },
     "dist/index.js": {
       "imports": [
@@ -2635,7 +2656,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1501
+          "bytesInOutput": 1571
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2937,6 +2958,9 @@
         "src/controllers/live-quiz-controller/getParticipantsOnCall.ts": {
           "bytesInOutput": 1055
         },
+        "src/controllers/chat-controller/getChatsController.ts": {
+          "bytesInOutput": 882
+        },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 8960
         },
@@ -2953,7 +2977,7 @@
           "bytesInOutput": 6693
         }
       },
-      "bytes": 540305
+      "bytes": 541315
     }
   }
 }

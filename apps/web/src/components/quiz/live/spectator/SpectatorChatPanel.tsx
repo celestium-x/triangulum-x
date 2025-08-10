@@ -27,14 +27,17 @@ export default function SpectatorChatPanel() {
         setIsExpanded(!isExpanded);
     }
 
-    const handleIncomingChatMessage = useCallback((payload: unknown) => {
-        const messagePayload = payload as { id: string; payload: ChatMessage };
-        const chat = messagePayload.payload;
+    const handleIncomingChatMessage = useCallback(
+        (payload: unknown) => {
+            const messagePayload = payload as { id: string; payload: ChatMessage };
+            const chat = messagePayload.payload;
 
-        if (chat.sender_id === spectatorData?.id) return;
+            if (chat.sender_id === spectatorData?.id) return;
 
-        setMessages((prev) => [...prev, chat]);
-    }, [spectatorData?.id]);
+            setMessages((prev) => [...prev, chat]);
+        },
+        [spectatorData?.id],
+    );
 
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
@@ -139,28 +142,25 @@ function MessagesRenderer({
         setActiveReactionMessage((prev) => (prev === messageId ? null : messageId));
     };
 
-    
     const formatTime = (timestamp: number) => {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false
+            hour12: false,
         });
     };
 
     return (
         <div className="w-full px-3 py-3 flex flex-col gap-y-3 relative">
-            {messages.map((message, index) => {
-                const isTop = index === 0;
-                const isBottom = index === messages.length - 1;
+                {messages.map((message) => {
                 const isOwnMessage = message.sender_id === spectatorData.id;
 
                 return (
                     <div
                         className={cn(
                             'flex items-end gap-x-2',
-                            isOwnMessage ? 'flex-row-reverse' : 'flex-row'
+                            isOwnMessage ? 'flex-row-reverse' : 'flex-row',
                         )}
                         key={message.id}
                         onMouseEnter={() => setHoverMessage(message.id)}
@@ -180,18 +180,17 @@ function MessagesRenderer({
                             message={message.message}
                             colored={isOwnMessage}
                             hovered={message.id === hoverMessage}
-                            isTop={isTop}
-                            isBottom={isBottom}
                             isOwnMessage={isOwnMessage}
                             active={activeReactionMessage === message.id}
                             onToggle={() => handleToggleReaction(message.id)}
                             closeOthers={() => setActiveReactionMessage(null)}
                         />
 
-                        {/* Timestamp - left for sent messages, right for received messages */}
-                        <div className={cn(
-                            'text-[10px] text-neutral-500 dark:text-neutral-400 self-end pb-1 flex-shrink-0'
-                        )}>
+                        <div
+                            className={cn(
+                                'text-[10px] text-neutral-500 dark:text-neutral-400 self-end pb-1 flex-shrink-0',
+                            )}
+                        >
                             {formatTime(message.timestamp)}
                         </div>
                     </div>
@@ -205,8 +204,6 @@ function MessageBubble({
     message,
     colored,
     hovered,
-    isTop,
-    isBottom,
     isOwnMessage,
     active,
     onToggle,
@@ -215,8 +212,6 @@ function MessageBubble({
     message: string;
     colored: boolean;
     hovered: boolean;
-    isTop: boolean;
-    isBottom: boolean;
     isOwnMessage: boolean;
     active: boolean;
     onToggle: () => void;
@@ -226,9 +221,13 @@ function MessageBubble({
         <div
             className={cn(
                 'relative px-3 py-2 break-words max-w-[75%] min-w-[60px]',
-                colored ? 'bg-[#8e46f3] text-white' : 'bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white',
-                colored ? 'rounded-l-xl rounded-tr-xl rounded-br-md' : 'rounded-r-xl rounded-tl-xl rounded-bl-md',
-                'shadow-sm'
+                colored
+                    ? 'bg-[#8e46f3] text-white'
+                    : 'bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white',
+                colored
+                    ? 'rounded-l-xl rounded-tr-xl rounded-br-md'
+                    : 'rounded-r-xl rounded-tl-xl rounded-bl-md',
+                'shadow-sm',
             )}
         >
             <div className="whitespace-pre-wrap break-words text-sm leading-relaxed">{message}</div>
@@ -239,9 +238,9 @@ function MessageBubble({
                         'absolute z-10 bg-black/80 text-white rounded-full p-1.5 cursor-pointer',
                         'hover:bg-black/90 transition-colors duration-150',
                         'shadow-lg backdrop-blur-sm',
-                        
+
                         isOwnMessage ? '-left-3 top-0' : '-right-3 top-0',
-                        'transform -translate-y-1/2'
+                        'transform -translate-y-1/2',
                     )}
                     onClick={(e) => {
                         e.stopPropagation();
@@ -257,14 +256,12 @@ function MessageBubble({
                     className={cn(
                         'absolute z-20',
                         'bottom-full mb-2',
-                        
-                        isOwnMessage
-                            ? 'right-full mr-3' 
-                            : 'left-full ml-3'  
+
+                        isOwnMessage ? 'right-full mr-3' : 'left-full ml-3',
                     )}
-                    onReact={(reaction) => {
+                    onReact={(_reaction) => {
                         closeOthers();
-                        console.log('Reacted with:', reaction);
+                        // on react logic here
                     }}
                 />
             )}
