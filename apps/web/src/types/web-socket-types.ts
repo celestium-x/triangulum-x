@@ -16,19 +16,28 @@ export interface ParticipantNameChangeEvent {
     choosenNickname: string;
 }
 
-export interface ChatMessage {
+export enum Interactions {
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
+export type ChatMessageType = {
     id: string;
-    sender_id: string;
-    sender_name: string;
-    avatar: string;
+    senderId: string;
+    senderName: string;
     message: string;
-    timestamp: number;
+    createdAt: Date;
+    senderAvatar?: string | null;
     chatReactions: {
         id: string;
-        name: string;
-        avatar: string;
+        userId: string;
+        reaction: Interactions[];
+        reactedAt: number;
     }[];
-}
+};
 
 export interface SpectatorNameChangeEvent {
     choosenNickname: string;

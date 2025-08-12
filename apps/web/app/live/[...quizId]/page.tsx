@@ -1,6 +1,7 @@
 'use client';
 import LiveUserRendererScreens from '@/components/quiz/live/LiveUserRendererScreens';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
+import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
     useLiveHostStore,
@@ -26,6 +27,7 @@ export default function New({ params }: NewProps) {
     const { setParticipantData } = useLiveParticipantStore();
     const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
+    const { setChatMessages } = useLiveQuizGlobalChatStore();
 
     const { setParticipants } = useLiveParticipantsStore();
     const { setSpectators } = useLiveSpectatorsStore();
@@ -42,6 +44,7 @@ export default function New({ params }: NewProps) {
                     setCurrentUserType(data.role);
                     setParticipants(data.participants);
                     setSpectators(data.spectators);
+                    setChatMessages(data.messages);
 
                     switch (data.role) {
                         case 'HOST':
@@ -72,6 +75,7 @@ export default function New({ params }: NewProps) {
         setParticipantData,
         setSpectatorData,
         setSpectators,
+        setChatMessages,
     ]);
 
     if (!quiz) {

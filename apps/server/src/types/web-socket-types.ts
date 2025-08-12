@@ -52,23 +52,33 @@ export interface SpectatorNameChangeEvent {
 
 export interface IncomingChatMessage {
     quizId: string;
-    sender_id: string;
-    sender_role: string;
-    sender_name: string;
+    senderId: string;
+    senderRole: string;
+    senderName: string;
+    senderAvatar: string;
     message: string;
     repliedToId?: string;
 }
 
-// export interface ChatMessage {
-//     id: string;
-//     sender_id: string;
-//     sender_name: string;
-//     avatar: string;
-//     message: string;
-//     timestamp: number;
-//     chatReactions: {
-//         id: string;
-//         name: string;
-//         avatar: string;
-//     }[];
-// }
+export enum Interactions {
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
+export type ChatMessageType = {
+    id: string;
+    senderId: string;
+    senderName: string;
+    message: string;
+    createdAt: Date;
+    senderAvatar?: string | null;
+    chatReactions: {
+        id: string;
+        userId: string;
+        reaction: Interactions[];
+        reactedAt: number;
+    }[];
+};

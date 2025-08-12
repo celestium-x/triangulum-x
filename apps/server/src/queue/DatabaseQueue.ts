@@ -45,6 +45,7 @@ interface CreateChatMessageJobType {
         senderId: string;
         senderRole: string;
         senderName: string;
+        senderAvatar: string;
         message: string;
         repliedToId?: string;
     };
@@ -216,6 +217,7 @@ export default class DatabaseQueue {
                     senderId: chatMessage.senderId,
                     senderRole: chatMessage.senderRole,
                     senderName: chatMessage.senderName,
+                    senderAvatar: chatMessage.senderAvatar,
                     message: chatMessage.message,
                     repliedTo: chatMessage.repliedToId
                         ? { connect: { id: chatMessage.repliedToId } }
@@ -325,6 +327,7 @@ export default class DatabaseQueue {
             senderId: string;
             senderRole: string;
             senderName: string;
+            senderAvatar: string;
             message: string;
             repliedToId?: string | null;
         },

@@ -3,6 +3,7 @@ import { parse } from 'cookie';
 import prisma from '@repo/db/client';
 import { CookiePayload } from '../../types/web-socket-types';
 import QuizAction from '../../class/quizAction';
+import getChatsController from '../chat-controller/getChatsController';
 
 function unauthorized(res: Response) {
     return res.status(401).json({ success: false, message: 'Unauthorized user' });
@@ -203,6 +204,8 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
 
         const sanitizedGameSession = QuizAction.sanitizeGameSession(result.gameSession, role);
 
+        const data = await getChatsController(role, gameSessionId, quizId);
+
         const responseData: any = {
             success: true,
             quiz: result.quiz,
@@ -212,6 +215,16 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
             spectators: result.spectators,
             role,
         };
+
+        if (!data.success || !data.messages || data.error) {
+            res.status(200).json(responseData);
+            return;
+        }
+
+        if (data.messages) {
+            responseData.messages = data.messages;
+        }
+
         res.status(200).json(responseData);
         return;
     } catch (err: any) {
