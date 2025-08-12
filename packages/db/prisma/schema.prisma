@@ -226,9 +226,10 @@ model ChatMessage {
     quizId String
     quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
-    senderId   String
-    senderRole String
-    senderName String
+    senderId     String
+    senderRole   String
+    senderName   String
+    senderAvatar String?
 
     message       String
     chatReactions ChatReaction[]

@@ -1,42 +1,38 @@
 import prisma from '@repo/db/client';
-import { Request, Response } from 'express';
+import { ChatMessageType, USER_TYPE } from '../../types/web-socket-types';
 
-export default async function getChatsController(req: Request, res: Response) {
+type ReturnStatement = { success: boolean; messages?: ChatMessageType[]; error?: Error | string };
+
+export default async function getChatsController(
+    role: USER_TYPE,
+    gameSessionId: string,
+    quizId: string,
+): Promise<ReturnStatement> {
+    if (role === USER_TYPE.PARTICIPANT) {
+        return { success: false, error: 'Invalid role' };
+    }
+
     try {
-        const { gameSessionId, quizId } = req.query;
-
-        if (!gameSessionId || !quizId) {
-            res.status(400).json({
-                message: 'Missing required parameters: gameSessionId and quizId.',
-            });
-            return;
-        }
-
         const messages = await prisma.chatMessage.findMany({
-            where: {
-                gameSessionId: gameSessionId as string,
-                quizId: quizId as string,
-            },
-            include: {
-                chatReactions: true,
-                replies: {
-                    include: {
-                        chatReactions: true,
+            where: { gameSessionId, quizId },
+            select: {
+                senderId: true,
+                senderName: true,
+                message: true,
+                createdAt: true,
+                senderAvatar: true,
+                chatReactions: {
+                    select: {
+                        userId: true,
                     },
-                    orderBy: { createdAt: 'asc' },
                 },
-                repliedTo: true,
             },
-            orderBy: {
-                createdAt: 'asc',
-            },
+            orderBy: { createdAt: 'asc' },
         });
 
-        res.status(200).json({ messages });
-        return;
+        return { success: true, messages: messages as ChatMessageType[] };
     } catch (error) {
-        console.error('[GET_CHAT_MESSAGES_ERROR]', error);
-        res.status(500).json({ message: 'Internal server error' });
-        return;
+        console.error('Unable to fetch messages', error);
+        return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
 }

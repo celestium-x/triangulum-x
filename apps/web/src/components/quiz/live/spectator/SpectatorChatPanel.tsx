@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
 import { useLiveSpectatorStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { InteractionEnum, SpectatorType } from '@/types/prisma-types';
-import { ChatMessage, MESSAGE_TYPES } from '@/types/web-socket-types';
+import { ChatMessageType, MESSAGE_TYPES } from '@/types/web-socket-types';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MdOutlineAddReaction } from 'react-icons/md';
@@ -14,6 +14,7 @@ import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
 import { v4 as uuid } from 'uuid';
+import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
 
 export default function SpectatorChatPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForSpectatorStore();
@@ -21,7 +22,7 @@ export default function SpectatorChatPanel() {
     const { subscribeToHandler, unsubscribeToHandler, handleSendChatMessage } = useWebSocket();
     const [_reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const { chatMessages, addChatMessage } = useLiveQuizGlobalChatStore();
 
     function handleToggleExpand() {
         setIsExpanded(!isExpanded);
@@ -29,14 +30,14 @@ export default function SpectatorChatPanel() {
 
     const handleIncomingChatMessage = useCallback(
         (payload: unknown) => {
-            const messagePayload = payload as { id: string; payload: ChatMessage };
+            const messagePayload = payload as { id: string; payload: ChatMessageType };
             const chat = messagePayload.payload;
 
-            if (chat.sender_id === spectatorData?.id) return;
+            if (chat.senderId === spectatorData?.id) return;
 
-            setMessages((prev) => [...prev, chat]);
+            addChatMessage(chat);
         },
-        [spectatorData?.id],
+        [spectatorData?.id, addChatMessage],
     );
 
     useEffect(() => {
@@ -53,17 +54,17 @@ export default function SpectatorChatPanel() {
 
         if (message.length === 0) return;
 
-        const chat: ChatMessage = {
+        const chat: ChatMessageType = {
             id: uuid(),
-            sender_id: spectatorData.id,
-            sender_name: spectatorData.nickname,
-            avatar: spectatorData.avatar!,
+            senderId: spectatorData.id,
+            senderName: spectatorData.nickname,
+            senderAvatar: spectatorData.avatar!,
             message: message,
-            timestamp: Date.now(),
+            createdAt: new Date(Date.now()),
             chatReactions: [],
         };
 
-        setMessages([...messages, chat]);
+        addChatMessage(chat);
         handleSendChatMessage(chat);
         inputRef.current.value = '';
     }
@@ -86,7 +87,7 @@ export default function SpectatorChatPanel() {
             </div>
             <div className="relative h-fit w-full flex flex-col justify-end items-start p-2 overflow-y-auto custom-scrollbar">
                 <div className="h-full w-full overflow-y-auto custom-scrollbar ">
-                    <MessagesRenderer messages={messages} spectatorData={spectatorData!} />
+                    <MessagesRenderer messages={chatMessages} spectatorData={spectatorData!} />
                 </div>
                 <div
                     className={cn(
@@ -132,7 +133,7 @@ function MessagesRenderer({
     messages,
     spectatorData,
 }: {
-    messages: ChatMessage[];
+    messages: ChatMessageType[];
     spectatorData: SpectatorType;
 }) {
     const [hoverMessage, setHoverMessage] = useState<string>('');
@@ -142,8 +143,8 @@ function MessagesRenderer({
         setActiveReactionMessage((prev) => (prev === messageId ? null : messageId));
     };
 
-    const formatTime = (timestamp: number) => {
-        const date = new Date(timestamp);
+    const formatTime = (input: string | number | Date) => {
+        const date = new Date(input);
         return date.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
@@ -153,8 +154,8 @@ function MessagesRenderer({
 
     return (
         <div className="w-full px-3 py-3 flex flex-col gap-y-3 relative">
-            {messages.map((message) => {
-                const isOwnMessage = message.sender_id === spectatorData.id;
+            {messages.map((message, index) => {
+                const isOwnMessage = message.senderId === spectatorData.id;
 
                 return (
                     <div
@@ -162,14 +163,14 @@ function MessagesRenderer({
                             'flex items-end gap-x-2',
                             isOwnMessage ? 'flex-row-reverse' : 'flex-row',
                         )}
-                        key={message.id}
+                        key={index}
                         onMouseEnter={() => setHoverMessage(message.id)}
                         onMouseLeave={() => setHoverMessage('')}
                     >
                         <div className="size-[28px] rounded-full overflow-hidden flex-shrink-0">
                             <Image
-                                src={message.avatar}
-                                alt={message.sender_name}
+                                src={message.senderAvatar || ''}
+                                alt={message.senderName}
                                 width={28}
                                 height={28}
                                 className="object-cover"
@@ -191,7 +192,7 @@ function MessagesRenderer({
                                 'text-[10px] text-neutral-500 dark:text-neutral-400 self-end pb-1 flex-shrink-0',
                             )}
                         >
-                            {formatTime(message.timestamp)}
+                            {formatTime(new Date(message.createdAt))}
                         </div>
                     </div>
                 );

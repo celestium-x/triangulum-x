@@ -1508,7 +1508,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 11221,
+      "bytes": 11345,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1722,7 +1722,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1695,
+      "bytes": 1873,
       "imports": [
         {
           "path": "ws",
@@ -1846,8 +1846,24 @@
       "imports": [],
       "format": "cjs"
     },
+    "src/controllers/chat-controller/getChatsController.ts": {
+      "bytes": 1251,
+      "imports": [
+        {
+          "path": "../../packages/db/index.ts",
+          "kind": "import-statement",
+          "original": "@repo/db/client"
+        },
+        {
+          "path": "src/types/web-socket-types.ts",
+          "kind": "import-statement",
+          "original": "../../types/web-socket-types"
+        }
+      ],
+      "format": "esm"
+    },
     "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-      "bytes": 7636,
+      "bytes": 8017,
       "imports": [
         {
           "path": "express",
@@ -1873,6 +1889,11 @@
           "path": "src/class/quizAction.ts",
           "kind": "import-statement",
           "original": "../../class/quizAction"
+        },
+        {
+          "path": "src/controllers/chat-controller/getChatsController.ts",
+          "kind": "import-statement",
+          "original": "../chat-controller/getChatsController"
         }
       ],
       "format": "esm"
@@ -2016,22 +2037,6 @@
     },
     "src/controllers/live-quiz-controller/getParticipantsOnCall.ts": {
       "bytes": 1362,
-      "imports": [
-        {
-          "path": "../../packages/db/index.ts",
-          "kind": "import-statement",
-          "original": "@repo/db/client"
-        },
-        {
-          "path": "express",
-          "kind": "import-statement",
-          "external": true
-        }
-      ],
-      "format": "esm"
-    },
-    "src/controllers/chat-controller/getChatsController.ts": {
-      "bytes": 1251,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2324,7 +2329,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8826,
+      "bytes": 8878,
       "imports": [
         {
           "path": "ioredis",
@@ -2497,7 +2502,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1002854
+      "bytes": 1003553
     },
     "dist/index.js": {
       "imports": [
@@ -2890,7 +2895,7 @@
           "bytesInOutput": 6880
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 7015
+          "bytesInOutput": 7065
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2932,7 +2937,10 @@
           "bytesInOutput": 3614
         },
         "src/controllers/live-quiz-controller/getLiveQuizDataController.ts": {
-          "bytesInOutput": 5477
+          "bytesInOutput": 5744
+        },
+        "src/controllers/chat-controller/getChatsController.ts": {
+          "bytesInOutput": 793
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2958,9 +2966,6 @@
         "src/controllers/live-quiz-controller/getParticipantsOnCall.ts": {
           "bytesInOutput": 1055
         },
-        "src/controllers/chat-controller/getChatsController.ts": {
-          "bytesInOutput": 882
-        },
         "src/sockets/WebSocketServer.ts": {
           "bytesInOutput": 8960
         },
@@ -2974,10 +2979,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 6574
+          "bytesInOutput": 6594
         }
       },
-      "bytes": 541254
+      "bytes": 541572
     }
   }
 }

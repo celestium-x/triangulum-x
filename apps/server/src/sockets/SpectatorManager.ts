@@ -213,7 +213,7 @@ export default class SpectatorManager {
 
     private async handle_spectator_send_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
         const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
-        const { sender_name, message, repliedToId } = payload;
+        const { senderName, message, repliedToId, senderAvatar } = payload;
 
         if (!quizId || !sender_id || !message) {
             console.error('Missing required fields in chat message payload:', {
@@ -226,7 +226,8 @@ export default class SpectatorManager {
         const chatMessage = {
             senderId: sender_id,
             senderRole: sender_role,
-            senderName: sender_name,
+            senderName: senderName,
+            senderAvatar: senderAvatar,
             message,
             repliedToId: repliedToId ?? null,
         };
