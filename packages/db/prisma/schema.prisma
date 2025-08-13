@@ -248,7 +248,9 @@ model ChatReaction {
     chatMessageId String
     chatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
 
-    userId   String
+    reactorType String
+    reactorName String
+    reactorAvatar   String
     reaction Interactions
 
     reactedAt DateTime @default(now())

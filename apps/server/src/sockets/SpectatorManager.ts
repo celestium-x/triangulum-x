@@ -121,29 +121,19 @@ export default class SpectatorManager {
             case MESSAGE_TYPES.SPECTATOR_NAME_CHANGE:
                 this.handle_spectator_name_change(payload, ws);
                 break;
-            case MESSAGE_TYPES.REACTION_EVENT:
-                this.handle_incoming_reaction_event(payload, ws);
-                break;
 
             case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
                 this.handle_spectator_send_message(payload, ws);
                 break;
+
+            case MESSAGE_TYPES.REACTION_EVENT:
+                this.handle_incoming_reaction_event(payload, ws);
+                break;
+
             default:
                 console.error('Unknown message type: ', type);
                 break;
         }
-    }
-
-    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
-        const { reactionType } = payload;
-        const published_message: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.REACTION_EVENT,
-            payload: {
-                reactionType,
-            },
-            exclude_socket_id: ws.id,
-        };
-        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
     }
 
     private cleanup_spectator_socket(ws: CustomWebSocket): void {
@@ -248,6 +238,20 @@ export default class SpectatorManager {
             .catch((err) => {
                 console.error('Failed to enqueue chat message:', err);
             });
+    }
+
+    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
+        const { chatMessageId, reactionType } = payload;
+        
+        const published_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.REACTION_EVENT,
+            payload: {
+                chatMessageId,
+                reactionType,
+            },
+            exclude_socket_id: ws.id,
+        };
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
     }
 
     private generateSocketId(): string {

@@ -1482,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 8841,
+      "bytes": 7225,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1508,7 +1508,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 11345,
+      "bytes": 11256,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -2329,7 +2329,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8878,
+      "bytes": 8935,
       "imports": [
         {
           "path": "ioredis",
@@ -2502,7 +2502,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1003553
+      "bytes": 1001073
     },
     "dist/index.js": {
       "imports": [
@@ -2892,10 +2892,10 @@
           "bytesInOutput": 2265
         },
         "src/cache/RedisCache.ts": {
-          "bytesInOutput": 6880
+          "bytesInOutput": 5538
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 7065
+          "bytesInOutput": 6982
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2979,10 +2979,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 6594
+          "bytesInOutput": 6632
         }
       },
-      "bytes": 541572
+      "bytes": 540185
     }
   }
 }
