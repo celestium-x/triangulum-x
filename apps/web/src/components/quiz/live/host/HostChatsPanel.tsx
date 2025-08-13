@@ -17,7 +17,7 @@ import { MdChevronRight } from 'react-icons/md';
 import { v4 as uuid } from 'uuid';
 import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
 import { useLiveHostStore } from '@/store/live-quiz/useLiveQuizUserStore';
-import { IoClose } from "react-icons/io5";
+import { IoClose } from 'react-icons/io5';
 import MessagesRenderer from '../common/MessageRenderer';
 
 export default function HostChatsPanel() {
@@ -65,11 +65,7 @@ export default function HostChatsPanel() {
             const reactionPayload = payload as ChatReactionType;
             const reaction = reactionPayload;
 
-            if (
-                reaction.reactorName === hostData?.name &&
-                reaction.reactorType === 'HOST'
-            )
-                return;
+            if (reaction.reactorName === hostData?.name && reaction.reactorType === 'HOST') return;
             addChatReaction(reaction);
         },
         [hostData?.name, addChatReaction],
@@ -130,7 +126,8 @@ export default function HostChatsPanel() {
                 <div className="h-full w-full overflow-y-auto custom-scrollbar">
                     <MessagesRenderer
                         messages={uniqueMessages}
-                        id={hostData?.id!}
+                        // check it once
+                        id={hostData?.id || ''}
                         onSendReaction={(chatMessageId, reaction) => {
                             if (!hostData) return;
                             const reactionData: ChatReactionType = {
@@ -157,24 +154,22 @@ export default function HostChatsPanel() {
                     )}
                 >
                     {selectedReply && (
-                        <div className={cn(
-                            'relative w-full rounded-xl mt-2 px-4 py-2 flex justify-start items-center border border-neutral-800 bg-neutral-900',
-                            'dark:text-neutral-500'
-                        )}>
-                            <div className='pr-10 truncate'>
-                                {selectedReply.message}
-                            </div>
+                        <div
+                            className={cn(
+                                'relative w-full rounded-xl mt-2 px-4 py-2 flex justify-start items-center border border-neutral-800 bg-neutral-900',
+                                'dark:text-neutral-500',
+                            )}
+                        >
+                            <div className="pr-10 truncate">{selectedReply.message}</div>
                             <div
-                                className='bg-neutral-300 p-[1px] absolute right-2 rounded-full'
+                                className="bg-neutral-300 p-[1px] absolute right-2 rounded-full"
                                 onClick={() => setSelectedReply(null)}
                             >
-                                <IoClose className='text-black size-3' />
+                                <IoClose className="text-black size-3" />
                             </div>
                         </div>
                     )}
-                    <div
-                        className='flex justify-center items-center gap-x-2'
-                    >
+                    <div className="flex justify-center items-center gap-x-2">
                         <span
                             onClick={() => setReactionAppear((prev) => !prev)}
                             className="dark:text-neutral-200  rounded-full p-1.5 transition-colors duration-200"
@@ -204,8 +199,8 @@ export default function HostChatsPanel() {
                             />
                         </span>
                     </div>
-                </div >
-            </div >
-        </div >
+                </div>
+            </div>
+        </div>
     );
 }

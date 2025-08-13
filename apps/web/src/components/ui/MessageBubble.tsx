@@ -1,9 +1,8 @@
-import { cn } from "@/lib/utils";
-import { InteractionEnum } from "@/types/prisma-types";
-import { ChatMessageType } from "@/types/web-socket-types";
-import { MdOutlineAddReaction } from "react-icons/md";
-import Reactions from "../quiz/live/common/Reactions";
-
+import { cn } from '@/lib/utils';
+import { InteractionEnum } from '@/types/prisma-types';
+import { ChatMessageType } from '@/types/web-socket-types';
+import { MdOutlineAddReaction } from 'react-icons/md';
+import Reactions from '../quiz/live/common/Reactions';
 
 export default function MessageBubble({
     message,
@@ -35,13 +34,10 @@ export default function MessageBubble({
                 colored
                     ? 'bg-[#8e46f3] text-white'
                     : 'bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white',
-                colored
-                    ? 'rounded-l-lg rounded-br-xs '
-                    : 'rounded-r-lg rounded-bl-xs ',
+                colored ? 'rounded-l-lg rounded-br-xs ' : 'rounded-r-lg rounded-bl-xs ',
                 'shadow-sm',
             )}
         >
-
             {repliedMessage && (
                 <div
                     className={cn(

@@ -1,9 +1,9 @@
-import MessageBubble from "@/components/ui/MessageBubble";
-import { cn } from "@/lib/utils";
-import { InteractionEnum, SpectatorType, } from "@/types/prisma-types";
-import { ChatMessageType, ChatReactionType } from "@/types/web-socket-types";
-import Image from "next/image";
-import { useMemo, useRef, useState } from "react";
+import MessageBubble from '@/components/ui/MessageBubble';
+import { cn } from '@/lib/utils';
+import { InteractionEnum } from '@/types/prisma-types';
+import { ChatMessageType, ChatReactionType } from '@/types/web-socket-types';
+import Image from 'next/image';
+import { useMemo, useRef, useState } from 'react';
 
 export default function MessagesRenderer({
     messages,
@@ -24,7 +24,7 @@ export default function MessagesRenderer({
     const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
     const messageMap = useMemo(() => {
-        return new Map(messages.map(m => [m.id, m]));
+        return new Map(messages.map((m) => [m.id, m]));
     }, [messages]);
 
     const handleToggleReaction = (messageId: string) => {
@@ -68,8 +68,8 @@ export default function MessagesRenderer({
                 return '😀';
             default:
                 return '👍';
-        };
-    }
+        }
+    };
 
     //
     const scrollToMessage = (id: string) => {
@@ -168,7 +168,7 @@ export default function MessagesRenderer({
                                                     </span>
                                                 )}
                                             </div>
-                                        )
+                                        ),
                                     )}
                                 </div>
                             )}
@@ -177,6 +177,5 @@ export default function MessagesRenderer({
                 );
             })}
         </div>
-
     );
 }
