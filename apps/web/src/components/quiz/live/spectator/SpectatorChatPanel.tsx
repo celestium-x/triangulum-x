@@ -128,7 +128,7 @@ export default function SpectatorChatPanel() {
                 <div className="h-full w-full overflow-y-auto custom-scrollbar">
                     <MessagesRenderer
                         messages={uniqueMessages}
-                        spectatorData={spectatorData!}
+                        id={spectatorData?.id!}
                         onSendReaction={(chatMessageId, reaction) => {
                             if (!spectatorData) return;
                             const reactionData: ChatReactionType = {

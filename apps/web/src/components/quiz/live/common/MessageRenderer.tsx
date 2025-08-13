@@ -1,19 +1,19 @@
 import MessageBubble from "@/components/ui/MessageBubble";
 import { cn } from "@/lib/utils";
-import { InteractionEnum, SpectatorType } from "@/types/prisma-types";
+import { InteractionEnum, SpectatorType, } from "@/types/prisma-types";
 import { ChatMessageType, ChatReactionType } from "@/types/web-socket-types";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 
 export default function MessagesRenderer({
     messages,
-    spectatorData,
+    id,
     onSendReaction,
     onDoubleClick,
     highlight,
 }: {
     messages: ChatMessageType[];
-    spectatorData: SpectatorType;
+    id: string;
     onSendReaction: (chatMessageId: string, reaction: InteractionEnum) => void;
     onDoubleClick: (message: ChatMessageType) => void;
     highlight: ChatMessageType | null;
@@ -84,7 +84,7 @@ export default function MessagesRenderer({
     return (
         <div className="w-full p-3 pt-14 flex flex-col gap-y-3 relative">
             {messages.map((message) => {
-                const isOwnMessage = message.senderId === spectatorData.id;
+                const isOwnMessage = message.senderId === id;
                 const groupedReactions = groupReactionsByType(message.chatReactions ?? []);
                 //
                 const highlighted = highlight?.id === message.id;
@@ -148,8 +148,9 @@ export default function MessagesRenderer({
                                     )}
                                 >
                                     {Object.entries(groupedReactions).map(
-                                        ([reactionType, data]) => (
+                                        ([reactionType, data], index) => (
                                             <div
+                                                key={index}
                                                 className={cn(
                                                     'flex items-center gap-x-1 px-1.5 py-0.5 rounded-full text-xs',
                                                     'bg-neutral-100 dark:bg-neutral-900',

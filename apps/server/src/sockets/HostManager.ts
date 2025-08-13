@@ -2,6 +2,8 @@ import Redis from 'ioredis';
 import {
     CookiePayload,
     CustomWebSocket,
+    IncomingChatMessage,
+    IncomingChatReaction,
     MESSAGE_TYPES,
     PubSubMessageTypes,
 } from '../types/web-socket-types';
@@ -81,12 +83,17 @@ export default class HostManager {
             case MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW:
                 this.handle_host_question_preview_page_change(ws);
                 break;
-            case MESSAGE_TYPES.REACTION_EVENT:
-                this.handle_incoming_reaction_event(payload, ws);
-                break;
 
             case MESSAGE_TYPES.HOST_LAUNCH_QUESTION:
                 this.handle_question_launch(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
+                this.handle_send_chat_message(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.REACTION_EVENT:
+                this.handle_incoming_reaction_event(payload, ws);
                 break;
 
             default:
@@ -129,18 +136,6 @@ export default class HostManager {
         // };
     }
 
-    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
-        const { reactionType } = payload;
-        const published_message: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.REACTION_EVENT,
-            payload: {
-                reactionType,
-            },
-            exclude_socket_id: ws.id,
-        };
-        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
-    }
-
     private async validateHostInDB(quizId: string, hostId: string): Promise<boolean> {
         const quiz = await prisma.quiz.findUnique({
             where: { id: quizId, hostId },
@@ -171,6 +166,83 @@ export default class HostManager {
         };
 
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
+
+    private async handle_send_chat_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
+        const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
+        const { senderName, message, repliedToId, senderAvatar } = payload;
+
+        if (!quizId || !sender_id || !message) {
+            console.error('Missing required fields in chat message payload:', {
+                quizId,
+                message,
+            });
+            return;
+        }
+
+        const chatMessage = {
+            senderId: sender_id,
+            senderRole: sender_role,
+            senderName: senderName,
+            senderAvatar: senderAvatar,
+            message,
+            repliedToId: repliedToId ?? null,
+        };
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
+            payload: {
+                id: ws.user.userId,
+                payload: payload,
+            },
+            exclude_socket_id: ws.user.userId,
+        };
+
+        this.quizManager.publish_event_to_redis(gameSessionId, event_data);
+
+        this.database_queue
+            .create_chat_message(gameSessionId, gameSessionId, quizId, chatMessage)
+            .catch((err) => {
+                console.error('Failed to enqueue chat message:', err);
+            });
+    }
+
+    private handle_incoming_reaction_event(payload: IncomingChatReaction, ws: CustomWebSocket) {
+        const { userId } = ws.user;
+        const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
+            payload;
+
+        if (!chatMessageId) {
+            console.error('Missing required fields in chat reactuon payload:', {
+                chatMessageId,
+            });
+            return;
+        }
+
+        const chatReaction = {
+            reaction,
+            reactedAt,
+            reactorName,
+            reactorAvatar,
+            reactorType,
+        };
+
+        const published_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.REACTION_EVENT,
+            payload: {
+                chatMessageId,
+                reactorType,
+            },
+            exclude_socket_id: ws.id,
+        };
+
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
+
+        this.database_queue
+            .create_chat_reaction(userId, chatMessageId, chatReaction)
+            .catch((err) => {
+                console.error('Failed to enqueue chat reaction: ', err);
+            });
     }
 
     private generateSocketId(): string {
