@@ -1,6 +1,6 @@
 import { GameSession, Question, Spectator } from '@repo/db/client';
 import Redis from 'ioredis';
-import { Participant, Quiz, ChatMessage } from '@repo/db/client';
+import { Participant, Quiz } from '@repo/db/client';
 
 const SECONDS = 60;
 const MINUTES = 60;
@@ -150,54 +150,6 @@ export default class RedisCache {
 
     public get_spectator_key(game_session_id: string) {
         return `game_session:${game_session_id}:spectators`;
-    }
-
-    //  <------------------ CHAT ------------------>
-
-    public async add_chat_message(game_session_id: string, message: ChatMessage) {
-        try {
-            const key = this.get_game_session_chats_key(game_session_id);
-
-            await this.redis_cache.lpush(key, JSON.stringify(message));
-            await this.redis_cache.ltrim(key, 0, 99);
-            await this.redis_cache.expire(key, SECONDS * MINUTES * HOURS);
-        } catch (error) {
-            console.error('Error adding chat message: ', error);
-        }
-    }
-
-    public async get_game_session_chats(
-        game_session_id: string,
-        limit: number = 50,
-        offset: number = 0,
-    ) {
-        try {
-            const key = this.get_game_session_chats_key(game_session_id);
-
-            const messages = await this.redis_cache.lrange(key, offset, offset + limit - 1);
-
-            return messages.map((msg) => {
-                try {
-                    return JSON.parse(msg);
-                } catch (error) {
-                    console.error('Failed to parse message: ', error);
-                    return null;
-                }
-            });
-        } catch (error) {
-            console.error('Error getting chat messages: ', error);
-            return;
-        }
-    }
-
-    // public async update_chat_message(game_session_id: string, messageId: string) {
-    //     try {
-    //         const key = this.get_game_session_chats_key(game_session_id);
-    //     } catch (error) {}
-    // }
-
-    private get_game_session_chats_key(game_session_id: string) {
-        return `game_session:${game_session_id}:chats`;
     }
 
     //  <------------------ QUIZ ------------------>

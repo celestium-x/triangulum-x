@@ -225,7 +225,6 @@ export default class DatabaseQueue {
                 },
             });
 
-            await this.redis_cache.add_chat_message(game_session_id, createChatMessage);
             return {
                 success: true,
                 chatMessage: createChatMessage,
