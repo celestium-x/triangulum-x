@@ -18,7 +18,6 @@ import { getLiveQuizSummarizedData } from '../controllers/live-quiz-controller/g
 import getSelectedQuestionDetails from '../controllers/live-quiz-controller/getSelectedQuestionDetails';
 import getSpectatorOnCall from '../controllers/live-quiz-controller/getSpectatorOnCall';
 import getParticipantsOnCall from '../controllers/live-quiz-controller/getParticipantsOnCall';
-import getChatsController from '../controllers/chat-controller/getChatsController';
 
 const router = Router();
 

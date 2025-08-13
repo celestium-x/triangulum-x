@@ -1,6 +1,6 @@
 import { GameSession, Question, Spectator } from '@repo/db/client';
 import Redis from 'ioredis';
-import { Participant, Quiz, ChatMessage } from '@repo/db/client';
+import { Participant, Quiz } from '@repo/db/client';
 
 const SECONDS = 60;
 const MINUTES = 60;

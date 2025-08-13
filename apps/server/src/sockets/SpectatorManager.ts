@@ -242,7 +242,6 @@ export default class SpectatorManager {
 
     private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
         const { chatMessageId, reactionType } = payload;
-        
         const published_message: PubSubMessageTypes = {
             type: MESSAGE_TYPES.REACTION_EVENT,
             payload: {
