@@ -21,6 +21,19 @@ export interface PubSubMessageTypes {
     exclude_socket_id?: string;
 }
 
+export enum Interactions {
+    THUMBS_UP = 'THUMBS_UP',
+    DOLLAR = 'DOLLAR',
+    BULB = 'BULB',
+    HEART = 'HEART',
+    SMILE = 'SMILE',
+}
+
+export enum ReactorType {
+    HOST = 'HOST',
+    SPECTATOR = 'SPECTATOR',
+}
+
 export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
     HOST_CHANGE_QUESTION_PREVIEW = 'HOST_CHANGE_QUESTION_PREVIEW',
@@ -60,12 +73,13 @@ export interface IncomingChatMessage {
     repliedToId?: string;
 }
 
-export enum Interactions {
-    THUMBS_UP = 'THUMBS_UP',
-    DOLLAR = 'DOLLAR',
-    BULB = 'BULB',
-    HEART = 'HEART',
-    SMILE = 'SMILE',
+export interface IncomingChatReaction {
+    chatMessageId: string;
+    reactorName: string;
+    reactorAvatar: string;
+    reaction: Interactions;
+    reactedAt: Date;
+    reactorType: ReactorType;
 }
 
 export type ChatMessageType = {
@@ -76,9 +90,10 @@ export type ChatMessageType = {
     createdAt: Date;
     senderAvatar?: string | null;
     chatReactions: {
-        id: string;
-        userId: string;
-        reaction: Interactions[];
-        reactedAt: number;
+        reactorName: string;
+        reactorAvatar: string;
+        reaction: Interactions;
+        reactedAt: Date;
+        reactorType: ReactorType;
     }[];
 };

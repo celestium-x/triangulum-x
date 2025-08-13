@@ -16,6 +16,7 @@ export default async function getChatsController(
         const messages = await prisma.chatMessage.findMany({
             where: { gameSessionId, quizId },
             select: {
+                id: true,
                 senderId: true,
                 senderName: true,
                 message: true,
@@ -23,7 +24,11 @@ export default async function getChatsController(
                 senderAvatar: true,
                 chatReactions: {
                     select: {
-                        userId: true,
+                        reactorName: true,
+                        reactorAvatar: true,
+                        reaction: true,
+                        reactedAt: true,
+                        reactorType: true,
                     },
                 },
             },

@@ -8,9 +8,11 @@ import prisma, {
     Spectator,
     ChatMessage,
     ChatReaction,
+    Interactions,
 } from '@repo/db/client';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
+import { ReactorType } from '../types/web-socket-types';
 const REDIS_URL = process.env.REDIS_URL;
 
 interface UpdateGameSessionJobtype {
@@ -53,8 +55,14 @@ interface CreateChatMessageJobType {
 
 interface CreateChatReactionJobType {
     id: string;
-    chatMessageId: string;
-    chatReaction: Prisma.ChatReactionCreateInput;
+    chat_message_id: string;
+    chat_reaction: {
+        reactorType: ReactorType;
+        reactorName: string;
+        reactorAvatar: string;
+        reaction: Interactions;
+        reactedAt?: Date;
+    };
 }
 
 export default class DatabaseQueue {
@@ -244,15 +252,20 @@ export default class DatabaseQueue {
         { success: boolean; chatReaction: ChatReaction } | { success: boolean; error: string }
     > {
         try {
-            const { chatReaction }: CreateChatReactionJobType = job.data;
+            const { chat_reaction, chat_message_id }: CreateChatReactionJobType = job.data;
 
             const createChatReaction = await prisma.chatReaction.create({
                 data: {
-                    ...chatReaction,
+                    ...chat_reaction,
+                    chatMessageId: chat_message_id,
+                    reactorName: chat_reaction.reactorName,
+                    reactorAvatar: chat_reaction.reactorAvatar,
+                    reactedAt: chat_reaction.reactedAt,
+                    reaction: chat_reaction.reaction,
+                    reactorType: chat_reaction.reactorType,
                 },
             });
 
-            // add this to redis
             return {
                 success: true,
                 chatReaction: createChatReaction,
@@ -342,10 +355,16 @@ export default class DatabaseQueue {
     public async create_chat_reaction(
         id: string,
         chat_message_id: string,
-        chat_reaction: Prisma.ChatReactionCreateInput,
+        chat_reaction: {
+            reactedAt: Date;
+            reaction: Interactions;
+            reactorAvatar: string;
+            reactorName: string;
+            reactorType: ReactorType;
+        },
         options?: Partial<JobOption>,
     ) {
-        this.database_queue
+        return await this.database_queue
             .add(
                 QueueJobTypes.CREATE_CHAT_REACTION,
                 { id, chat_message_id, chat_reaction },

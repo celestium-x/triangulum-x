@@ -1482,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 7225,
+      "bytes": 7212,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1508,7 +1508,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 11256,
+      "bytes": 11960,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1534,6 +1534,11 @@
           "path": "src/services/init-services.ts",
           "kind": "import-statement",
           "original": "../services/init-services"
+        },
+        {
+          "path": "../types/web-socket-types",
+          "kind": "import-statement",
+          "external": true
         }
       ],
       "format": "esm"
@@ -1722,7 +1727,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 1873,
+      "bytes": 2197,
       "imports": [
         {
           "path": "ws",
@@ -1847,7 +1852,7 @@
       "format": "cjs"
     },
     "src/controllers/chat-controller/getChatsController.ts": {
-      "bytes": 1251,
+      "bytes": 1451,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2052,7 +2057,7 @@
       "format": "esm"
     },
     "src/routes/index.ts": {
-      "bytes": 3425,
+      "bytes": 3250,
       "imports": [
         {
           "path": "express",
@@ -2148,11 +2153,6 @@
           "path": "src/controllers/live-quiz-controller/getParticipantsOnCall.ts",
           "kind": "import-statement",
           "original": "../controllers/live-quiz-controller/getParticipantsOnCall"
-        },
-        {
-          "path": "src/controllers/chat-controller/getChatsController.ts",
-          "kind": "import-statement",
-          "original": "../controllers/chat-controller/getChatsController"
         }
       ],
       "format": "esm"
@@ -2329,7 +2329,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 8935,
+      "bytes": 9639,
       "imports": [
         {
           "path": "ioredis",
@@ -2502,7 +2502,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1001073
+      "bytes": 1003027
     },
     "dist/index.js": {
       "imports": [
@@ -2661,7 +2661,7 @@
           "bytesInOutput": 702
         },
         "src/routes/index.ts": {
-          "bytesInOutput": 1571
+          "bytesInOutput": 1501
         },
         "src/controllers/user-controller/signInController.ts": {
           "bytesInOutput": 1276
@@ -2895,7 +2895,7 @@
           "bytesInOutput": 5538
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 6982
+          "bytesInOutput": 7300
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2940,7 +2940,7 @@
           "bytesInOutput": 5744
         },
         "src/controllers/chat-controller/getChatsController.ts": {
-          "bytesInOutput": 793
+          "bytesInOutput": 937
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2979,10 +2979,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 6632
+          "bytesInOutput": 7159
         }
       },
-      "bytes": 540185
+      "bytes": 541104
     }
   }
 }
