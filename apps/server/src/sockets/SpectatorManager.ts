@@ -3,6 +3,7 @@ import {
     CookiePayload,
     CustomWebSocket,
     IncomingChatMessage,
+    IncomingChatReaction,
     MESSAGE_TYPES,
     PubSubMessageTypes,
     SpectatorNameChangeEvent,
@@ -240,17 +241,42 @@ export default class SpectatorManager {
             });
     }
 
-    private handle_incoming_reaction_event(payload: any, ws: CustomWebSocket) {
-        const { chatMessageId, reactionType } = payload;
+    private handle_incoming_reaction_event(payload: IncomingChatReaction, ws: CustomWebSocket) {
+        const { userId } = ws.user;
+        const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
+            payload;
+
+        if (!chatMessageId) {
+            console.error('Missing required fields in chat reactuon payload:', {
+                chatMessageId,
+            });
+            return;
+        }
+
+        const chatReaction = {
+            reaction,
+            reactedAt,
+            reactorName,
+            reactorAvatar,
+            reactorType,
+        };
+
         const published_message: PubSubMessageTypes = {
             type: MESSAGE_TYPES.REACTION_EVENT,
             payload: {
                 chatMessageId,
-                reactionType,
+                reactorType,
             },
             exclude_socket_id: ws.id,
         };
+
         this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
+
+        this.database_queue
+            .create_chat_reaction(userId, chatMessageId, chatReaction)
+            .catch((err) => {
+                console.error('Failed to enqueue chat reaction: ', err);
+            });
     }
 
     private generateSocketId(): string {

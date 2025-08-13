@@ -248,7 +248,7 @@ model ChatReaction {
     chatMessageId String
     chatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
 
-    reactorType String
+    reactorType ReactorType
     reactorName String
     reactorAvatar   String
     reaction Interactions
@@ -320,4 +320,9 @@ enum QuizPhase {
     QUESTION_ACTIVE
     SHOW_RESULTS
     WAITING_NEXT
+}
+
+enum ReactorType {
+    HOST
+    SPECTATOR
 }

@@ -12,7 +12,7 @@ export default function ExpandableCard({ children, ref, isExpanded }: Expandable
         <div
             ref={ref}
             className={cn(
-                'p-0 rounded-xl z-100',
+                'p-0 rounded-xl z-80',
                 'duration-300 ease-in-out transition-all',
                 'border border-neutral-200 dark:border-neutral-700 bg-light-base dark:bg-neutral-900',
                 'shadow-2xl',

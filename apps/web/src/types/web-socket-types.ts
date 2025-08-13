@@ -1,3 +1,5 @@
+import { InteractionEnum } from './prisma-types';
+
 export enum MESSAGE_TYPES {
     HOST_JOIN_GAME_SESSION = 'JOIN_GAME_SESSION',
     HOST_CHANGE_QUESTION_PREVIEW = 'HOST_CHANGE_QUESTION_PREVIEW',
@@ -16,12 +18,9 @@ export interface ParticipantNameChangeEvent {
     choosenNickname: string;
 }
 
-export enum Interactions {
-    THUMBS_UP = 'THUMBS_UP',
-    DOLLAR = 'DOLLAR',
-    BULB = 'BULB',
-    HEART = 'HEART',
-    SMILE = 'SMILE',
+export enum ReactorType {
+    HOST = 'HOST',
+    SPECTATOR = 'SPECTATOR',
 }
 
 export type ChatMessageType = {
@@ -32,11 +31,22 @@ export type ChatMessageType = {
     createdAt: Date;
     senderAvatar?: string | null;
     chatReactions: {
-        id: string;
-        userId: string;
-        reaction: Interactions[];
-        reactedAt: number;
+        chatMessageId: string;
+        reactorName: string;
+        reactorAvatar: string;
+        reaction: InteractionEnum;
+        reactedAt: Date;
+        reactorType: ReactorType;
     }[];
+};
+
+export type ChatReactionType = {
+    chatMessageId: string;
+    reactorName: string;
+    reactorAvatar: string;
+    reaction: InteractionEnum;
+    reactedAt: Date;
+    reactorType: ReactorType;
 };
 
 export interface SpectatorNameChangeEvent {

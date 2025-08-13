@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useWebSocket } from './useWebSocket';
-import { MESSAGE_TYPES } from '@/types/web-socket-types';
+import { ChatReactionType, MESSAGE_TYPES } from '@/types/web-socket-types';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { GameSessionType, ParticipantType, SpectatorType } from '@/types/prisma-types';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
+import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
 
 export const useSubscribeEventHandlers = () => {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
@@ -17,6 +18,7 @@ export const useSubscribeEventHandlers = () => {
     const { updateGameSession } = useLiveQuizStore();
     const { updateSpectatorData } = useLiveSpectatorStore();
     const { upsertSpectator } = useLiveSpectatorsStore();
+    const { addChatReaction } = useLiveQuizGlobalChatStore();
 
     function handleIncomingMessage(payload: unknown) {
         upsertParticipant(payload as ParticipantType);
@@ -59,14 +61,22 @@ export const useSubscribeEventHandlers = () => {
         } as SpectatorType);
     }
 
+    function handleIncomingChatReactionMessage(payload: unknown) {
+        const message = payload as ChatReactionType;
+        addChatReaction(message);
+    }
+
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION, handleIncomingMessage);
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE, handleIncomingNameChangeMessage);
+
         subscribeToHandler(
             MESSAGE_TYPES.SPECTATOR_NAME_CHANGE,
             handleIncomingSpectatorNameChangeMessage,
         );
         subscribeToHandler(MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION, handleIncomingNewSpectator);
+        subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReactionMessage);
+
         subscribeToHandler(
             MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
             handleIncomingQuestionPreviewPageChange,
@@ -80,6 +90,7 @@ export const useSubscribeEventHandlers = () => {
                 MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
                 handleIncomingNameChangeMessage,
             );
+            unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReactionMessage);
         };
     });
 };
