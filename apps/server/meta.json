@@ -1508,7 +1508,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 11960,
+      "bytes": 12033,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1727,7 +1727,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 2197,
+      "bytes": 2196,
       "imports": [
         {
           "path": "ws",
@@ -1852,7 +1852,7 @@
       "format": "cjs"
     },
     "src/controllers/chat-controller/getChatsController.ts": {
-      "bytes": 1451,
+      "bytes": 1485,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2216,7 +2216,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 6211,
+      "bytes": 8616,
       "imports": [
         {
           "path": "ioredis",
@@ -2329,7 +2329,7 @@
       "format": "esm"
     },
     "src/sockets/SpectatorManager.ts": {
-      "bytes": 9639,
+      "bytes": 9693,
       "imports": [
         {
           "path": "ioredis",
@@ -2502,7 +2502,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1003027
+      "bytes": 1006841
     },
     "dist/index.js": {
       "imports": [
@@ -2895,7 +2895,7 @@
           "bytesInOutput": 5538
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 7300
+          "bytesInOutput": 7366
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2940,7 +2940,7 @@
           "bytesInOutput": 5744
         },
         "src/controllers/chat-controller/getChatsController.ts": {
-          "bytesInOutput": 937
+          "bytesInOutput": 964
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2970,7 +2970,7 @@
           "bytesInOutput": 8960
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 4395
+          "bytesInOutput": 6258
         },
         "src/sockets/QuizManager.ts": {
           "bytesInOutput": 2425
@@ -2979,10 +2979,10 @@
           "bytesInOutput": 6033
         },
         "src/sockets/SpectatorManager.ts": {
-          "bytesInOutput": 7159
+          "bytesInOutput": 7208
         }
       },
-      "bytes": 541104
+      "bytes": 543109
     }
   }
 }

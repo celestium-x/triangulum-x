@@ -124,7 +124,7 @@ export default class SpectatorManager {
                 break;
 
             case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
-                this.handle_spectator_send_message(payload, ws);
+                this.handle_send_chat_message(payload, ws);
                 break;
 
             case MESSAGE_TYPES.REACTION_EVENT:
@@ -202,7 +202,7 @@ export default class SpectatorManager {
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 
-    private async handle_spectator_send_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
+    private async handle_send_chat_message(payload: IncomingChatMessage, ws: CustomWebSocket) {
         const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
         const { senderName, message, repliedToId, senderAvatar } = payload;
 
