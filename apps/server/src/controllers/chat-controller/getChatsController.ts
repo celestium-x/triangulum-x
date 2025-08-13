@@ -22,6 +22,7 @@ export default async function getChatsController(
                 message: true,
                 createdAt: true,
                 senderAvatar: true,
+                repliedToId: true,
                 chatReactions: {
                     select: {
                         reactorName: true,

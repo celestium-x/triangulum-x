@@ -30,6 +30,7 @@ export type ChatMessageType = {
     message: string;
     createdAt: Date;
     senderAvatar?: string | null;
+    repliedToId?: string,
     chatReactions: {
         chatMessageId: string;
         reactorName: string;

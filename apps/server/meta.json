@@ -1727,7 +1727,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 2197,
+      "bytes": 2196,
       "imports": [
         {
           "path": "ws",
@@ -1852,7 +1852,7 @@
       "format": "cjs"
     },
     "src/controllers/chat-controller/getChatsController.ts": {
-      "bytes": 1451,
+      "bytes": 1485,
       "imports": [
         {
           "path": "../../packages/db/index.ts",
@@ -2502,7 +2502,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1003027
+      "bytes": 1003076
     },
     "dist/index.js": {
       "imports": [
@@ -2940,7 +2940,7 @@
           "bytesInOutput": 5744
         },
         "src/controllers/chat-controller/getChatsController.ts": {
-          "bytesInOutput": 937
+          "bytesInOutput": 964
         },
         "src/schemas/spectatorJoinSchema.ts": {
           "bytesInOutput": 127
@@ -2982,7 +2982,7 @@
           "bytesInOutput": 7159
         }
       },
-      "bytes": 541104
+      "bytes": 541131
     }
   }
 }
