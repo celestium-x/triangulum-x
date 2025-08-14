@@ -91,8 +91,8 @@ export default class PhaseQueue {
     }
 
     public async start_processing_jobs() {
-        this.phase_queue.process('phase_transition', async (job) => {
-            console.log(`[${this.server_id}] Processing job`, job.data);
+        this.phase_queue.process('phase_transition', async (_job) => {
+            // console.log(`[${this.server_id}] Processing job`, job.data);
         });
     }
 

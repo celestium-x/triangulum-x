@@ -17,10 +17,6 @@ export default function HostQuestionPreviewRenderer() {
         if (e.key === 'Enter' && currentQuestion) {
             e.preventDefault();
         }
-        console.log('question laucnhed ', {
-            questionId: currentQuestion?.id,
-            questionIndex: currentQuestion?.orderIndex,
-        });
         handleSendHostLaunchQuestion({
             questionId: currentQuestion?.id,
             questionIndex: currentQuestion?.orderIndex,

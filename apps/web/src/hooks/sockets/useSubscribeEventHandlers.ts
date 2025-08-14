@@ -66,8 +66,7 @@ export const useSubscribeEventHandlers = () => {
         addChatReaction(message);
     }
 
-    function handleHostLaunchQuestion() {
-    }
+    function handleHostLaunchQuestion() {}
 
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION, handleIncomingMessage);
