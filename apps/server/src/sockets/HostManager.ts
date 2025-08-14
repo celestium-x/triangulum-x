@@ -6,6 +6,7 @@ import {
     IncomingChatReaction,
     MESSAGE_TYPES,
     PubSubMessageTypes,
+    SECONDS,
 } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma, { HostScreen, ParticipantScreen, SpectatorScreen } from '@repo/db/client';
@@ -13,6 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { WebSocket } from 'ws';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import RedisCache from '../cache/RedisCache';
+import PhaseQueue from '../queue/PhaseQueue';
 
 export interface HostManagerDependencies {
     publisher: Redis;
@@ -22,6 +24,7 @@ export interface HostManagerDependencies {
     quizManager: QuizManager;
     databaseQueue: DatabaseQueue;
     redis_cache: RedisCache;
+    phase_queue: PhaseQueue;
 }
 
 export default class HostManager {
@@ -32,6 +35,7 @@ export default class HostManager {
     private quizManager: QuizManager;
     private database_queue: DatabaseQueue;
     private redis_cache: RedisCache;
+    private phase_queue: PhaseQueue;
 
     constructor(dependencies: HostManagerDependencies) {
         this.publisher = dependencies.publisher;
@@ -41,6 +45,7 @@ export default class HostManager {
         this.quizManager = dependencies.quizManager;
         this.database_queue = dependencies.databaseQueue;
         this.redis_cache = dependencies.redis_cache;
+        this.phase_queue = dependencies.phase_queue;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
@@ -118,6 +123,13 @@ export default class HostManager {
             throw new Error("Questions doesn't exist in quiz");
         }
 
+        const now = Date.now();
+        const buffer = 2 * SECONDS; // 2 seconds
+        const question_reading_time = 7 * SECONDS;
+
+        const start_time = now + buffer;
+        const end_time = start_time + question_reading_time;
+
         await this.database_queue.update_game_session(
             game_session_id,
             {
@@ -126,14 +138,21 @@ export default class HostManager {
                 hostScreen: HostScreen.QUESTION_READING,
                 spectatorScreen: SpectatorScreen.QUESTION_READING,
                 participantScreen: ParticipantScreen.QUESTION_READING,
+                phaseStartTime: new Date(start_time),
+                phaseEndTime: new Date(end_time),
+                currentPhase: 'QUESTION_READING',
             },
             game_session_id,
         );
 
-        // const message: PubSubMessageTypes = {
-        //     type: MESSAGE_TYPES.HOST_LAUNCH_QUESTION,
-        //     payload: {},
-        // };
+        await this.phase_queue.schedule_phase_transition({
+            gameSessionId: game_session_id,
+            questionId,
+            questionIndex,
+            fromPhase: 'QUESTION_READING',
+            toPhase: 'QUESTION_ACTIVE',
+            executeAt: end_time,
+        });
     }
 
     private async validateHostInDB(quizId: string, hostId: string): Promise<boolean> {

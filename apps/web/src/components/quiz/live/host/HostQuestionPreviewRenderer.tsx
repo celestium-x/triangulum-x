@@ -1,21 +1,38 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import Image from 'next/image';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import HostQuestionPreviewOptions from './HostQuestionPreviewOptions';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 
 export default function HostQuestionPreviewRenderer() {
-    const [copied, setCopied] = useState<boolean>(false);
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion } = useLiveQuizStore();
-    useEffect(() => {
-        if (copied) {
-            setTimeout(() => setCopied(false), 2000);
+    const { handleSendHostLaunchQuestion } = useWebSocket();
+
+    function handleLaunchQuestion(e: KeyboardEvent) {
+        if (e.key === 'Enter' && currentQuestion) {
+            e.preventDefault();
         }
-    }, [copied]);
+        console.log('question laucnhed ', {
+            questionId: currentQuestion?.id,
+            questionIndex: currentQuestion?.orderIndex,
+        });
+        handleSendHostLaunchQuestion({
+            questionId: currentQuestion?.id,
+            questionIndex: currentQuestion?.orderIndex,
+        });
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleLaunchQuestion);
+        return () => {
+            document.removeEventListener('keydown', handleLaunchQuestion);
+        };
+    });
 
     if (!currentQuestion) {
         return (

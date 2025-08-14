@@ -66,6 +66,9 @@ export const useSubscribeEventHandlers = () => {
         addChatReaction(message);
     }
 
+    function handleHostLaunchQuestion() {
+    }
+
     useEffect(() => {
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION, handleIncomingMessage);
         subscribeToHandler(MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE, handleIncomingNameChangeMessage);
@@ -81,6 +84,8 @@ export const useSubscribeEventHandlers = () => {
             MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
             handleIncomingQuestionPreviewPageChange,
         );
+        subscribeToHandler(MESSAGE_TYPES.HOST_LAUNCH_QUESTION, handleHostLaunchQuestion);
+
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -91,6 +96,19 @@ export const useSubscribeEventHandlers = () => {
                 handleIncomingNameChangeMessage,
             );
             unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReactionMessage);
+            unsubscribeToHandler(
+                MESSAGE_TYPES.SPECTATOR_NAME_CHANGE,
+                handleIncomingSpectatorNameChangeMessage,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION,
+                handleIncomingNewSpectator,
+            );
+            unsubscribeToHandler(MESSAGE_TYPES.HOST_LAUNCH_QUESTION, handleHostLaunchQuestion);
+            unsubscribeToHandler(
+                MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
+                handleIncomingQuestionPreviewPageChange,
+            );
         };
     });
 };

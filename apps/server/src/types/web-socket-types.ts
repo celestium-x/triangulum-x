@@ -97,3 +97,18 @@ export type ChatMessageType = {
         reactorType: ReactorType;
     }[];
 };
+export const SECONDS = 1000;
+
+// export interface ChatMessage {
+//     id: string;
+//     sender_id: string;
+//     sender_name: string;
+//     avatar: string;
+//     message: string;
+//     timestamp: number;
+//     chatReactions: {
+//         id: string;
+//         name: string;
+//         avatar: string;
+//     }[];
+// }
