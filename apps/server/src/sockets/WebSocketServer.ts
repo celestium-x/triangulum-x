@@ -16,8 +16,13 @@ import {
     MESSAGE_TYPES,
     USER_TYPE,
 } from '../types/web-socket-types';
-import { databaseQueueInstance, redisCacheInstance } from '../services/init-services';
+import {
+    databaseQueueInstance,
+    phaseQueueInstance,
+    redisCacheInstance,
+} from '../services/init-services';
 import DatabaseQueue from '../queue/DatabaseQueue';
+import PhaseQueue from '../queue/PhaseQueue';
 
 dotenv.config();
 const REDIS_URL = process.env.REDIS_URL;
@@ -33,6 +38,7 @@ export default class WebsocketServer {
     private subscriber: Redis;
     private redis_cache: RedisCache;
     private database_queue: DatabaseQueue;
+    private phase_queue!: PhaseQueue;
 
     private hostManager!: HostManager;
     private quizManager!: QuizManager;
@@ -45,6 +51,7 @@ export default class WebsocketServer {
         this.publisher = new Redis(REDIS_URL!);
         this.redis_cache = redisCacheInstance;
         this.database_queue = databaseQueueInstance;
+        this.phase_queue = phaseQueueInstance;
         this.initialize_redis_subscribers();
         this.initialize_managers();
         this.initialize();
@@ -193,6 +200,7 @@ export default class WebsocketServer {
             quizManager: this.quizManager,
             databaseQueue: this.database_queue,
             redis_cache: this.redis_cache,
+            phase_queue: this.phase_queue,
         });
         this.participant_manager = new ParticipantManager({
             publisher: this.publisher,

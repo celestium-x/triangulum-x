@@ -205,4 +205,40 @@ export default class RedisCache {
     private get_quiz_key(game_session_id: string): string {
         return `game_session:${game_session_id}:quiz`;
     }
+
+    //  <------------------ PHASE ------------------>
+
+    public async try_acquire_lock(lock_key: string, lock_value: string, ttl_seconds: number) {
+        try {
+            const result = await this.redis_cache.set(
+                lock_key,
+                lock_value,
+                'EX',
+                ttl_seconds,
+                'NX',
+            );
+            return result === 'OK';
+        } catch (err) {
+            console.error('error in try_acquire_lock', err);
+        }
+    }
+
+    public async renew_lock(lock_key: string, ttl_seconds: number): Promise<boolean> {
+        try {
+            const result = await this.redis_cache.expire(lock_key, ttl_seconds);
+            return result === 1;
+        } catch (err) {
+            console.error(`Error renewing lock ${lock_key}:`, err);
+            return false;
+        }
+    }
+
+    public async get_lock_owner(lock_key: string): Promise<string | null> {
+        try {
+            return await this.redis_cache.get(lock_key);
+        } catch (err) {
+            console.error(`Error reading lock owner ${lock_key}:`, err);
+            return null;
+        }
+    }
 }

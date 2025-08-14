@@ -112,6 +112,17 @@ export const useWebSocket = () => {
         }
     }
 
+    function handleSendHostLaunchQuestion(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.HOST_LAUNCH_QUESTION,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+
     return {
         subscribeToHandler,
         unsubscribeToHandler,
@@ -123,5 +134,6 @@ export const useWebSocket = () => {
         handleSendInteractionMessage,
         handleSendChatMessage,
         handleSendChatReactionMessage,
+        handleSendHostLaunchQuestion,
     };
 };
