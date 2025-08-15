@@ -77,7 +77,7 @@ export default function MessagesRenderer({
     };
 
     return (
-        <div className="w-full p-3 pt-14 flex flex-col gap-y-2 relative">
+        <div className="w-full p-3 pt-14 flex flex-col gap-y-1 relative">
             {messages.map((message) => {
                 const isOwnMessage = message.senderId === id;
                 const groupedReactions = groupReactionsByType(message.chatReactions ?? []);

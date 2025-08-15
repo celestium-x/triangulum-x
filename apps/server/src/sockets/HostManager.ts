@@ -257,8 +257,6 @@ export default class HostManager {
 
         this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
 
-        console.log('chat reaction received to host: ', chatReaction);
-
         this.database_queue
             .create_chat_reaction(userId, chatMessageId, chatReaction)
             .catch((err) => {

@@ -19,7 +19,6 @@ import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalC
 import { useLiveSpectatorStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { IoClose } from 'react-icons/io5';
 import MessagesRenderer from '../common/MessageRenderer';
-import { InteractionEnum } from '@/types/prisma-types';
 
 const emojiList = ['😀', '😂', '😍', '👍', '🙏', '🔥', '🎉', '💡', '❤️', '😎'];
 

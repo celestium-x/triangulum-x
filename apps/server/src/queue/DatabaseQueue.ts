@@ -254,8 +254,6 @@ export default class DatabaseQueue {
         try {
             const { chat_reaction, chat_message_id }: CreateChatReactionJobType = job.data;
 
-            console.log('job data is --------------------------------> ', job.data);
-
             const createChatReaction = await prisma.chatReaction.create({
                 data: {
                     ...chat_reaction,
@@ -267,8 +265,6 @@ export default class DatabaseQueue {
                     reactorType: chat_reaction.reactorType,
                 },
             });
-
-            console.log('db queue after call --------------------------', createChatReaction);
 
             return {
                 success: true,
