@@ -3,6 +3,7 @@ import { InteractionEnum } from '@/types/prisma-types';
 import { ChatMessageType } from '@/types/web-socket-types';
 import { MdOutlineAddReaction } from 'react-icons/md';
 import Reactions from '../quiz/live/common/Reactions';
+import { LuReplyAll } from "react-icons/lu";
 
 export default function MessageBubble({
     message,
@@ -16,6 +17,7 @@ export default function MessageBubble({
     onReact,
     repliedMessage,
     scrollToMessage,
+    onReplyClick,
 }: {
     message: string;
     messageCreatedAt: Date;
@@ -28,6 +30,7 @@ export default function MessageBubble({
     onReact: (reaction: InteractionEnum) => void;
     repliedMessage?: ChatMessageType;
     scrollToMessage: (id: string) => void;
+    onReplyClick: () => void;
 }) {
     const formatTime = (input: string | number | Date) => {
         const date = new Date(input);
@@ -79,17 +82,23 @@ export default function MessageBubble({
                 {hovered && (
                     <div
                         className={cn(
-                            'absolute z-10 bg-black/70 text-white rounded-full p-1.5 cursor-pointer',
-                            'hover:bg-black/80 transition-colors duration-150',
-                            'shadow-lg backdrop-blur-sm',
-                            isOwnMessage ? '-left-4 top-2' : '-right-4 top-2',
+                            'absolute z-10 dark:text-light-base rounded-full p-1.5 px-2 cursor-pointer',
+                            'shadow-lg backdrop-blur-sm flex gap-x-2.5',
+                            isOwnMessage ? '-left-16 top-1' : '-right-16 top-2', 
                         )}
                         onClick={(e) => {
                             e.stopPropagation();
                             onToggle();
                         }}
                     >
-                        <MdOutlineAddReaction className="size-4" fill="white" />
+                        <MdOutlineAddReaction className="size-4 hover:-translate-y-0.5 transition-3d transform duration-200 ease-in-out" /> 
+                        <LuReplyAll 
+                            className="size-4 hover:-translate-y-0.5 transition-3d transform duration-200 ease-in-out"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onReplyClick();
+                            }}
+                        />
                     </div>
                 )}
 

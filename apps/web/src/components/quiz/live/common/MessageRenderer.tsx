@@ -129,6 +129,7 @@ export default function MessagesRenderer({
                             </div>
 
                             <MessageBubble
+                                onClick={() => onDoubleClick(message)}
                                 message={message.message}
                                 messageCreatedAt={message.createdAt}
                                 colored={isOwnMessage}
@@ -140,7 +141,10 @@ export default function MessagesRenderer({
                                 onReact={(reaction) => onSendReaction(message.id, reaction)}
                                 repliedMessage={repliedMessage}
                                 scrollToMessage={scrollToMessage}
+                                onReplyClick={() => onDoubleClick(message)}
                             />
+
+
 
                             {hasReactions && (
                                 <div
