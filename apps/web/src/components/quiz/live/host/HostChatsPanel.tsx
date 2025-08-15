@@ -20,6 +20,25 @@ import { useLiveHostStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { IoClose } from 'react-icons/io5';
 import MessagesRenderer from '../common/MessageRenderer';
 
+const emojiList = [
+    '😀',
+    '😂',
+    '😍',
+    '👍',
+    '🙏',
+    '🔥',
+    '🎉',
+    '💡',
+    '❤️',
+    '😎',
+    '🥳',
+    '🤔',
+    '👏',
+    '🙌',
+    '💯',
+    '😢',
+];
+
 export default function HostChatsPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForHostStore();
     const { hostData } = useLiveHostStore();
@@ -29,7 +48,7 @@ export default function HostChatsPanel() {
         handleSendChatMessage,
         handleSendChatReactionMessage,
     } = useWebSocket();
-    const [_reactionAppear, setReactionAppear] = useState<boolean>(false);
+    const [reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
     const { chatMessages, addChatMessage, addChatReaction } = useLiveQuizGlobalChatStore();
@@ -45,9 +64,7 @@ export default function HostChatsPanel() {
         return out;
     }, [chatMessages]);
 
-    function handleToggleExpand() {
-        setIsExpanded(!isExpanded);
-    }
+    const handleToggleExpand = () => setIsExpanded(!isExpanded);
 
     const handleIncomingChatMessage = useCallback(
         (payload: unknown) => {
@@ -61,10 +78,8 @@ export default function HostChatsPanel() {
 
     const handleIncomingChatReaction = useCallback(
         (payload: unknown) => {
-            // this is not same as spectator, mark it once
             const reactionPayload = payload as ChatReactionType;
             const reaction = reactionPayload;
-
             if (reaction.reactorName === hostData?.name && reaction.reactorType === 'HOST') return;
             addChatReaction(reaction);
         },
@@ -86,7 +101,7 @@ export default function HostChatsPanel() {
         handleIncomingChatReaction,
     ]);
 
-    function handleSendMessage() {
+    const handleSendMessage = () => {
         if (!inputRef.current || !hostData) return;
         const message = inputRef.current.value.trim();
         if (!message) return;
@@ -97,7 +112,7 @@ export default function HostChatsPanel() {
             senderName: hostData.name,
             senderAvatar: hostData.image,
             message,
-            createdAt: new Date(Date.now()),
+            createdAt: new Date(),
             repliedToId: selectedReply?.id,
             chatReactions: [],
         };
@@ -105,7 +120,17 @@ export default function HostChatsPanel() {
         addChatMessage(chat);
         handleSendChatMessage(chat);
         inputRef.current.value = '';
-    }
+    };
+
+    const handleAddEmoji = (emoji: string) => {
+        if (!inputRef.current) return;
+        const cursorPos = inputRef.current.selectionStart ?? inputRef.current.value.length;
+        const textBefore = inputRef.current.value.substring(0, cursorPos);
+        const textAfter = inputRef.current.value.substring(cursorPos);
+        inputRef.current.value = textBefore + emoji + textAfter;
+        inputRef.current.focus();
+        setReactionAppear(false);
+    };
 
     return (
         <div className="h-full flex flex-col justify-between">
@@ -114,7 +139,7 @@ export default function HostChatsPanel() {
                 <ToolTipComponent content="Click to expand">
                     <Button
                         className="text-dark-base dark:text-light-base cursor-pointer dark:bg-neutral-600/30"
-                        variant={'ghost'}
+                        variant="ghost"
                         onClick={handleToggleExpand}
                     >
                         <BiExpandAlt className="dark:text-light-base" strokeWidth={0.5} />
@@ -126,7 +151,6 @@ export default function HostChatsPanel() {
                 <div className="h-full w-full overflow-y-auto custom-scrollbar">
                     <MessagesRenderer
                         messages={uniqueMessages}
-                        // check it once
                         id={hostData?.id || ''}
                         onSendReaction={(chatMessageId, reaction) => {
                             if (!hostData) return;
@@ -151,6 +175,7 @@ export default function HostChatsPanel() {
                         'h-fit w-full px-2 ',
                         'focus-within:ring-1 focus-within:border-ring focus-within:ring-ring/50 rounded-xl ',
                         'dark:bg-input/30',
+                        'relative',
                     )}
                 >
                     {selectedReply && (
@@ -169,13 +194,29 @@ export default function HostChatsPanel() {
                             </div>
                         </div>
                     )}
-                    <div className="flex justify-center items-center gap-x-2">
+
+                    <div className="flex justify-center items-center gap-x-2 relative">
+                        {reactionAppear && (
+                            <div className="absolute max-w-[10rem] bottom-11 left-0 z-50 bg-white dark:bg-neutral-800 p-2 rounded-xl shadow-lg border flex gap-2 overflow-x-auto flex-nowrap custom-scrollbar">
+                                {emojiList.map((emoji) => (
+                                    <span
+                                        key={emoji}
+                                        className="cursor-pointer text-lg hover:scale-110 transition-transform"
+                                        onClick={() => handleAddEmoji(emoji)}
+                                    >
+                                        {emoji}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
                         <span
                             onClick={() => setReactionAppear((prev) => !prev)}
-                            className="dark:text-neutral-200  rounded-full p-1.5 transition-colors duration-200"
+                            className="dark:text-neutral-200 rounded-full p-1.5 transition-colors duration-200 cursor-pointer"
                         >
-                            <HiOutlineEmojiHappy className="size-4 dark:text-neutral-400 text-neutral-800 rounded-full cursor-pointer" />
+                            <HiOutlineEmojiHappy className="size-4 dark:text-neutral-400 text-neutral-800 rounded-full" />
                         </span>
+
                         <TextArea
                             autogrow
                             ref={inputRef}
@@ -184,7 +225,7 @@ export default function HostChatsPanel() {
                                 'focus-visible:ring-0',
                                 'bg-transparent dark:text-neutral-200 text-neutral-950 text-sm',
                             )}
-                            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+                            onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault();
                                     setSelectedReply(null);
@@ -192,9 +233,9 @@ export default function HostChatsPanel() {
                                 }
                             }}
                         />
-                        <span className="dark:text-neutral-200 dark:hover:bg-neutral-950 rounded-full p-1.5 transition-colors duration-200">
+                        <span className="dark:text-neutral-200 dark:hover:bg-neutral-950 rounded-full p-1.5 transition-colors duration-200 cursor-pointer">
                             <MdChevronRight
-                                className="size-4 rounded-full "
+                                className="size-4 rounded-full"
                                 onClick={handleSendMessage}
                             />
                         </span>
