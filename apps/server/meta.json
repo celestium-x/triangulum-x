@@ -1482,7 +1482,7 @@
       "format": "esm"
     },
     "src/cache/RedisCache.ts": {
-      "bytes": 7212,
+      "bytes": 8347,
       "imports": [
         {
           "path": "@repo/db/client",
@@ -1508,7 +1508,7 @@
       "format": "esm"
     },
     "src/queue/DatabaseQueue.ts": {
-      "bytes": 12142,
+      "bytes": 11960,
       "imports": [
         {
           "path": "src/types/database-queue-types.ts",
@@ -1621,8 +1621,29 @@
       ],
       "format": "esm"
     },
+    "src/queue/PhaseQueue.ts": {
+      "bytes": 3750,
+      "imports": [
+        {
+          "path": "bull",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../cache/RedisCache",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/services/init-services.ts",
+          "kind": "import-statement",
+          "original": "../services/init-services"
+        }
+      ],
+      "format": "esm"
+    },
     "src/services/init-services.ts": {
-      "bytes": 505,
+      "bytes": 637,
       "imports": [
         {
           "path": "src/cache/RedisCache.ts",
@@ -1638,6 +1659,11 @@
           "path": "src/controllers/quiz-controller/quizController.ts",
           "kind": "import-statement",
           "original": "../controllers/quiz-controller/quizController"
+        },
+        {
+          "path": "src/queue/PhaseQueue.ts",
+          "kind": "import-statement",
+          "original": "../queue/PhaseQueue"
         }
       ],
       "format": "esm"
@@ -1727,7 +1753,7 @@
       "format": "esm"
     },
     "src/types/web-socket-types.ts": {
-      "bytes": 2197,
+      "bytes": 2523,
       "imports": [
         {
           "path": "ws",
@@ -2216,7 +2242,7 @@
       "format": "cjs"
     },
     "src/sockets/HostManager.ts": {
-      "bytes": 8524,
+      "bytes": 9154,
       "imports": [
         {
           "path": "ioredis",
@@ -2255,6 +2281,11 @@
         },
         {
           "path": "../cache/RedisCache",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../queue/PhaseQueue",
           "kind": "import-statement",
           "external": true
         }
@@ -2370,7 +2401,7 @@
       "format": "esm"
     },
     "src/sockets/WebSocketServer.ts": {
-      "bytes": 11153,
+      "bytes": 11360,
       "imports": [
         {
           "path": "ws",
@@ -2446,6 +2477,11 @@
           "path": "../queue/DatabaseQueue",
           "kind": "import-statement",
           "external": true
+        },
+        {
+          "path": "../queue/PhaseQueue",
+          "kind": "import-statement",
+          "external": true
         }
       ],
       "format": "esm"
@@ -2502,7 +2538,7 @@
       "imports": [],
       "exports": [],
       "inputs": {},
-      "bytes": 1006736
+      "bytes": 1018226
     },
     "dist/index.js": {
       "imports": [
@@ -2593,6 +2629,11 @@
         },
         {
           "path": "jsonwebtoken",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "bull",
           "kind": "require-call",
           "external": true
         },
@@ -2892,10 +2933,10 @@
           "bytesInOutput": 2265
         },
         "src/cache/RedisCache.ts": {
-          "bytesInOutput": 5538
+          "bytesInOutput": 6401
         },
         "src/queue/DatabaseQueue.ts": {
-          "bytesInOutput": 7468
+          "bytesInOutput": 7300
         },
         "node_modules/nanoid/index.js": {
           "bytesInOutput": 1114
@@ -2906,8 +2947,11 @@
         "src/controllers/quiz-controller/quizController.ts": {
           "bytesInOutput": 8429
         },
+        "src/queue/PhaseQueue.ts": {
+          "bytesInOutput": 2766
+        },
         "src/services/init-services.ts": {
-          "bytesInOutput": 244
+          "bytesInOutput": 309
         },
         "src/controllers/quiz-controller/upsertQuizController.ts": {
           "bytesInOutput": 1558
@@ -2920,6 +2964,9 @@
         },
         "src/controllers/quiz-controller/publishQuizController.ts": {
           "bytesInOutput": 1763
+        },
+        "src/types/web-socket-types.ts": {
+          "bytesInOutput": 20
         },
         "src/controllers/quiz-controller/launchQuizController.ts": {
           "bytesInOutput": 2047
@@ -2967,10 +3014,10 @@
           "bytesInOutput": 1055
         },
         "src/sockets/WebSocketServer.ts": {
-          "bytesInOutput": 8960
+          "bytesInOutput": 9055
         },
         "src/sockets/HostManager.ts": {
-          "bytesInOutput": 6175
+          "bytesInOutput": 6742
         },
         "src/sockets/QuizManager.ts": {
           "bytesInOutput": 2425
@@ -2982,7 +3029,7 @@
           "bytesInOutput": 7149
         }
       },
-      "bytes": 543069
+      "bytes": 547339
     }
   }
 }
