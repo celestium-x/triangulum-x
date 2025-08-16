@@ -53,6 +53,12 @@ export default function HostChatsPanel() {
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
     const { chatMessages, addChatMessage, addChatReaction } = useLiveQuizGlobalChatStore();
 
+    useEffect(() => {
+        if (selectedReply) {
+            inputRef.current?.focus();
+        }
+    }, [selectedReply]);
+
     const uniqueMessages = useMemo(() => {
         const seen = new Set<string>();
         const out: ChatMessageType[] = [];
@@ -185,7 +191,7 @@ export default function HostChatsPanel() {
                                 'dark:text-neutral-500',
                             )}
                         >
-                            <div className="pr-10 truncate">{selectedReply.message}</div>
+                            <div className="pr-10 truncate text-sm">{selectedReply.message}</div>
                             <div
                                 className="bg-neutral-300 p-[1px] absolute right-2 rounded-full"
                                 onClick={() => setSelectedReply(null)}
