@@ -1,15 +1,8 @@
 import Bull from 'bull';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
-
-interface PhaseTransitionJob {
-    gameSessionId: string;
-    questionId: string;
-    questionIndex: number;
-    fromPhase: string;
-    toPhase: string;
-    executeAt: number;
-}
+import QuizManager from '../sockets/QuizManager';
+import { PhaseTransitionJob } from '../types/web-socket-types';
 
 export default class PhaseQueue {
     private phase_queue: Bull.Queue;
@@ -17,6 +10,7 @@ export default class PhaseQueue {
     private server_id: string;
     private redis_cache: RedisCache = redisCacheInstance;
     private electionIntervalId?: NodeJS.Timeout;
+    private quiz_manager!: QuizManager;
 
     constructor() {
         this.server_id = process.env.SERVER_ID || `server_${Math.random()}`;
@@ -26,6 +20,10 @@ export default class PhaseQueue {
         this.setup_queue_events();
         this.elect_queue_processor();
         this.setup_shutdown_hooks();
+    }
+
+    public set_quiz_manager(quiz_manager_instance: QuizManager) {
+        this.quiz_manager = quiz_manager_instance;
     }
 
     private setup_queue_events() {
@@ -77,22 +75,30 @@ export default class PhaseQueue {
     }
 
     private setup_shutdown_hooks() {
-        const cleanup = () => {
+        const cleanup = async () => {
             if (this.electionIntervalId) {
                 clearInterval(this.electionIntervalId);
             }
-            this.phase_queue.close().then(() => {
+            try {
+                await this.phase_queue.close();
                 console.warn(`[${this.server_id}] Queue closed.`);
-            });
+            } catch (err) {
+                console.error(`[${this.server_id}] Error closing queue`, err);
+            } finally {
+                process.exit(0);
+            }
         };
 
         process.on('SIGINT', cleanup);
         process.on('SIGTERM', cleanup);
     }
 
+
     public async start_processing_jobs() {
-        this.phase_queue.process('phase_transition', async (_job) => {
-            // console.log(`[${this.server_id}] Processing job`, job.data);
+        this.phase_queue.process('phase_transition', async (job) => {
+            console.log("job: ", job);
+            console.log(`[${this.server_id}] Processing job`, job.data);
+            this.quiz_manager.handle_transition_phase(job.data);
         });
     }
 

@@ -1,3 +1,4 @@
+import { QuizPhase } from '.prisma/client';
 import { WebSocket } from 'ws';
 
 export interface CustomWebSocket extends WebSocket {
@@ -47,6 +48,15 @@ export enum MESSAGE_TYPES {
 
     REACTION_EVENT = 'REACTION_EVENT',
     SEND_CHAT_MESSAGE = 'SEND_CHAT_MESSAGE',
+
+    QUESTION_READING_PHASE_TO_PARTICIPANT = 'QUESTION_READING_PHASE_TO_PARTICIPANT',
+    QUESTION_READING_PHASE_TO_SPECTATOR = 'QUESTION_READING_PHASE_TO_SPECTATOR',
+    QUESTION_READING_PHASE_TO_HOST = 'QUESTION_READING_PHASE_TO_HOST',
+
+    QUESTION_ACTIVE_PHASE_TO_PARTICIPANT = 'QUESTION_ACTIVE_PHASE_TO_PARTICIPANT',
+    QUESTION_ACTIVE_PHASE_TO_SPECTATOR = 'QUESTION_ACTIVE_PHASE_TO_SPECTATOR',
+    QUESTION_ACTIVE_PHASE_TO_HOST = 'QUESTION_ACTIVE_PHASE_TO_HOST',
+
 }
 
 export enum USER_TYPE {
@@ -97,18 +107,23 @@ export type ChatMessageType = {
         reactorType: ReactorType;
     }[];
 };
+
 export const SECONDS = 1000;
 
-// export interface ChatMessage {
-//     id: string;
-//     sender_id: string;
-//     sender_name: string;
-//     avatar: string;
-//     message: string;
-//     timestamp: number;
-//     chatReactions: {
-//         id: string;
-//         name: string;
-//         avatar: string;
-//     }[];
-// }
+export interface PhaseQueueJobDataType {
+    gameSessionId: string,
+    questionId: string,
+    questionIndex: number,
+    fromPhase: QuizPhase,
+    toPhase: QuizPhase,
+    executeAt: Date
+}
+
+export interface PhaseTransitionJob {
+    gameSessionId: string;
+    questionId: string;
+    questionIndex: number;
+    fromPhase: string;
+    toPhase: string;
+    executeAt: number;
+}
