@@ -21,6 +21,7 @@ export default function HostQuestionReviewFooter() {
     const totalQuestions = quiz?._count.questions;
 
     function handleKeyDown(event: KeyboardEvent) {
+        // event.preventDefault();
         if (event.key === 'ArrowLeft') {
             handlePreviousQuestion();
         } else if (event.key === 'ArrowRight') {

@@ -21,14 +21,12 @@ export interface QuizManagerDependencies {
 
 export default class QuizManager {
     private publisher: Redis;
-    private subscriber: Redis;
     private redis_cache: RedisCache;
     private database_queue: DatabaseQueue;
     private phase_queue!: PhaseQueue;
 
     constructor(dependencies: QuizManagerDependencies) {
         this.publisher = dependencies.publisher;
-        this.subscriber = dependencies.subscriber;
         this.redis_cache = dependencies.redis_cache;
         this.database_queue = dependencies.database_queue;
     }
@@ -121,96 +119,97 @@ export default class QuizManager {
             data.fromPhase === QuizPhase.QUESTION_READING &&
             data.toPhase === QuizPhase.QUESTION_ACTIVE
         ) {
-            // console.log('transitioning from question-reading to question-active');
-
-            const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
-
-            if (!quiz) {
-                // send websocket message for error
-                console.error('Quiz not found');
-                return;
-            }
-
-            const question = quiz.questions?.find((q) => q.id === data.questionId);
-
-            if (!question) {
-                // send websocket message for error
-                console.error(`Question with id: ${data.questionId} doesn't exist`);
-                return;
-            }
-
-            const now = Date.now();
-            const buffer = 2 * SECONDS; // 2 seconds
-            const question_active_time = question.timeLimit * SECONDS;
-
-            const start_time = now + buffer;
-            const end_time = start_time + question_active_time;
-
-            // console.log('start-time: ', start_time);
-            // console.log('end-time: ', end_time);
-
-            this.database_queue
-                .update_game_session(
-                    data.gameSessionId,
-                    {
-                        hostScreen: HostScreen.QUESTION_ACTIVE,
-                        spectatorScreen: SpectatorScreen.QUESTION_ACTIVE,
-                        participantScreen: ParticipantScreen.QUESTION_ACTIVE,
-                        currentPhase: QuizPhase.QUESTION_ACTIVE,
-                        phaseStartTime: new Date(start_time),
-                        phaseEndTime: new Date(end_time),
-                    },
-                    data.gameSessionId,
-                )
-                .catch((err) => {
-                    console.error('Failed to enqueue question active phase:', err);
-                });
-
-            // console.log('added to queue and cache');
-
-            const pub_sub_message_to_participant: PubSubMessageTypes = {
-                type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
-                payload: {
-                    questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                    participantScreen: QuizPhase.QUESTION_ACTIVE,
-                    startTime: start_time,
-                    endTime: end_time,
-                },
-            };
-            this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
-
-            const pub_sub_message_to_host: PubSubMessageTypes = {
-                type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
-                payload: {
-                    questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                    hostScreen: QuizPhase.QUESTION_ACTIVE,
-                    startTime: start_time,
-                    endTime: end_time,
-                },
-            };
-            this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_host);
-
-            const pub_sub_message_to_spectator: PubSubMessageTypes = {
-                type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR,
-                payload: {
-                    questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                    spectatorScreen: QuizPhase.QUESTION_ACTIVE,
-                    startTime: start_time,
-                    endTime: end_time,
-                },
-            };
-            this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_spectator);
-
-            // console.log('sent messages to users & scheduled phase transition');
-
-            await this.phase_queue.schedule_phase_transition({
-                gameSessionId: data.gameSessionId,
-                questionId: data.questionId,
-                questionIndex: data.questionIndex,
-                fromPhase: QuizPhase.QUESTION_ACTIVE,
-                toPhase: QuizPhase.SHOW_RESULTS,
-                executeAt: end_time,
-            });
+            await this.handle_reading_to_active_transition_phase(data);
+        } else if (
+            data.fromPhase === QuizPhase.QUESTION_ACTIVE &&
+            data.toPhase === QuizPhase.SHOW_RESULTS
+        ) {
+            await this.handle_active_to_results_transition_phase(data);
         }
+    }
+
+    private async handle_active_to_results_transition_phase(_data: PhaseQueueJobDataType) {}
+
+    private async handle_reading_to_active_transition_phase(data: PhaseQueueJobDataType) {
+        const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
+
+        if (!quiz) {
+            // send websocket message for error
+            console.error('Quiz not found');
+            return;
+        }
+
+        const question = quiz.questions?.find((q) => q.id === data.questionId);
+        if (!question) {
+            // send websocket message for error
+            console.error(`Question with id: ${data.questionId} doesn't exist`);
+            return;
+        }
+
+        const now = Date.now();
+        const buffer = 2 * SECONDS; // 2 seconds
+        const question_active_time = question.timeLimit * SECONDS;
+
+        const start_time = now + buffer;
+        const end_time = start_time + question_active_time;
+
+        this.database_queue
+            .update_game_session(
+                data.gameSessionId,
+                {
+                    hostScreen: HostScreen.QUESTION_ACTIVE,
+                    spectatorScreen: SpectatorScreen.QUESTION_ACTIVE,
+                    participantScreen: ParticipantScreen.QUESTION_ACTIVE,
+                    currentPhase: QuizPhase.QUESTION_ACTIVE,
+                    phaseStartTime: new Date(start_time),
+                    phaseEndTime: new Date(end_time),
+                },
+                data.gameSessionId,
+            )
+            .catch((err) => {
+                console.error('Failed to enqueue question active phase:', err);
+            });
+
+        const pub_sub_message_to_participant: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
+            payload: {
+                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
+                participantScreen: QuizPhase.QUESTION_ACTIVE,
+                startTime: start_time,
+                endTime: end_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
+
+        const pub_sub_message_to_host: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
+            payload: {
+                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
+                hostScreen: QuizPhase.QUESTION_ACTIVE,
+                startTime: start_time,
+                endTime: end_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_host);
+
+        const pub_sub_message_to_spectator: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR,
+            payload: {
+                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
+                spectatorScreen: QuizPhase.QUESTION_ACTIVE,
+                startTime: start_time,
+                endTime: end_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_spectator);
+
+        await this.phase_queue.schedule_phase_transition({
+            gameSessionId: data.gameSessionId,
+            questionId: data.questionId,
+            questionIndex: data.questionIndex,
+            fromPhase: QuizPhase.QUESTION_ACTIVE,
+            toPhase: QuizPhase.SHOW_RESULTS,
+            executeAt: end_time,
+        });
     }
 }
