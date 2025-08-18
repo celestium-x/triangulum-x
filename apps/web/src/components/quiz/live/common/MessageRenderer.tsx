@@ -118,15 +118,17 @@ export default function MessagesRenderer({
                             }}
                             onDoubleClick={() => onDoubleClick(message)}
                         >
-                            <div className="size-[28px] rounded-full overflow-hidden flex-shrink-0">
-                                <Image
-                                    src={message.senderAvatar || ''}
-                                    alt={message.senderName}
-                                    width={28}
-                                    height={28}
-                                    className="object-cover"
-                                />
-                            </div>
+                            {!isOwnMessage && (
+                                <div className="size-[28px] rounded-full overflow-hidden flex-shrink-0">
+                                    <Image
+                                        src={message.senderAvatar || ''}
+                                        alt={message.senderName}
+                                        width={28}
+                                        height={28}
+                                        className="object-cover"
+                                    />
+                                </div>
+                            )}
 
                             <MessageBubble
                                 message={message.message}

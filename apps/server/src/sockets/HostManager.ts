@@ -15,6 +15,7 @@ import { WebSocket } from 'ws';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import RedisCache from '../cache/RedisCache';
 import PhaseQueue from '../queue/PhaseQueue';
+import { QuizPhase } from '.prisma/client';
 
 export interface HostManagerDependencies {
     publisher: Redis;
@@ -140,17 +141,59 @@ export default class HostManager {
                 participantScreen: ParticipantScreen.QUESTION_READING,
                 phaseStartTime: new Date(start_time),
                 phaseEndTime: new Date(end_time),
-                currentPhase: 'QUESTION_READING',
+                currentPhase: QuizPhase.QUESTION_READING,
             },
             game_session_id,
         );
+
+        const pub_sub_message_to_participant: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT,
+            payload: {
+                currentQuestionIndex: questionIndex,
+                currentQuestionId: questionId,
+                questionTitle: question.question,
+                phaseStartTime: start_time,
+                phaseEndTime: end_time,
+                currentPhase: QuizPhase.QUESTION_READING,
+                participantScreen: HostScreen.QUESTION_READING,
+            },
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_participant);
+
+        const pub_sub_message_to_host: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST,
+            payload: {
+                currentQuestionIndex: questionIndex,
+                currentQuestionId: questionId,
+                questionTitle: question.question,
+                phaseStartTime: start_time,
+                phaseEndTime: end_time,
+                currentPhase: QuizPhase.QUESTION_READING,
+                hostScreen: HostScreen.QUESTION_READING,
+            },
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_host);
+
+        const pub_sub_message_to_spectator: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR,
+            payload: {
+                currentQuestionIndex: questionIndex,
+                currentQuestionId: questionId,
+                questionTitle: question.question,
+                phaseStartTime: start_time,
+                phaseEndTime: end_time,
+                currentPhase: QuizPhase.QUESTION_READING,
+                spectatorScreen: HostScreen.QUESTION_READING,
+            },
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_spectator);
 
         await this.phase_queue.schedule_phase_transition({
             gameSessionId: game_session_id,
             questionId,
             questionIndex,
-            fromPhase: 'QUESTION_READING',
-            toPhase: 'QUESTION_ACTIVE',
+            fromPhase: QuizPhase.QUESTION_READING,
+            toPhase: QuizPhase.QUESTION_ACTIVE,
             executeAt: end_time,
         });
     }

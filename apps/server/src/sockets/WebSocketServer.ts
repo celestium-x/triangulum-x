@@ -19,13 +19,15 @@ import {
 import {
     databaseQueueInstance,
     phaseQueueInstance,
+    publisherInstance,
+    quizManagerInstance,
     redisCacheInstance,
+    subscriberInstance,
 } from '../services/init-services';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import PhaseQueue from '../queue/PhaseQueue';
 
 dotenv.config();
-const REDIS_URL = process.env.REDIS_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export default class WebsocketServer {
@@ -47,8 +49,8 @@ export default class WebsocketServer {
 
     constructor(server: Server) {
         this.wss = new WebSocketServer({ server });
-        this.subscriber = new Redis(REDIS_URL!);
-        this.publisher = new Redis(REDIS_URL!);
+        this.publisher = publisherInstance;
+        this.subscriber = subscriberInstance;
         this.redis_cache = redisCacheInstance;
         this.database_queue = databaseQueueInstance;
         this.phase_queue = phaseQueueInstance;
@@ -135,6 +137,30 @@ export default class WebsocketServer {
                     USER_TYPE.PARTICIPANT,
                 ]);
                 break;
+
+            case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.HOST]);
+                break;
+
+            case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.SPECTATOR]);
+                break;
+
+            case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
+                break;
+
+            case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.HOST]);
+                break;
+
+            case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.SPECTATOR]);
+                break;
+
+            case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
+                break;
         }
     }
 
@@ -187,11 +213,7 @@ export default class WebsocketServer {
     }
 
     private initialize_managers() {
-        this.quizManager = new QuizManager({
-            publisher: this.publisher,
-            subscriber: this.subscriber,
-            redis_cache: this.redis_cache,
-        });
+        this.quizManager = quizManagerInstance;
         this.hostManager = new HostManager({
             publisher: this.publisher,
             subscriber: this.subscriber,
