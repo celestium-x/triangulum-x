@@ -155,9 +155,9 @@ export default class HostManager {
                 phaseStartTime: start_time,
                 phaseEndTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
-                participantScreen: HostScreen.QUESTION_READING
-            }
-        }
+                participantScreen: HostScreen.QUESTION_READING,
+            },
+        };
         this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_participant);
 
         const pub_sub_message_to_host: PubSubMessageTypes = {
@@ -169,9 +169,9 @@ export default class HostManager {
                 phaseStartTime: start_time,
                 phaseEndTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
-                hostScreen: HostScreen.QUESTION_READING
-            }
-        }
+                hostScreen: HostScreen.QUESTION_READING,
+            },
+        };
         this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_host);
 
         const pub_sub_message_to_spectator: PubSubMessageTypes = {
@@ -183,9 +183,9 @@ export default class HostManager {
                 phaseStartTime: start_time,
                 phaseEndTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
-                spectatorScreen: HostScreen.QUESTION_READING
-            }
-        }
+                spectatorScreen: HostScreen.QUESTION_READING,
+            },
+        };
         this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_spectator);
 
         await this.phase_queue.schedule_phase_transition({

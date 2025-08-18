@@ -1,10 +1,15 @@
 import Redis from 'ioredis';
 import RedisCache from '../cache/RedisCache';
 import prisma, { Participant, Spectator } from '@repo/db/client';
-import { CookiePayload, MESSAGE_TYPES, PhaseQueueJobDataType, PubSubMessageTypes, SECONDS } from '../types/web-socket-types';
+import {
+    CookiePayload,
+    MESSAGE_TYPES,
+    PhaseQueueJobDataType,
+    PubSubMessageTypes,
+    SECONDS,
+} from '../types/web-socket-types';
 import { HostScreen, ParticipantScreen, QuizPhase, SpectatorScreen } from '.prisma/client';
 import DatabaseQueue from '../queue/DatabaseQueue';
-import fi from 'zod/v4/locales/fi.js';
 import PhaseQueue from '../queue/PhaseQueue';
 
 export interface QuizManagerDependencies {
@@ -29,7 +34,7 @@ export default class QuizManager {
     }
 
     public set_phase_queue(phase_queue_instance: PhaseQueue) {
-        this.phase_queue = phase_queue_instance
+        this.phase_queue = phase_queue_instance;
     }
 
     public async onHostconnect(game_session_id: string, quiz_id: string, _host_socket_id: string) {
@@ -112,15 +117,17 @@ export default class QuizManager {
     }
 
     public async handle_transition_phase(data: PhaseQueueJobDataType) {
-        if (data.fromPhase === QuizPhase.QUESTION_READING && data.toPhase === QuizPhase.QUESTION_ACTIVE) {
-
-            console.log("transitioning from question-reading to question-active");
+        if (
+            data.fromPhase === QuizPhase.QUESTION_READING &&
+            data.toPhase === QuizPhase.QUESTION_ACTIVE
+        ) {
+            // console.log('transitioning from question-reading to question-active');
 
             const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
 
             if (!quiz) {
                 // send websocket message for error
-                console.error("Quiz not found");
+                console.error('Quiz not found');
                 return;
             }
 
@@ -139,8 +146,8 @@ export default class QuizManager {
             const start_time = now + buffer;
             const end_time = start_time + question_active_time;
 
-            console.log("start-time: ", start_time);
-            console.log("end-time: ", end_time);
+            // console.log('start-time: ', start_time);
+            // console.log('end-time: ', end_time);
 
             this.database_queue
                 .update_game_session(
@@ -159,7 +166,7 @@ export default class QuizManager {
                     console.error('Failed to enqueue question active phase:', err);
                 });
 
-            console.log("added to queue and cache");
+            // console.log('added to queue and cache');
 
             const pub_sub_message_to_participant: PubSubMessageTypes = {
                 type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
@@ -168,8 +175,8 @@ export default class QuizManager {
                     participantScreen: QuizPhase.QUESTION_ACTIVE,
                     startTime: start_time,
                     endTime: end_time,
-                }
-            }
+                },
+            };
             this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
 
             const pub_sub_message_to_host: PubSubMessageTypes = {
@@ -179,8 +186,8 @@ export default class QuizManager {
                     hostScreen: QuizPhase.QUESTION_ACTIVE,
                     startTime: start_time,
                     endTime: end_time,
-                }
-            }
+                },
+            };
             this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_host);
 
             const pub_sub_message_to_spectator: PubSubMessageTypes = {
@@ -190,11 +197,11 @@ export default class QuizManager {
                     spectatorScreen: QuizPhase.QUESTION_ACTIVE,
                     startTime: start_time,
                     endTime: end_time,
-                }
-            }
+                },
+            };
             this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_spectator);
 
-            console.log("sent messages to users & scheduled phase transition");
+            // console.log('sent messages to users & scheduled phase transition');
 
             await this.phase_queue.schedule_phase_transition({
                 gameSessionId: data.gameSessionId,
@@ -202,9 +209,8 @@ export default class QuizManager {
                 questionIndex: data.questionIndex,
                 fromPhase: QuizPhase.QUESTION_ACTIVE,
                 toPhase: QuizPhase.SHOW_RESULTS,
-                executeAt: end_time
+                executeAt: end_time,
             });
-
         }
     }
 }

@@ -93,11 +93,9 @@ export default class PhaseQueue {
         process.on('SIGTERM', cleanup);
     }
 
-
     public async start_processing_jobs() {
         this.phase_queue.process('phase_transition', async (job) => {
-            console.log("job: ", job);
-            console.log(`[${this.server_id}] Processing job`, job.data);
+            // console.log(`[${this.server_id}] Processing job`, job.data);
             this.quiz_manager.handle_transition_phase(job.data);
         });
     }

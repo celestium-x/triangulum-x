@@ -56,7 +56,6 @@ export enum MESSAGE_TYPES {
     QUESTION_ACTIVE_PHASE_TO_PARTICIPANT = 'QUESTION_ACTIVE_PHASE_TO_PARTICIPANT',
     QUESTION_ACTIVE_PHASE_TO_SPECTATOR = 'QUESTION_ACTIVE_PHASE_TO_SPECTATOR',
     QUESTION_ACTIVE_PHASE_TO_HOST = 'QUESTION_ACTIVE_PHASE_TO_HOST',
-
 }
 
 export enum USER_TYPE {
@@ -111,12 +110,12 @@ export type ChatMessageType = {
 export const SECONDS = 1000;
 
 export interface PhaseQueueJobDataType {
-    gameSessionId: string,
-    questionId: string,
-    questionIndex: number,
-    fromPhase: QuizPhase,
-    toPhase: QuizPhase,
-    executeAt: Date
+    gameSessionId: string;
+    questionId: string;
+    questionIndex: number;
+    fromPhase: QuizPhase;
+    toPhase: QuizPhase;
+    executeAt: Date;
 }
 
 export interface PhaseTransitionJob {

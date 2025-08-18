@@ -139,42 +139,28 @@ export default class WebsocketServer {
                 break;
 
             case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.HOST
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.HOST]);
                 break;
 
             case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.SPECTATOR,
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.SPECTATOR]);
                 break;
 
             case MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.PARTICIPANT,
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
                 break;
 
             case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.HOST
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.HOST]);
                 break;
 
             case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.SPECTATOR,
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.SPECTATOR]);
                 break;
 
             case MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT:
-                this.broadcast_to_session(game_session_id, message, [
-                    USER_TYPE.PARTICIPANT,
-                ]);
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
                 break;
-
-
         }
     }
 

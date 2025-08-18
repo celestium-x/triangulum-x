@@ -42,9 +42,7 @@ export default function MessageBubble({
     };
 
     return (
-        <div
-            className={cn('flex flex-col w-full', isOwnMessage ? 'items-end' : 'items-start')}
-        >
+        <div className={cn('flex flex-col w-full', isOwnMessage ? 'items-end' : 'items-start')}>
             <div
                 className={cn(
                     'relative min-w-[35px] rounded-md px-3 py-2 max-w-[55%] break-words',
