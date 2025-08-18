@@ -43,11 +43,11 @@ export default function MessageBubble({
 
     return (
         <div
-            className={cn('flex flex-col max-w-[75%]', isOwnMessage ? 'items-end' : 'items-start')}
+            className={cn('flex flex-col w-full', isOwnMessage ? 'items-end' : 'items-start')}
         >
             <div
                 className={cn(
-                    'relative min-w-[35px] rounded-md px-3 py-2',
+                    'relative min-w-[35px] rounded-md px-3 py-2 max-w-[55%] break-words',
                     colored
                         ? 'bg-neutral-200 dark:bg-neutral-700 text-black dark:text-white rounded-xl'
                         : 'bg-[#8e46f3] text-white',
