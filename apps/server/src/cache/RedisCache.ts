@@ -85,6 +85,38 @@ export default class RedisCache {
         }
     }
 
+    public async get_all_participants(
+        game_session_id: string,
+        fields?: (keyof Participant)[]
+    ) {
+        const key = this.get_participants_key(game_session_id);
+        try {
+            const data = await this.redis_cache.hgetall(key);
+            if (!data) return [];
+
+            return Object.entries(data).map(([participant_id, value]) => {
+                const participant = JSON.parse(value);
+
+                // this will always include participant_id
+                if (fields && fields.length > 0) {
+                    const filtered: any = { participant_id };
+                    for (const field of fields) {
+                        if (participant[field] !== undefined) {
+                            filtered[field] = participant[field];
+                        }
+                    }
+                    return filtered;
+                }
+
+                // if no field specified return complete participant
+                return { participant_id, ...participant };
+            });
+        } catch (err) {
+            console.error("Error in get_all_participants:", err);
+            return [];
+        }
+    }
+
     public async set_participants(
         game_session_id: string,
         participant_id: string,
