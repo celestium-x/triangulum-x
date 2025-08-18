@@ -16,20 +16,16 @@ export const useWebSocket = () => {
         if (!quizId || quizId === 'undefined' || quizId === '') {
             return;
         }
-
         if (lastQuizIdRef.current === quizId) {
             socket.current = getWebSocketClient(quizId);
             return;
         }
-
         lastQuizIdRef.current = quizId;
         socket.current = getWebSocketClient(quizId);
-
         return () => {
-            if (lastQuizIdRef.current === quizId) {
+            if (lastQuizIdRef.current !== quizId) {
                 cleanWebSocketClient();
                 socket.current = null;
-                lastQuizIdRef.current = null;
             }
         };
     }, [pathname]);

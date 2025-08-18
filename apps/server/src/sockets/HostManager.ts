@@ -29,8 +29,6 @@ export interface HostManagerDependencies {
 }
 
 export default class HostManager {
-    private publisher: Redis;
-    private subscriber: Redis;
     private socketMapping: Map<string, CustomWebSocket>;
     private sessionHostMapping: Map<string, string>;
     private quizManager: QuizManager;
@@ -39,8 +37,6 @@ export default class HostManager {
     private phase_queue: PhaseQueue;
 
     constructor(dependencies: HostManagerDependencies) {
-        this.publisher = dependencies.publisher;
-        this.subscriber = dependencies.subscriber;
         this.socketMapping = dependencies.socketMapping;
         this.sessionHostMapping = dependencies.sessionHostMapping;
         this.quizManager = dependencies.quizManager;
@@ -125,12 +121,11 @@ export default class HostManager {
         }
 
         const now = Date.now();
-        const buffer = 2 * SECONDS; // 2 seconds
-        const question_reading_time = 7 * SECONDS;
+        const buffer = 2 * SECONDS;
+        const question_reading_time = question.readingTime * SECONDS;
 
         const start_time = now + buffer;
         const end_time = start_time + question_reading_time;
-
         await this.database_queue.update_game_session(
             game_session_id,
             {
