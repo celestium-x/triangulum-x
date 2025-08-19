@@ -128,8 +128,6 @@ export default class QuizManager {
         }
     }
 
-    private async handle_active_to_results_transition_phase(_data: PhaseQueueJobDataType) {}
-
     private async handle_reading_to_active_transition_phase(data: PhaseQueueJobDataType) {
         const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
 
@@ -173,8 +171,8 @@ export default class QuizManager {
         const pub_sub_message_to_participant: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
             payload: {
-                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                participantScreen: QuizPhase.QUESTION_ACTIVE,
+                questionOptions: question.options,
+                participantScreen: ParticipantScreen.QUESTION_ACTIVE,
                 startTime: start_time,
                 endTime: end_time,
             },
@@ -184,8 +182,8 @@ export default class QuizManager {
         const pub_sub_message_to_host: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
             payload: {
-                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                hostScreen: QuizPhase.QUESTION_ACTIVE,
+                questionOptions: question.options,
+                hostScreen: HostScreen.QUESTION_ACTIVE,
                 startTime: start_time,
                 endTime: end_time,
             },
@@ -195,8 +193,8 @@ export default class QuizManager {
         const pub_sub_message_to_spectator: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR,
             payload: {
-                questionOptions: quiz?.questions?.[data.questionIndex]?.options,
-                spectatorScreen: QuizPhase.QUESTION_ACTIVE,
+                questionOptions: question.options,
+                spectatorScreen: SpectatorScreen.QUESTION_ACTIVE,
                 startTime: start_time,
                 endTime: end_time,
             },
@@ -211,5 +209,78 @@ export default class QuizManager {
             toPhase: QuizPhase.SHOW_RESULTS,
             executeAt: end_time,
         });
+    }
+
+    private async handle_active_to_results_transition_phase(data: PhaseQueueJobDataType) {
+        const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
+
+        if (!quiz) {
+            console.error('Quiz not found');
+            return;
+        }
+
+        const question = quiz.questions?.find((q) => q.id === data.questionId);
+
+        if (!question) {
+            console.error(`Question with id: ${data.questionId} doesn't exist`);
+            return;
+        }
+
+        const now = Date.now();
+        const buffer = 2 * SECONDS; // 2 seconds
+
+        const start_time = now + buffer;
+
+        this.database_queue
+            .update_game_session(
+                data.gameSessionId,
+                {
+                    hostScreen: HostScreen.QUESTION_RESULTS,
+                    spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
+                    participantScreen: ParticipantScreen.QUESTION_RESULTS,
+                    currentPhase: QuizPhase.SHOW_RESULTS,
+                    phaseStartTime: new Date(start_time),
+                    phaseEndTime: null, // will be controlled by host to choose to go to next question
+                },
+                data.gameSessionId,
+            )
+            .catch((err) => {
+                console.error('Failed to enqueue show result phase:', err);
+            });
+
+        const score_of_all_participants = await this.redis_cache.get_all_participants(
+            data.gameSessionId,
+            ['totalScore'],
+        );
+
+        const pub_sub_message_to_participant: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
+            payload: {
+                scores: score_of_all_participants,
+                participantScreen: ParticipantScreen.QUESTION_RESULTS,
+                startTime: start_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
+
+        const pub_sub_message_to_host: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
+            payload: {
+                scores: score_of_all_participants,
+                hostScreen: HostScreen.QUESTION_RESULTS,
+                startTime: start_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_host);
+
+        const pub_sub_message_to_spectator: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
+            payload: {
+                scores: score_of_all_participants,
+                spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
+                startTime: start_time,
+            },
+        };
+        this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_spectator);
     }
 }

@@ -299,6 +299,7 @@ enum ParticipantScreen {
     QUESTION_MOTIVATION
     QUESTION_READING
     QUESTION_ACTIVE
+    QUESTION_RESULTS
 }
 
 enum SpectatorScreen {
@@ -306,6 +307,7 @@ enum SpectatorScreen {
     QUESTION_MOTIVATION
     QUESTION_READING
     QUESTION_ACTIVE
+    QUESTION_RESULTS
 }
 
 enum HostScreen {
@@ -313,6 +315,7 @@ enum HostScreen {
     QUESTION_PREVIEW
     QUESTION_READING // 5 seconds
     QUESTION_ACTIVE
+    QUESTION_RESULTS // will wait here for host for start next question
 }
 
 enum QuizPhase {
