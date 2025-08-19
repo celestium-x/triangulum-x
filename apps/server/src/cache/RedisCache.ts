@@ -85,10 +85,7 @@ export default class RedisCache {
         }
     }
 
-    public async get_all_participants(
-        game_session_id: string,
-        fields?: (keyof Participant)[]
-    ) {
+    public async get_all_participants(game_session_id: string, fields?: (keyof Participant)[]) {
         const key = this.get_participants_key(game_session_id);
         try {
             const data = await this.redis_cache.hgetall(key);
@@ -112,7 +109,7 @@ export default class RedisCache {
                 return { participant_id, ...participant };
             });
         } catch (err) {
-            console.error("Error in get_all_participants:", err);
+            console.error('Error in get_all_participants:', err);
             return [];
         }
     }

@@ -15,49 +15,72 @@ export default function HostMainScreen() {
     const { gameSession, updateGameSession } = useLiveQuizStore();
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
 
-    const handleIncomingReadingPhase = useCallback((payload: unknown) => {}, [updateGameSession])
+    const handleIncomingReadingPhase = useCallback((payload: unknown) => {
 
-    const handleIncomingActivePhase = useCallback((payload: unknown) => {
-        const readingPhasePayload = payload as {
-            questionOptions: string[],
-            hostScreen: HostScreenEnum,
-            startTime: number,
-            endTime: number,
-        }
+        console.warn(payload);
 
-        // console.log("reading phase payload: ", readingPhasePayload);
+    }, []);
 
-        updateGameSession({
-            hostScreen: readingPhasePayload.hostScreen,
-        });
-    }, [updateGameSession])
+    const handleIncomingActivePhase = useCallback(
+        (payload: unknown) => {
+            const readingPhasePayload = payload as {
+                questionOptions: string[];
+                hostScreen: HostScreenEnum;
+                startTime: number;
+                endTime: number;
+            };
 
-    const handleIncomingResultsPhase = useCallback((payload: unknown) => {
-        const resultsPhasePayload = payload as {
-            scores: { participantId: string, score: number }[],
-            hostScreen: HostScreenEnum,
-            startTime: number,
-        }
+            // console.log("reading phase payload: ", readingPhasePayload);
 
-        // console.log("results phase payload: ", resultsPhasePayload);
+            updateGameSession({
+                hostScreen: readingPhasePayload.hostScreen,
+            });
+        },
+        [updateGameSession],
+    );
 
-        updateGameSession({
-            hostScreen: resultsPhasePayload.hostScreen,
-        })
-    }, [updateGameSession])
+    const handleIncomingResultsPhase = useCallback(
+        (payload: unknown) => {
+            const resultsPhasePayload = payload as {
+                scores: { participantId: string; score: number }[];
+                hostScreen: HostScreenEnum;
+                startTime: number;
+            };
+
+            // console.log("results phase payload: ", resultsPhasePayload);
+
+            updateGameSession({
+                hostScreen: resultsPhasePayload.hostScreen,
+            });
+        },
+        [updateGameSession],
+    );
 
     useEffect(() => {
-
-        subscribeToHandler(MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST, handleIncomingReadingPhase);
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST,
+            handleIncomingReadingPhase,
+        );
         subscribeToHandler(MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST, handleIncomingActivePhase);
-        subscribeToHandler(MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST, handleIncomingResultsPhase);
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
+            handleIncomingResultsPhase,
+        );
 
         return () => {
-            unsubscribeToHandler(MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST, handleIncomingReadingPhase);
-            unsubscribeToHandler(MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST, handleIncomingActivePhase);
-            unsubscribeToHandler(MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST, handleIncomingResultsPhase);
-        }
-
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST,
+                handleIncomingReadingPhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
+                handleIncomingActivePhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
+                handleIncomingResultsPhase,
+            );
+        };
     }, [
         subscribeToHandler,
         unsubscribeToHandler,

@@ -173,7 +173,6 @@ export default class WebsocketServer {
             case MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT:
                 this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
                 break;
-                
         }
     }
 

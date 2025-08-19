@@ -215,11 +215,11 @@ export default class QuizManager {
         const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
 
         if (!quiz) {
-            console.error("Quiz not found");
+            console.error('Quiz not found');
             return;
         }
 
-        const question = quiz.questions?.find(q => q.id === data.questionId);
+        const question = quiz.questions?.find((q) => q.id === data.questionId);
 
         if (!question) {
             console.error(`Question with id: ${data.questionId} doesn't exist`);
@@ -242,22 +242,25 @@ export default class QuizManager {
                     phaseStartTime: new Date(start_time),
                     phaseEndTime: null, // will be controlled by host to choose to go to next question
                 },
-                data.gameSessionId
+                data.gameSessionId,
             )
             .catch((err) => {
                 console.error('Failed to enqueue show result phase:', err);
             });
 
-        const score_of_all_participants = await this.redis_cache.get_all_participants(data.gameSessionId, ['totalScore']);
+        const score_of_all_participants = await this.redis_cache.get_all_participants(
+            data.gameSessionId,
+            ['totalScore'],
+        );
 
         const pub_sub_message_to_participant: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
             payload: {
                 scores: score_of_all_participants,
                 participantScreen: ParticipantScreen.QUESTION_RESULTS,
-                startTime: start_time
-            }
-        }
+                startTime: start_time,
+            },
+        };
         this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
 
         const pub_sub_message_to_host: PubSubMessageTypes = {
@@ -265,9 +268,9 @@ export default class QuizManager {
             payload: {
                 scores: score_of_all_participants,
                 hostScreen: HostScreen.QUESTION_RESULTS,
-                startTime: start_time
-            }
-        }
+                startTime: start_time,
+            },
+        };
         this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_host);
 
         const pub_sub_message_to_spectator: PubSubMessageTypes = {
@@ -275,10 +278,9 @@ export default class QuizManager {
             payload: {
                 scores: score_of_all_participants,
                 spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
-                startTime: start_time
-            }
-        }
+                startTime: start_time,
+            },
+        };
         this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_spectator);
     }
-
 }
