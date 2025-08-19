@@ -93,12 +93,12 @@ export default function HostChatsPanel() {
     );
 
     useEffect(() => {
-        subscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
-        subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReaction);
+        subscribeToHandler(MESSAGE_TYPES.CHAT_MESSAGE, handleIncomingChatMessage);
+        subscribeToHandler(MESSAGE_TYPES.CHAT_REACTION_EVENT, handleIncomingChatReaction);
 
         return () => {
-            unsubscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
-            unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReaction);
+            unsubscribeToHandler(MESSAGE_TYPES.CHAT_MESSAGE, handleIncomingChatMessage);
+            unsubscribeToHandler(MESSAGE_TYPES.CHAT_REACTION_EVENT, handleIncomingChatReaction);
         };
     }, [
         subscribeToHandler,
