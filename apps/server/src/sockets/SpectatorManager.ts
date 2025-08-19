@@ -25,8 +25,6 @@ interface SpectatorManagerDependencies {
 }
 
 export default class SpectatorManager {
-    private publisher: Redis;
-    private subscriber: Redis;
     private session_spectators_mapping: Map<string, Set<string>>;
     private quizManager: QuizManager;
     private socket_mapping: Map<string, CustomWebSocket>;
@@ -36,8 +34,6 @@ export default class SpectatorManager {
     private spectator_socket_mapping: Map<string, string> = new Map(); // Map<spectatorId, socketId>
 
     constructor(dependencies: SpectatorManagerDependencies) {
-        this.publisher = dependencies.publisher;
-        this.subscriber = dependencies.subscriber;
         this.session_spectators_mapping = dependencies.session_spectator_mapping;
         this.quizManager = dependencies.quizManager;
         this.socket_mapping = dependencies.socket_mapping;
@@ -123,18 +119,34 @@ export default class SpectatorManager {
                 this.handle_spectator_name_change(payload, ws);
                 break;
 
-            case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
+            case MESSAGE_TYPES.INTERACTION_EVENT:
+                this.handle_incoming_interaction_event(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.CHAT_MESSAGE:
                 this.handle_send_chat_message(payload, ws);
                 break;
 
-            case MESSAGE_TYPES.REACTION_EVENT:
-                this.handle_incoming_reaction_event(payload, ws);
+            case MESSAGE_TYPES.CHAT_REACTION_EVENT:
+                this.handle_incoming_chat_reaction_event(payload, ws);
                 break;
 
             default:
                 console.error('Unknown message type: ', type);
                 break;
         }
+    }
+
+    private handle_incoming_interaction_event(payload: any, ws: CustomWebSocket) {
+        const { reactionType } = payload;
+        const published_message: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.INTERACTION_EVENT,
+            payload: {
+                reactionType,
+            },
+            exclude_socket_id: ws.id,
+        };
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
     }
 
     private cleanup_spectator_socket(ws: CustomWebSocket): void {
@@ -224,7 +236,7 @@ export default class SpectatorManager {
         };
 
         const event_data: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
+            type: MESSAGE_TYPES.CHAT_MESSAGE,
             payload: {
                 id: ws.user.userId,
                 payload: payload,
@@ -241,7 +253,10 @@ export default class SpectatorManager {
             });
     }
 
-    private handle_incoming_reaction_event(payload: IncomingChatReaction, ws: CustomWebSocket) {
+    private handle_incoming_chat_reaction_event(
+        payload: IncomingChatReaction,
+        ws: CustomWebSocket,
+    ) {
         const { userId } = ws.user;
         const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
             payload;
@@ -262,7 +277,7 @@ export default class SpectatorManager {
         };
 
         const published_message: PubSubMessageTypes = {
-            type: MESSAGE_TYPES.REACTION_EVENT,
+            type: MESSAGE_TYPES.CHAT_REACTION_EVENT,
             payload: {
                 chatMessageId,
                 reactorType,

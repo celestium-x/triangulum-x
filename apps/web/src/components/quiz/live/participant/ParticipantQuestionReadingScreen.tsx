@@ -13,7 +13,6 @@ export default function ParticipantQuestionReadingScreen(): JSX.Element {
     const [timer, setTimer] = useState<number>(TOTAL_TIME);
     const [progress, setProgress] = useState<number>(0);
     const { participantData } = useLiveParticipantStore();
-    // const { currentQuestion } = useLiveQuizStore();
     const { quiz } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
 

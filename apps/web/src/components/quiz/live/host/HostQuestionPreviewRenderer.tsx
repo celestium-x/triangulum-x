@@ -14,13 +14,13 @@ export default function HostQuestionPreviewRenderer() {
     const { handleSendHostLaunchQuestion } = useWebSocket();
 
     function handleLaunchQuestion(e: KeyboardEvent) {
-        if (e.key === 'Enter' && currentQuestion) {
+        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && currentQuestion) {
             e.preventDefault();
+            handleSendHostLaunchQuestion({
+                questionId: currentQuestion?.id,
+                questionIndex: currentQuestion?.orderIndex,
+            });
         }
-        handleSendHostLaunchQuestion({
-            questionId: currentQuestion?.id,
-            questionIndex: currentQuestion?.orderIndex,
-        });
     }
 
     useEffect(() => {

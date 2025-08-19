@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { HoverBorderGradient } from '../ui/HoverBorderGradient';
 import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
 import SafariBrowser from '../ui/SafariBrowser';
+import { Highlighter } from '../ui/Highlighter';
 
 export default function LandingPage() {
     return (
@@ -36,20 +37,21 @@ export default function LandingPage() {
                     Win in crypto
                 </h1>
                 <div className="text-md font-normal dark:text-neutral-400 text-neutral-600 text-wrap max-w-[70%]">
-                    A decentralized, gamified quiz platform where hosts stake crypto, compete in
-                    live quiz challenges, and earn rewards for their knowledge.
+                    A decentralized,{' '}
+                    <Highlighter
+                        className="dark:text-light-base"
+                        color="#4f2b82"
+                        action="highlight"
+                    >
+                        gamified quiz platform{' '}
+                    </Highlighter>{' '}
+                    where hosts stake crypto, compete in live quiz challenges, and earn{' '}
+                    <Highlighter color="#FF9800" action="underline">
+                        rewards for their knowledge
+                    </Highlighter>{' '}
+                    .
                 </div>
             </div>
-            {/* <div className="relative mx-auto flex items-center justify-center mt-8 border-dashed border dark:border-neutral-600 border-neutral-600 w-fit rounded-[24px] p-2 z-50 dark:bg-dark-base bg-light-base">
-                <Image
-                    src={'/images/dashboard-ui2.png'}
-                    width={1200}
-                    height={1200}
-                    alt="dashboard-ui"
-                    unoptimized={true}
-                    className="rounded-[16px] border-[1px] dark:border-neutral-600 border-neutral-600"
-                />
-            </div> */}
             <SafariBrowser
                 url="https://triangulum.com"
                 imageSrc="/images/dashboard-ui2.png"

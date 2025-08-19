@@ -9,8 +9,8 @@ export default function Home() {
     return (
         <div
             className={cn(
-                'w-full max-h-screen h-screen relative',
-                'bg-light-base dark:bg-dark-primary',
+                'w-full h-full relative',
+                'bg-light-base dark:bg-dark-primary flex flex-col',
             )}
         >
             <Navbar />
@@ -19,8 +19,9 @@ export default function Home() {
                 <Beam className="absolute top-30 left-60" />
                 <Beam className="absolute top-[40%] right-40 rotate-180" />
                 <LandingPage />
-                <FeatureArcComponent />
             </div>
+            <FeatureArcComponent />
+            {/* <FeatureCarouselDemo /> */}
         </div>
     );
 }

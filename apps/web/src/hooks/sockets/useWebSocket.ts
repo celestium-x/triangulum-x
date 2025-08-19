@@ -79,7 +79,7 @@ export const useWebSocket = () => {
 
     function handleSendInteractionMessage(payload: unknown) {
         const message: MessagePayload = {
-            type: MESSAGE_TYPES.REACTION_EVENT,
+            type: MESSAGE_TYPES.INTERACTION_EVENT,
             payload: payload,
         };
         if (socket.current) {
@@ -89,7 +89,7 @@ export const useWebSocket = () => {
 
     function handleSendChatReactionMessage(payload: unknown) {
         const message: MessagePayload = {
-            type: MESSAGE_TYPES.REACTION_EVENT,
+            type: MESSAGE_TYPES.CHAT_REACTION_EVENT,
             payload: payload,
         };
         if (socket.current) {
@@ -99,7 +99,7 @@ export const useWebSocket = () => {
 
     function handleSendChatMessage(payload: unknown) {
         const message: MessagePayload = {
-            type: MESSAGE_TYPES.SEND_CHAT_MESSAGE,
+            type: MESSAGE_TYPES.CHAT_MESSAGE,
             payload: payload,
         };
 

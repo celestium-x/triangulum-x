@@ -85,7 +85,7 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
-            case MESSAGE_TYPES.REACTION_EVENT:
+            case MESSAGE_TYPES.INTERACTION_EVENT:
                 this.broadcast_to_session(
                     game_session_id,
                     message,
@@ -123,7 +123,14 @@ export default class WebsocketServer {
                 ]);
                 break;
 
-            case MESSAGE_TYPES.SEND_CHAT_MESSAGE:
+            case MESSAGE_TYPES.CHAT_MESSAGE:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                ]);
+                break;
+
+            case MESSAGE_TYPES.CHAT_REACTION_EVENT:
                 this.broadcast_to_session(game_session_id, message, [
                     USER_TYPE.HOST,
                     USER_TYPE.SPECTATOR,

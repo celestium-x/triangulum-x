@@ -4,13 +4,8 @@ import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { cn } from '@/lib/utils';
 import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
-import {
-    ChatMessageType,
-    ChatReactionType,
-    MESSAGE_TYPES,
-    ReactorType,
-} from '@/types/web-socket-types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { ChatMessageType, ChatReactionType, ReactorType } from '@/types/web-socket-types';
+import { useMemo, useRef, useState } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
@@ -25,22 +20,11 @@ const emojiList = ['😀', '😂', '😍', '👍', '🙏', '🔥', '🎉', '💡
 export default function SpectatorChatPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForSpectatorStore();
     const { spectatorData } = useLiveSpectatorStore();
-    const {
-        subscribeToHandler,
-        unsubscribeToHandler,
-        handleSendChatMessage,
-        handleSendChatReactionMessage,
-    } = useWebSocket();
+    const { handleSendChatMessage, handleSendChatReactionMessage } = useWebSocket();
     const [reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
     const { chatMessages, addChatMessage, addChatReaction } = useLiveQuizGlobalChatStore();
-
-    useEffect(() => {
-        if (selectedReply) {
-            inputRef.current?.focus();
-        }
-    }, [selectedReply]);
 
     const uniqueMessages = useMemo(() => {
         const seen = new Set<string>();
@@ -54,45 +38,6 @@ export default function SpectatorChatPanel() {
     }, [chatMessages]);
 
     const handleToggleExpand = () => setIsExpanded(!isExpanded);
-
-    const handleIncomingChatMessage = useCallback(
-        (payload: unknown) => {
-            const messagePayload = payload as { id: string; payload: ChatMessageType };
-            const chat = messagePayload.payload;
-            if (chat.senderId === spectatorData?.id) return;
-            addChatMessage(chat);
-        },
-        [spectatorData?.id, addChatMessage],
-    );
-
-    const handleIncomingChatReaction = useCallback(
-        (payload: unknown) => {
-            const reactionPayload = payload as { id: string; payload: ChatReactionType };
-            const reaction = reactionPayload.payload;
-            if (
-                reaction.reactorName === spectatorData?.nickname &&
-                reaction.reactorType === 'SPECTATOR'
-            )
-                return;
-            addChatReaction(reaction);
-        },
-        [spectatorData?.nickname, addChatReaction],
-    );
-
-    useEffect(() => {
-        subscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
-        subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReaction);
-
-        return () => {
-            unsubscribeToHandler(MESSAGE_TYPES.SEND_CHAT_MESSAGE, handleIncomingChatMessage);
-            unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingChatReaction);
-        };
-    }, [
-        subscribeToHandler,
-        unsubscribeToHandler,
-        handleIncomingChatMessage,
-        handleIncomingChatReaction,
-    ]);
 
     const handleSendMessage = () => {
         if (!inputRef.current || !spectatorData) return;
@@ -178,9 +123,9 @@ export default function SpectatorChatPanel() {
                                 'dark:text-neutral-500',
                             )}
                         >
-                            <div className="pr-10 truncate text-sm">{selectedReply.message}</div>
+                            <div className="pr-10 truncate">{selectedReply.message}</div>
                             <div
-                                className="bg-neutral-300 p-[1px] absolute right-2 rounded-full cursor-pointer"
+                                className="bg-neutral-300 p-[1px] absolute right-2 rounded-full"
                                 onClick={() => setSelectedReply(null)}
                             >
                                 <IoClose className="text-black size-3" />
