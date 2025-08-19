@@ -49,9 +49,9 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
             createEmojiAnimation(payload.reactionType);
         }
 
-        subscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
+        subscribeToHandler(MESSAGE_TYPES.INTERACTION_EVENT, handleIncomingReactionEvent);
         return () => {
-            unsubscribeToHandler(MESSAGE_TYPES.REACTION_EVENT, handleIncomingReactionEvent);
+            unsubscribeToHandler(MESSAGE_TYPES.INTERACTION_EVENT, handleIncomingReactionEvent);
         };
     }, [subscribeToHandler, unsubscribeToHandler]);
 
