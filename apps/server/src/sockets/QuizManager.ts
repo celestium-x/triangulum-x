@@ -264,7 +264,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
             payload: {
                 scores: score_of_all_participants,
-                participantScreen: HostScreen.QUESTION_RESULTS,
+                hostScreen: HostScreen.QUESTION_RESULTS,
                 startTime: start_time
             }
         }
@@ -274,7 +274,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
             payload: {
                 scores: score_of_all_participants,
-                participantScreen: SpectatorScreen.QUESTION_RESULTS,
+                spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
                 startTime: start_time
             }
         }
