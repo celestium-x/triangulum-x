@@ -4,6 +4,7 @@ export interface MessagePayload {
     type: MESSAGE_TYPES;
     payload: unknown;
 }
+
 export type MessageHandler = (payload: MessagePayload) => void;
 export type ParsedMessage = {
     type: string;
@@ -18,6 +19,8 @@ export default class WebSocketClient {
     private max_reconnect_attempts = 5;
     private reconnect_timeout: NodeJS.Timeout | null = null;
     private reconnect_delay: number = 1000;
+    private max_reconnect_delay: number = 30000;
+    private persistent_reconnect_delay: number = 5000;
     private message_queue: MessagePayload[] = [];
     private handlers: Map<string, MessageHandler[]> = new Map();
     private is_manually_closed: boolean = false;
@@ -39,7 +42,6 @@ export default class WebSocketClient {
             this.is_connected = true;
             this.reconnect_attempts = 0;
             this.reconnect_delay = 1000;
-            this.flush_message_queue();
         };
 
         this.ws.onmessage = (event: MessageEvent<string>) => {
@@ -59,14 +61,8 @@ export default class WebSocketClient {
                 this.reconnect_timeout = null;
             }
 
-            if (
-                !this.is_manually_closed &&
-                event.code !== 1000 &&
-                this.reconnect_attempts < this.max_reconnect_attempts
-            ) {
+            if (!this.is_manually_closed && event.code !== 1000) {
                 this.attempt_reconnect();
-            } else if (this.reconnect_attempts >= this.max_reconnect_attempts) {
-                console.error('Max reconnection attempts reached');
             }
         };
 
@@ -107,6 +103,7 @@ export default class WebSocketClient {
     public send_message(message: MessagePayload) {
         if (this.is_connected && this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify(message));
+            this.flush_message_queue();
         } else {
             this.message_queue.push(message);
         }
@@ -114,12 +111,25 @@ export default class WebSocketClient {
 
     private attempt_reconnect() {
         if (this.is_manually_closed) return;
-        this.reconnect_attempts++;
-        this.reconnect_timeout = setTimeout(() => {
-            this.initialize_connection();
-        }, this.reconnect_delay);
 
-        this.reconnect_delay = Math.min(this.reconnect_delay * 2, 30000);
+        this.reconnect_attempts++;
+
+        let delay: number;
+
+        if (this.reconnect_attempts <= this.max_reconnect_attempts) {
+            delay = this.reconnect_delay;
+            this.reconnect_delay = Math.min(this.reconnect_delay * 2, this.max_reconnect_delay);
+        } else {
+            console.warn(`Max reconnection attempts (${this.max_reconnect_attempts}) reached. Switching to persistent reconnection mode.`);
+            delay = this.persistent_reconnect_delay;
+            this.reconnect_delay = 1000;
+        }
+
+        this.reconnect_timeout = setTimeout(() => {
+            if (!this.is_manually_closed) {
+                this.initialize_connection();
+            }
+        }, delay);
     }
 
     private flush_message_queue() {
@@ -149,5 +159,26 @@ export default class WebSocketClient {
         this.is_connected = false;
         this.handlers.clear();
         this.message_queue = [];
+    }
+
+    public force_reconnect() {
+        if (!this.is_manually_closed) {
+            this.is_connected = false;
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.close();
+            }
+            this.reconnect_attempts = 0;
+            this.reconnect_delay = 1000;
+            this.attempt_reconnect();
+        }
+    }
+
+    public get_status() {
+        return {
+            is_connected: this.is_connected,
+            reconnect_attempts: this.reconnect_attempts,
+            queued_messages: this.message_queue.length,
+            is_manually_closed: this.is_manually_closed
+        };
     }
 }
