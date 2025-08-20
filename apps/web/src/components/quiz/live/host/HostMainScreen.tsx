@@ -16,9 +16,7 @@ export default function HostMainScreen() {
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
 
     const handleIncomingReadingPhase = useCallback((payload: unknown) => {
-
         console.warn(payload);
-
     }, []);
 
     const handleIncomingActivePhase = useCallback(
