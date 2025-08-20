@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 interface NavItemsProps {
+    isAtTop?: boolean;
     items: {
         name: string;
         link?: string;
@@ -12,7 +13,7 @@ interface NavItemsProps {
     className?: string;
 }
 
-export default function NavItems({ items, className }: NavItemsProps) {
+export default function NavItems({ items, className, isAtTop }: NavItemsProps) {
     const [hovered, setHovered] = useState<number | null>(null);
 
     return (
@@ -27,7 +28,7 @@ export default function NavItems({ items, className }: NavItemsProps) {
                 <a
                     onMouseEnter={() => setHovered(idx)}
                     onClick={item.onClick}
-                    className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+                    className={`relative py-2 text-neutral-600 dark:text-neutral-300 ${isAtTop ? 'px-8' : 'px-4'}`}
                     key={`link-${idx}`}
                     href={item.link}
                 >

@@ -1,8 +1,0 @@
--- AlterEnum
-ALTER TYPE "HostScreen" ADD VALUE 'QUESTION_RESULTS';
-
--- AlterEnum
-ALTER TYPE "ParticipantScreen" ADD VALUE 'QUESTION_RESULTS';
-
--- AlterEnum
-ALTER TYPE "SpectatorScreen" ADD VALUE 'QUESTION_RESULTS';
