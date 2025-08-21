@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import ExpandableCard from '../common/ExpandableCard';
+import ExpandableCard from '../../common/ExpandableCard';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 import HostChatsPanel from './HostChatsPanel';
 import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
