@@ -1,15 +1,16 @@
-import { useLiveParticipantsStore } from "@/store/live-quiz/useLiveParticipantsStore";
-import { useLiveQuizGlobalChatStore } from "@/store/live-quiz/useLiveQuizGlobalChatStore";
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
-import { useLiveParticipantStore, useLiveSpectatorStore } from "@/store/live-quiz/useLiveQuizUserStore";
-import { useLiveSpectatorsStore } from "@/store/live-quiz/useLiveSpectatorsStore";
-import { GameSessionType, ParticipantType, SpectatorType } from "@/types/prisma-types";
-import { ChatMessageType, ChatReactionType } from "@/types/web-socket-types";
-
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
+import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import {
+    useLiveParticipantStore,
+    useLiveSpectatorStore,
+} from '@/store/live-quiz/useLiveQuizUserStore';
+import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
+import { GameSessionType, ParticipantType, SpectatorType } from '@/types/prisma-types';
+import { ChatMessageType, ChatReactionType } from '@/types/web-socket-types';
 
 export class SubscribeEventHandlers {
-
-    // participant-evenets
+    // <---------------------- PARTICIPANT-EVENTS ---------------------->
 
     static handleIncomingMessage(payload: unknown) {
         const { upsertParticipant } = useLiveParticipantsStore.getState();
@@ -31,11 +32,9 @@ export class SubscribeEventHandlers {
             nickname: message.nickname,
             isNameChanged: true,
         } as ParticipantType);
-
     }
 
-
-    // game-session-events
+    // <---------------------- GAME-SESSION-EVENTS ---------------------->
 
     static handleIncomingQuestionPreviewPageChange(payload: unknown) {
         const { updateGameSession } = useLiveQuizStore.getState();
@@ -43,8 +42,7 @@ export class SubscribeEventHandlers {
         updateGameSession({ id: message.id, hostScreen: message.hostScreen } as GameSessionType);
     }
 
-
-    // spectator-events
+    // <---------------------- SPECTATOR-EVENTS ---------------------->
 
     static handleSpectatorNameChangeMessage(payload: unknown) {
         const { upsertSpectator } = useLiveSpectatorsStore.getState();
@@ -61,7 +59,6 @@ export class SubscribeEventHandlers {
             nickname: message.nickname,
             isNameChanged: true,
         } as SpectatorType);
-
     }
 
     static handleIncomingNewSpectator(payload: unknown) {
@@ -69,8 +66,7 @@ export class SubscribeEventHandlers {
         upsertSpectator(payload as SpectatorType);
     }
 
-
-    // chat-events 
+    // <---------------------- CHAT-EVENTS ---------------------->
 
     static handleIncomingChatReactionMessage(payload: unknown) {
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
@@ -82,25 +78,25 @@ export class SubscribeEventHandlers {
     static handleIncomingChatMessage(payload: unknown) {
         const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatMessage } = useLiveQuizGlobalChatStore.getState();
-        const messagePayload  = payload as { id: string; payload: ChatMessageType };
+        const messagePayload = payload as { id: string; payload: ChatMessageType };
         const chat = messagePayload.payload;
-        
+
         if (chat.senderId === spectatorData?.id) return;
-        
+
         addChatMessage(chat);
     }
-    
+
     static handleIncomingReactionEvent(payload: unknown) {
         const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
-        
+
         const reactionPayload = payload as { id: string; payload: ChatReactionType };
         const reaction = reactionPayload.payload;
         if (
             reaction.reactorName === spectatorData?.nickname &&
             reaction.reactorType === 'SPECTATOR'
         )
-        return;
+            return;
         addChatReaction(reaction);
     }
 
