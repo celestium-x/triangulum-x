@@ -5,6 +5,7 @@ import HostChatsPanel from './HostChatsPanel';
 import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
 import HostSettingsPanel from './HostSettingsPanel';
 import HostPeoplePanel from './HostPeoplePanel';
+import HostLeaderboardPanel from './HostLeaderboard';
 
 export default function HostPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
@@ -22,6 +23,8 @@ export default function HostPanelRenderer() {
                 return <HostPeoplePanel />;
             case 'SETTINGS':
                 return <HostSettingsPanel />;
+            case 'LEADERBOARD':
+                return <HostLeaderboardPanel />;
         }
     }
 

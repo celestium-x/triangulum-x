@@ -87,7 +87,7 @@ function BigHomeNavbar({
 
                 <div className="flex items-center gap-x-4">
                     <DarkModeToggle />
-                    <NavItems  items={navItems} />
+                    <NavItems items={navItems} />
                 </div>
 
                 <div className="flex items-center justify-center gap-x-3">
