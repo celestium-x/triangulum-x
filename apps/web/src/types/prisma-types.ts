@@ -121,6 +121,10 @@ export interface GameSessionType {
     createdAt: Date;
     updatedAt: Date;
 
+    currentPhase?:   QuizPhaseEnum;
+    phaseStartTime: number;
+    phaseEndTime?:   number;
+
     quizId: string;
     quiz?: QuizType;
 
