@@ -6,10 +6,11 @@ import {
     useLiveSpectatorStore,
 } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
-import { GameSessionType, ParticipantType, SpectatorType } from '@/types/prisma-types';
+import { GameSessionType, HostScreenEnum, ParticipantType, QuizPhaseEnum, SpectatorType } from '@/types/prisma-types';
 import { ChatMessageType, ChatReactionType } from '@/types/web-socket-types';
 
 export class SubscribeEventHandlers {
+
     // <---------------------- PARTICIPANT-EVENTS ---------------------->
 
     static handleIncomingMessage(payload: unknown) {
@@ -100,5 +101,59 @@ export class SubscribeEventHandlers {
         addChatReaction(reaction);
     }
 
-    static handleHostLaunchQuestion() {}
+    // <---------------------- HOST-PHASE-EVENTS ---------------------->
+
+    static handleHostIncomingReadingPhase(payload: unknown) {
+        const readingPhasePayload = payload as {
+            currentQuestionIndex: number,
+            currentQuestionId: string,
+            questionTitle: string,
+            startTime: number,
+            endTime: number,
+            currentPhase: QuizPhaseEnum,
+            hostScreen: HostScreenEnum,
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            hostScreen: readingPhasePayload.hostScreen,
+            currentQuestionId: readingPhasePayload.currentQuestionId,
+            currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+            phaseStartTime: readingPhasePayload.startTime,
+            phaseEndTime: readingPhasePayload.endTime
+        });
+    }
+
+    static handleHostIncomingActivePhase(payload: unknown) {
+        const activePhasePayload = payload as {
+            questionOptions: string[];
+            hostScreen: HostScreenEnum;
+            startTime: number;
+            endTime: number;
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            hostScreen: activePhasePayload.hostScreen,
+            phaseStartTime: activePhasePayload.startTime,
+            phaseEndTime: activePhasePayload.endTime
+        });
+
+        useLiveQuizStore.getState().updateCurrentQuestion({
+            options: activePhasePayload.questionOptions
+        });
+    }
+
+    static handleHostIncomingResultsPhase(payload: unknown) {
+        const resultsPhasePayload = payload as {
+            scores: { participantId: string; score: number }[];
+            correctAnswer: number;
+            hostScreen: HostScreenEnum;
+            startTime: number;
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            hostScreen: resultsPhasePayload.hostScreen,
+        });
+    }
+
+    static handleHostLaunchQuestion() { }
 }

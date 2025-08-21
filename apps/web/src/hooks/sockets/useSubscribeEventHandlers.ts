@@ -43,6 +43,20 @@ export function useSubscribeEventHandlers() {
             SubscribeEventHandlers.handleHostLaunchQuestion,
         );
 
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST,
+            SubscribeEventHandlers.handleHostIncomingReadingPhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
+            SubscribeEventHandlers.handleHostIncomingActivePhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
+            SubscribeEventHandlers.handleHostIncomingResultsPhase,
+        );
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -78,6 +92,18 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.HOST_LAUNCH_QUESTION,
                 SubscribeEventHandlers.handleHostLaunchQuestion,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_READING_PHASE_TO_HOST,
+                SubscribeEventHandlers.handleHostIncomingReadingPhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_HOST,
+                SubscribeEventHandlers.handleHostIncomingActivePhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
+                SubscribeEventHandlers.handleHostIncomingResultsPhase,
             );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);

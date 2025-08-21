@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import CountDownClock from "@/components/ui/CountDownClock";
 import { getImageContainerWidth, useWidth } from "@/hooks/useWidth";
@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
 import Image from "next/image";
 import { useRef } from "react";
+import HostQuestionActiveOptions from "./HostQuestionActiveOptions";
 
-export default function HostQuestionReadingRenderer() {
+export default function HostQuestionActiveRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession } = useLiveQuizStore();
@@ -57,10 +58,15 @@ export default function HostQuestionReadingRenderer() {
                             </div>
                         </div>
                     )}
+                    <HostQuestionActiveOptions />
                 </div>
-                <div className="flex flex-col items-center gap-y-3">
+            </div>
+            <div className="flex flex-col items-center gap-y-3">
+                {remainingSeconds >= 0 && (
                     <CountDownClock seconds={remainingSeconds} />
-                    <div>Participants and Spectators are now reading this question</div>
+                )}
+                <div>
+                    Participants and Spectators are now answering to this question
                 </div>
             </div>
         </div>
