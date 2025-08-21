@@ -1,11 +1,11 @@
 'use client';
 import HostLobbyFooter from './HostLobbyFooter';
-import WaitingLobbyHostLeft from './WaitingLobbyHostLeft';
+import WaitingLobbyLeft from './WaitingLobbyHostLeft';
 
 export default function HostLobbyScreen() {
     return (
         <div className="w-full h-full flex">
-            <WaitingLobbyHostLeft />
+            <WaitingLobbyLeft />
             <HostLobbyFooter />
             {/* <WaitingLobbyHostRight /> */}
         </div>

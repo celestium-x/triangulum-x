@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import Image from 'next/image';
-import LiveQuizInteractionTicker from '../common/LiveQuizInteractionTicker';
+import LiveQuizInteractionTicker from '../../../common/LiveQuizInteractionTicker';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { HostScreenEnum } from '@/types/prisma-types';

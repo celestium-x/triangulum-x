@@ -1,37 +1,54 @@
 'use client';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import { HostScreenEnum } from '@/types/prisma-types';
-import HostLobbyScreen from './HostLobbyScreen';
-import HostQuestionPreviewScreen from './HostQuestionPreviewScreen';
+import { HostScreenEnum, QuizPhaseEnum } from '@/types/prisma-types';
+import LobbyScreen from './screens/LobbyScreen/HostLobbyScreen';
+import HostQuestionPreviewScreen from './screens/QuestionPreviewScreen/HostQuestionPreviewScreen';
 import HostMainFooter from './HostMainFooter';
-import HostPanelRenderer from './HostPanelRenderer';
-import HostQuestionResultsScreen from './HostQuestionResultsScreen';
-import HostQuestionActiveScreen from './HostQuestionActiveScreen';
+import HostPanelRenderer from './controls/HostPanelRenderer';
+import HostQuestionResultsScreen from './screens/QuestionResultsScreen/HostQuestionResultsScreen';
+import HostQuestionActiveScreen from './screens/QuestionActiveScreen/HostQuestionActiveScreen';
 import { useCallback, useEffect } from 'react';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { MESSAGE_TYPES } from '@/types/web-socket-types';
+import HostQuestionReadingScreen from './screens/QuestionReadingScreen/HostQuestionReadingScreen';
 
 export default function HostMainScreen() {
     const { gameSession, updateGameSession } = useLiveQuizStore();
     const { subscribeToHandler, unsubscribeToHandler } = useWebSocket();
 
     const handleIncomingReadingPhase = useCallback((payload: unknown) => {
-        console.warn(payload);
-    }, []);
+        const readingPhasePayload = payload as {
+            currentQuestionIndex: number,
+            currentQuestionId: string,
+            questionTitle: string,
+            phaseStartTime: number,
+            phaseEndTime: number,
+            currentPhase: QuizPhaseEnum,
+            hostScreen: HostScreenEnum,
+        };
+
+        console.log("Reading phase payload: ", readingPhasePayload);
+
+        updateGameSession({
+            hostScreen: readingPhasePayload.hostScreen,
+            currentQuestionId: readingPhasePayload.currentQuestionId,
+            currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+        });
+    }, [updateGameSession]);
 
     const handleIncomingActivePhase = useCallback(
         (payload: unknown) => {
-            const readingPhasePayload = payload as {
+            const activePhasePayload = payload as {
                 questionOptions: string[];
                 hostScreen: HostScreenEnum;
                 startTime: number;
                 endTime: number;
             };
 
-            // console.log("reading phase payload: ", readingPhasePayload);
+            // console.log("active phase payload: ", readingPhasePayload);
 
             updateGameSession({
-                hostScreen: readingPhasePayload.hostScreen,
+                hostScreen: activePhasePayload.hostScreen,
             });
         },
         [updateGameSession],
@@ -90,10 +107,13 @@ export default function HostMainScreen() {
     function renderHostScreenPanels() {
         switch (gameSession?.hostScreen) {
             case HostScreenEnum.LOBBY:
-                return <HostLobbyScreen />;
+                return <LobbyScreen />;
 
             case HostScreenEnum.QUESTION_PREVIEW:
                 return <HostQuestionPreviewScreen />;
+
+            case HostScreenEnum.QUESTION_READING:
+                return <HostQuestionReadingScreen />;
 
             case HostScreenEnum.QUESTION_ACTIVE:
                 return <HostQuestionActiveScreen />;

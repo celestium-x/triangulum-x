@@ -1,5 +1,5 @@
 'use client';
-import WaitingLobbyAvatars from '../common/Avatars';
+import WaitingLobbyAvatars from '../../../common/Avatars';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 
