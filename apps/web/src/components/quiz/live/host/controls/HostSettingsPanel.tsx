@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
-import OnOffToggle from '../common/OnOffToggle';
+import OnOffToggle from '../../common/OnOffToggle';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 

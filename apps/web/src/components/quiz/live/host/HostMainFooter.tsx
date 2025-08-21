@@ -1,4 +1,4 @@
-import HostControls from './HostControls';
+import HostControls from './controls/HostControls';
 import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLiveQuizExpandableCardForHostStore';
 import { cn } from '@/lib/utils';
 
