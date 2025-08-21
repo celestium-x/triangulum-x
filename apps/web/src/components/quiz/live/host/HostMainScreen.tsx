@@ -27,7 +27,7 @@ export default function HostMainScreen() {
             hostScreen: HostScreenEnum,
         };
 
-        console.log("Reading phase payload: ", readingPhasePayload);
+        // console.log("Reading phase payload: ", readingPhasePayload);
 
         updateGameSession({
             hostScreen: readingPhasePayload.hostScreen,

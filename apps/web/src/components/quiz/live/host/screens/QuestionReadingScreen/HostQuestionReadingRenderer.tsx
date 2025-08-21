@@ -5,7 +5,7 @@ import { getImageContainerWidth, useWidth } from "@/hooks/useWidth";
 import { cn } from "@/lib/utils";
 import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
 export default function HostQuestionReadingRenderer() {
@@ -13,6 +13,18 @@ export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession } = useLiveQuizStore();
+
+    const [time, setTime] = useState<{ startTime: number, endTime: number }>({ startTime: 0, endTime: 0 });
+
+    useEffect(() => {
+
+        if(!gameSession) return;
+
+        setTime({
+            startTime: gameSession.phaseEndTime!,
+            endTime: gameSession.phaseEndTime!
+        });
+    }, [gameSession]);
 
     if (!currentQuestion) {
         return (
@@ -54,7 +66,7 @@ export default function HostQuestionReadingRenderer() {
                     )}
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
-                    <CountDownClock seconds={(gameSession?.phaseEndTime! - gameSession?.phaseStartTime!) / 1000} />
+                    <CountDownClock seconds={(time?.startTime - time?.endTime) / 1000 | 0} />
                     <div>
                         Participants and Spectators are now reading this question
                     </div>
