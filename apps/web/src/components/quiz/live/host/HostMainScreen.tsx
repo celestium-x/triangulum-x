@@ -33,6 +33,8 @@ export default function HostMainScreen() {
             hostScreen: readingPhasePayload.hostScreen,
             currentQuestionId: readingPhasePayload.currentQuestionId,
             currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+            phaseStartTime: readingPhasePayload.phaseStartTime,
+            phaseEndTime: readingPhasePayload.phaseEndTime
         });
     }, [updateGameSession]);
 

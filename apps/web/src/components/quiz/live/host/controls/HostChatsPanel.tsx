@@ -18,7 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
 import { useLiveHostStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { IoClose } from 'react-icons/io5';
-import MessagesRenderer from '../common/MessageRenderer';
+import MessagesRenderer from '../../common/MessageRenderer';
 
 const emojiList = [
     '😀',
