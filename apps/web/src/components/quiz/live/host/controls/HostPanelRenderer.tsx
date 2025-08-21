@@ -7,7 +7,6 @@ import HostSettingsPanel from './HostSettingsPanel';
 import HostPeoplePanel from './HostPeoplePanel';
 import HostLeaderboardPanel from '../HostLeaderboard';
 
-
 export default function HostPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
     const { type, setType, setIsExpanded, isExpanded } = useLiveQuizExpandableCardForHostStore();
