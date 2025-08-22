@@ -1,7 +1,7 @@
 'use client';
 import { IoMdArrowRoundForward } from 'react-icons/io';
 import FeatureBoxComponent from '../ui/FeatureBoxComponent';
-import { SlidersVertical } from '../ui/animated-icons/SildesVertical';
+import SlidesVertical from '../ui/animated-icons/SlidesVertical';
 
 export default function FeatureBox() {
     return (
@@ -12,7 +12,7 @@ export default function FeatureBox() {
                 buttonText="START QUIZ"
                 buttonIcon={<IoMdArrowRoundForward />}
                 backgroundSvg={(hovered: boolean) => (
-                    <SlidersVertical
+                    <SlidesVertical
                         strokeWidth={0.1}
                         height={200}
                         width={200}
@@ -27,7 +27,7 @@ export default function FeatureBox() {
                 buttonText="START QUIZ"
                 buttonIcon={<IoMdArrowRoundForward />}
                 backgroundSvg={(hovered: boolean) => (
-                    <SlidersVertical
+                    <SlidesVertical
                         strokeWidth={0.1}
                         height={200}
                         width={200}
@@ -42,7 +42,7 @@ export default function FeatureBox() {
                 buttonText="START QUIZ"
                 buttonIcon={<IoMdArrowRoundForward />}
                 backgroundSvg={(hovered: boolean) => (
-                    <SlidersVertical
+                    <SlidesVertical
                         strokeWidth={0.1}
                         height={200}
                         width={200}

@@ -14,16 +14,17 @@ export default function Home() {
                 'bg-light-base dark:bg-dark-primary flex flex-col gap-y-30',
             )}
         >
-            <Navbar />
             <Spotlight />
-            <div className="pt-30 h-full relative">
-                <Beam className="absolute top-30 left-60" />
-                <Beam className="absolute top-[40%] right-40 rotate-180" />
-                <LandingPage />
+            <Navbar />
+            <div className='max-w-6xl mx-auto'>
+                <div className="pt-28 h-full relative">
+                    <Beam className="absolute top-30 left-60" />
+                    <Beam className="absolute top-[40%] right-40 rotate-180" />
+                    <LandingPage />
+                </div>
+                <FeatureBoxComponent />
+                <FeatureArcComponent />
             </div>
-            <FeatureBoxComponent />
-            <FeatureArcComponent />
-            {/* <FeatureCarouselDemo /> */}
         </div>
     );
 }
