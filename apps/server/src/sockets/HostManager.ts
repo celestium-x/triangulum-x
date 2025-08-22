@@ -163,8 +163,8 @@ export default class HostManager {
                 currentQuestionIndex: questionIndex,
                 currentQuestionId: questionId,
                 questionTitle: question.question,
-                phaseStartTime: start_time,
-                phaseEndTime: end_time,
+                startTime: start_time,
+                endTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
                 participantScreen: HostScreen.QUESTION_READING,
             },
@@ -177,8 +177,8 @@ export default class HostManager {
                 currentQuestionIndex: questionIndex,
                 currentQuestionId: questionId,
                 questionTitle: question.question,
-                phaseStartTime: start_time,
-                phaseEndTime: end_time,
+                startTime: start_time,
+                endTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
                 hostScreen: HostScreen.QUESTION_READING,
             },
@@ -191,8 +191,8 @@ export default class HostManager {
                 currentQuestionIndex: questionIndex,
                 currentQuestionId: questionId,
                 questionTitle: question.question,
-                phaseStartTime: start_time,
-                phaseEndTime: end_time,
+                startTime: start_time,
+                endTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
                 spectatorScreen: HostScreen.QUESTION_READING,
             },
@@ -220,13 +220,17 @@ export default class HostManager {
         const { gameSessionId: game_session_id } = ws.user;
         const gameSession = await this.redis_cache.get_game_session(game_session_id);
 
-        if (gameSession?.hostScreen === 'QUESTION_PREVIEW') {
+        if (gameSession?.hostScreen === HostScreen.QUESTION_PREVIEW) {
             return;
         }
 
-        const { data } = await this.database_queue.update_game_session(
+        await this.database_queue.update_game_session(
             ws.user.userId,
-            { hostScreen: 'QUESTION_PREVIEW' },
+            {
+                hostScreen: HostScreen.QUESTION_PREVIEW,
+                spectatorScreen: SpectatorScreen.QUESTION_MOTIVATION,
+                participantScreen: ParticipantScreen.QUESTION_MOTIVATION,
+            },
             game_session_id,
         );
 
@@ -234,7 +238,7 @@ export default class HostManager {
             type: MESSAGE_TYPES.HOST_CHANGE_QUESTION_PREVIEW,
             payload: {
                 id: ws.user.userId,
-                hostScreen: data.hostScreen,
+                screen: ParticipantScreen.QUESTION_MOTIVATION, // this will same for both paritcipant and spectator
             },
         };
 

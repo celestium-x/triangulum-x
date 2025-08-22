@@ -158,7 +158,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         set({
             quiz: {
                 id: '',
-                title: '',
+                title: 'Quiz Title',
                 description: '',
                 theme: TemplateEnum.CLASSIC,
                 prizePool: 0,

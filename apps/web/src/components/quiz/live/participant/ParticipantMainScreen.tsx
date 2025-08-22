@@ -1,21 +1,30 @@
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { ParticipantScreenEnum } from '@/types/prisma-types';
-import ParticipantLobbyScreen from './ParticipantLobbyScreen';
-import ParticipantMotivationScreen from './ParticipantMotivationScreen';
-import ParticipantQuestionReadingScreen from './ParticipantQuestionReadingScreen';
+import ParticipantLobbyScreen from './screens/LobbyScreen/ParticipantLobbyScreen';
+import ParticipantMotivationScreen from './screens/QuestionMotivationScreen/ParticipantMotivationScreen';
+import ParticipantQuestionReadingScreen from './screens/QuestionReadingScreen/ParticipantQuestionReadingScreen';
 import ParticipantMainFooter from './ParticipantMainFooter';
 import ParticipantPanelRenderer from './ParticipantChannelRenderer';
 
 export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
+
     function renderHostScreenPanels() {
         switch (gameSession?.participantScreen) {
             case ParticipantScreenEnum.LOBBY:
                 return <ParticipantLobbyScreen />;
-            case ParticipantScreenEnum.MOTIVATION:
+
+            case ParticipantScreenEnum.QUESTION_MOTIVATION:
                 return <ParticipantMotivationScreen />;
+
             case ParticipantScreenEnum.QUESTION_READING:
                 return <ParticipantQuestionReadingScreen />;
+
+            case ParticipantScreenEnum.QUESTION_ACTIVE:
+                return <div>Question active</div>;
+
+            case ParticipantScreenEnum.QUESTION_RESULTS:
+                return <div>Question results</div>;
         }
     }
     return (

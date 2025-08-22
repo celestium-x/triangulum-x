@@ -1,0 +1,42 @@
+'use client';
+import { templates } from '@/lib/templates';
+import { cn } from '@/lib/utils';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { getResponsiveGap } from '@/components/canvas/CanvasOptions';
+
+export default function HostQuestionActiveOptions() {
+    const { currentQuestion, quiz: liveQuiz } = useLiveQuizStore();
+    const template = templates.find((t) => t.id === liveQuiz?.theme);
+    if (!currentQuestion?.options) return null;
+
+    return (
+        <div className="w-full flex flex-col items-center justify-center gap-y-5 p-8 rounded-xl z-50">
+            <div
+                className={cn(
+                    'w-full h-full flex items-end justify-center',
+                    getResponsiveGap(currentQuestion),
+                )}
+            >
+                {currentQuestion.options.map((option, idx) => (
+                    <div
+                        key={idx}
+                        className="flex flex-col items-center justify-end h-full flex-1 min-w-0 px-1"
+                    >
+                        <div
+                            className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
+                            style={{
+                                height: 25,
+                                backgroundColor: `${template?.bars[idx]}` || '#4F46E5',
+                            }}
+                        />
+                        <div className="mt-1 sm:mt-2 min-h-[1.5rem] sm:min-h-[2rem] flex items-center justify-center w-full">
+                            <div className="text-xs sm:text-sm text-center px-0.5 sm:px-1 leading-tight font-light break-words">
+                                <span className="hidden sm:inline">{option}</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}

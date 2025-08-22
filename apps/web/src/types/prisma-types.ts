@@ -209,9 +209,10 @@ export enum SessionStatusEnum {
 export enum ParticipantScreenEnum {
     LOBBY = 'LOBBY',
     COUNTDOWN = 'COUNTDOWN',
-    MOTIVATION = 'MOTIVATION',
+    QUESTION_MOTIVATION = 'QUESTION_MOTIVATION',
     QUESTION_READING = 'QUESTION_READING',
     QUESTION_ACTIVE = 'QUESTION_ACTIVE',
+    QUESTION_RESULTS = 'QUESTION_RESULTS',
 }
 
 export enum SpectatorScreenEnum {

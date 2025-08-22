@@ -257,6 +257,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
             payload: {
                 scores: score_of_all_participants,
+                correctAnswer: question.correctAnswer,
                 participantScreen: ParticipantScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
@@ -267,6 +268,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
             payload: {
                 scores: score_of_all_participants,
+                correctAnswer: question.correctAnswer,
                 hostScreen: HostScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
@@ -277,6 +279,7 @@ export default class QuizManager {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
             payload: {
                 scores: score_of_all_participants,
+                correctAnswer: question.correctAnswer,
                 spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
