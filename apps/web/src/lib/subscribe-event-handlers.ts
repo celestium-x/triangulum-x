@@ -6,12 +6,19 @@ import {
     useLiveSpectatorStore,
 } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
-import { GameSessionType, HostScreenEnum, ParticipantScreenEnum, ParticipantType, QuizPhaseEnum, SpectatorScreenEnum, SpectatorType } from '@/types/prisma-types';
+import {
+    GameSessionType,
+    HostScreenEnum,
+    ParticipantScreenEnum,
+    ParticipantType,
+    QuizPhaseEnum,
+    SpectatorScreenEnum,
+    SpectatorType,
+} from '@/types/prisma-types';
 import { ChatMessageType, ChatReactionType } from '@/types/web-socket-types';
 import { toast } from 'sonner';
 
 export class SubscribeEventHandlers {
-
     // <---------------------- PARTICIPANT-EVENTS ---------------------->
 
     static handleIncomingMessage(payload: unknown) {
@@ -40,18 +47,18 @@ export class SubscribeEventHandlers {
 
     static handleIncomingQuestionPreviewPageChange(payload: unknown) {
         const message = payload as {
-            id: string,
-            screen: SpectatorScreenEnum | ParticipantScreenEnum
+            id: string;
+            screen: SpectatorScreenEnum | ParticipantScreenEnum;
         };
 
-        toast.success("Quiz started!");
+        toast.success('Quiz started!');
 
         const { updateGameSession } = useLiveQuizStore.getState();
         updateGameSession({
             id: message.id,
             hostScreen: HostScreenEnum.QUESTION_PREVIEW,
             spectatorScreen: message.screen,
-            participantScreen: message.screen
+            participantScreen: message.screen,
         } as GameSessionType);
     }
 
@@ -117,13 +124,13 @@ export class SubscribeEventHandlers {
 
     static handleHostIncomingReadingPhase(payload: unknown) {
         const readingPhasePayload = payload as {
-            currentQuestionIndex: number,
-            currentQuestionId: string,
-            questionTitle: string,
-            startTime: number,
-            endTime: number,
-            currentPhase: QuizPhaseEnum,
-            hostScreen: HostScreenEnum,
+            currentQuestionIndex: number;
+            currentQuestionId: string;
+            questionTitle: string;
+            startTime: number;
+            endTime: number;
+            currentPhase: QuizPhaseEnum;
+            hostScreen: HostScreenEnum;
         };
 
         useLiveQuizStore.getState().updateGameSession({
@@ -131,7 +138,7 @@ export class SubscribeEventHandlers {
             currentQuestionId: readingPhasePayload.currentQuestionId,
             currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
             phaseStartTime: readingPhasePayload.startTime,
-            phaseEndTime: readingPhasePayload.endTime
+            phaseEndTime: readingPhasePayload.endTime,
         });
     }
 
@@ -146,11 +153,11 @@ export class SubscribeEventHandlers {
         useLiveQuizStore.getState().updateGameSession({
             hostScreen: activePhasePayload.hostScreen,
             phaseStartTime: activePhasePayload.startTime,
-            phaseEndTime: activePhasePayload.endTime
+            phaseEndTime: activePhasePayload.endTime,
         });
 
         useLiveQuizStore.getState().updateCurrentQuestion({
-            options: activePhasePayload.questionOptions
+            options: activePhasePayload.questionOptions,
         });
     }
 
@@ -171,13 +178,13 @@ export class SubscribeEventHandlers {
 
     static handleParticipantIncomingReadingPhase(payload: unknown) {
         const readingPhasePayload = payload as {
-            currentQuestionIndex: number,
-            currentQuestionId: string,
-            questionTitle: string,
-            startTime: number,
-            endTime: number,
-            currentPhase: QuizPhaseEnum,
-            participantScreen: ParticipantScreenEnum,
+            currentQuestionIndex: number;
+            currentQuestionId: string;
+            questionTitle: string;
+            startTime: number;
+            endTime: number;
+            currentPhase: QuizPhaseEnum;
+            participantScreen: ParticipantScreenEnum;
         };
 
         useLiveQuizStore.getState().updateGameSession({
@@ -185,7 +192,7 @@ export class SubscribeEventHandlers {
             currentQuestionId: readingPhasePayload.currentQuestionId,
             currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
             phaseStartTime: readingPhasePayload.startTime,
-            phaseEndTime: readingPhasePayload.endTime
+            phaseEndTime: readingPhasePayload.endTime,
         });
     }
 
@@ -200,11 +207,11 @@ export class SubscribeEventHandlers {
         useLiveQuizStore.getState().updateGameSession({
             participantScreen: activePhasePayload.pariticipantScreen,
             phaseStartTime: activePhasePayload.startTime,
-            phaseEndTime: activePhasePayload.endTime
+            phaseEndTime: activePhasePayload.endTime,
         });
 
         useLiveQuizStore.getState().updateCurrentQuestion({
-            options: activePhasePayload.questionOptions
+            options: activePhasePayload.questionOptions,
         });
     }
 
@@ -221,5 +228,5 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() { }
+    static handleHostLaunchQuestion() {}
 }

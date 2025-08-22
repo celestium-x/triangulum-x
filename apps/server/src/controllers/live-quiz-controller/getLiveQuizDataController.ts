@@ -98,6 +98,9 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     totalSpectators: true,
                     avgResponseTime: true,
                     correctAnswerRate: true,
+                    currentPhase: true,
+                    phaseEndTime: true,
+                    phaseStartTime: true,
                 },
             });
 

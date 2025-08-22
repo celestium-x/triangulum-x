@@ -1,11 +1,11 @@
 'use client';
 
-import CountDownClock from "@/components/ui/CountDownClock";
-import { getImageContainerWidth, useWidth } from "@/hooks/useWidth";
-import { cn } from "@/lib/utils";
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
-import Image from "next/image";
-import { useRef } from "react";
+import CountDownClock from '@/components/ui/CountDownClock';
+import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
+import { cn } from '@/lib/utils';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import Image from 'next/image';
+import { useRef } from 'react';
 
 export default function ParticipantQuestionReadingScreen() {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -22,27 +22,27 @@ export default function ParticipantQuestionReadingScreen() {
 
     const remainingSeconds = Math.max(
         0,
-        Math.floor((gameSession.phaseEndTime! - Date.now()) / 1000)
+        Math.floor((gameSession.phaseEndTime! - Date.now()) / 1000),
     );
 
     return (
         <div
             className={cn(
-                "w-full h-full overflow-hidden flex flex-col items-center justify-center",
-                "relative"
+                'w-full h-full overflow-hidden flex flex-col items-center justify-center',
+                'relative',
             )}
         >
             <div className="min-h-[32rem] w-[90%] flex flex-col justify-between">
                 <div
-                    className={cn("w-full text-3xl text-center")}
+                    className={cn('w-full text-3xl text-center')}
                     dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
                 />
                 <div className="flex flex-row items-center justify-center">
                     {currentQuestion.imageUrl && (
                         <div
                             className={cn(
-                                "h-full flex flex-col justify-end p-2 sm:p-4 relative mb-15",
-                                getImageContainerWidth(canvasWidth)
+                                'h-full flex flex-col justify-end p-2 sm:p-4 relative mb-15',
+                                getImageContainerWidth(canvasWidth),
                             )}
                         >
                             <div className="w-full overflow-hidden relative rounded-sm">
@@ -65,7 +65,6 @@ export default function ParticipantQuestionReadingScreen() {
         </div>
     );
 }
-
 
 // import { JSX, useEffect, useState } from 'react';
 // import { motion } from 'framer-motion';

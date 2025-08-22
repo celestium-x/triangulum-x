@@ -120,7 +120,9 @@ export default class WebSocketClient {
             delay = this.reconnect_delay;
             this.reconnect_delay = Math.min(this.reconnect_delay * 2, this.max_reconnect_delay);
         } else {
-            console.warn(`Max reconnection attempts (${this.max_reconnect_attempts}) reached. Switching to persistent reconnection mode.`);
+            console.warn(
+                `Max reconnection attempts (${this.max_reconnect_attempts}) reached. Switching to persistent reconnection mode.`,
+            );
             delay = this.persistent_reconnect_delay;
             this.reconnect_delay = 1000;
         }
@@ -178,7 +180,7 @@ export default class WebSocketClient {
             is_connected: this.is_connected,
             reconnect_attempts: this.reconnect_attempts,
             queued_messages: this.message_queue.length,
-            is_manually_closed: this.is_manually_closed
+            is_manually_closed: this.is_manually_closed,
         };
     }
 }

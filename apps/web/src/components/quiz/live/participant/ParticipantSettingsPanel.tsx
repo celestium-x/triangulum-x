@@ -14,7 +14,7 @@ export default function ParticipantSettingPanel() {
     const { participantData } = useLiveParticipantStore();
     const [name, setName] = useState<string | undefined>(participantData?.nickname);
     const [enableNameChange, setEnableNameChange] = useState<boolean>(false);
-    console.log(participantData);
+
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         if (!name || name.trim() === '') {

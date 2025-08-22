@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import CountDownClock from "@/components/ui/CountDownClock";
-import { getImageContainerWidth, useWidth } from "@/hooks/useWidth";
-import { cn } from "@/lib/utils";
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
-import Image from "next/image";
-import { useRef } from "react";
+import CountDownClock from '@/components/ui/CountDownClock';
+import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
+import { cn } from '@/lib/utils';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import Image from 'next/image';
+import { useRef } from 'react';
 
 export default function HostQuestionResultsRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
@@ -14,7 +14,9 @@ export default function HostQuestionResultsRenderer() {
 
     if (!currentQuestion) {
         return (
-            <div className="text-center text-neutral-400 w-full">Error in getting current question</div>
+            <div className="text-center text-neutral-400 w-full">
+                Error in getting current question
+            </div>
         );
     }
 
@@ -53,9 +55,7 @@ export default function HostQuestionResultsRenderer() {
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
                     <CountDownClock reverse />
-                    <div>
-                        Participants and Spectators are now seeing results of this question
-                    </div>
+                    <div>Participants and Spectators are now seeing results of this question</div>
                 </div>
             </div>
         </div>

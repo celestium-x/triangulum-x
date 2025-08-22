@@ -16,7 +16,7 @@ export default function Home() {
         >
             <Spotlight />
             <Navbar />
-            <div className='max-w-6xl mx-auto'>
+            <div className="max-w-6xl mx-auto">
                 <div className="pt-28 h-full relative">
                     <Beam className="absolute top-30 left-60" />
                     <Beam className="absolute top-[40%] right-40 rotate-180" />

@@ -34,12 +34,10 @@ export default function New({ params }: NewProps) {
 
     useEffect(() => {
         async function getLiveData() {
-            console.log('function called');
             try {
                 const { data } = await axios.get(`${LIVE_QUIZ_DATA_URL}/${quizId}`, {
                     withCredentials: true,
                 });
-                console.log(data);
                 if (data.success) {
                     updateQuiz(data.quiz);
                     updateGameSession(data.gameSession);
@@ -60,7 +58,6 @@ export default function New({ params }: NewProps) {
                         default:
                             break;
                     }
-                    console.log(data.userData);
                 }
             } catch (error) {
                 console.error('Error fetching live data:', error);

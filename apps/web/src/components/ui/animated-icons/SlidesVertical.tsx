@@ -24,7 +24,7 @@ interface SlidersVerticalProps extends React.SVGAttributes<SVGSVGElement> {
     animateState?: 'normal' | 'animate';
 }
 
-export default function SlidesVertical ({
+export default function SlidesVertical({
     width = 28,
     height = 28,
     strokeWidth = 2,
@@ -94,4 +94,4 @@ export default function SlidesVertical ({
             />
         </svg>
     );
-};
+}
