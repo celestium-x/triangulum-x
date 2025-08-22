@@ -224,7 +224,7 @@ export default class HostManager {
             return;
         }
 
-        const { data } = await this.database_queue.update_game_session(
+        await this.database_queue.update_game_session(
             ws.user.userId,
             {
                 hostScreen: HostScreen.QUESTION_PREVIEW,
