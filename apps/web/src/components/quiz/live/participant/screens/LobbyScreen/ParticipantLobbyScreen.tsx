@@ -1,5 +1,7 @@
+
 import ParticipantLobbyFooter from './ParticipantLobbyFooter';
 import WaitingLobbyParticipantLeft from './WaitingLobbyParticipantLeft';
+
 
 export default function ParticipantLobbyScreen() {
     return (

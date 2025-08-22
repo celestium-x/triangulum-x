@@ -6,8 +6,9 @@ import {
     useLiveSpectatorStore,
 } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useLiveSpectatorsStore } from '@/store/live-quiz/useLiveSpectatorsStore';
-import { GameSessionType, HostScreenEnum, ParticipantType, QuizPhaseEnum, SpectatorType } from '@/types/prisma-types';
+import { GameSessionType, HostScreenEnum, ParticipantScreenEnum, ParticipantType, QuizPhaseEnum, SpectatorScreenEnum, SpectatorType } from '@/types/prisma-types';
 import { ChatMessageType, ChatReactionType } from '@/types/web-socket-types';
+import { toast } from 'sonner';
 
 export class SubscribeEventHandlers {
 
@@ -38,9 +39,20 @@ export class SubscribeEventHandlers {
     // <---------------------- GAME-SESSION-EVENTS ---------------------->
 
     static handleIncomingQuestionPreviewPageChange(payload: unknown) {
+        const message = payload as {
+            id: string,
+            screen: SpectatorScreenEnum | ParticipantScreenEnum
+        };
+
+        toast.success("Quiz started!");
+
         const { updateGameSession } = useLiveQuizStore.getState();
-        const message = payload as GameSessionType;
-        updateGameSession({ id: message.id, hostScreen: message.hostScreen } as GameSessionType);
+        updateGameSession({
+            id: message.id,
+            hostScreen: HostScreenEnum.QUESTION_PREVIEW,
+            spectatorScreen: message.screen,
+            participantScreen: message.screen
+        } as GameSessionType);
     }
 
     // <---------------------- SPECTATOR-EVENTS ---------------------->
@@ -152,6 +164,60 @@ export class SubscribeEventHandlers {
 
         useLiveQuizStore.getState().updateGameSession({
             hostScreen: resultsPhasePayload.hostScreen,
+        });
+    }
+
+    // <---------------------- PARTICIPANT-PHASE-EVENTS ---------------------->
+
+    static handleParticipantIncomingReadingPhase(payload: unknown) {
+        const readingPhasePayload = payload as {
+            currentQuestionIndex: number,
+            currentQuestionId: string,
+            questionTitle: string,
+            startTime: number,
+            endTime: number,
+            currentPhase: QuizPhaseEnum,
+            participantScreen: ParticipantScreenEnum,
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            participantScreen: readingPhasePayload.participantScreen,
+            currentQuestionId: readingPhasePayload.currentQuestionId,
+            currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+            phaseStartTime: readingPhasePayload.startTime,
+            phaseEndTime: readingPhasePayload.endTime
+        });
+    }
+
+    static handleParticipantIncomingActivePhase(payload: unknown) {
+        const activePhasePayload = payload as {
+            questionOptions: string[];
+            pariticipantScreen: ParticipantScreenEnum;
+            startTime: number;
+            endTime: number;
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            participantScreen: activePhasePayload.pariticipantScreen,
+            phaseStartTime: activePhasePayload.startTime,
+            phaseEndTime: activePhasePayload.endTime
+        });
+
+        useLiveQuizStore.getState().updateCurrentQuestion({
+            options: activePhasePayload.questionOptions
+        });
+    }
+
+    static handleParticipantIncomingResultsPhase(payload: unknown) {
+        const resultsPhasePayload = payload as {
+            scores: { participantId: string; score: number }[];
+            correctAnswer: number;
+            participantScreen: ParticipantScreenEnum;
+            startTime: number;
+        };
+
+        useLiveQuizStore.getState().updateGameSession({
+            participantScreen: resultsPhasePayload.participantScreen,
         });
     }
 

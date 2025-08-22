@@ -57,6 +57,22 @@ export function useSubscribeEventHandlers() {
             MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
             SubscribeEventHandlers.handleHostIncomingResultsPhase,
         );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT,
+            SubscribeEventHandlers.handleParticipantIncomingReadingPhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
+            SubscribeEventHandlers.handleParticipantIncomingActivePhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
+            SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+        );
+
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -104,6 +120,18 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_HOST,
                 SubscribeEventHandlers.handleHostIncomingResultsPhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT,
+                SubscribeEventHandlers.handleParticipantIncomingReadingPhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
+                SubscribeEventHandlers.handleParticipantIncomingActivePhase,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
+                SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
             );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);
