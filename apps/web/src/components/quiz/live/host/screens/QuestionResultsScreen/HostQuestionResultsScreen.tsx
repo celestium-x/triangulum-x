@@ -1,5 +1,4 @@
-import HostQuestionResultsRenderer from "./HostQuestionResultsRenderer";
-
+import HostQuestionResultsRenderer from './HostQuestionResultsRenderer';
 
 export default function HostQuestionResultsScreen() {
     return (

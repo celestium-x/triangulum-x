@@ -44,8 +44,7 @@ export default function New({ params }: NewProps) {
                     setCurrentUserType(data.role);
                     setParticipants(data.participants);
                     setSpectators(data.spectators);
-                    setChatMessages(data.messages);
-
+                    setChatMessages(data.messages || []);
                     switch (data.role) {
                         case 'HOST':
                             setHostData(data.userData);

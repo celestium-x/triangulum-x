@@ -121,9 +121,9 @@ export interface GameSessionType {
     createdAt: Date;
     updatedAt: Date;
 
-    currentPhase?:   QuizPhaseEnum;
+    currentPhase?: QuizPhaseEnum;
     phaseStartTime: number;
-    phaseEndTime?:   number;
+    phaseEndTime?: number;
 
     quizId: string;
     quiz?: QuizType;
@@ -243,5 +243,5 @@ export enum QuizPhaseEnum {
     QUESTION_READING = 'QUESTION_READING',
     QUESTION_ACTIVE = 'QUESTION_ACTIVE',
     SHOW_RESULTS = 'SHOW_RESULTS',
-    WAITING_NEXT = 'WAITING_NEXT'
+    WAITING_NEXT = 'WAITING_NEXT',
 }

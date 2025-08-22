@@ -137,7 +137,7 @@ export default class HostManager {
         }
 
         const now = Date.now();
-        const buffer = 2 * SECONDS;
+        const buffer = 10 * SECONDS;
         const question_reading_time = question.readingTime * SECONDS;
 
         const start_time = now + buffer;

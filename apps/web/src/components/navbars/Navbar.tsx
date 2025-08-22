@@ -41,11 +41,11 @@ export default function Navbar() {
 
     return (
         <div
-            className={`fixed left-1/2 -translate-x-1/2 w-screen px-4 py-4 z-[100] transition-all duration-400 ease-in-out border
+            className={`fixed left-1/2 -translate-x-1/2 w-screen px-4 py-4 z-[100] transition-all duration-400 ease-in-out border rounded-2xl
         ${
             atTop
                 ? 'max-w-7xl top-1 border-none'
-                : 'rounded-2xl shadow-lg top-4 border max-w-4xl bg-gradient-to-b dark:from-[#1c1c1c] dark:via-neutral-900 dark:to-[#1c1c1c] from-neutral-200 via-neutral-100 to-neutral-200'
+                : 'shadow-lg top-4 border max-w-4xl bg-gradient-to-b dark:from-[#1c1c1c] dark:via-neutral-900/90 dark:to-[#1c1c1c] backdrop-blur-sm from-neutral-200 via-neutral-100 to-neutral-200'
         }`}
         >
             <div className="px-4 flex items-center justify-between w-full">

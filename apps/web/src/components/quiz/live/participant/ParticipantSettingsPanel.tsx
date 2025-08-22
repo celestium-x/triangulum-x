@@ -64,10 +64,11 @@ export default function ParticipantSettingPanel() {
                             <Input
                                 min={1}
                                 type="text"
-                                placeholder="Enter your name..."
+                                placeholder={participantData?.nickname}
+                                disabled={participantData?.isNameChanged}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="py-5 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none "
+                                className="py-5 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-light-base text-dark-primary"
                             />
                         </form>
                     )}
