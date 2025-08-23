@@ -123,6 +123,20 @@ export default function HostQuestionReviewFooter() {
         currentQuestion.orderIndex >= totalQuestions - 1 ||
         loading;
 
+
+    const [platform, setPlatform] = useState<'mac' | 'windows' | 'other'>('other');
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const platform = navigator.platform.toLowerCase();
+
+        if (platform.includes('mac') || userAgent.includes('mac')) {
+            setPlatform('mac');
+        } else if (platform.includes('win') || userAgent.includes('win')) {
+            setPlatform('windows');
+        }
+    }, []);
+
+
     return (
         <div className="absolute bottom-4 left-4 z-100">
             <section className="flex items-center flex-shrink-0 gap-x-6 relative">
@@ -188,7 +202,7 @@ export default function HostQuestionReviewFooter() {
                         <ToolTipComponent content="Pressing enter will launch the current question previewing on the screen">
                             <span className="bg-neutral-900 text-neutral-100 text-xs font-light tracking-wider px-3 py-1 rounded-lg flex items-center justify-center gap-x-2 cursor-pointer">
                                 <IoIosReturnLeft className="max-w-0 group-hover:max-w-3 opacity-0 group-hover:opacity-100 transition-all duration-300 overflow-hidden" />
-                                ENTER
+                                {platform === 'mac' ? '⌘' : 'Ctrl'} + ENTER
                             </span>
                         </ToolTipComponent>
                         <div className="text-xs text-neutral-700 font-light tracking-wide">

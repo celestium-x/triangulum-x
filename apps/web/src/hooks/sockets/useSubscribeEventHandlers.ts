@@ -68,20 +68,10 @@ export function useSubscribeEventHandlers() {
             SubscribeEventHandlers.handleParticipantIncomingActivePhase,
         );
 
-        subscribeToHandler(
-            MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
-            SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
-        );
-
-        subscribeToHandler(
-            MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,
-            SubscribeEventHandlers.handleHostIncomingResponseMessage,
-        );
-
-        subscribeToHandler(
-            MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
-            SubscribeEventHandlers.handleHostIncomingResponseMessage,
-        );
+        // subscribeToHandler(
+        //     MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
+        //     SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+        // );
 
         subscribeToHandler(
             MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
@@ -160,6 +150,18 @@ export function useSubscribeEventHandlers() {
                 MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
                 SubscribeEventHandlers.handleIncomingQuestionAlreadyAskedEvent,
             );
+            // unsubscribeToHandler(
+            //     MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT,
+            //     SubscribeEventHandlers.handleParticipantIncomingReadingPhase,
+            // );
+            // unsubscribeToHandler(
+            //     MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_PARTICIPANT,
+            //     SubscribeEventHandlers.handleParticipantIncomingActivePhase,
+            // );
+            // unsubscribeToHandler(
+            //     MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
+            //     SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+            // );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);
 }
