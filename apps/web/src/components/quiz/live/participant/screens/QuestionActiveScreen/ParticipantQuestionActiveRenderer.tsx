@@ -1,19 +1,26 @@
 'use client';
 
-import CountDownClock from '@/components/ui/CountDownClock';
-import { useWebSocket } from '@/hooks/sockets/useWebSocket';
-import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
+import { useRef, useState } from 'react';
+import { FaRegCircle, FaRegCircleDot } from 'react-icons/fa6';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import Image from 'next/image';
-import { useRef } from 'react';
-// import HostQuestionActiveOptions from './HostQuestionActiveOptions';
+import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { templates } from '@/lib/templates';
+import CountDownClock from '@/components/ui/CountDownClock';
+
+type Hex = `#${string}`;
+
+function hexWithAlpha(hex: Hex, alphaHex: string) {
+    if (!/^#([0-9A-Fa-f]{6})$/.test(hex)) return hex;
+    return `${hex}${alphaHex}` as Hex;
+}
 
 export default function ParticipantQuestionActiveRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
-    const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession } = useLiveQuizStore();
+    const { currentQuestion, quiz, alreadyResponded, setAlreadyResponded, gameSession } =
+        useLiveQuizStore();
     const { handleParticipantResponseMessage } = useWebSocket();
+    const [selected, setSelected] = useState<number | null>(null);
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -23,60 +30,83 @@ export default function ParticipantQuestionActiveRenderer() {
         );
     }
 
-    function handleSelectOption(selectedAnswer: number) {
-        const payload = {
-            selectedAnswer: selectedAnswer,
-        };
-        handleParticipantResponseMessage(payload);
+    const template = templates.find((t) => t.id === quiz?.theme);
+    const barColors = template?.bars ?? (['#3b82f6'] as Hex[]);
+
+    function handleSelectOption(index: number) {
+        if (selected !== null) return;
+        if (alreadyResponded) return;
+
+        setSelected(index);
+        setAlreadyResponded(true);
+        handleParticipantResponseMessage({ selectedAnswer: index });
     }
 
     return (
         <div
+            ref={canvasRef}
             className={cn(
-                'w-full h-full overflow-hidden flex flex-col items-center justify-center',
-                'relative',
+                'w-full h-full overflow-hidden flex flex-col items-center space-y-10',
+                'relative p-8 pt-50',
             )}
         >
-            <div className="min-h-[32rem] w-[90%] flex flex-col justify-between">
-                <div
-                    className={cn('w-full text-3xl text-center')}
-                    dangerouslySetInnerHTML={{ __html: currentQuestion.question! }}
-                />
-                <div className="flex flex-row items-center justify-center">
-                    {currentQuestion.imageUrl && (
+            <div className="w-full text-3xl text-center max-w-7xl mb-12">
+                {currentQuestion?.question}
+            </div>
+
+            <div className="grid grid-cols-2 gap-6 w-full max-w-7xl justify-items-center ">
+                {currentQuestion.options?.map((option, index) => {
+                    const color = barColors[index % barColors.length] as Hex;
+                    const isSelected = selected === index;
+                    const isDisabled = selected !== null && !isSelected;
+
+                    return (
                         <div
+                            key={index}
+                            onClick={() => !isDisabled && handleSelectOption(index)}
                             className={cn(
-                                'h-full flex flex-col justify-end p-2 sm:p-4 relative mb-15',
-                                getImageContainerWidth(canvasWidth),
+                                'group relative isolate flex w-full select-none items-stretch overflow-hidden rounded-2xl',
+                                'border border-white/10 bg-white/[0.03] p-1 transition-transform',
+                                !isDisabled &&
+                                'cursor-pointer hover:-translate-y-0.5 active:translate-y-0',
+                                isDisabled && 'opacity-50 cursor-not-allowed',
                             )}
+                            style={{
+                                boxShadow: isSelected
+                                    ? `0 0 0 1px ${hexWithAlpha(color, '55')}, 0 10px 30px ${hexWithAlpha(color, '25')}`
+                                    : '0 6px 20px rgba(0,0,0,0.25)',
+                            }}
                         >
-                            <div className="w-full overflow-hidden relative rounded-sm">
-                                <Image
-                                    src={currentQuestion.imageUrl}
-                                    alt="Question reference image"
-                                    className="object-contain w-full h-auto"
-                                    width={500}
-                                    height={500}
-                                    unoptimized
-                                />
+                            <div className="w-1.5 rounded-xl" style={{ backgroundColor: color }} />
+
+                            <div className="flex min-h-[64px] flex-1 items-center gap-10 px-4 md:gap-4 md:px-5">
+                                <span
+                                    className={cn(
+                                        'grid size-6 place-items-center rounded-full border transition-all',
+                                        isSelected
+                                            ? 'border-transparent'
+                                            : 'border-white/25 group-hover:border-white/50',
+                                    )}
+                                    style={{
+                                        background: isSelected ? color : 'transparent',
+                                    }}
+                                >
+                                    {isSelected ? (
+                                        <FaRegCircleDot className="h-4 w-4" />
+                                    ) : (
+                                        <FaRegCircle className="h-4 w-4 opacity-70" />
+                                    )}
+                                </span>
+
+                                <div className="flex-1">
+                                    <div className="text-sm md:text-base">{option}</div>
+                                </div>
                             </div>
                         </div>
-                    )}
-                    {/* <HostQuestionActiveOptions /> */}
-                    <div className="grid grid-cols-2 gap-3">
-                        {currentQuestion.options!.map((option, index) => (
-                            <div
-                                className="bg-red-400 hover:bg-pink-700 transition-colors cursor-pointer px-4 py-3 rounded-md col-span-1 "
-                                key={index}
-                                onClick={() => handleSelectOption(index)}
-                            >
-                                {option}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                    );
+                })}
             </div>
-            <div className="flex flex-col items-center gap-y-3">
+            <div>
                 <CountDownClock
                     startTime={gameSession.phaseStartTime!}
                     endTime={gameSession.phaseEndTime!}

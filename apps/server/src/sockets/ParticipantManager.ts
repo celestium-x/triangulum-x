@@ -53,6 +53,7 @@ export default class ParticipantManager {
             ws.close();
             return;
         }
+
         this.cleanup_existing_partiicpant_socket(
             decoded_cookie_payload.userId,
             decoded_cookie_payload.gameSessionId,
@@ -206,6 +207,7 @@ export default class ParticipantManager {
         }
 
         const quiz = await this.redis_cache.get_quiz(game_session_id);
+        const participant = await this.redis_cache.get_participant(game_session_id, participant_id);
 
         if (!quiz) {
             console.error('Quiz not found');
@@ -222,16 +224,28 @@ export default class ParticipantManager {
         const answeredAt = Date.now();
         const question_active_time = Number(game_session.phaseStartTime!);
 
+        const isCorrectAnswer = selectedAnswer === question.correctAnswer;
+
         this.database_queue.create_participant_response(participant_id, game_session_id, {
             selectedAnswer: selectedAnswer,
-            isCorrect: selectedAnswer === question.correctAnswer!,
+            isCorrect: isCorrectAnswer,
             timeToAnswer: question_active_time - answeredAt,
             pointsEarned: question.basePoints,
             timeBonus: 0,
             streakBonus: 0,
-            answered: new Date(answeredAt),
+            answeredAt: new Date(answeredAt),
             questionId: game_session.currentQuestionId!,
         });
+
+        this.database_queue.update_participant(
+            participant_id,
+            {
+                totalScore: isCorrectAnswer
+                    ? participant.totalScore + question.basePoints
+                    : participant.totalScore,
+            },
+            game_session_id,
+        );
 
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
@@ -241,11 +255,6 @@ export default class ParticipantManager {
         };
 
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
-
-        // response fetch from redis and check if already answered
-        // fetch game-session and quiz, and use current question from it
-        // create response schema and add it to db queue
-        // publish the message
     }
 
     private cleanup_existing_partiicpant_socket(

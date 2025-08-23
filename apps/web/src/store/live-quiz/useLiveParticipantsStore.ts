@@ -7,6 +7,7 @@ interface LiveParticipantsStoreProps {
     upsertParticipant: (participant: ParticipantType) => void;
     removeParticipant: (participantId: string) => void;
     getParticipant: (participantId: string) => ParticipantType | undefined;
+    updateParticipants: (participants: Partial<ParticipantType>[]) => void;
 }
 
 export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set, get) => ({
@@ -48,5 +49,22 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
     // Helper method to get a specific participant
     getParticipant: (participantId: string) => {
         return get().participants.find((p) => p.id === participantId);
+    },
+
+    updateParticipants: (participants: Partial<ParticipantType>[]) => {
+        set((state) => {
+            const updated_participant = state.participants.map((p) => {
+                const incoming = participants.find((up) => up.id === p.id);
+                if (incoming) {
+                    return {
+                        ...p,
+                        ...incoming,
+                        id: p.id,
+                    };
+                }
+                return p;
+            });
+            return { participants: updated_participant };
+        });
     },
 }));

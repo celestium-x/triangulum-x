@@ -4,10 +4,15 @@ import { create } from 'zustand';
 interface LiveQuizStore {
     quiz: QuizType | null;
     updateQuiz: (updatedFields: Partial<QuizType>) => void;
+
     gameSession: GameSessionType | null;
     updateGameSession: (updatedFields: Partial<GameSessionType>) => void;
+
     currentQuestion: QuestionType | null;
     updateCurrentQuestion: (updatedFields: Partial<QuestionType>) => void;
+
+    alreadyResponded: boolean;
+    setAlreadyResponded: (value: boolean) => void;
 }
 
 export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
@@ -29,6 +34,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             };
         });
     },
+
     gameSession: null,
     updateGameSession: (updatedFields: Partial<GameSessionType>) => {
         set((state) => ({
@@ -38,6 +44,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             } as GameSessionType,
         }));
     },
+
     currentQuestion: null,
     updateCurrentQuestion: (updateFields: Partial<QuestionType>) => {
         set((state) => ({
@@ -47,4 +54,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             } as QuestionType,
         }));
     },
+
+    alreadyResponded: false,
+    setAlreadyResponded: (value: boolean) => set({ alreadyResponded: value }),
 }));

@@ -12,7 +12,7 @@ export default function LandingPage() {
                     <AnimatedSvgCircles />
                 </div>
 
-                    <HoverBorderGradient
+                <HoverBorderGradient
                     containerClassName="rounded-full"
                     as="button"
                     className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
@@ -27,7 +27,7 @@ export default function LandingPage() {
                     <span className="text-sm">powerd by solana</span>
                 </HoverBorderGradient>
 
-                <div className='bg-neutral-950 h-[30px] '/>
+                <div className="bg-neutral-950 h-[30px] " />
                 <h1
                     className="text-7xl font-semibold text-transparent bg-clip-text tracking-tight
                         bg-gradient-to-b mt-4
