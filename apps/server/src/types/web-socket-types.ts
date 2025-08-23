@@ -23,21 +23,19 @@ export interface CookiePayload {
 //     only_socket_id?: string;
 // }
 
-
 export type PubSubMessageTypes =
     | {
-        type: MESSAGE_TYPES,
-        payload: any,
-        exclude_socket_id?: string,
-        only_socket_id?: never
-    }
+          type: MESSAGE_TYPES;
+          payload: any;
+          exclude_socket_id?: string;
+          only_socket_id?: never;
+      }
     | {
-        type: MESSAGE_TYPES,
-        payload: any,
-        exclude_socket_id?: never,
-        only_socket_id?: string
-    }
-
+          type: MESSAGE_TYPES;
+          payload: any;
+          exclude_socket_id?: never;
+          only_socket_id?: string;
+      };
 
 export enum Interactions {
     THUMBS_UP = 'THUMBS_UP',

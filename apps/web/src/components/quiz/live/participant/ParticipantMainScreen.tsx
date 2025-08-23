@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { ParticipantScreenEnum } from '@/types/prisma-types';
@@ -46,11 +46,8 @@ export default function ParticipantMainScreen() {
                 MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
                 SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
             );
-        }
-    }, [
-        subscribeToHandler,
-        unsubscribeToHandler
-    ]);
+        };
+    }, [subscribeToHandler, unsubscribeToHandler]);
 
     function renderHostScreenPanels() {
         switch (gameSession?.participantScreen) {

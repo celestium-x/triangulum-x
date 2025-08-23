@@ -1,5 +1,4 @@
-import ParticipantQuestionActiveRenderer from "./ParticipantQuestionActiveRenderer";
-
+// import ParticipantQuestionActiveRenderer from './ParticipantQuestionActiveRenderer';
 
 export default function ParticipantQuestionActiveScreen() {
     return (

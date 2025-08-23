@@ -63,10 +63,10 @@ export default function ParticipantQuestionActiveRenderer() {
                         </div>
                     )}
                     {/* <HostQuestionActiveOptions /> */}
-                    <div className='grid grid-cols-2 gap-3'>
+                    <div className="grid grid-cols-2 gap-3">
                         {currentQuestion.options!.map((option, index) => (
                             <div
-                                className='bg-red-400 hover:bg-pink-700 transition-colors cursor-pointer px-4 py-3 rounded-md col-span-1 '
+                                className="bg-red-400 hover:bg-pink-700 transition-colors cursor-pointer px-4 py-3 rounded-md col-span-1 "
                                 key={index}
                                 onClick={() => handleSelectOption(index)}
                             >

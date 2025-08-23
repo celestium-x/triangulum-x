@@ -85,7 +85,7 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
-                
+
             case MESSAGE_TYPES.INTERACTION_EVENT:
                 this.broadcast_to_session(
                     game_session_id,
@@ -192,7 +192,7 @@ export default class WebsocketServer {
                     message,
                     [USER_TYPE.PARTICIPANT],
                     message.exclude_socket_id,
-                    message.only_socket_id
+                    message.only_socket_id,
                 );
         }
     }

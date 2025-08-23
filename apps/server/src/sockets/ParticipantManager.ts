@@ -11,7 +11,7 @@ import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import RedisCache from '../cache/RedisCache';
-import { QuizPhase } from ".prisma/client";
+import { QuizPhase } from '.prisma/client';
 
 export interface ParticipantManagerDependencies {
     publisher: Redis;
@@ -167,15 +167,12 @@ export default class ParticipantManager {
     }
 
     private async handle_participant_response(payload: any, ws: CustomWebSocket) {
-        const {
-            userId: participant_id,
-            gameSessionId: game_session_id
-        } = ws.user;
+        const { userId: participant_id, gameSessionId: game_session_id } = ws.user;
 
         const { selectedAnswer } = payload;
 
         if (typeof selectedAnswer !== 'number') {
-            console.error("Invalid type of selected answer");
+            console.error('Invalid type of selected answer');
             return;
         }
 
@@ -193,14 +190,14 @@ export default class ParticipantManager {
         const old_response = await this.redis_cache.get_participant_response(
             game_session_id,
             game_session.currentQuestionId!,
-            participant_id
+            participant_id,
         );
 
         if (old_response) {
             const event_data: PubSubMessageTypes = {
                 type: MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,
                 payload: {
-                    error: "Already opted an option."
+                    error: 'Already opted an option.',
                 },
                 only_socket_id: ws.id,
             };
@@ -225,27 +222,23 @@ export default class ParticipantManager {
         const answeredAt = Date.now();
         const question_active_time = Number(game_session.phaseStartTime!);
 
-        this.database_queue.create_participant_response(
-            participant_id,
-            game_session_id,
-            {
-                selectedAnswer: selectedAnswer,
-                isCorrect: selectedAnswer === question.correctAnswer!,
-                timeToAnswer: question_active_time - answeredAt,
-                pointsEarned: question.basePoints,
-                timeBonus: 0,
-                streakBonus: 0,
-                answered: new Date(answeredAt),
-                questionId: game_session.currentQuestionId!
-            }
-        );
+        this.database_queue.create_participant_response(participant_id, game_session_id, {
+            selectedAnswer: selectedAnswer,
+            isCorrect: selectedAnswer === question.correctAnswer!,
+            timeToAnswer: question_active_time - answeredAt,
+            pointsEarned: question.basePoints,
+            timeBonus: 0,
+            streakBonus: 0,
+            answered: new Date(answeredAt),
+            questionId: game_session.currentQuestionId!,
+        });
 
         const event_data: PubSubMessageTypes = {
             type: MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
             payload: {
                 selectedAnswer: selectedAnswer,
             },
-        }
+        };
 
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
 
@@ -253,7 +246,6 @@ export default class ParticipantManager {
         // fetch game-session and quiz, and use current question from it
         // create response schema and add it to db queue
         // publish the message
-
     }
 
     private cleanup_existing_partiicpant_socket(

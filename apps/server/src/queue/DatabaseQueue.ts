@@ -77,7 +77,7 @@ interface CreateParticipantResponseJobType {
         timeBonus: number;
         streakBonus: number;
         answered: Date;
-        questionId: string
+        questionId: string;
     };
 }
 
@@ -127,7 +127,7 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
             this.create_participant_response_processor.bind(this),
-        )
+        );
     }
 
     private async update_spectator_processor(
@@ -305,14 +305,13 @@ export default class DatabaseQueue {
         { success: boolean; participantResponse: Response } | { success: boolean; error: string }
     > {
         try {
-
             const { id, response, game_session_id }: CreateParticipantResponseJobType = job.data;
 
             const createPariticipantResponse = await prisma.response.create({
                 data: {
                     ...response,
                     participantId: id,
-                    gameSessionId: game_session_id
+                    gameSessionId: game_session_id,
                 },
             });
 
@@ -320,14 +319,13 @@ export default class DatabaseQueue {
                 game_session_id,
                 response.questionId,
                 id,
-                createPariticipantResponse
+                createPariticipantResponse,
             );
 
             return {
                 success: true,
                 participantResponse: createPariticipantResponse,
-            }
-
+            };
         } catch (error) {
             console.error('Error while processing participant resposne: ', error);
             return {
@@ -442,9 +440,9 @@ export default class DatabaseQueue {
             timeBonus: number;
             streakBonus: number;
             answered: Date;
-            questionId: string
+            questionId: string;
         },
-        options?: Partial<JobOption>
+        options?: Partial<JobOption>,
     ) {
         return await this.database_queue
             .add(
@@ -454,5 +452,4 @@ export default class DatabaseQueue {
             )
             .catch((err) => console.error('Failed to enqueue participant response: ', err));
     }
-
 }

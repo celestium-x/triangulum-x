@@ -128,7 +128,6 @@ export const useWebSocket = () => {
         if (socket.current) {
             socket.current.send_message(message);
         }
-
     }
 
     return {
@@ -143,6 +142,6 @@ export const useWebSocket = () => {
         handleSendChatMessage,
         handleSendChatReactionMessage,
         handleSendHostLaunchQuestion,
-        handleParticipantResponseMessage
+        handleParticipantResponseMessage,
     };
 };
