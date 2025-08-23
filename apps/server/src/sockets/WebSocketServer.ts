@@ -85,6 +85,7 @@ export default class WebsocketServer {
                     USER_TYPE.SPECTATOR,
                 ]);
                 break;
+                
             case MESSAGE_TYPES.INTERACTION_EVENT:
                 this.broadcast_to_session(
                     game_session_id,
@@ -180,6 +181,19 @@ export default class WebsocketServer {
             case MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT:
                 this.broadcast_to_session(game_session_id, message, [USER_TYPE.PARTICIPANT]);
                 break;
+
+            case MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE:
+                this.broadcast_to_session(game_session_id, message, [USER_TYPE.HOST]);
+                break;
+
+            case MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE:
+                this.broadcast_to_session(
+                    game_session_id,
+                    message,
+                    [USER_TYPE.PARTICIPANT],
+                    message.exclude_socket_id,
+                    message.only_socket_id
+                );
         }
     }
 
@@ -188,6 +202,7 @@ export default class WebsocketServer {
         message: any,
         messages_to: USER_TYPE[],
         exclude_socket_id?: string,
+        only_socket_id?: string,
     ) {
         if (messages_to.includes(USER_TYPE.HOST)) {
             const host_socket_id = this.session_host_mapping.get(game_session_id);
@@ -201,6 +216,19 @@ export default class WebsocketServer {
 
         if (messages_to.includes(USER_TYPE.PARTICIPANT)) {
             const participant_socket_ids = this.session_participants_mapping.get(game_session_id);
+
+            if (only_socket_id) {
+                const socket_id_exists = participant_socket_ids?.has(only_socket_id);
+
+                if (socket_id_exists) {
+                    const participant_socket = this.socket_mapping.get(only_socket_id);
+                    if (participant_socket && participant_socket.readyState === WebSocket.OPEN) {
+                        participant_socket.send(JSON.stringify(message));
+                    }
+                }
+                return;
+            }
+
             participant_socket_ids?.forEach((socket_id: string) => {
                 if (exclude_socket_id === socket_id) {
                     return;
@@ -214,6 +242,19 @@ export default class WebsocketServer {
 
         if (messages_to.includes(USER_TYPE.SPECTATOR)) {
             const spectator_socket_ids = this.session_spectators_mapping.get(game_session_id);
+
+            if (only_socket_id) {
+                const socket_id_exists = spectator_socket_ids?.has(only_socket_id);
+
+                if (socket_id_exists) {
+                    const spectator_socket = this.socket_mapping.get(only_socket_id);
+                    if (spectator_socket && spectator_socket.readyState === WebSocket.OPEN) {
+                        spectator_socket.send(JSON.stringify(message));
+                    }
+                }
+                return;
+            }
+
             spectator_socket_ids?.forEach((socket_id: string) => {
                 if (exclude_socket_id === socket_id) {
                     return;

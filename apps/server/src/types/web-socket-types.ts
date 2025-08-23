@@ -16,11 +16,28 @@ export interface CookiePayload {
     exp: number;
 }
 
-export interface PubSubMessageTypes {
-    type: MESSAGE_TYPES;
-    payload: any;
-    exclude_socket_id?: string;
-}
+// export interface PubSubMessageTypes {
+//     type: MESSAGE_TYPES;
+//     payload: any;
+//     exclude_socket_id?: string;
+//     only_socket_id?: string;
+// }
+
+
+export type PubSubMessageTypes =
+    | {
+        type: MESSAGE_TYPES,
+        payload: any,
+        exclude_socket_id?: string,
+        only_socket_id?: never
+    }
+    | {
+        type: MESSAGE_TYPES,
+        payload: any,
+        exclude_socket_id?: never,
+        only_socket_id?: string
+    }
+
 
 export enum Interactions {
     THUMBS_UP = 'THUMBS_UP',
@@ -42,6 +59,8 @@ export enum MESSAGE_TYPES {
 
     PARTICIPANT_JOIN_GAME_SESSION = 'PARTICIPANT_JOIN_GAME_SESSION',
     PARTICIPANT_NAME_CHANGE = 'PARTICIPANT_NAME_CHANGE',
+    PARTICIPANT_RESPONSE_MESSAGE = 'PARTICIPANT_RESPONSE_MESSAGE',
+    PARTICIPANT_RESPONDED_MESSAGE = 'PARTICIPANT_RESPONDED_MESSAGE',
 
     SPECTATOR_JOIN_GAME_SESSION = 'SPECTATOR_JOIN_GAME_SESSION',
     SPECTATOR_NAME_CHANGE = 'SPECTATOR_NAME_CHANGE',

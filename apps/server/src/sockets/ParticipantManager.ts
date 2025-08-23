@@ -11,6 +11,7 @@ import prisma from '@repo/db/client';
 import { v4 as uuid } from 'uuid';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import RedisCache from '../cache/RedisCache';
+import { QuizPhase } from ".prisma/client";
 
 export interface ParticipantManagerDependencies {
     publisher: Redis;
@@ -110,9 +111,15 @@ export default class ParticipantManager {
             case MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE:
                 this.handle_participant_name_change(payload, ws);
                 break;
+
             case MESSAGE_TYPES.INTERACTION_EVENT:
                 this.handle_incoming_interaction_event(payload, ws);
                 break;
+
+            case MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE:
+                this.handle_participant_response(payload, ws);
+                break;
+
             default:
                 console.error('Unknown message type at participant manager', type);
                 break;
@@ -157,6 +164,96 @@ export default class ParticipantManager {
             },
         };
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
+
+    private async handle_participant_response(payload: any, ws: CustomWebSocket) {
+        const {
+            userId: participant_id,
+            gameSessionId: game_session_id
+        } = ws.user;
+
+        const { selectedAnswer } = payload;
+
+        if (typeof selectedAnswer !== 'number') {
+            console.error("Invalid type of selected answer");
+            return;
+        }
+
+        const game_session = await this.redis_cache.get_game_session(game_session_id);
+
+        if (!game_session) {
+            console.error('Game session not found');
+            return;
+        }
+
+        if (game_session.currentPhase !== QuizPhase.QUESTION_ACTIVE) {
+            return;
+        }
+
+        const old_response = await this.redis_cache.get_participant_response(
+            game_session_id,
+            game_session.currentQuestionId!,
+            participant_id
+        );
+
+        if (old_response) {
+            const event_data: PubSubMessageTypes = {
+                type: MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,
+                payload: {
+                    error: "Already opted an option."
+                },
+                only_socket_id: ws.id,
+            };
+            this.quizManager.publish_event_to_redis(game_session_id, event_data);
+            return;
+        }
+
+        const quiz = await this.redis_cache.get_quiz(game_session_id);
+
+        if (!quiz) {
+            console.error('Quiz not found');
+            return;
+        }
+
+        const question = quiz.questions?.find((q) => q.id === game_session.currentQuestionId);
+
+        if (!question) {
+            console.error(`Question with id: ${game_session.currentQuestionId} doesn't exist`);
+            return;
+        }
+
+        const answeredAt = Date.now();
+        const question_active_time = Number(game_session.phaseStartTime!);
+
+        this.database_queue.create_participant_response(
+            participant_id,
+            game_session_id,
+            {
+                selectedAnswer: selectedAnswer,
+                isCorrect: selectedAnswer === question.correctAnswer!,
+                timeToAnswer: question_active_time - answeredAt,
+                pointsEarned: question.basePoints,
+                timeBonus: 0,
+                streakBonus: 0,
+                answered: new Date(answeredAt),
+                questionId: game_session.currentQuestionId!
+            }
+        );
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
+            payload: {
+                selectedAnswer: selectedAnswer,
+            },
+        }
+
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+
+        // response fetch from redis and check if already answered
+        // fetch game-session and quiz, and use current question from it
+        // create response schema and add it to db queue
+        // publish the message
+
     }
 
     private cleanup_existing_partiicpant_socket(

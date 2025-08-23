@@ -5,6 +5,7 @@ import ParticipantMotivationScreen from './screens/QuestionMotivationScreen/Part
 import ParticipantQuestionReadingScreen from './screens/QuestionReadingScreen/ParticipantQuestionReadingScreen';
 import ParticipantMainFooter from './ParticipantMainFooter';
 import ParticipantPanelRenderer from './ParticipantChannelRenderer';
+import ParticipantQuestionActiveScreen from './screens/QuestionActiveScreen/ParticipantQuestionActiveScreen';
 
 export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -21,7 +22,7 @@ export default function ParticipantMainScreen() {
                 return <ParticipantQuestionReadingScreen />;
 
             case ParticipantScreenEnum.QUESTION_ACTIVE:
-                return <div>Question active</div>;
+                return <ParticipantQuestionActiveScreen />;
 
             case ParticipantScreenEnum.QUESTION_RESULTS:
                 return <div>Question results</div>;
