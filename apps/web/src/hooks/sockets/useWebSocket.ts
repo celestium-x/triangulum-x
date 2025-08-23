@@ -119,6 +119,17 @@ export const useWebSocket = () => {
         }
     }
 
+    function handleParticipantResponseMessage(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+
     return {
         subscribeToHandler,
         unsubscribeToHandler,
@@ -131,5 +142,6 @@ export const useWebSocket = () => {
         handleSendChatMessage,
         handleSendChatReactionMessage,
         handleSendHostLaunchQuestion,
+        handleParticipantResponseMessage,
     };
 };

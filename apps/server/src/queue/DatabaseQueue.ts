@@ -9,6 +9,7 @@ import prisma, {
     ChatMessage,
     ChatReaction,
     Interactions,
+    Response,
 } from '@repo/db/client';
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
@@ -65,6 +66,21 @@ interface CreateChatReactionJobType {
     };
 }
 
+interface CreateParticipantResponseJobType {
+    id: string;
+    game_session_id: string;
+    response: {
+        selectedAnswer: number;
+        isCorrect: boolean;
+        timeToAnswer: number;
+        pointsEarned: number;
+        timeBonus: number;
+        streakBonus: number;
+        answered: Date;
+        questionId: string;
+    };
+}
+
 export default class DatabaseQueue {
     private database_queue: Bull.Queue;
     private redis_cache: RedisCache;
@@ -107,6 +123,10 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.CREATE_CHAT_REACTION,
             this.create_chat_reaction_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
+            this.create_participant_response_processor.bind(this),
         );
     }
 
@@ -279,6 +299,42 @@ export default class DatabaseQueue {
         }
     }
 
+    private async create_participant_response_processor(
+        job: Bull.Job,
+    ): Promise<
+        { success: boolean; participantResponse: Response } | { success: boolean; error: string }
+    > {
+        try {
+            const { id, response, game_session_id }: CreateParticipantResponseJobType = job.data;
+
+            const createPariticipantResponse = await prisma.response.create({
+                data: {
+                    ...response,
+                    participantId: id,
+                    gameSessionId: game_session_id,
+                },
+            });
+
+            await this.redis_cache.set_participant_response(
+                game_session_id,
+                response.questionId,
+                id,
+                createPariticipantResponse,
+            );
+
+            return {
+                success: true,
+                participantResponse: createPariticipantResponse,
+            };
+        } catch (error) {
+            console.error('Error while processing participant resposne: ', error);
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
+    }
+
     public async update_game_session(
         id: string,
         gameSession: Prisma.GameSessionUpdateInput,
@@ -371,5 +427,29 @@ export default class DatabaseQueue {
                 { ...this.default_job_options, ...options },
             )
             .catch((err) => console.error('Failed to enqueue chat reaction:', err));
+    }
+
+    public async create_participant_response(
+        id: string,
+        game_session_id: string,
+        response: {
+            selectedAnswer: number;
+            isCorrect: boolean;
+            timeToAnswer: number;
+            pointsEarned: number;
+            timeBonus: number;
+            streakBonus: number;
+            answered: Date;
+            questionId: string;
+        },
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue
+            .add(
+                QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
+                { id, game_session_id, response },
+                { ...this.default_job_options, ...options },
+            )
+            .catch((err) => console.error('Failed to enqueue participant response: ', err));
     }
 }

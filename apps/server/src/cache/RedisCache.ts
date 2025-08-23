@@ -1,4 +1,4 @@
-import { GameSession, Question, Spectator } from '@repo/db/client';
+import { GameSession, Question, Response, Spectator } from '@repo/db/client';
 import Redis from 'ioredis';
 import { Participant, Quiz } from '@repo/db/client';
 
@@ -139,6 +139,50 @@ export default class RedisCache {
 
     private get_participants_key(game_session_id: string) {
         return `game_session:${game_session_id}:participants`;
+    }
+
+    //  <------------------ RESPONSE ------------------>
+
+    public async set_participant_response(
+        game_session_id: string,
+        question_id: string,
+        participant_id: string,
+        response: Partial<Response>,
+    ) {
+        try {
+            const key = this.get_participant_response_key(game_session_id);
+            const unique_key = this.get_unique_key_to_response(question_id, participant_id);
+
+            await this.redis_cache.hset(key, unique_key, JSON.stringify(response));
+            await this.redis_cache.expire(key, 60 * 60 * 24);
+        } catch (error) {
+            console.error('Error while setting participant response in cache: ', error);
+        }
+    }
+
+    public async get_participant_response(
+        game_session_id: string,
+        question_id: string,
+        participant_id: string,
+    ) {
+        try {
+            const key = this.get_participant_response_key(game_session_id);
+            const unique_key = this.get_unique_key_to_response(question_id, participant_id);
+
+            const data = await this.redis_cache.hget(key, unique_key);
+            return data ? JSON.parse(data) : null;
+        } catch (error) {
+            console.error('Error while getting participant response from cache: ', error);
+            return null;
+        }
+    }
+
+    private get_unique_key_to_response(question_id: string, participant_id: string) {
+        return `${question_id}_${participant_id}`;
+    }
+
+    private get_participant_response_key(game_session_id: string) {
+        return `game_session:${game_session_id}:responses`;
     }
 
     //  <------------------ SPECTATOR ------------------>
