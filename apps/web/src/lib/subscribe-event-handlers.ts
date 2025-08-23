@@ -133,7 +133,9 @@ export class SubscribeEventHandlers {
             hostScreen: HostScreenEnum;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        const { updateGameSession } = useLiveQuizStore.getState();
+
+        updateGameSession({
             hostScreen: readingPhasePayload.hostScreen,
             currentQuestionId: readingPhasePayload.currentQuestionId,
             currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
@@ -150,13 +152,15 @@ export class SubscribeEventHandlers {
             endTime: number;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
+
+        updateGameSession({
             hostScreen: activePhasePayload.hostScreen,
             phaseStartTime: activePhasePayload.startTime,
             phaseEndTime: activePhasePayload.endTime,
         });
 
-        useLiveQuizStore.getState().updateCurrentQuestion({
+        updateCurrentQuestion({
             options: activePhasePayload.questionOptions,
         });
     }
@@ -169,7 +173,9 @@ export class SubscribeEventHandlers {
             startTime: number;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        const { updateGameSession } = useLiveQuizStore.getState();
+
+        updateGameSession({
             hostScreen: resultsPhasePayload.hostScreen,
         });
     }
@@ -187,13 +193,25 @@ export class SubscribeEventHandlers {
             participantScreen: ParticipantScreenEnum;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        console.log("[DEBUG] reading phase payload: ", readingPhasePayload);
+
+        const { updateGameSession, updateCurrentQuestion, gameSession, currentQuestion } = useLiveQuizStore.getState();
+
+        updateGameSession({
             participantScreen: readingPhasePayload.participantScreen,
             currentQuestionId: readingPhasePayload.currentQuestionId,
             currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+            currentPhase: readingPhasePayload.currentPhase,
             phaseStartTime: readingPhasePayload.startTime,
             phaseEndTime: readingPhasePayload.endTime,
         });
+
+        updateCurrentQuestion({
+            question: readingPhasePayload.questionTitle,
+        });
+
+        console.log("[DEBUG] updated game-session: ", gameSession);
+        console.log("[DEBUG] updated current question: ", currentQuestion);
     }
 
     static handleParticipantIncomingActivePhase(payload: unknown) {
@@ -204,15 +222,22 @@ export class SubscribeEventHandlers {
             endTime: number;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        console.log("[DEBUG] active phase payload: ", activePhasePayload);
+
+        const { updateGameSession, updateCurrentQuestion, gameSession, currentQuestion } = useLiveQuizStore.getState();
+
+        updateGameSession({
             participantScreen: activePhasePayload.pariticipantScreen,
+            currentPhase: QuizPhaseEnum.QUESTION_ACTIVE,
             phaseStartTime: activePhasePayload.startTime,
             phaseEndTime: activePhasePayload.endTime,
         });
 
-        useLiveQuizStore.getState().updateCurrentQuestion({
+        updateCurrentQuestion({
             options: activePhasePayload.questionOptions,
         });
+        console.log("[DEBUG] updated game-session: ", gameSession);
+        console.log("[DEBUG] update current question: ", currentQuestion);
     }
 
     static handleParticipantIncomingResultsPhase(payload: unknown) {
@@ -223,10 +248,18 @@ export class SubscribeEventHandlers {
             startTime: number;
         };
 
-        useLiveQuizStore.getState().updateGameSession({
+        console.log("[DEBUG] results phase payload: ", resultsPhasePayload);
+
+        const { updateGameSession, gameSession, currentQuestion } = useLiveQuizStore.getState();
+
+        updateGameSession({
             participantScreen: resultsPhasePayload.participantScreen,
+            currentPhase: QuizPhaseEnum.SHOW_RESULTS,
+            phaseStartTime: resultsPhasePayload.startTime,
         });
+        console.log("[DEBUG] updated game-session: ", gameSession);
+        console.log("[DEBUG] update current question: ", currentQuestion);
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 }

@@ -40,7 +40,7 @@ export default function ParticipantQuestionActiveRenderer() {
             <div className="min-h-[32rem] w-[90%] flex flex-col justify-between">
                 <div
                     className={cn('w-full text-3xl text-center')}
-                    dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
+                    dangerouslySetInnerHTML={{ __html: currentQuestion.question! }}
                 />
                 <div className="flex flex-row items-center justify-center">
                     {currentQuestion.imageUrl && (
@@ -64,7 +64,7 @@ export default function ParticipantQuestionActiveRenderer() {
                     )}
                     {/* <HostQuestionActiveOptions /> */}
                     <div className='grid grid-cols-2 gap-3'>
-                        {currentQuestion.options.map((option, index) => (
+                        {currentQuestion.options!.map((option, index) => (
                             <div
                                 className='bg-red-400 hover:bg-pink-700 transition-colors cursor-pointer px-4 py-3 rounded-md col-span-1 '
                                 key={index}
