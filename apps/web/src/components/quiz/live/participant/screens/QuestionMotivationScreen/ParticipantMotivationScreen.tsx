@@ -26,7 +26,7 @@ export default function ParticipantMotivationScreen(): JSX.Element {
                         }}
                         className="text-3xl font-extralight tracking-wider flex flex-col items-center gap-y-4"
                     >
-                        <span className="text-sm">Are you ready{participantData?.nickname}!</span>
+                        <span className="text-sm">Are you ready {participantData?.nickname}!</span>
                         <span>Respond quickly to get more points!</span>
                     </motion.span>
                     {participantData?.avatar && (

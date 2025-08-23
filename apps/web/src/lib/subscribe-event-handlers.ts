@@ -167,13 +167,16 @@ export class SubscribeEventHandlers {
 
     static handleHostIncomingResultsPhase(payload: unknown) {
         const resultsPhasePayload = payload as {
-            scores: { participantId: string; score: number }[];
+            scores: { id: string; totalScore: number }[];
             correctAnswer: number;
             hostScreen: HostScreenEnum;
             startTime: number;
         };
 
+        const { updateParticipants } = useLiveParticipantsStore.getState();
         const { updateGameSession } = useLiveQuizStore.getState();
+
+        updateParticipants(resultsPhasePayload.scores);
 
         updateGameSession({
             hostScreen: resultsPhasePayload.hostScreen,
@@ -193,10 +196,11 @@ export class SubscribeEventHandlers {
             participantScreen: ParticipantScreenEnum;
         };
 
-        // console.log('[DEBUG] reading phase payload: ', readingPhasePayload);
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
 
-        const { updateGameSession, updateCurrentQuestion } =
-            useLiveQuizStore.getState();
+        updateCurrentQuestion({
+            question: readingPhasePayload.questionTitle,
+        });
 
         updateGameSession({
             participantScreen: readingPhasePayload.participantScreen,
@@ -206,62 +210,68 @@ export class SubscribeEventHandlers {
             phaseStartTime: readingPhasePayload.startTime,
             phaseEndTime: readingPhasePayload.endTime,
         });
-
-        updateCurrentQuestion({
-            question: readingPhasePayload.questionTitle,
-        });
-
-        // console.log('[DEBUG] updated game-session: ', gameSession);
-        // console.log('[DEBUG] updated current question: ', currentQuestion);
     }
 
     static handleParticipantIncomingActivePhase(payload: unknown) {
         const activePhasePayload = payload as {
             questionOptions: string[];
-            pariticipantScreen: ParticipantScreenEnum;
+            participantScreen: string;
             startTime: number;
             endTime: number;
         };
 
-        // console.log('[DEBUG] active phase payload: ', activePhasePayload);
-
-        const { updateGameSession, updateCurrentQuestion } =
-            useLiveQuizStore.getState();
-
-        updateGameSession({
-            participantScreen: activePhasePayload.pariticipantScreen,
-            currentPhase: QuizPhaseEnum.QUESTION_ACTIVE,
-            phaseStartTime: activePhasePayload.startTime,
-            phaseEndTime: activePhasePayload.endTime,
-        });
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
 
         updateCurrentQuestion({
             options: activePhasePayload.questionOptions,
         });
-        // console.log('[DEBUG] updated game-session: ', gameSession);
-        // console.log('[DEBUG] update current question: ', currentQuestion);
+
+        updateGameSession({
+            participantScreen: ParticipantScreenEnum.QUESTION_ACTIVE,
+            currentPhase: QuizPhaseEnum.QUESTION_ACTIVE,
+            phaseStartTime: activePhasePayload.startTime,
+            phaseEndTime: activePhasePayload.endTime,
+        });
     }
 
     static handleParticipantIncomingResultsPhase(payload: unknown) {
         const resultsPhasePayload = payload as {
-            scores: { participantId: string; score: number }[];
+            scores: { id: string; totalScore: number }[];
             correctAnswer: number;
             participantScreen: ParticipantScreenEnum;
             startTime: number;
         };
 
-        // console.log('[DEBUG] results phase payload: ', resultsPhasePayload);
-
         const { updateGameSession } = useLiveQuizStore.getState();
+        const { updateParticipants } = useLiveParticipantsStore.getState();
+
+        updateParticipants(resultsPhasePayload.scores);
 
         updateGameSession({
             participantScreen: resultsPhasePayload.participantScreen,
             currentPhase: QuizPhaseEnum.SHOW_RESULTS,
             phaseStartTime: resultsPhasePayload.startTime,
         });
-        // console.log('[DEBUG] updated game-session: ', gameSession);
-        // console.log('[DEBUG] update current question: ', currentQuestion);
     }
 
     static handleHostLaunchQuestion() {}
+
+    // <---------------------- RESPONSE-EVENTS ---------------------->
+
+    static handleParticipantIncomingRespondedMessage(payload: unknown) {
+        const message = payload as {
+            error: string;
+        };
+        toast.warning(message.error);
+    }
+
+    static handleHostIncomingResponseMessage(payload: unknown) {
+        const message = payload as {
+            selectedAnswer: number;
+        };
+        toast.success(message.selectedAnswer);
+        // set it to host bar
+    }
 }
+
+// {"type":"QUESTION_RESULTS_PHASE_TO_HOST","payload":{"scores":[{"participant_id":"cmeonltfb000kslqprquuvruv","totalScore":100},{"participant_id":"cmeonlr3l000gslqpi27obskj","totalScore":0}],"correctAnswer":3,"hostScreen":"QUESTION_RESULTS","startTime":1755977544655}}

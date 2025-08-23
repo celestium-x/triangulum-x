@@ -17,7 +17,7 @@ export default function ThemesDraft() {
     }
 
     return (
-        <div className="text-neutral-900 dark:text-neutral-100">
+        <div className="text-neutral-900 dark:text-neutral-100 select-none">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
                 <div className="text-lg font-medium">Themes</div>
                 <RxCross2 onClick={() => setState(DraftRenderer.NONE)} className="cursor-pointer" />

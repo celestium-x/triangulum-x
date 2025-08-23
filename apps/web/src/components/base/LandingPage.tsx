@@ -7,7 +7,7 @@ import { Highlighter } from '../ui/Highlighter';
 export default function LandingPage() {
     return (
         <div>
-            <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4 relative z-50">
+            <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4 relative z-50 select-none">
                 <div className="absolute bottom-0 -z-10">
                     <AnimatedSvgCircles />
                 </div>
@@ -26,6 +26,8 @@ export default function LandingPage() {
                     />
                     <span className="text-sm">powerd by solana</span>
                 </HoverBorderGradient>
+
+                <div className="bg-neutral-950 h-[30px] " />
                 <h1
                     className="text-7xl font-semibold text-transparent bg-clip-text tracking-tight
                         bg-gradient-to-b mt-4

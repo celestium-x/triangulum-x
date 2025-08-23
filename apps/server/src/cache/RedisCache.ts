@@ -91,12 +91,12 @@ export default class RedisCache {
             const data = await this.redis_cache.hgetall(key);
             if (!data) return [];
 
-            return Object.entries(data).map(([participant_id, value]) => {
+            return Object.entries(data).map(([id, value]) => {
                 const participant = JSON.parse(value);
 
                 // this will always include participant_id
                 if (fields && fields.length > 0) {
-                    const filtered: any = { participant_id };
+                    const filtered: any = { id };
                     for (const field of fields) {
                         if (participant[field] !== undefined) {
                             filtered[field] = participant[field];
@@ -106,7 +106,7 @@ export default class RedisCache {
                 }
 
                 // if no field specified return complete participant
-                return { participant_id, ...participant };
+                return { id, ...participant };
             });
         } catch (err) {
             console.error('Error in get_all_participants:', err);

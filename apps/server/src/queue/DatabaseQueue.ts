@@ -76,7 +76,7 @@ interface CreateParticipantResponseJobType {
         pointsEarned: number;
         timeBonus: number;
         streakBonus: number;
-        answered: Date;
+        answeredAt: Date;
         questionId: string;
     };
 }
@@ -309,9 +309,16 @@ export default class DatabaseQueue {
 
             const createPariticipantResponse = await prisma.response.create({
                 data: {
-                    ...response,
-                    participantId: id,
-                    gameSessionId: game_session_id,
+                    selectedAnswer: response.selectedAnswer,
+                    isCorrect: response.isCorrect,
+                    timeToAnswer: response.timeToAnswer ?? 0,
+                    pointsEarned: response.pointsEarned,
+                    timeBonus: response.timeBonus,
+                    streakBonus: response.streakBonus,
+                    answeredAt: response.answeredAt,
+                    question: { connect: { id: response.questionId } },
+                    participant: { connect: { id: id } },
+                    gameSession: { connect: { id: game_session_id } },
                 },
             });
 
@@ -439,7 +446,7 @@ export default class DatabaseQueue {
             pointsEarned: number;
             timeBonus: number;
             streakBonus: number;
-            answered: Date;
+            answeredAt: Date;
             questionId: string;
         },
         options?: Partial<JobOption>,
