@@ -288,7 +288,7 @@ export default class HostManager {
         payload: IncomingChatReaction,
         ws: CustomWebSocket,
     ) {
-        const { userId } = ws.user;
+        const { userId, gameSessionId: game_session_id } = ws.user;
         const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
             payload;
 
@@ -311,12 +311,16 @@ export default class HostManager {
             type: MESSAGE_TYPES.CHAT_REACTION_EVENT,
             payload: {
                 chatMessageId,
+                reaction,
+                reactedAt,
+                reactorName,
+                reactorAvatar,
                 reactorType,
             },
             exclude_socket_id: ws.id,
         };
 
-        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, published_message);
+        this.quizManager.publish_event_to_redis(game_session_id, published_message);
 
         this.database_queue
             .create_chat_reaction(userId, chatMessageId, chatReaction)

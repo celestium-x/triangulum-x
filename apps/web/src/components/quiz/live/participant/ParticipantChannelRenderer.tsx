@@ -3,6 +3,7 @@ import ExpandableCard from '../common/ExpandableCard';
 import { useHandleClickOutside } from '@/hooks/useHandleClickOutside';
 import { useLiveQuizExpandableCardForParticipantStore } from '@/store/live-quiz/useLiveQuizExpandableCardForParticipantStore';
 import ParticipantSettingPanel from './ParticipantSettingsPanel';
+import ParticipantLeaderboardPanel from './ParticipantLeaderboard';
 
 export default function ParticipantPanelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
@@ -17,6 +18,9 @@ export default function ParticipantPanelRenderer() {
         switch (type) {
             case 'SETTINGS':
                 return <ParticipantSettingPanel />;
+
+            case 'LEADERBOARD':
+                return <ParticipantLeaderboardPanel />;
         }
     }
 

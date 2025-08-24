@@ -1,5 +1,6 @@
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalChatStore';
+import { useLiveQuizHostStore } from '@/store/live-quiz/useLiveQuizHostStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import {
     useLiveParticipantStore,
@@ -96,27 +97,27 @@ export class SubscribeEventHandlers {
     }
 
     static handleIncomingChatMessage(payload: unknown) {
-        const { spectatorData } = useLiveSpectatorStore.getState();
+        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatMessage } = useLiveQuizGlobalChatStore.getState();
         const messagePayload = payload as { id: string; payload: ChatMessageType };
         const chat = messagePayload.payload;
 
-        if (chat.senderId === spectatorData?.id) return;
+        // if (chat.senderId === spectatorData?.id) return;
 
         addChatMessage(chat);
     }
 
     static handleIncomingReactionEvent(payload: unknown) {
-        const { spectatorData } = useLiveSpectatorStore.getState();
+        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
 
         const reactionPayload = payload as { id: string; payload: ChatReactionType };
         const reaction = reactionPayload.payload;
-        if (
-            reaction.reactorName === spectatorData?.nickname &&
-            reaction.reactorType === 'SPECTATOR'
-        )
-            return;
+        // if (
+        //     reaction.reactorName === spectatorData?.nickname &&
+        //     reaction.reactorType === 'SPECTATOR'
+        // )
+        //     return;
         addChatReaction(reaction);
     }
 
@@ -269,9 +270,8 @@ export class SubscribeEventHandlers {
         const message = payload as {
             selectedAnswer: number;
         };
-        toast.success(message.selectedAnswer);
-        // set it to host bar
+
+        const { updateLiveOptions } = useLiveQuizHostStore.getState();
+        updateLiveOptions(message.selectedAnswer);
     }
 }
-
-// {"type":"QUESTION_RESULTS_PHASE_TO_HOST","payload":{"scores":[{"participant_id":"cmeonltfb000kslqprquuvruv","totalScore":100},{"participant_id":"cmeonlr3l000gslqpi27obskj","totalScore":0}],"correctAnswer":3,"hostScreen":"QUESTION_RESULTS","startTime":1755977544655}}

@@ -1,7 +1,12 @@
 'use client';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { cn } from '@/lib/utils';
+import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import Image from 'next/image';
+import { useRef } from 'react';
 
 export interface Player {
+    id: string;
     imageUrl: string;
     name: string;
     rank: number;
@@ -50,8 +55,8 @@ function LeaderBoardBubble({ player }: { player: Player }) {
             <span
                 className={`${
                     player.rank === 1
-                        ? 'text-base font-semibold text-zinc-100'
-                        : 'text-sm font-medium text-zinc-200'
+                        ? 'text-base font-semibold dark:text-zinc-100 text-dark-base '
+                        : 'text-sm font-medium dark:text-zinc-200 text-dark-base'
                 }`}
             >
                 {player.name.split(' ')[0]}
@@ -72,9 +77,15 @@ function LeaderBoardBubble({ player }: { player: Player }) {
     );
 }
 
-function LeaderBoardPanel({ player }: { player: Player }) {
+function LeaderBoardPanel({ player }: { player: Player; scroll: boolean }) {
+    const { participantData } = useLiveParticipantStore();
     return (
-        <div className="w-full h-16 rounded-xl flex overflow-hidden dark:bg-neutral-950 hover:scale-105 transition-all duration-300 ease-in-out">
+        <div
+            className={cn(
+                'w-full h-16 rounded-xl flex overflow-hidden dark:bg-neutral-950 hover:scale-105 transition-all duration-300 ease-in-out border',
+                participantData?.id === player.id ? 'border-[#eebbe2]' : 'border-transparent',
+            )}
+        >
             <div className="h-full w-[20%] flex justify-center items-center">
                 <span className="h-9 w-9 rounded-full border overflow-hidden">
                     <Image
@@ -98,31 +109,88 @@ function LeaderBoardPanel({ player }: { player: Player }) {
     );
 }
 
-export default function LeaderboardPanelComponent({ players }: { players: Player[] }) {
+export default function LeaderboardPanelComponent({
+    players,
+    participant,
+}: {
+    players: Player[];
+    participant?: boolean;
+}) {
+    const { participantData } = useLiveParticipantStore();
+    const youRef = useRef<HTMLDivElement | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
     const first = players.find((p) => p.rank === 1);
     const second = players.find((p) => p.rank === 2);
     const third = players.find((p) => p.rank === 3);
     const others = players.filter((p) => p.rank > 3);
+    const you = players.find((p) => p.id === participantData?.id);
+
+    const handleScrollToYou = () => {
+        if (youRef.current && scrollContainerRef.current) {
+            const container = scrollContainerRef.current;
+            const element = youRef.current;
+
+            const containerRect = container.getBoundingClientRect();
+            const elementRect = element.getBoundingClientRect();
+
+            const scrollTop =
+                element.offsetTop -
+                container.offsetTop -
+                containerRect.height / 2 +
+                elementRect.height / 2;
+
+            container.scrollTo({
+                top: scrollTop,
+                behavior: 'smooth',
+            });
+        }
+    };
 
     return (
-        <div className="h-full w-full pt-12 p-6 pb-8 overflow-hidden space-y-3">
+        <div className="h-full w-full pt-12 p-6 pb-8 overflow-hidden space-y-3 relative">
             <div className="w-full h-[28%] flex justify-between items-end gap-6">
-                <div className="flex-1 flex justify-center items-end">
-                    {second && <LeaderBoardBubble player={second} />}
-                </div>
-                <div className="flex-1 flex justify-center items-end">
-                    {first && <LeaderBoardBubble player={first} />}
-                </div>
-                <div className="flex-1 flex justify-center items-end">
-                    {third && <LeaderBoardBubble player={third} />}
-                </div>
+                <ToolTipComponent content={second?.score}>
+                    <div className="flex-1 flex justify-center items-end">
+                        {second && <LeaderBoardBubble player={second} />}
+                    </div>
+                </ToolTipComponent>
+                <ToolTipComponent content={first?.score}>
+                    <div className="flex-1 flex justify-center items-end">
+                        {first && <LeaderBoardBubble player={first} />}
+                    </div>
+                </ToolTipComponent>
+                <ToolTipComponent content={third?.score}>
+                    <div className="flex-1 flex justify-center items-end">
+                        {third && <LeaderBoardBubble player={third} />}
+                    </div>
+                </ToolTipComponent>
             </div>
 
-            <div className="w-full h-[72%] rounded-xl p-2 space-y-2 overflow-y-auto custom-scrollbar">
+            <div
+                ref={scrollContainerRef}
+                className="w-full h-[72%] rounded-xl p-2 space-y-2 overflow-y-auto custom-scrollbar"
+            >
                 {others.map((player) => (
-                    <LeaderBoardPanel key={player.rank} player={player} />
+                    <div key={player.rank} ref={player.id === you?.id ? youRef : null}>
+                        <LeaderBoardPanel player={player} scroll={false} />
+                    </div>
                 ))}
             </div>
+
+            {participant && (
+                <div
+                    className={cn(
+                        'absolute bottom-5 right-5 px-3.5 py-1.5 border border-neutral-500 rounded-full ',
+                        'bg-neutral-200 dark:bg-dark-base text-sm shadow-md cursor-pointer',
+                        'text-dark-base dark:text-light-base',
+                        'hover:-translate-y-[1px] hover:shadow-lg transition-all ease-in-out duration-200',
+                    )}
+                    onClick={handleScrollToYou}
+                >
+                    Your rank: <span className="font-semibold">#{you?.rank}</span>
+                </div>
+            )}
         </div>
     );
 }

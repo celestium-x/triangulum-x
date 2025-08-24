@@ -7,10 +7,9 @@ import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLive
 import {
     ChatMessageType,
     ChatReactionType,
-    MESSAGE_TYPES,
     ReactorType,
 } from '@/types/web-socket-types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
@@ -19,6 +18,7 @@ import { useLiveQuizGlobalChatStore } from '@/store/live-quiz/useLiveQuizGlobalC
 import { useLiveHostStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { IoClose } from 'react-icons/io5';
 import MessagesRenderer from '../../common/MessageRenderer';
+import { InteractionEnum } from '@/types/prisma-types';
 
 const emojiList = [
     '😀',
@@ -42,12 +42,7 @@ const emojiList = [
 export default function HostChatsPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForHostStore();
     const { hostData } = useLiveHostStore();
-    const {
-        subscribeToHandler,
-        unsubscribeToHandler,
-        handleSendChatMessage,
-        handleSendChatReactionMessage,
-    } = useWebSocket();
+    const { handleSendChatMessage, handleSendChatReactionMessage } = useWebSocket();
     const [reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
@@ -70,43 +65,6 @@ export default function HostChatsPanel() {
         return out;
     }, [chatMessages]);
 
-    const handleToggleExpand = () => setIsExpanded(!isExpanded);
-
-    const handleIncomingChatMessage = useCallback(
-        (payload: unknown) => {
-            const messagePayload = payload as { id: string; payload: ChatMessageType };
-            const chat = messagePayload.payload;
-            if (chat.senderId === hostData?.id) return;
-            addChatMessage(chat);
-        },
-        [hostData?.id, addChatMessage],
-    );
-
-    const handleIncomingChatReaction = useCallback(
-        (payload: unknown) => {
-            const reactionPayload = payload as ChatReactionType;
-            const reaction = reactionPayload;
-            if (reaction.reactorName === hostData?.name && reaction.reactorType === 'HOST') return;
-            addChatReaction(reaction);
-        },
-        [hostData?.name, addChatReaction],
-    );
-
-    useEffect(() => {
-        subscribeToHandler(MESSAGE_TYPES.CHAT_MESSAGE, handleIncomingChatMessage);
-        subscribeToHandler(MESSAGE_TYPES.CHAT_REACTION_EVENT, handleIncomingChatReaction);
-
-        return () => {
-            unsubscribeToHandler(MESSAGE_TYPES.CHAT_MESSAGE, handleIncomingChatMessage);
-            unsubscribeToHandler(MESSAGE_TYPES.CHAT_REACTION_EVENT, handleIncomingChatReaction);
-        };
-    }, [
-        subscribeToHandler,
-        unsubscribeToHandler,
-        handleIncomingChatMessage,
-        handleIncomingChatReaction,
-    ]);
-
     const handleSendMessage = () => {
         if (!inputRef.current || !hostData) return;
         const message = inputRef.current.value.trim();
@@ -128,6 +86,21 @@ export default function HostChatsPanel() {
         inputRef.current.value = '';
     };
 
+    const handleSendReactionMessage = (chatMessageId: string, reaction: InteractionEnum) => {
+        if (!hostData) return;
+        const reactionData: ChatReactionType = {
+            chatMessageId,
+            reactorName: hostData.name!,
+            reactorAvatar: hostData.image!,
+            reaction,
+            reactedAt: new Date(),
+            reactorType: ReactorType.HOST,
+        };
+
+        addChatReaction(reactionData);
+        handleSendChatReactionMessage(reactionData);
+    };
+
     const handleAddEmoji = (emoji: string) => {
         if (!inputRef.current) return;
         const cursorPos = inputRef.current.selectionStart ?? inputRef.current.value.length;
@@ -146,7 +119,7 @@ export default function HostChatsPanel() {
                     <Button
                         className="text-dark-base dark:text-light-base cursor-pointer dark:bg-neutral-600/30"
                         variant="ghost"
-                        onClick={handleToggleExpand}
+                        onClick={() => setIsExpanded(!isExpanded)}
                     >
                         <BiExpandAlt className="dark:text-light-base" strokeWidth={0.5} />
                     </Button>
@@ -158,19 +131,7 @@ export default function HostChatsPanel() {
                     <MessagesRenderer
                         messages={uniqueMessages}
                         id={hostData?.id || ''}
-                        onSendReaction={(chatMessageId, reaction) => {
-                            if (!hostData) return;
-                            const reactionData: ChatReactionType = {
-                                chatMessageId,
-                                reactorName: hostData.name!,
-                                reactorAvatar: hostData.image!,
-                                reaction,
-                                reactedAt: new Date(),
-                                reactorType: ReactorType.HOST,
-                            };
-                            addChatReaction(reactionData);
-                            handleSendChatReactionMessage(reactionData);
-                        }}
+                        onSendReaction={handleSendReactionMessage}
                         onDoubleClick={(message: ChatMessageType) => setSelectedReply(message)}
                         highlight={selectedReply}
                     />

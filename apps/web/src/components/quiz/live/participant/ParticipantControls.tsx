@@ -3,6 +3,7 @@ import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { IoMdSettings } from 'react-icons/io';
+import { MdLeaderboard } from 'react-icons/md';
 
 interface ParticipantControlsType {
     tooltip: string;
@@ -21,16 +22,16 @@ export default function ParticipantControls({
     // onClickPeople,
     onClickSettings,
     // onClickChat,
-    // onClickLeaderboard,
+    onClickLeaderboard,
 }: ParticipantControlsProps) {
     const { quiz } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
     const allParticipantControls: ParticipantControlsType[] = [
-        // {
-        //     tooltip: 'Leaderboard',
-        //     icon: <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />,
-        //     onClick: onClickLeaderboard,
-        // },
+        {
+            tooltip: 'Leaderboard',
+            icon: <MdLeaderboard className="" style={{ width: '28px', height: '28px' }} />,
+            onClick: onClickLeaderboard,
+        },
         // {
         //     tooltip: 'People in Room',
         //     icon: <PiDetectiveFill className="" style={{ width: '28px', height: '28px' }} />,
