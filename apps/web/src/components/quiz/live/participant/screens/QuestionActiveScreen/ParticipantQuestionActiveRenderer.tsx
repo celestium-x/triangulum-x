@@ -46,7 +46,7 @@ export default function ParticipantQuestionActiveRenderer() {
         <div
             ref={canvasRef}
             className={cn(
-                'w-full h-full overflow-hidden flex flex-col items-center space-y-10',
+                'w-full h-full overflow-hidden flex flex-col items-center space-y-10 z-[100]',
                 'relative p-8 pt-50',
             )}
         >
@@ -66,7 +66,7 @@ export default function ParticipantQuestionActiveRenderer() {
                             onClick={() => !isDisabled && handleSelectOption(index)}
                             className={cn(
                                 'group relative isolate flex w-full select-none items-stretch overflow-hidden rounded-2xl',
-                                'border border-white/10 bg-white/[0.03] p-1 transition-transform',
+                                'border border-white/10 bg-white/[0.03] transition-transform',
                                 !isDisabled &&
                                     'cursor-pointer hover:-translate-y-0.5 active:translate-y-0',
                                 isDisabled && 'opacity-50 cursor-not-allowed',
@@ -75,9 +75,10 @@ export default function ParticipantQuestionActiveRenderer() {
                                 boxShadow: isSelected
                                     ? `0 0 0 1px ${hexWithAlpha(color, '55')}, 0 10px 30px ${hexWithAlpha(color, '25')}`
                                     : '0 6px 20px rgba(0,0,0,0.25)',
+                                backgroundColor: template?.background_color
                             }}
                         >
-                            <div className="w-1.5 rounded-xl" style={{ backgroundColor: color }} />
+                            <div className="w-3" style={{ backgroundColor: color }} />
 
                             <div className="flex min-h-[64px] flex-1 items-center gap-10 px-4 md:gap-4 md:px-5">
                                 <span
