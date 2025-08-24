@@ -277,7 +277,7 @@ export default class DatabaseQueue {
             const createChatReaction = await prisma.chatReaction.create({
                 data: {
                     ...chat_reaction,
-                    chatMessageId: chat_message_id,
+                    chatMessage: { connect: { id: chat_message_id } },
                     reactorName: chat_reaction.reactorName,
                     reactorAvatar: chat_reaction.reactorAvatar,
                     reactedAt: chat_reaction.reactedAt,

@@ -280,6 +280,10 @@ export default class SpectatorManager {
             type: MESSAGE_TYPES.CHAT_REACTION_EVENT,
             payload: {
                 chatMessageId,
+                reaction,
+                reactedAt,
+                reactorName,
+                reactorAvatar,
                 reactorType,
             },
             exclude_socket_id: ws.id,

@@ -90,6 +90,7 @@ export class SubscribeEventHandlers {
     // <---------------------- CHAT-EVENTS ---------------------->
 
     static handleIncomingChatReactionMessage(payload: unknown) {
+
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
         const message = payload as ChatReactionType;
 
@@ -97,27 +98,27 @@ export class SubscribeEventHandlers {
     }
 
     static handleIncomingChatMessage(payload: unknown) {
-        const { spectatorData } = useLiveSpectatorStore.getState();
+        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatMessage } = useLiveQuizGlobalChatStore.getState();
         const messagePayload = payload as { id: string; payload: ChatMessageType };
         const chat = messagePayload.payload;
 
-        if (chat.senderId === spectatorData?.id) return;
+        // if (chat.senderId === spectatorData?.id) return;
 
         addChatMessage(chat);
     }
 
     static handleIncomingReactionEvent(payload: unknown) {
-        const { spectatorData } = useLiveSpectatorStore.getState();
+        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
 
         const reactionPayload = payload as { id: string; payload: ChatReactionType };
         const reaction = reactionPayload.payload;
-        if (
-            reaction.reactorName === spectatorData?.nickname &&
-            reaction.reactorType === 'SPECTATOR'
-        )
-            return;
+        // if (
+        //     reaction.reactorName === spectatorData?.nickname &&
+        //     reaction.reactorType === 'SPECTATOR'
+        // )
+        //     return;
         addChatReaction(reaction);
     }
 
@@ -255,7 +256,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 
@@ -270,7 +271,7 @@ export class SubscribeEventHandlers {
         const message = payload as {
             selectedAnswer: number;
         };
-        
+
         const { updateLiveOptions } = useLiveQuizHostStore.getState();
         updateLiveOptions(message.selectedAnswer);
     }
