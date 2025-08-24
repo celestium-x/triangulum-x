@@ -3,9 +3,12 @@ import { templates } from '@/lib/templates';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { getResponsiveGap } from '@/components/canvas/CanvasOptions';
+import { useLiveQuizHostStore } from '@/store/live-quiz/useLiveQuizHostStore';
 
 export default function HostQuestionActiveOptions() {
     const { currentQuestion, quiz: liveQuiz } = useLiveQuizStore();
+    const { liveOptions } = useLiveQuizHostStore();
+
     const template = templates.find((t) => t.id === liveQuiz?.theme);
     if (!currentQuestion?.options) return null;
 
@@ -25,7 +28,7 @@ export default function HostQuestionActiveOptions() {
                         <div
                             className="w-full rounded-tr-md sm:rounded-tr-2xl transition-all duration-1000 ease-in-out border border-white/20 z-50"
                             style={{
-                                height: 25,
+                                height: 8 * liveOptions[idx]!,
                                 backgroundColor: `${template?.bars[idx]}` || '#4F46E5',
                             }}
                         />

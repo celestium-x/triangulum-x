@@ -12,6 +12,7 @@ export default function HostQuestionPreviewRenderer() {
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion } = useLiveQuizStore();
     const { handleSendHostLaunchQuestion } = useWebSocket();
+    const avatarRef = useRef<HTMLAudioElement>(null);
 
     function handleLaunchQuestion(e: KeyboardEvent) {
         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && currentQuestion) {
@@ -22,6 +23,13 @@ export default function HostQuestionPreviewRenderer() {
             });
         }
     }
+
+    useEffect(() => {
+        if (avatarRef.current && 88) {
+            avatarRef.current.currentTime = 88;
+            avatarRef.current.play();
+        }
+    }, []);
 
     useEffect(() => {
         document.addEventListener('keydown', handleLaunchQuestion);
@@ -69,6 +77,12 @@ export default function HostQuestionPreviewRenderer() {
                             </div>
                         </div>
                     )}
+                    <audio
+                        className='hidden'
+                        src='/audio/avatar.mp3'
+                        autoPlay
+                        ref={avatarRef}
+                    />
                     <HostQuestionPreviewOptions />
                 </div>
             </div>
