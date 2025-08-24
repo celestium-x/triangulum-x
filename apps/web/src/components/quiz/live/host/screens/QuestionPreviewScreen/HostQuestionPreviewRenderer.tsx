@@ -77,12 +77,7 @@ export default function HostQuestionPreviewRenderer() {
                             </div>
                         </div>
                     )}
-                    <audio
-                        className='hidden'
-                        src='/audio/avatar.mp3'
-                        autoPlay
-                        ref={avatarRef}
-                    />
+                    <audio className="hidden" src="/audio/avatar.mp3" autoPlay ref={avatarRef} />
                     <HostQuestionPreviewOptions />
                 </div>
             </div>

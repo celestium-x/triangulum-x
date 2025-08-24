@@ -21,6 +21,6 @@ export const useLiveQuizHostStore = create<LiveQuizHostStoreProps>((set) => ({
             const liveOptions = [...state.liveOptions];
             liveOptions[option] = (liveOptions[option] ?? 0) + 1;
             return { liveOptions: liveOptions };
-        })
-    }
+        });
+    },
 }));

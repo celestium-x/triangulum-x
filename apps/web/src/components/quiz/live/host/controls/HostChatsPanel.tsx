@@ -7,10 +7,9 @@ import { useLiveQuizExpandableCardForHostStore } from '@/store/live-quiz/useLive
 import {
     ChatMessageType,
     ChatReactionType,
-    MESSAGE_TYPES,
     ReactorType,
 } from '@/types/web-socket-types';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { BiExpandAlt } from 'react-icons/bi';
 import { HiOutlineEmojiHappy } from 'react-icons/hi';
 import { MdChevronRight } from 'react-icons/md';
@@ -43,7 +42,7 @@ const emojiList = [
 export default function HostChatsPanel() {
     const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForHostStore();
     const { hostData } = useLiveHostStore();
-    const { handleSendChatMessage, handleSendChatReactionMessage, } = useWebSocket();
+    const { handleSendChatMessage, handleSendChatReactionMessage } = useWebSocket();
     const [reactionAppear, setReactionAppear] = useState<boolean>(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
@@ -100,7 +99,7 @@ export default function HostChatsPanel() {
 
         addChatReaction(reactionData);
         handleSendChatReactionMessage(reactionData);
-    }
+    };
 
     const handleAddEmoji = (emoji: string) => {
         if (!inputRef.current) return;

@@ -3,7 +3,7 @@ import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { cn } from '@/lib/utils';
 import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 export interface Player {
     id: string;
@@ -32,8 +32,9 @@ function LeaderBoardBubble({ player }: { player: Player }) {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill={crownColors[player.rank]}
-                className={`absolute -top-5 right-0 ${player.rank === 1 ? 'w-7 h-7' : 'w-6 h-6'
-                    } rotate-12 drop-shadow-md`}
+                className={`absolute -top-5 right-0 ${
+                    player.rank === 1 ? 'w-7 h-7' : 'w-6 h-6'
+                } rotate-12 drop-shadow-md`}
             >
                 <path d="M5 16l-3-9 6 4 4-7 4 7 6-4-3 9H5zm0 2h14v2H5v-2z" />
             </svg>
@@ -52,21 +53,23 @@ function LeaderBoardBubble({ player }: { player: Player }) {
             </div>
 
             <span
-                className={`${player.rank === 1
-                    ? 'text-base font-semibold dark:text-zinc-100 text-dark-base '
-                    : 'text-sm font-medium dark:text-zinc-200 text-dark-base'
-                    }`}
+                className={`${
+                    player.rank === 1
+                        ? 'text-base font-semibold dark:text-zinc-100 text-dark-base '
+                        : 'text-sm font-medium dark:text-zinc-200 text-dark-base'
+                }`}
             >
                 {player.name.split(' ')[0]}
             </span>
 
             <span
-                className={`${player.rank === 1
-                    ? 'text-lg font-bold text-yellow-400 drop-shadow-md'
-                    : player.rank === 2
-                        ? 'text-md font-semibold text-zinc-400'
-                        : 'text-md font-semibold text-orange-500'
-                    }`}
+                className={`${
+                    player.rank === 1
+                        ? 'text-lg font-bold text-yellow-400 drop-shadow-md'
+                        : player.rank === 2
+                          ? 'text-md font-semibold text-zinc-400'
+                          : 'text-md font-semibold text-orange-500'
+                }`}
             >
                 #{player.rank}
             </span>
@@ -74,14 +77,15 @@ function LeaderBoardBubble({ player }: { player: Player }) {
     );
 }
 
-function LeaderBoardPanel({ player, scroll }: { player: Player, scroll: boolean }) {
-
+function LeaderBoardPanel({ player }: { player: Player; scroll: boolean }) {
     const { participantData } = useLiveParticipantStore();
     return (
-        <div className={cn(
-            'w-full h-16 rounded-xl flex overflow-hidden dark:bg-neutral-950 hover:scale-105 transition-all duration-300 ease-in-out border',
-            participantData?.id === player.id ? 'border-[#eebbe2]' : 'border-transparent',
-        )}>
+        <div
+            className={cn(
+                'w-full h-16 rounded-xl flex overflow-hidden dark:bg-neutral-950 hover:scale-105 transition-all duration-300 ease-in-out border',
+                participantData?.id === player.id ? 'border-[#eebbe2]' : 'border-transparent',
+            )}
+        >
             <div className="h-full w-[20%] flex justify-center items-center">
                 <span className="h-9 w-9 rounded-full border overflow-hidden">
                     <Image
@@ -105,7 +109,13 @@ function LeaderBoardPanel({ player, scroll }: { player: Player, scroll: boolean 
     );
 }
 
-export default function LeaderboardPanelComponent({ players }: { players: Player[] }) {
+export default function LeaderboardPanelComponent({
+    players,
+    participant,
+}: {
+    players: Player[];
+    participant?: boolean;
+}) {
     const { participantData } = useLiveParticipantStore();
     const youRef = useRef<HTMLDivElement | null>(null);
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -120,15 +130,19 @@ export default function LeaderboardPanelComponent({ players }: { players: Player
         if (youRef.current && scrollContainerRef.current) {
             const container = scrollContainerRef.current;
             const element = youRef.current;
-            
+
             const containerRect = container.getBoundingClientRect();
             const elementRect = element.getBoundingClientRect();
-            
-            const scrollTop = element.offsetTop - container.offsetTop - (containerRect.height / 2) + (elementRect.height / 2);
-            
+
+            const scrollTop =
+                element.offsetTop -
+                container.offsetTop -
+                containerRect.height / 2 +
+                elementRect.height / 2;
+
             container.scrollTo({
                 top: scrollTop,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     };
@@ -153,31 +167,30 @@ export default function LeaderboardPanelComponent({ players }: { players: Player
                 </ToolTipComponent>
             </div>
 
-            <div 
+            <div
                 ref={scrollContainerRef}
                 className="w-full h-[72%] rounded-xl p-2 space-y-2 overflow-y-auto custom-scrollbar"
             >
                 {others.map((player) => (
-                    <div
-                        key={player.rank}
-                        ref={player.id === you?.id ? youRef : null}
-                    >
+                    <div key={player.rank} ref={player.id === you?.id ? youRef : null}>
                         <LeaderBoardPanel player={player} scroll={false} />
                     </div>
                 ))}
             </div>
 
-            <div
-                className={cn(
-                    'absolute bottom-5 right-5 px-3.5 py-1.5 border border-neutral-500 rounded-full ',
-                    'bg-neutral-200 dark:bg-dark-base text-sm shadow-md cursor-pointer',
-                    'text-dark-base dark:text-light-base',
-                    'hover:-translate-y-[1px] hover:shadow-lg transition-all ease-in-out duration-200'
-                )}
-                onClick={handleScrollToYou}
-            >
-                Your rank: <span className='font-semibold'>#{you?.rank}</span>
-            </div>
+            {participant && (
+                <div
+                    className={cn(
+                        'absolute bottom-5 right-5 px-3.5 py-1.5 border border-neutral-500 rounded-full ',
+                        'bg-neutral-200 dark:bg-dark-base text-sm shadow-md cursor-pointer',
+                        'text-dark-base dark:text-light-base',
+                        'hover:-translate-y-[1px] hover:shadow-lg transition-all ease-in-out duration-200',
+                    )}
+                    onClick={handleScrollToYou}
+                >
+                    Your rank: <span className="font-semibold">#{you?.rank}</span>
+                </div>
+            )}
         </div>
     );
 }

@@ -90,7 +90,6 @@ export class SubscribeEventHandlers {
     // <---------------------- CHAT-EVENTS ---------------------->
 
     static handleIncomingChatReactionMessage(payload: unknown) {
-
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
         const message = payload as ChatReactionType;
 
@@ -256,7 +255,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() { }
+    static handleHostLaunchQuestion() {}
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 

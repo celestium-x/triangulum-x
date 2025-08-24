@@ -1,38 +1,31 @@
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import LeaderboardPanelComponent, { Player } from '../common/LeaderboardPanelComponent';
 
 export default function HostLeaderboardPanel() {
-    const players: Player[] = [
-        {
-            imageUrl: 'https://dejbzabt9zak1.cloudfront.net/avatars/avatar-1.jpg',
-            name: 'Piyush',
-            rank: 1,
-            score: 100,
-        },
-        {
-            imageUrl: 'https://dejbzabt9zak1.cloudfront.net/avatars/avatar-2.jpg',
-            name: 'Piyush',
-            rank: 2,
-            score: 90,
-        },
-        {
-            imageUrl: 'https://dejbzabt9zak1.cloudfront.net/avatars/avatar-3.jpg',
-            name: 'Piyush',
-            rank: 3,
-            score: 80,
-        },
-        {
-            imageUrl: 'https://dejbzabt9zak1.cloudfront.net/avatars/avatar-4.jpg',
-            name: 'Piyush',
-            rank: 4,
-            score: 70,
-        },
-        {
-            imageUrl: 'https://dejbzabt9zak1.cloudfront.net/avatars/avatar-5.jpg',
-            name: 'Piyush',
-            rank: 5,
-            score: 65,
-        },
-    ];
+    const { participants } = useLiveParticipantsStore();
 
-    return <LeaderboardPanelComponent players={players} />;
+    const sortedParticipants = [...participants].sort((p1, p2) => p2.totalScore - p1.totalScore);
+
+    const emptyScoreBoard =
+        sortedParticipants.length > 0 && sortedParticipants[0]?.totalScore === 0;
+
+    const players: Player[] = sortedParticipants.map((p, index) => ({
+        id: p.id,
+        imageUrl: p.avatar!,
+        name: p.nickname,
+        rank: index + 1,
+        score: p.totalScore,
+    }));
+
+    return (
+        <>
+            {emptyScoreBoard ? (
+                <div className="h-full w-full flex justify-center items-center dark:text-neutral-500 text-sm">
+                    No one has attempted the question yet
+                </div>
+            ) : (
+                <LeaderboardPanelComponent players={players} />
+            )}
+        </>
+    );
 }

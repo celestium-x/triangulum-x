@@ -288,12 +288,9 @@ export default class HostManager {
         payload: IncomingChatReaction,
         ws: CustomWebSocket,
     ) {
-
-        const {
-            userId,
-            gameSessionId: game_session_id
-        } = ws.user;
-        const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } = payload;
+        const { userId, gameSessionId: game_session_id } = ws.user;
+        const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
+            payload;
 
         if (!chatMessageId) {
             console.error('Missing required fields in chat reactuon payload:', {

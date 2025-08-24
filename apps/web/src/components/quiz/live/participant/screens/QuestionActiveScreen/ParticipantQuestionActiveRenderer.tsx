@@ -68,7 +68,7 @@ export default function ParticipantQuestionActiveRenderer() {
                                 'group relative isolate flex w-full select-none items-stretch overflow-hidden rounded-2xl',
                                 'border border-white/10 bg-white/[0.03] p-1 transition-transform',
                                 !isDisabled &&
-                                'cursor-pointer hover:-translate-y-0.5 active:translate-y-0',
+                                    'cursor-pointer hover:-translate-y-0.5 active:translate-y-0',
                                 isDisabled && 'opacity-50 cursor-not-allowed',
                             )}
                             style={{
