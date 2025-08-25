@@ -18,6 +18,7 @@ import { getLiveQuizSummarizedData } from '../controllers/live-quiz-controller/g
 import getSelectedQuestionDetails from '../controllers/live-quiz-controller/getSelectedQuestionDetails';
 import getSpectatorOnCall from '../controllers/live-quiz-controller/getSpectatorOnCall';
 import getParticipantsOnCall from '../controllers/live-quiz-controller/getParticipantsOnCall';
+import verifyQuizOwnershipMiddleware from '../middlewares/verifyQuizOwnershipMiddleware';
 
 const router = Router();
 
@@ -51,6 +52,7 @@ router.get('/quiz/get-sumarized-quiz/:quizId', authMiddleware, getLiveQuizSummar
 router.get(
     '/quiz/get-selected-question-data/:quizId/:questionIndex',
     authMiddleware,
+    verifyQuizOwnershipMiddleware,
     getSelectedQuestionDetails,
 );
 router.get('/quiz/spectators/:quizId', authMiddleware, getSpectatorOnCall);

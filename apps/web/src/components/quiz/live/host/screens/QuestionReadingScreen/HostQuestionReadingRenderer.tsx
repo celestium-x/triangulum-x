@@ -4,12 +4,12 @@ import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession } = useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } = useLiveQuizStore();
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -18,6 +18,23 @@ export default function HostQuestionReadingRenderer() {
             </div>
         );
     }
+
+    useEffect(() => {
+
+        if (!quiz) return;
+
+        console.log("quiz before updation: ", quiz);
+
+        const questions = quiz.questions;
+        const updatedQuestions = questions.filter((q) => q.id !== currentQuestion.id);
+        updateQuiz({
+            questions: updatedQuestions
+        });
+
+        updateCurrentQuestion({});
+
+        console.log("A question should get subtracted: ", quiz);
+    }, []);
 
     return (
         <div

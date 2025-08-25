@@ -87,6 +87,7 @@ model Question {
 
     orderIndex Int
     imageUrl   String?
+    isAsked    Boolean  @default(false)
 
     quizId   String
     quiz     Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)

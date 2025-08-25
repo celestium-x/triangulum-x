@@ -39,12 +39,14 @@ export default function HostQuestionReviewFooter() {
     function isQuestionDataComplete(question: QuestionType | undefined) {
         return (
             question &&
+            question.id &&
             question.question &&
             question.options &&
             question.explanation !== undefined &&
             question.difficulty !== undefined &&
             question.basePoints !== undefined &&
-            question.timeLimit !== undefined
+            question.timeLimit !== undefined &&
+            question.orderIndex !== undefined
         );
     }
 
@@ -59,6 +61,10 @@ export default function HostQuestionReviewFooter() {
         if (!quiz?.id || !session?.user.token) return;
         setLoading(true);
         try {
+
+            console.log("tageted index: ", targetIndex);
+            console.log("questions length: ", quiz?.questions);
+
             const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
                 quiz.id,
                 targetIndex,

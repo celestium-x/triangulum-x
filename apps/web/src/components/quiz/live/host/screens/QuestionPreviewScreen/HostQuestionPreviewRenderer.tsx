@@ -10,9 +10,8 @@ import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 export default function HostQuestionPreviewRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion } = useLiveQuizStore();
+    const { currentQuestion, quiz, updateCurrentQuestion } = useLiveQuizStore();
     const { handleSendHostLaunchQuestion } = useWebSocket();
-    const avatarRef = useRef<HTMLAudioElement>(null);
 
     function handleLaunchQuestion(e: KeyboardEvent) {
         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && currentQuestion) {
@@ -24,12 +23,9 @@ export default function HostQuestionPreviewRenderer() {
         }
     }
 
-    useEffect(() => {
-        if (avatarRef.current && 88) {
-            avatarRef.current.currentTime = 88;
-            avatarRef.current.play();
-        }
-    }, []);
+    // useEffect(() => {
+    //     updateCurrentQuestion(currentQuestion!)
+    // }, [currentQuestion])
 
     useEffect(() => {
         document.addEventListener('keydown', handleLaunchQuestion);
@@ -38,9 +34,19 @@ export default function HostQuestionPreviewRenderer() {
         };
     });
 
+    if(!quiz || !quiz.questions || quiz.questions.length === 0) {
+        return (
+            <div className='text-center text-neutral-700 dark:text-neutral-400 text-2xl h-full w-full '>
+                All questions are asked
+            </div>
+        );
+    }
+
     if (!currentQuestion) {
         return (
-            <div className="text-center text-neutral-400 w-full">Select a question to preview</div>
+            <div className="text-center text-neutral-700 dark:text-neutral-400 text-2xl h-full w-full ">
+                Select a question to preview
+            </div>
         );
     }
 
@@ -77,7 +83,6 @@ export default function HostQuestionPreviewRenderer() {
                             </div>
                         </div>
                     )}
-                    <audio className="hidden" src="/audio/avatar.mp3" autoPlay ref={avatarRef} />
                     <HostQuestionPreviewOptions />
                 </div>
             </div>
