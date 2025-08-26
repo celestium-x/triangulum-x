@@ -149,12 +149,15 @@
     0% {
         transform: scale(1.05);
     }
+
     20% {
         transform: scale(1.1);
     }
+
     40% {
         transform: scale(1.05);
     }
+
     100% {
         transform: scale(1.05);
     }
@@ -167,9 +170,24 @@
 .delay-0 {
     animation-delay: 0s;
 }
+
 .delay-700 {
     animation-delay: 0.3s;
 }
+
 .delay-1400 {
     animation-delay: 0.6s;
+}
+
+
+.fade-dots {
+    mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-composite: intersect;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%),
+        linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    -webkit-mask-composite: destination-in;
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+    pointer-events: none;
 }
