@@ -24,9 +24,9 @@ export default function HostQuestionReadingRenderer() {
         if (!quiz) return;
 
         console.log("quiz before updation: ", quiz);
+        console.log("current question before updation: ", currentQuestion);
 
-        const questions = quiz.questions;
-        const updatedQuestions = questions.filter((q) => q.id !== currentQuestion.id);
+        const updatedQuestions = quiz.questions.filter((q) => q && q.id !== currentQuestion.id);
         updateQuiz({
             questions: updatedQuestions
         });

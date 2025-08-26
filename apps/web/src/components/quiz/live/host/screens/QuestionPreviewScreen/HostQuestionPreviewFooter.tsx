@@ -29,6 +29,12 @@ export default function HostQuestionReviewFooter() {
         }
     }
 
+    // useEffect(() => {
+    //     // this is to get the first question everytime previewing questions before serving it
+    //     // as backend will check if the question is asked or not
+    //     navigateToQuestion(0);
+    // }, []);
+
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => {
@@ -53,7 +59,11 @@ export default function HostQuestionReviewFooter() {
     async function navigateToQuestion(targetIndex: number) {
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
         if (loading) return;
+
+        // to avoid duplicacy
         const targetQuestion = quiz.questions[targetIndex];
+
+        // checking for complete data for a question
         if (isQuestionDataComplete(targetQuestion)) {
             updateCurrentQuestion(targetQuestion!);
             return;
@@ -61,23 +71,21 @@ export default function HostQuestionReviewFooter() {
         if (!quiz?.id || !session?.user.token) return;
         setLoading(true);
         try {
-
-            console.log("tageted index: ", targetIndex);
-            console.log("questions length: ", quiz?.questions);
-
-            const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
+            const question: QuestionType = await LiveQuizBackendActions.getQuestionDetailByIndex(
                 quiz.id,
                 targetIndex,
                 session.user.token,
             );
 
-            if (data) {
+            if (question) {
+                console.log("question: ", question);
+
                 const updatedQuestions = [...quiz.questions];
-                updatedQuestions[targetIndex] = data;
+                updatedQuestions[targetIndex] = question;
                 updateQuiz({
                     questions: updatedQuestions,
                 });
-                updateCurrentQuestion(data);
+                updateCurrentQuestion(question);
             }
         } catch (error) {
             console.error('Failed to fetch question data:', error);

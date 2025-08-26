@@ -6,12 +6,16 @@ import Image from 'next/image';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import HostQuestionPreviewOptions from './HostQuestionPreviewOptions';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
+import { QuestionType } from '@/types/prisma-types';
+import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
+import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 
 export default function HostQuestionPreviewRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, quiz, updateCurrentQuestion } = useLiveQuizStore();
+    const { currentQuestion, quiz, updateCurrentQuestion, updateQuiz } = useLiveQuizStore();
     const { handleSendHostLaunchQuestion } = useWebSocket();
+    const { session } = useUserSessionStore();
 
     function handleLaunchQuestion(e: KeyboardEvent) {
         if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && currentQuestion) {
@@ -23,10 +27,6 @@ export default function HostQuestionPreviewRenderer() {
         }
     }
 
-    // useEffect(() => {
-    //     updateCurrentQuestion(currentQuestion!)
-    // }, [currentQuestion])
-
     useEffect(() => {
         document.addEventListener('keydown', handleLaunchQuestion);
         return () => {
@@ -34,12 +34,22 @@ export default function HostQuestionPreviewRenderer() {
         };
     });
 
-    if(!quiz || !quiz.questions || quiz.questions.length === 0) {
-        return (
-            <div className='text-center text-neutral-700 dark:text-neutral-400 text-2xl h-full w-full '>
-                All questions are asked
-            </div>
-        );
+    if (!quiz || !quiz.questions || quiz.questions.length === 0) {
+        async function fetchQuestion() {
+            const question: QuestionType = await LiveQuizBackendActions.getQuestionDetailByIndex(
+                quiz?.id!,
+                0,
+                session?.user.token,
+            );
+
+            if(question) {
+                updateQuiz({
+                    questions: [question]
+                });
+                updateCurrentQuestion(question);
+            }
+        }
+        fetchQuestion();
     }
 
     if (!currentQuestion) {

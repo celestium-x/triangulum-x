@@ -72,24 +72,21 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             isAsked: questionWithTargetedIndex.isAsked,
             orderIndex: questionWithTargetedIndex.orderIndex,
         }
-        console.log("targeted question: ", currentQuestionValue);
 
+        // check it once for infinite loop
         while (currentQuestionValue.isAsked) {
             if (currentQuestionValue.orderIndex >= quiz.questions.length) {
                 currentQuestionValue.orderIndex = 0;
                 currentQuestionValue.isAsked = quiz.questions[0]?.isAsked!;
                 continue;
             }
-            console.log("shifted to next question: ", currentQuestionValue);
             currentQuestionValue.isAsked = quiz.questions[currentQuestionValue.orderIndex]?.isAsked!;
             currentQuestionValue.orderIndex++;
         }
 
-        console.log("selected question: ", currentQuestionValue);
-
         res.status(200).json({
             success: true,
-            question: quiz.questions[currentQuestionValue.orderIndex]
+            question: quiz.questions.find((q) => q.orderIndex === currentQuestionValue.orderIndex)
         });
         return;
     } catch (error) {
