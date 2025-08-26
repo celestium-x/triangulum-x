@@ -1,8 +1,8 @@
-"use client"
-import ToolTipComponent from "@/components/utility/TooltipComponent";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { useEffect, useRef } from "react";
+'use client';
+import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { useEffect, useRef } from 'react';
 
 export default function LeaderboardParticipantBar({
     baseHeight,
@@ -16,10 +16,10 @@ export default function LeaderboardParticipantBar({
     baseHeight: number;
     color: string;
     nickname: string;
-    avatar: string,
-    score: number,
-    rank: number,
-    you: boolean,
+    avatar: string;
+    score: number;
+    rank: number;
+    you: boolean;
 }) {
     const barRef = useRef<HTMLDivElement>(null);
 
@@ -50,8 +50,9 @@ export default function LeaderboardParticipantBar({
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill={crownColors[rank]}
-                            className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full z-[300] ${rank === 1 ? 'w-6 h-6 sm:w-7 sm:h-7' : 'w-5 h-5 sm:w-6 sm:h-6'
-                                } rotate-12 drop-shadow-md`}
+                            className={`absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full z-[300] ${
+                                rank === 1 ? 'w-6 h-6 sm:w-7 sm:h-7' : 'w-5 h-5 sm:w-6 sm:h-6'
+                            } rotate-12 drop-shadow-md`}
                         >
                             <path d="M5 16l-3-9 6 4 4-7 4 7 6-4-3 9H5zm0 2h14v2H5v-2z" />
                         </svg>
@@ -64,10 +65,10 @@ export default function LeaderboardParticipantBar({
                             rank === 1
                                 ? 'border-2 sm:border-4 border-[#FFD700]'
                                 : rank === 2
-                                    ? 'border-2 sm:border-4 border-[#C0C0C0]'
-                                    : rank === 3
-                                        ? 'border-2 sm:border-4 border-[#CD7F32]'
-                                        : 'border-none'
+                                  ? 'border-2 sm:border-4 border-[#C0C0C0]'
+                                  : rank === 3
+                                    ? 'border-2 sm:border-4 border-[#CD7F32]'
+                                    : 'border-none',
                         )}
                         width={60}
                         height={60}
@@ -81,7 +82,10 @@ export default function LeaderboardParticipantBar({
                 className="rounded-t-md flex justify-center items-center w-12 sm:w-16 lg:w-18 transition-all duration-500 ease-in-out relative"
                 style={{
                     backgroundColor: color,
-                    height: typeof window !== 'undefined' && window.innerWidth < 640 ? responsiveHeight : baseHeight,
+                    height:
+                        typeof window !== 'undefined' && window.innerWidth < 640
+                            ? responsiveHeight
+                            : baseHeight,
                     marginBottom: 0,
                 }}
             >
@@ -93,7 +97,7 @@ export default function LeaderboardParticipantBar({
                     <div className="w-full h-full bg-gradient-to-b from-white/60 via-white/20 to-transparent rounded-t-md blur-[1.5px]" />
                 </div>
 
-                <div className='absolute bottom-2 sm:bottom-3 text-neutral-900 font-bold drop-shadow-2xl tracking-wide text-xs sm:text-sm'>
+                <div className="absolute bottom-2 sm:bottom-3 text-neutral-900 font-bold drop-shadow-2xl tracking-wide text-xs sm:text-sm">
                     #{rank}
                 </div>
 

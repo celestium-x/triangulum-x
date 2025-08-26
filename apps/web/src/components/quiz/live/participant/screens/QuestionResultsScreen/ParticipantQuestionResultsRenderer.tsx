@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { Button } from '@/components/ui/button';
-import { GoShareAndroid } from "react-icons/go";
+import { GoShareAndroid } from 'react-icons/go';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { DotPattern } from '@/components/magicui/dot-pattern';
 import LeaderboardResultCard from './LeaderboardResultCard';
@@ -30,12 +30,12 @@ export default function ParticipantQuestionResultsRenderer() {
     });
 
     const currentUser = participantData;
-    const yourIndex = sortedParticipants.findIndex(p => p.id === currentUser?.id);
+    const yourIndex = sortedParticipants.findIndex((p) => p.id === currentUser?.id);
     const yourRank = yourIndex + 1;
-    const yourStreak = currentUser?.longestStreak!;
+    const yourStreak = currentUser?.longestStreak ?? 0;
 
     // change this
-    const yourAnswer = "Mercury";
+    const yourAnswer = 2;
 
     const visibleBars = sortedParticipants.slice(0, 6);
 
@@ -85,7 +85,6 @@ export default function ParticipantQuestionResultsRenderer() {
                             participant={currentUser}
                             currentQuestion={currentQuestion}
                             userAnswer={yourAnswer}
-                            dateTime={dateTime}
                             rank={yourRank > 0 ? yourRank : 1}
                             streak={yourStreak}
                         />
@@ -102,9 +101,9 @@ export default function ParticipantQuestionResultsRenderer() {
                                 <LeaderboardParticipantBar
                                     key={index}
                                     baseHeight={baseHeight}
-                                    color={color!}
+                                    color={color ?? '#ccc'}
                                     nickname={p.nickname}
-                                    avatar={p.avatar!}
+                                    avatar={p.avatar ?? '/default-avatar.png'}
                                     score={p.totalScore}
                                     rank={rank}
                                     you={you}
@@ -128,9 +127,6 @@ export default function ParticipantQuestionResultsRenderer() {
         </div>
     );
 }
-
-
-
 
 function getRelativeHeight(rank: number) {
     if (rank === 1) return 450;
