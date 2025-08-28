@@ -12,6 +12,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 100,
             timeLimit: 30,
             orderIndex: 0,
+            isAsked: false,
         },
         {
             question: "Which element has the chemical symbol 'O'?",
@@ -22,6 +23,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 100,
             timeLimit: 30,
             orderIndex: 1,
+            isAsked: false,
         },
         {
             question: 'What is the blockchain that powers Ethereum?',
@@ -32,6 +34,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 150,
             timeLimit: 40,
             orderIndex: 2,
+            isAsked: false,
         },
         {
             question: 'Which company created React?',
@@ -42,6 +45,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 100,
             timeLimit: 30,
             orderIndex: 3,
+            isAsked: false,
         },
         {
             question: "What does 'IPFS' stand for?",
@@ -57,6 +61,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 200,
             timeLimit: 45,
             orderIndex: 4,
+            isAsked: false,
         },
         {
             question: 'Which one is a layer-2 solution on Ethereum?',
@@ -67,6 +72,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 150,
             timeLimit: 30,
             orderIndex: 5,
+            isAsked: false,
         },
         {
             question: 'Which of these is a Web3 wallet?',
@@ -77,6 +83,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 100,
             timeLimit: 30,
             orderIndex: 6,
+            isAsked: false,
         },
         {
             question: 'What does DAO stand for?',
@@ -92,6 +99,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 150,
             timeLimit: 30,
             orderIndex: 7,
+            isAsked: false,
         },
         {
             question:
@@ -104,6 +112,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 150,
             timeLimit: 30,
             orderIndex: 8,
+            isAsked: false,
         },
         {
             question: "What is 'gas' in the Ethereum network?",
@@ -115,6 +124,7 @@ export function generateDefaultQuestions(): QuestionType[] {
             basePoints: 150,
             timeLimit: 30,
             orderIndex: 9,
+            isAsked: false,
         },
     ];
 

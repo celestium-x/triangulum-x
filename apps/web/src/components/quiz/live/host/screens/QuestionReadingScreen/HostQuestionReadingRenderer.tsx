@@ -12,7 +12,6 @@ export default function HostQuestionReadingRenderer() {
     const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } =
         useLiveQuizStore();
 
-
     useEffect(() => {
         if (!currentQuestion || !quiz || !gameSession) return;
 

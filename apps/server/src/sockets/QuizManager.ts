@@ -130,7 +130,6 @@ export default class QuizManager {
 
     private async handle_reading_to_active_transition_phase(data: PhaseQueueJobDataType) {
         const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
-
         if (!quiz) {
             // send websocket message for error
             console.error('Quiz not found');

@@ -35,11 +35,9 @@ export default function HostQuestionPreviewRenderer() {
     });
 
     useEffect(() => {
-
         if (!quiz) return;
 
         if (quiz.questions === undefined || quiz.questions.length === 0) {
-
             async function fetchQuestion() {
                 if (!quiz) return;
 

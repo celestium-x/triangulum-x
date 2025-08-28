@@ -2,25 +2,12 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
-type CountDownClockProps =
-    | {
-          startTime: number | Date | string;
-          endTime: number | Date | string;
-          seconds?: never;
-          reverse?: never;
-      }
-    | {
-          seconds: number;
-          reverse?: never;
-          startTime?: never;
-          endTime?: never;
-      }
-    | {
-          reverse: boolean;
-          seconds?: never;
-          startTime?: never;
-          endTime?: never;
-      };
+interface CountDownClockProps {
+    startTime: number | Date | string;
+    endTime: number | Date | string;
+    seconds?: number;
+    reverse?: never;
+}
 
 export default function CountDownClock(props: CountDownClockProps) {
     const [currentTime, setCurrentTime] = useState(Date.now());

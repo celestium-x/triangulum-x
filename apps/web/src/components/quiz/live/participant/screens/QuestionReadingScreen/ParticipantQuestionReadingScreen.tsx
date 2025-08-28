@@ -20,11 +20,6 @@ export default function ParticipantQuestionReadingScreen() {
         );
     }
 
-    const remainingSeconds = Math.max(
-        0,
-        Math.floor((gameSession.phaseEndTime! - Date.now()) / 1000),
-    );
-
     return (
         <div
             className={cn(
@@ -59,7 +54,10 @@ export default function ParticipantQuestionReadingScreen() {
                     )}
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
-                    <CountDownClock seconds={remainingSeconds} />
+                    <CountDownClock
+                        startTime={gameSession.phaseStartTime!}
+                        endTime={gameSession.phaseEndTime!}
+                    />
                 </div>
             </div>
         </div>

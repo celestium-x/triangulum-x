@@ -91,6 +91,15 @@ export class SubscribeEventHandlers {
         } as SpectatorType);
     }
 
+    static handleSpectatorIncomingResultsPhase() {
+        // const resultsPhasePayload = payload as {
+        //     scores: { participantId: string; score: number }[];
+        //     correctAnswer: number;
+        //     spectatorScreen: SpectatorScreenEnum;
+        //     startTime: number;
+        // };
+    }
+
     static handleIncomingNewSpectator(payload: unknown) {
         const { upsertSpectator } = useLiveSpectatorsStore.getState();
         upsertSpectator(payload as SpectatorType);

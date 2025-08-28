@@ -123,7 +123,6 @@ export default class HostManager {
     private async handle_question_launch(payload: any, ws: CustomWebSocket) {
         const { questionId, questionIndex } = payload;
         const { gameSessionId: game_session_id } = ws.user;
-
         const quiz = await this.redis_cache.get_quiz(game_session_id);
 
         if (!quiz) {

@@ -74,6 +74,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             orderIndex: get().quiz.questions.length,
             imageUrl: '',
             quizId: '',
+            isAsked: false,
         };
         const quiz = get().quiz;
         set({ quiz: { ...quiz, questions: [...quiz.questions, question] } });
