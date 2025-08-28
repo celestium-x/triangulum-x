@@ -10,7 +10,7 @@ export default function HostQuestionResultsRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession } = useLiveQuizStore();
-
+    
     if (!currentQuestion || !gameSession) {
         return (
             <div className="text-center text-neutral-400 w-full">
@@ -57,7 +57,7 @@ export default function HostQuestionResultsRenderer() {
                         startTime={gameSession.phaseStartTime!}
                         endTime={gameSession.phaseEndTime!}
                     />
-``                    <div>Participants and Spectators are now seeing results of this question</div>
+                    <div>Participants and Spectators are now seeing results of this question</div>
                 </div>
             </div>
         </div>
