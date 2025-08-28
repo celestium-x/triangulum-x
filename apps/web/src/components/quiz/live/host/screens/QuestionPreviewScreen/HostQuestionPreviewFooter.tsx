@@ -78,26 +78,31 @@ export default function HostQuestionReviewFooter() {
             );
 
             if (question) {
-                console.log("question: ", question);
+                const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
 
-                const updatedQuestions = [...quiz.questions];
-                updatedQuestions[targetIndex] = question;
-                updateQuiz({
-                    questions: updatedQuestions,
-                });
+                if (!isQuestionExists) {
+                    const updatedQuestions = [...quiz.questions];
+                    updatedQuestions.push(question);
+                    updateQuiz({
+                        questions: updatedQuestions,
+                    });
+                }
                 updateCurrentQuestion(question);
             }
         } catch (error) {
             console.error('Failed to fetch question data:', error);
         } finally {
             setLoading(false);
+            console.log("[NAVIGATION] quiz: ", quiz);
         }
     }
 
     function handlePreviousQuestion() {
-        if (!currentQuestion || currentQuestion.orderIndex <= 0) {
+        if (!quiz?.questions || !currentQuestion || currentQuestion.orderIndex <= 0) {
+            console.log("left click failed");
             return;
         }
+        console.log("left clicked");
         navigateToQuestion(currentQuestion.orderIndex - 1);
     }
 

@@ -256,7 +256,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 

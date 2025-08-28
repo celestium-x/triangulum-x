@@ -124,19 +124,22 @@ export default class HostManager {
         const { questionId, questionIndex } = payload;
         const { gameSessionId: game_session_id } = ws.user;
 
+        console.log("data from frontend: ", questionId, questionIndex);
+
         const quiz = await this.redis_cache.get_quiz(game_session_id);
 
         if (!quiz) {
             throw new Error("Quiz doesn't exist in game_session");
         }
 
-        const question = quiz.questions?.[questionIndex];
+        const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
 
-        if (!question) {
-            throw new Error("Questions doesn't exist in quiz");
-        }
+        if (!question) throw new Error("Questions doesn't exist in quiz");
+
+        console.log("question to be launched: ", question);
 
         if(question.isAsked) {
+            console.log("question is already asked");
             const pub_sub_message_to_host: PubSubMessageTypes = {
                 type: MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
                 payload: {
@@ -149,6 +152,8 @@ export default class HostManager {
             this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_host);
             return;
         }
+
+        console.log("question not asked, so it will be launched");
 
         const now = Date.now();
         const buffer = 2 * SECONDS;
