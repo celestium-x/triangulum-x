@@ -4,23 +4,23 @@ import { cn } from '@/lib/utils';
 
 type CountDownClockProps =
     | {
-        startTime: number | Date | string;
-        endTime: number | Date | string;
-        seconds?: never;
-        reverse?: never;
-    }
+          startTime: number | Date | string;
+          endTime: number | Date | string;
+          seconds?: never;
+          reverse?: never;
+      }
     | {
-        seconds: number;
-        reverse?: never;
-        startTime?: never;
-        endTime?: never;
-    }
+          seconds: number;
+          reverse?: never;
+          startTime?: never;
+          endTime?: never;
+      }
     | {
-        reverse: boolean;
-        seconds?: never;
-        startTime?: never;
-        endTime?: never;
-    };
+          reverse: boolean;
+          seconds?: never;
+          startTime?: never;
+          endTime?: never;
+      };
 
 export default function CountDownClock(props: CountDownClockProps) {
     const [currentTime, setCurrentTime] = useState(Date.now());

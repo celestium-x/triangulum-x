@@ -9,7 +9,8 @@ import { useEffect, useRef } from 'react';
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } = useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } =
+        useLiveQuizStore();
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -20,23 +21,26 @@ export default function HostQuestionReadingRenderer() {
     }
 
     useEffect(() => {
-
         if (!quiz || !gameSession) return;
 
-        console.log("quiz before updation: ", quiz);
+        console.log('quiz before updation: ', quiz);
 
         const updatedQuestions = quiz.questions.filter((q) => q && q.id !== currentQuestion.id);
         updateQuiz({
-            questions: updatedQuestions
+            questions: updatedQuestions,
         });
 
-        const question = quiz.questions.find((q) => q && q.id === gameSession.currentQuestionId && q.orderIndex === gameSession.currentQuestionIndex);
+        const question = quiz.questions.find(
+            (q) =>
+                q &&
+                q.id === gameSession.currentQuestionId &&
+                q.orderIndex === gameSession.currentQuestionIndex,
+        );
         if (!question) {
-            console.log("question not found");
+            console.log('question not found');
         }
         updateCurrentQuestion(question!);
-        console.log("current question: ", currentQuestion);
-
+        console.log('current question: ', currentQuestion);
     }, []);
 
     return (

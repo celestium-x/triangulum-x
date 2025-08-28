@@ -25,7 +25,6 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
     }
 
     try {
-
         const quiz = await prisma.quiz.findUnique({
             where: {
                 id: quizId,
@@ -57,7 +56,9 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             return;
         }
 
-        const questionWithTargetedIndex = quiz.questions.find((q) => q.orderIndex === targetOrderIndex);
+        const questionWithTargetedIndex = quiz.questions.find(
+            (q) => q.orderIndex === targetOrderIndex,
+        );
 
         if (!questionWithTargetedIndex) {
             res.status(404).json({
@@ -68,25 +69,32 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             return;
         }
 
-        const currentQuestionValue = {
+        const currentQuestionValue: {
+            isAsked: boolean;
+            orderIndex: number;
+        } = {
             isAsked: questionWithTargetedIndex.isAsked,
             orderIndex: questionWithTargetedIndex.orderIndex,
-        }
+        };
 
         // check it once for infinite loop
         while (currentQuestionValue.isAsked) {
-            if (currentQuestionValue.orderIndex >= quiz.questions.length) {
+            if (currentQuestionValue.orderIndex >= quiz.questions.length && quiz.questions[0]) {
                 currentQuestionValue.orderIndex = 0;
-                currentQuestionValue.isAsked = quiz.questions[0]?.isAsked!;
+                currentQuestionValue.isAsked = quiz.questions[0].isAsked;
                 continue;
             }
-            currentQuestionValue.isAsked = quiz.questions[currentQuestionValue.orderIndex]?.isAsked!;
-            currentQuestionValue.orderIndex++;
+
+            if (currentQuestionValue.orderIndex < quiz.questions.length) {
+                const nextQuestion = quiz.questions[currentQuestionValue.orderIndex];
+                currentQuestionValue.isAsked = nextQuestion ? nextQuestion.isAsked : false;
+                currentQuestionValue.orderIndex++;
+            }
         }
 
         res.status(200).json({
             success: true,
-            question: quiz.questions.find((q) => q.orderIndex === currentQuestionValue.orderIndex)
+            question: quiz.questions.find((q) => q.orderIndex === currentQuestionValue.orderIndex),
         });
         return;
     } catch (error) {

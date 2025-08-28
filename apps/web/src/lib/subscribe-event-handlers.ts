@@ -65,9 +65,9 @@ export class SubscribeEventHandlers {
 
     static handleIncomingQuestionAlreadyAskedEvent(payload: unknown) {
         const message = payload as {
-            error: string,
-            questionId: string,
-            questionIndex: number
+            error: string;
+            questionId: string;
+            questionIndex: number;
         };
         toast.error(message.error);
     }
@@ -256,7 +256,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() { }
+    static handleHostLaunchQuestion() {}
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 
