@@ -65,6 +65,7 @@ export interface QuestionType {
     imageUrl?: string;
     quizId: string;
     quiz?: QuizType;
+    isAsked: boolean;
 }
 
 export interface ParticipantType {

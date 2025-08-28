@@ -29,6 +29,12 @@ export default function HostQuestionReviewFooter() {
         }
     }
 
+    // useEffect(() => {
+    //     // this is to get the first question everytime previewing questions before serving it
+    //     // as backend will check if the question is asked or not
+    //     navigateToQuestion(0);
+    // }, []);
+
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
         return () => {
@@ -39,19 +45,25 @@ export default function HostQuestionReviewFooter() {
     function isQuestionDataComplete(question: QuestionType | undefined) {
         return (
             question &&
+            question.id &&
             question.question &&
             question.options &&
             question.explanation !== undefined &&
             question.difficulty !== undefined &&
             question.basePoints !== undefined &&
-            question.timeLimit !== undefined
+            question.timeLimit !== undefined &&
+            question.orderIndex !== undefined
         );
     }
 
     async function navigateToQuestion(targetIndex: number) {
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
         if (loading) return;
+
+        // to avoid duplicacy
         const targetQuestion = quiz.questions[targetIndex];
+
+        // checking for complete data for a question
         if (isQuestionDataComplete(targetQuestion)) {
             updateCurrentQuestion(targetQuestion!);
             return;
@@ -59,31 +71,38 @@ export default function HostQuestionReviewFooter() {
         if (!quiz?.id || !session?.user.token) return;
         setLoading(true);
         try {
-            const data = await LiveQuizBackendActions.getQuestionDetailByIndex(
+            const question: QuestionType = await LiveQuizBackendActions.getQuestionDetailByIndex(
                 quiz.id,
                 targetIndex,
                 session.user.token,
             );
 
-            if (data) {
-                const updatedQuestions = [...quiz.questions];
-                updatedQuestions[targetIndex] = data;
-                updateQuiz({
-                    questions: updatedQuestions,
-                });
-                updateCurrentQuestion(data);
+            if (question) {
+                const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
+
+                if (!isQuestionExists) {
+                    const updatedQuestions = [...quiz.questions];
+                    updatedQuestions.push(question);
+                    updateQuiz({
+                        questions: updatedQuestions,
+                    });
+                }
+                updateCurrentQuestion(question);
             }
         } catch (error) {
             console.error('Failed to fetch question data:', error);
         } finally {
             setLoading(false);
+            // console.log('[NAVIGATION] quiz: ', quiz);
         }
     }
 
     function handlePreviousQuestion() {
-        if (!currentQuestion || currentQuestion.orderIndex <= 0) {
+        if (!quiz?.questions || !currentQuestion || currentQuestion.orderIndex <= 0) {
+            // console.log('left click failed');
             return;
         }
+        // console.log('left clicked');
         navigateToQuestion(currentQuestion.orderIndex - 1);
     }
 

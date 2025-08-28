@@ -25,25 +25,42 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
     }
 
     try {
-        const question = await prisma.question.findFirst({
+        const quiz = await prisma.quiz.findUnique({
             where: {
-                quizId: quizId,
-                orderIndex: targetOrderIndex,
+                id: quizId,
             },
             select: {
-                id: true,
-                question: true,
-                options: true,
-                explanation: true,
-                difficulty: true,
-                basePoints: true,
-                timeLimit: true,
-                orderIndex: true,
-                imageUrl: true,
+                questions: {
+                    select: {
+                        id: true,
+                        question: true,
+                        options: true,
+                        explanation: true,
+                        difficulty: true,
+                        basePoints: true,
+                        timeLimit: true,
+                        orderIndex: true,
+                        imageUrl: true,
+                        isAsked: true,
+                    },
+                },
             },
         });
 
-        if (!question) {
+        if (!quiz) {
+            res.status(404).json({
+                success: false,
+                message: 'Quiz not found',
+                value: 'QUIZ_NOT_FOUND',
+            });
+            return;
+        }
+
+        const questionWithTargetedIndex = quiz.questions.find(
+            (q) => q.orderIndex === targetOrderIndex,
+        );
+
+        if (!questionWithTargetedIndex) {
             res.status(404).json({
                 success: false,
                 message: `Question not found at index ${targetOrderIndex}`,
@@ -52,7 +69,33 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             return;
         }
 
-        res.status(200).json({ success: true, question });
+        const currentQuestionValue: {
+            isAsked: boolean;
+            orderIndex: number;
+        } = {
+            isAsked: questionWithTargetedIndex.isAsked,
+            orderIndex: questionWithTargetedIndex.orderIndex,
+        };
+
+        // check it once for infinite loop
+        while (currentQuestionValue.isAsked) {
+            if (currentQuestionValue.orderIndex >= quiz.questions.length && quiz.questions[0]) {
+                currentQuestionValue.orderIndex = 0;
+                currentQuestionValue.isAsked = quiz.questions[0].isAsked;
+                continue;
+            }
+
+            if (currentQuestionValue.orderIndex < quiz.questions.length) {
+                const nextQuestion = quiz.questions[currentQuestionValue.orderIndex];
+                currentQuestionValue.isAsked = nextQuestion ? nextQuestion.isAsked : false;
+                currentQuestionValue.orderIndex++;
+            }
+        }
+
+        res.status(200).json({
+            success: true,
+            question: quiz.questions.find((q) => q.orderIndex === currentQuestionValue.orderIndex),
+        });
         return;
     } catch (error) {
         console.error('Unexpected error in getSelectedQuestionDetails: ', error);

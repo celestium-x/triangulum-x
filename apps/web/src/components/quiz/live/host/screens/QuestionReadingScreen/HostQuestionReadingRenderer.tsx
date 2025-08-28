@@ -4,12 +4,37 @@ import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession } = useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } =
+        useLiveQuizStore();
+
+
+    useEffect(() => {
+        if (!currentQuestion || !quiz || !gameSession) return;
+
+        // console.log('quiz before updation: ', quiz);
+
+        const updatedQuestions = quiz.questions.filter((q) => q && q.id !== currentQuestion.id);
+        updateQuiz({
+            questions: updatedQuestions,
+        });
+
+        const question = quiz.questions.find(
+            (q) =>
+                q &&
+                q.id === gameSession.currentQuestionId &&
+                q.orderIndex === gameSession.currentQuestionIndex,
+        );
+        if (!question) {
+            // console.log('question not found');
+        }
+        updateCurrentQuestion(question!);
+        // console.log('current question: ', currentQuestion);
+    }, [quiz, gameSession, currentQuestion, updateCurrentQuestion, updateQuiz]);
 
     if (!currentQuestion || !gameSession) {
         return (

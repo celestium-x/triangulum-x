@@ -83,6 +83,11 @@ export function useSubscribeEventHandlers() {
             SubscribeEventHandlers.handleHostIncomingResponseMessage,
         );
 
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
+            SubscribeEventHandlers.handleIncomingQuestionAlreadyAskedEvent,
+        );
+
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -150,6 +155,10 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
                 SubscribeEventHandlers.handleHostIncomingResponseMessage,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
+                SubscribeEventHandlers.handleIncomingQuestionAlreadyAskedEvent,
             );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);

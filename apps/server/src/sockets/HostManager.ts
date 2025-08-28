@@ -130,10 +130,22 @@ export default class HostManager {
             throw new Error("Quiz doesn't exist in game_session");
         }
 
-        const question = quiz.questions?.[questionIndex];
+        const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
 
-        if (!question) {
-            throw new Error("Questions doesn't exist in quiz");
+        if (!question) throw new Error("Questions doesn't exist in quiz");
+
+        if (question.isAsked) {
+            const pub_sub_message_to_host: PubSubMessageTypes = {
+                type: MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
+                payload: {
+                    error: 'Question is already asked',
+                    questionId: questionId,
+                    questionIndex: questionIndex,
+                },
+                only_socket_id: ws.id,
+            };
+            this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_host);
+            return;
         }
 
         const now = Date.now();
@@ -142,7 +154,8 @@ export default class HostManager {
 
         const start_time = now + buffer;
         const end_time = start_time + question_reading_time;
-        await this.database_queue.update_game_session(
+
+        this.database_queue.update_game_session(
             game_session_id,
             {
                 currentQuestionIndex: questionIndex,
@@ -157,6 +170,19 @@ export default class HostManager {
             game_session_id,
         );
 
+        this.database_queue.update_quiz(
+            quiz.id!,
+            {
+                questions: {
+                    update: {
+                        where: { id: questionId },
+                        data: { isAsked: true },
+                    },
+                },
+            },
+            game_session_id,
+        );
+
         const pub_sub_message_to_participant: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_READING_PHASE_TO_PARTICIPANT,
             payload: {
@@ -166,7 +192,7 @@ export default class HostManager {
                 startTime: start_time,
                 endTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
-                participantScreen: HostScreen.QUESTION_READING,
+                participantScreen: ParticipantScreen.QUESTION_READING,
             },
         };
         this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_participant);
@@ -194,7 +220,7 @@ export default class HostManager {
                 startTime: start_time,
                 endTime: end_time,
                 currentPhase: QuizPhase.QUESTION_READING,
-                spectatorScreen: HostScreen.QUESTION_READING,
+                spectatorScreen: SpectatorScreen.QUESTION_READING,
             },
         };
         this.quizManager.publish_event_to_redis(game_session_id, pub_sub_message_to_spectator);
@@ -224,7 +250,7 @@ export default class HostManager {
             return;
         }
 
-        await this.database_queue.update_game_session(
+        this.database_queue.update_game_session(
             ws.user.userId,
             {
                 hostScreen: HostScreen.QUESTION_PREVIEW,

@@ -63,6 +63,15 @@ export class SubscribeEventHandlers {
         } as GameSessionType);
     }
 
+    static handleIncomingQuestionAlreadyAskedEvent(payload: unknown) {
+        const message = payload as {
+            error: string;
+            questionId: string;
+            questionIndex: number;
+        };
+        toast.error(message.error);
+    }
+
     // <---------------------- SPECTATOR-EVENTS ---------------------->
 
     static handleSpectatorNameChangeMessage(payload: unknown) {
@@ -87,7 +96,7 @@ export class SubscribeEventHandlers {
         upsertSpectator(payload as SpectatorType);
     }
 
-    // <---------------------- CHAT-EVENTS ---------------------->
+    // <---------------------- CHAT/INTERACTION-EVENTS ---------------------->
 
     static handleIncomingChatReactionMessage(payload: unknown) {
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
@@ -97,27 +106,19 @@ export class SubscribeEventHandlers {
     }
 
     static handleIncomingChatMessage(payload: unknown) {
-        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatMessage } = useLiveQuizGlobalChatStore.getState();
         const messagePayload = payload as { id: string; payload: ChatMessageType };
         const chat = messagePayload.payload;
-
-        // if (chat.senderId === spectatorData?.id) return;
 
         addChatMessage(chat);
     }
 
     static handleIncomingReactionEvent(payload: unknown) {
-        // const { spectatorData } = useLiveSpectatorStore.getState();
         const { addChatReaction } = useLiveQuizGlobalChatStore.getState();
 
         const reactionPayload = payload as { id: string; payload: ChatReactionType };
         const reaction = reactionPayload.payload;
-        // if (
-        //     reaction.reactorName === spectatorData?.nickname &&
-        //     reaction.reactorType === 'SPECTATOR'
-        // )
-        //     return;
+
         addChatReaction(reaction);
     }
 
