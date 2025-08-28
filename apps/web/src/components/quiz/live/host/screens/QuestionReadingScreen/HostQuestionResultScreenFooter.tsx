@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { useLiveQuizStore } from "@/store/live-quiz/useLiveQuizStore";
-import { HostScreenEnum } from "@/types/prisma-types";
+import { Button } from '@/components/ui/button';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { HostScreenEnum } from '@/types/prisma-types';
 
 export default function HostQuestionResultScreenFooter() {
-    const { updateGameSession } = useLiveQuizStore()
+    const { updateGameSession } = useLiveQuizStore();
     function handleQuestionPreviewPageChange() {
         updateGameSession({
-            hostScreen: HostScreenEnum.QUESTION_PREVIEW
-        })
+            hostScreen: HostScreenEnum.QUESTION_PREVIEW,
+        });
     }
 
     return (
@@ -19,5 +19,5 @@ export default function HostQuestionResultScreenFooter() {
                 Get Started
             </Button>
         </div>
-    )
+    );
 }

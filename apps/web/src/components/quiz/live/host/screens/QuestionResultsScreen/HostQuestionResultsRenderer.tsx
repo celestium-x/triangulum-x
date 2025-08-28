@@ -10,7 +10,6 @@ export default function HostQuestionResultsRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession } = useLiveQuizStore();
-    
     if (!currentQuestion || !gameSession) {
         return (
             <div className="text-center text-neutral-400 w-full">

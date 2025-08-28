@@ -100,10 +100,8 @@ export default class PhaseQueue {
     }
 
     public async schedule_phase_transition(data: PhaseTransitionJob): Promise<void> {
-        console.log('at schedule phase transition : ');
         const delay = Math.max(0, data.executeAt - Date.now());
         try {
-            console.log('scheduling phase transition : ', data);
             await this.phase_queue.add('phase_transition', data, {
                 delay,
                 jobId: `${data.gameSessionId}_${data.questionIndex}_${data.fromPhase}_${data.toPhase}`,

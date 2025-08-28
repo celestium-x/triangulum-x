@@ -123,19 +123,13 @@ export default class HostManager {
     private async handle_question_launch(payload: any, ws: CustomWebSocket) {
         const { questionId, questionIndex } = payload;
         const { gameSessionId: game_session_id } = ws.user;
-
         const quiz = await this.redis_cache.get_quiz(game_session_id);
 
         if (!quiz) {
             throw new Error("Quiz doesn't exist in game_session");
         }
 
-<<<<<<< HEAD
         const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
-=======
-        const question = quiz.questions?.[questionIndex];
-        console.log('question i am getting is : ', question);
->>>>>>> b863d8e (fixed: bugs)
 
         if (!question) throw new Error("Questions doesn't exist in quiz");
 
@@ -160,11 +154,7 @@ export default class HostManager {
         const start_time = now + buffer;
         const end_time = start_time + question_reading_time;
 
-<<<<<<< HEAD
         this.database_queue.update_game_session(
-=======
-        await this.database_queue.update_game_session(
->>>>>>> b863d8e (fixed: bugs)
             game_session_id,
             {
                 currentQuestionIndex: questionIndex,
@@ -178,8 +168,6 @@ export default class HostManager {
             },
             game_session_id,
         );
-        const game_sesssion = await this.redis_cache.get_game_session(game_session_id);
-        console.log('game session is : ', game_sesssion);
 
         this.database_queue.update_quiz(
             quiz.id!,
