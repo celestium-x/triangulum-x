@@ -35,23 +35,29 @@ export default function HostQuestionPreviewRenderer() {
     });
 
     useEffect(() => {
-        if (!quiz || !quiz.questions || quiz.questions.length === 0) {
+
+        if (!quiz) return;
+
+        if (quiz.questions === undefined || quiz.questions.length === 0) {
+
             async function fetchQuestion() {
+                if (!quiz) return;
+
                 const question: QuestionType =
                     await LiveQuizBackendActions.getQuestionDetailByIndex(
-                        quiz?.id!,
+                        quiz.id,
                         0,
                         session?.user.token,
                     );
 
-                console.log('received question at start: ', question);
+                // console.log('received question at start: ', question);
 
                 if (question) {
-                    console.log('checking if question exists in state');
+                    // console.log('checking if question exists in state');
                     const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
 
                     if (!isQuestionExists) {
-                        console.log("question doesn't exist in the state");
+                        // console.log("question doesn't exist in the state");
                         updateQuiz({
                             questions: [question],
                         });
@@ -61,7 +67,7 @@ export default function HostQuestionPreviewRenderer() {
             }
             fetchQuestion();
         }
-    }, [quiz]);
+    }, [quiz, session?.user.token, updateCurrentQuestion, updateQuiz]);
 
     if (!currentQuestion) {
         return (

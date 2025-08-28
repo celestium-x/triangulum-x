@@ -12,18 +12,11 @@ export default function HostQuestionReadingRenderer() {
     const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } =
         useLiveQuizStore();
 
-    if (!currentQuestion || !gameSession) {
-        return (
-            <div className="text-center text-neutral-400 w-full">
-                Error in getting current question
-            </div>
-        );
-    }
 
     useEffect(() => {
-        if (!quiz || !gameSession) return;
+        if (!currentQuestion || !quiz || !gameSession) return;
 
-        console.log('quiz before updation: ', quiz);
+        // console.log('quiz before updation: ', quiz);
 
         const updatedQuestions = quiz.questions.filter((q) => q && q.id !== currentQuestion.id);
         updateQuiz({
@@ -37,11 +30,19 @@ export default function HostQuestionReadingRenderer() {
                 q.orderIndex === gameSession.currentQuestionIndex,
         );
         if (!question) {
-            console.log('question not found');
+            // console.log('question not found');
         }
         updateCurrentQuestion(question!);
-        console.log('current question: ', currentQuestion);
-    }, []);
+        // console.log('current question: ', currentQuestion);
+    }, [quiz, gameSession, currentQuestion, updateCurrentQuestion, updateQuiz]);
+
+    if (!currentQuestion || !gameSession) {
+        return (
+            <div className="text-center text-neutral-400 w-full">
+                Error in getting current question
+            </div>
+        );
+    }
 
     return (
         <div

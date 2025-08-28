@@ -93,16 +93,16 @@ export default function HostQuestionReviewFooter() {
             console.error('Failed to fetch question data:', error);
         } finally {
             setLoading(false);
-            console.log('[NAVIGATION] quiz: ', quiz);
+            // console.log('[NAVIGATION] quiz: ', quiz);
         }
     }
 
     function handlePreviousQuestion() {
         if (!quiz?.questions || !currentQuestion || currentQuestion.orderIndex <= 0) {
-            console.log('left click failed');
+            // console.log('left click failed');
             return;
         }
-        console.log('left clicked');
+        // console.log('left clicked');
         navigateToQuestion(currentQuestion.orderIndex - 1);
     }
 
