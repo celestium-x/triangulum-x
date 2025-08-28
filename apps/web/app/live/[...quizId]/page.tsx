@@ -22,13 +22,12 @@ export interface NewProps {
 
 export default function New({ params }: NewProps) {
     const { quizId } = use(params);
-    const { quiz, updateQuiz, updateGameSession } = useLiveQuizStore();
+    const { quiz, updateQuiz, updateGameSession, updateCurrentQuestion } = useLiveQuizStore();
     const { setHostData } = useLiveHostStore();
     const { setParticipantData } = useLiveParticipantStore();
     const { setSpectatorData } = useLiveSpectatorStore();
     const { setCurrentUserType } = useUserRoleStore();
     const { setChatMessages } = useLiveQuizGlobalChatStore();
-
     const { setParticipants } = useLiveParticipantsStore();
     const { setSpectators } = useLiveSpectatorsStore();
 
@@ -45,6 +44,7 @@ export default function New({ params }: NewProps) {
                     setParticipants(data.participants);
                     setSpectators(data.spectators);
                     setChatMessages(data.messages || []);
+                    updateCurrentQuestion(data.currentQ);
                     switch (data.role) {
                         case 'HOST':
                             setHostData(data.userData);
@@ -75,6 +75,7 @@ export default function New({ params }: NewProps) {
         setSpectatorData,
         setSpectators,
         setChatMessages,
+        updateCurrentQuestion,
     ]);
 
     if (!quiz) {

@@ -123,7 +123,6 @@ export default function HostQuestionReviewFooter() {
         currentQuestion.orderIndex >= totalQuestions - 1 ||
         loading;
 
-
     const [platform, setPlatform] = useState<'mac' | 'windows' | 'other'>('other');
     useEffect(() => {
         const userAgent = navigator.userAgent.toLowerCase();
@@ -135,7 +134,6 @@ export default function HostQuestionReviewFooter() {
             setPlatform('windows');
         }
     }, []);
-
 
     return (
         <div className="absolute bottom-4 left-4 z-100">

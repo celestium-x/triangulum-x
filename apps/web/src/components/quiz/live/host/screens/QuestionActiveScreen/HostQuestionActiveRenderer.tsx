@@ -1,5 +1,4 @@
 'use client';
-
 import CountDownClock from '@/components/ui/CountDownClock';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
