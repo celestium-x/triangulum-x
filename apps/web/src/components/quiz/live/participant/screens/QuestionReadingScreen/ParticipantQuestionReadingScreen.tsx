@@ -20,11 +20,6 @@ export default function ParticipantQuestionReadingScreen() {
         );
     }
 
-    const remainingSeconds = Math.max(
-        0,
-        Math.floor((gameSession.phaseEndTime! - Date.now()) / 1000),
-    );
-
     return (
         <div
             className={cn(

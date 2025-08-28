@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 interface CountDownClockProps {
     startTime: number | Date | string;
     endTime: number | Date | string;
-    seconds?: never;
+    seconds?: number;
     reverse?: never;
 }
 

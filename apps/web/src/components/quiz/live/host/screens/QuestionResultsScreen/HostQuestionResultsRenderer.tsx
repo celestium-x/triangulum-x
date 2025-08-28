@@ -53,8 +53,11 @@ export default function HostQuestionResultsRenderer() {
                     )}
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
-                    <CountDownClock startTime={gameSession.phaseStartTime} endTime={gameSession.phaseEndTime!} />
-                    <div>Participants and Spectators are now seeing results of this question</div>
+                    <CountDownClock
+                        startTime={gameSession.phaseStartTime!}
+                        endTime={gameSession.phaseEndTime!}
+                    />
+``                    <div>Participants and Spectators are now seeing results of this question</div>
                 </div>
             </div>
         </div>
