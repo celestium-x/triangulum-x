@@ -300,16 +300,36 @@ export class SubscribeEventHandlers {
 
     static handleParticipantIncomingResultsPhase(payload: unknown) {
         const resultsPhasePayload = payload as {
-            scores: { id: string; totalScore: number }[];
+            scores: {
+                id: string;
+                totalScore: number;
+                finalRank: number;
+                longestStreak: number;
+            }[];
+            responses: {
+                id: string;
+                participantId: string;
+                isCorrect: boolean;
+                selectedAnswer: number;
+                pointsEarned: number;
+            }[];
             correctAnswer: number;
+            explanation: string;
             participantScreen: ParticipantScreenEnum;
             startTime: number;
         };
 
-        const { updateGameSession } = useLiveQuizStore.getState();
-        const { updateParticipants } = useLiveParticipantsStore.getState();
+        console.log("results payload data: ", resultsPhasePayload);
+
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
+        const { updateParticipants, setResponses } = useLiveParticipantsStore.getState();
 
         updateParticipants(resultsPhasePayload.scores);
+        setResponses(resultsPhasePayload.responses);
+        updateCurrentQuestion({
+            correctAnswer: resultsPhasePayload.correctAnswer,
+            explanation: resultsPhasePayload.explanation,
+        });
 
         updateGameSession({
             participantScreen: resultsPhasePayload.participantScreen,
@@ -318,7 +338,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 
@@ -326,6 +346,7 @@ export class SubscribeEventHandlers {
         const message = payload as {
             error: string;
         };
+        console.log("received payload from reponded message: ", message);
         toast.warning(message.error);
     }
 

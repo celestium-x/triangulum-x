@@ -11,9 +11,9 @@ import LeaderboardResultCard from './LeaderboardResultCard';
 import LeaderboardParticipantBar from './LeaderboardParticipantBars';
 
 export default function ParticipantQuestionResultsRenderer() {
-    const { participants } = useLiveParticipantsStore();
+    const { participants, responses, getResponse } = useLiveParticipantsStore();
     const { participantData } = useLiveParticipantStore();
-    const { currentQuestion } = useLiveQuizStore();
+    const { currentQuestion, setAlreadyResponded } = useLiveQuizStore();
 
     const sortedParticipants = [...participants].sort((p1, p2) => p2.totalScore - p1.totalScore);
     const [dateTime, setDateTime] = useState<string>('');
@@ -40,6 +40,10 @@ export default function ParticipantQuestionResultsRenderer() {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        setAlreadyResponded(false);
+    }, []);
+
     const participantColors = sortedParticipants.map((participant, index) => {
         const { id } = participant;
 
@@ -51,19 +55,28 @@ export default function ParticipantQuestionResultsRenderer() {
         return colorMapRef.current.get(id)!;
     });
 
-    const currentUser = participantData;
-    const yourIndex = sortedParticipants.findIndex((p) => p.id === currentUser?.id);
-    const yourRank = yourIndex + 1;
-    const yourStreak = currentUser?.longestStreak ?? 0;
+    let currentUser: any;
+    let yourIndex: any;
+    let yourRank: any;
+    let yourStreak: any;
+    let yourAnswer: number | undefined;
+
+    useEffect(() => {
+        console.log("responses: ", responses);
+        currentUser = participantData;
+        console.log("current user: ", currentUser);
+        yourIndex = sortedParticipants.findIndex((p) => p.id === currentUser?.id);
+        yourRank = yourIndex + 1;
+        yourStreak = currentUser?.longestStreak ?? 0;
+        yourAnswer = getResponse(currentUser?.id!)?.selectedAnswer;
+        console.log("yout asn", yourAnswer);
+    }, [participantData]);
 
     if (!currentQuestion) {
         return (
             <div className="text-center text-neutral-400 w-full">Error in fetching question</div>
         );
     }
-
-    // change this
-    const yourAnswer = 2;
 
     const visibleBars = sortedParticipants.slice(0, 6);
 

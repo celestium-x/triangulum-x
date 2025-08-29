@@ -1,4 +1,4 @@
-import { ParticipantType } from '@/types/prisma-types';
+import { ParticipantType, ResponseType } from '@/types/prisma-types';
 import { create } from 'zustand';
 
 interface LiveParticipantsStoreProps {
@@ -8,6 +8,11 @@ interface LiveParticipantsStoreProps {
     removeParticipant: (participantId: string) => void;
     getParticipant: (participantId: string) => ParticipantType | undefined;
     updateParticipants: (participants: Partial<ParticipantType>[]) => void;
+
+    responses: Partial<ResponseType>[];
+    getResponse: (participantId: string) => Partial<ResponseType> | undefined;
+    setResponses: (responses: Partial<ResponseType>[]) => void;
+    updateResponses: (responses: Partial<ResponseType>[]) => void;
 }
 
 export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set, get) => ({
@@ -67,4 +72,40 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
             return { participants: updated_participant };
         });
     },
+
+    responses: [],
+
+    getResponse: (participantId: string) => {
+
+        console.log("participantId: ", participantId);
+
+        const data = get().responses.find((r) => r.participantId === participantId);
+        console.log("all responses: ", get().responses);
+        console.log("found response: ", data);
+        return data;
+    },
+
+    setResponses: (responses: Partial<ResponseType>[]) => {
+        set({
+            responses: responses
+        })
+    },
+
+    updateResponses: (responses: Partial<ResponseType>[]) => {
+        set((state) => {
+            const updated_responses = state.responses.map((r) => {
+                const incoming = responses.find((up) => up.id === r.id);
+                if (incoming) {
+                    return {
+                        ...r,
+                        ...incoming,
+                        id: r.id,
+                    };
+                }
+                return r;
+            });
+            return { responses: updated_responses };
+        })
+    }
+
 }));

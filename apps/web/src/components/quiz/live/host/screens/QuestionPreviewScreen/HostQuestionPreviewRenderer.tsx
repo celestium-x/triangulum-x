@@ -62,7 +62,7 @@ export default function HostQuestionPreviewRenderer() {
             fetchQuestion();
         }
         // only keep quiz here
-    }, [quiz, session?.user.token, updateCurrentQuestion, updateQuiz]);
+    }, [quiz]);
 
     if (!currentQuestion) {
         return (
