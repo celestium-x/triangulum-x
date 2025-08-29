@@ -67,10 +67,21 @@ export default function HostQuestionResultsRenderer() {
                     )}
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
-                    <CountDownClock
-                        startTime={gameSession.phaseStartTime!}
-                        endTime={gameSession.phaseEndTime!}
-                    />
+                    <div className='flex'>
+                        <CountDownClock
+                            startTime={gameSession.phaseStartTime!}
+                            endTime={gameSession.phaseEndTime!}
+                        />
+                        <div
+                            className={cn(
+                                'flex items-center space-x-2 text-4xl font-bold text-white rounded-xl px-4 py-3',
+                                'bg-light-base dark:bg-dark-primary dark:text-light-base text-dark-primary',
+                            )}
+                            onClick={handleOnClick}
+                        >
+                            Next Question
+                        </div>
+                    </div>
                     <div>Participants and Spectators are now seeing results of this question</div>
                 </div>
             </div>
