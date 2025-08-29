@@ -9,31 +9,24 @@ import { useEffect, useRef } from 'react';
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession, quiz, updateQuiz, updateCurrentQuestion } =
-        useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz } = useLiveQuizStore();
 
     useEffect(() => {
         if (!currentQuestion || !quiz || !gameSession) return;
 
-        // console.log('quiz before updation: ', quiz);
+        // Only filter out the current question after it's been launched
+        // Use a more robust filtering approach that maintains array structure
+        const updatedQuestions = quiz.questions.map((q) => {
+            if (q && q.id === currentQuestion.id) {
+                return { ...q, isAsked: true }; // Mark as asked instead of removing
+            }
+            return q;
+        });
 
-        const updatedQuestions = quiz.questions.filter((q) => q && q.id !== currentQuestion.id);
         updateQuiz({
             questions: updatedQuestions,
         });
-
-        const question = quiz.questions.find(
-            (q) =>
-                q &&
-                q.id === gameSession.currentQuestionId &&
-                q.orderIndex === gameSession.currentQuestionIndex,
-        );
-        if (!question) {
-            // console.log('question not found');
-        }
-        updateCurrentQuestion(question!);
-        // console.log('current question: ', currentQuestion);
-    }, [quiz, gameSession, currentQuestion, updateCurrentQuestion, updateQuiz]);
+    }, [currentQuestion?.id, gameSession, quiz, updateQuiz, currentQuestion]);
 
     if (!currentQuestion || !gameSession) {
         return (

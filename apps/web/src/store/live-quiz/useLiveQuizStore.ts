@@ -8,7 +8,7 @@ interface LiveQuizStore {
     gameSession: GameSessionType | null;
     updateGameSession: (updatedFields: Partial<GameSessionType>) => void;
 
-    currentQuestion: QuestionType | null;
+    currentQuestion: QuestionType | null | undefined;
     updateCurrentQuestion: (updatedFields: Partial<QuestionType>) => void;
 
     alreadyResponded: boolean;
@@ -25,9 +25,19 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             } as QuizType;
 
             let currentQuestion = state.currentQuestion;
-            if (updatedFields.questions && updatedFields.questions.length > 0) {
-                currentQuestion = updatedFields.questions?.[0] ?? null;
+            if (
+                updatedFields.questions &&
+                updatedFields.questions.length > 0 &&
+                !state.currentQuestion
+            ) {
+                // Find the first non-asked question
+                const firstAvailableQuestion = updatedFields.questions
+                    .filter((q) => q && !q.isAsked)
+                    .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0))[0];
+
+                currentQuestion = firstAvailableQuestion ?? updatedFields.questions[0];
             }
+
             return {
                 quiz: updatedQuiz,
                 currentQuestion,
@@ -47,12 +57,22 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
 
     currentQuestion: null,
     updateCurrentQuestion: (updateFields: Partial<QuestionType>) => {
-        set((state) => ({
-            currentQuestion: {
-                ...state.currentQuestion,
-                ...updateFields,
-            } as QuestionType,
-        }));
+        set((state) => {
+            // If we're passing a complete question object, replace entirely
+            if (updateFields.id && updateFields.question) {
+                return {
+                    currentQuestion: updateFields as QuestionType,
+                };
+            }
+
+            // Otherwise, merge with existing
+            return {
+                currentQuestion: {
+                    ...state.currentQuestion,
+                    ...updateFields,
+                } as QuestionType,
+            };
+        });
     },
 
     alreadyResponded: false,

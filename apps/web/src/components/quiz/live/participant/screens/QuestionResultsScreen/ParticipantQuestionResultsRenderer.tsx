@@ -16,7 +16,29 @@ export default function ParticipantQuestionResultsRenderer() {
     const { currentQuestion } = useLiveQuizStore();
 
     const sortedParticipants = [...participants].sort((p1, p2) => p2.totalScore - p1.totalScore);
+    const [dateTime, setDateTime] = useState<string>('');
     const colorMapRef = useRef<Map<string, string>>(new Map());
+
+    useEffect(() => {
+        const updateDateTime = () => {
+            const now = new Date();
+            const date = now.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: '2-digit',
+            });
+
+            const time = now.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+            setDateTime(`${date} | ${time}`);
+        };
+        updateDateTime();
+        const interval = setInterval(updateDateTime, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     const participantColors = sortedParticipants.map((participant, index) => {
         const { id } = participant;
@@ -34,37 +56,16 @@ export default function ParticipantQuestionResultsRenderer() {
     const yourRank = yourIndex + 1;
     const yourStreak = currentUser?.longestStreak ?? 0;
 
+    if (!currentQuestion) {
+        return <div className='text-center text-neutral-400 w-full'>
+            Error in fetching question
+        </div>
+    };
+
     // change this
     const yourAnswer = 2;
 
     const visibleBars = sortedParticipants.slice(0, 6);
-
-    const [dateTime, setDateTime] = useState<string>('');
-
-    useEffect(() => {
-        const updateDateTime = () => {
-            const now = new Date();
-
-            const date = now.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: '2-digit',
-            });
-
-            const time = now.toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-            });
-
-            setDateTime(`${date} | ${time}`);
-        };
-
-        updateDateTime();
-        const interval = setInterval(updateDateTime, 1000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     return (
         <div className="w-full h-full bg-black/20 overflow-hidden flex justify-center items-center relative z-[200] p-2 sm:p-4">

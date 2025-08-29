@@ -20,20 +20,13 @@ export default function HostQuestionReviewFooter() {
     // @ts-expect-error: _count is not typed but exists on quiz
     const totalQuestions = quiz?._count.questions;
 
-    function handleKeyDown(event: KeyboardEvent) {
-        // event.preventDefault();
+    const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'ArrowLeft') {
             handlePreviousQuestion();
         } else if (event.key === 'ArrowRight') {
             handleNextQuestion();
         }
-    }
-
-    // useEffect(() => {
-    //     // this is to get the first question everytime previewing questions before serving it
-    //     // as backend will check if the question is asked or not
-    //     navigateToQuestion(0);
-    // }, []);
+    };
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -60,16 +53,20 @@ export default function HostQuestionReviewFooter() {
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
         if (loading) return;
 
-        // to avoid duplicacy
-        const targetQuestion = quiz.questions[targetIndex];
+        const availableQuestions = quiz.questions
+            .filter((q) => q && !q.isAsked)
+            .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0));
 
-        // checking for complete data for a question
+        const targetQuestion = availableQuestions.find((q) => q && q.orderIndex === targetIndex);
+
         if (isQuestionDataComplete(targetQuestion)) {
             updateCurrentQuestion(targetQuestion!);
             return;
         }
+
         if (!quiz?.id || !session?.user.token) return;
         setLoading(true);
+
         try {
             const question: QuestionType = await LiveQuizBackendActions.getQuestionDetailByIndex(
                 quiz.id,
@@ -77,51 +74,99 @@ export default function HostQuestionReviewFooter() {
                 session.user.token,
             );
 
-            if (question) {
-                const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
+            if (question && !question.isAsked) {
+                const existingQuestionIndex = quiz.questions.findIndex(
+                    (q) => q && q.id === question.id,
+                );
 
-                if (!isQuestionExists) {
+                if (existingQuestionIndex !== -1) {
                     const updatedQuestions = [...quiz.questions];
-                    updatedQuestions.push(question);
+                    updatedQuestions[existingQuestionIndex] = question;
+                    updateQuiz({
+                        questions: updatedQuestions,
+                    });
+                } else {
+                    const updatedQuestions = [...quiz.questions, question];
                     updateQuiz({
                         questions: updatedQuestions,
                     });
                 }
+
                 updateCurrentQuestion(question);
+            } else if (question?.isAsked) {
+                const nextAvailableIndex = findNextAvailableQuestionIndex(targetIndex);
+                if (nextAvailableIndex !== -1 && nextAvailableIndex !== targetIndex) {
+                    navigateToQuestion(nextAvailableIndex);
+                }
             }
         } catch (error) {
             console.error('Failed to fetch question data:', error);
         } finally {
             setLoading(false);
-            // console.log('[NAVIGATION] quiz: ', quiz);
         }
+    }
+
+    function findNextAvailableQuestionIndex(fromIndex: number): number {
+        if (!quiz?.questions) return -1;
+
+        for (let i = fromIndex + 1; i < totalQuestions; i++) {
+            const question = quiz.questions.find((q) => q && q.orderIndex === i);
+            if (!question || !question.isAsked) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    function findPreviousAvailableQuestionIndex(fromIndex: number): number {
+        if (!quiz?.questions) return -1;
+
+        for (let i = fromIndex - 1; i >= 0; i--) {
+            const question = quiz.questions.find((q) => q && q.orderIndex === i);
+            if (!question || !question.isAsked) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     function handlePreviousQuestion() {
-        if (!quiz?.questions || !currentQuestion || currentQuestion.orderIndex <= 0) {
-            // console.log('left click failed');
+        if (loading) return;
+        if (!quiz?.questions || !currentQuestion) {
             return;
         }
-        // console.log('left clicked');
-        navigateToQuestion(currentQuestion.orderIndex - 1);
+
+        const prevIndex = findPreviousAvailableQuestionIndex(currentQuestion.orderIndex);
+        if (prevIndex !== -1) {
+            navigateToQuestion(prevIndex);
+        }
+        return -1;
     }
 
     function handleNextQuestion() {
+        if (loading) return;
         if (!currentQuestion || !quiz?.questions) {
             return;
         }
-        if (currentQuestion.orderIndex >= totalQuestions - 1) {
-            return;
+
+        const nextIndex = findNextAvailableQuestionIndex(currentQuestion.orderIndex);
+        if (nextIndex !== -1) {
+            navigateToQuestion(nextIndex);
         }
-        navigateToQuestion(currentQuestion.orderIndex + 1);
+        return -1;
     }
 
-    const isPrevDisabled = !currentQuestion || currentQuestion.orderIndex <= 0 || loading;
-    const isNextDisabled =
-        !currentQuestion ||
-        !quiz?.questions ||
-        currentQuestion.orderIndex >= totalQuestions - 1 ||
-        loading;
+    const hasPreviousAvailable = currentQuestion
+        ? findPreviousAvailableQuestionIndex(currentQuestion.orderIndex) !== -1
+        : false;
+
+    const hasNextAvailable = currentQuestion
+        ? findNextAvailableQuestionIndex(currentQuestion.orderIndex) !== -1
+        : false;
+
+    const isPrevDisabled = !currentQuestion || !hasPreviousAvailable || loading;
+    const isNextDisabled = !currentQuestion || !hasNextAvailable || loading;
 
     const [platform, setPlatform] = useState<'mac' | 'windows' | 'other'>('other');
     useEffect(() => {
