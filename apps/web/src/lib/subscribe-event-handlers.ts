@@ -69,6 +69,7 @@ export class SubscribeEventHandlers {
             questionId: string;
             questionIndex: number;
         };
+        // toast should appear, currenlty not working
         toast.error(message.error);
     }
 

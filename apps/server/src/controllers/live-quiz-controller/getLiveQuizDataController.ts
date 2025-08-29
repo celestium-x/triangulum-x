@@ -75,6 +75,10 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                                 timeLimit: true,
                                 orderIndex: true,
                                 imageUrl: true,
+                                isAsked: true,
+                            },
+                            where: {
+                                isAsked: false,
                             },
                             orderBy: {
                                 orderIndex: 'asc',

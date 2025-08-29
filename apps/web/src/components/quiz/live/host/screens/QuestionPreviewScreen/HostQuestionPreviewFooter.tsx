@@ -3,7 +3,7 @@ import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IoIosReturnLeft } from 'react-icons/io';
 import { FaLightbulb } from 'react-icons/fa';
@@ -20,20 +20,13 @@ export default function HostQuestionReviewFooter() {
     // @ts-expect-error: _count is not typed but exists on quiz
     const totalQuestions = quiz?._count.questions;
 
-    function handleKeyDown(event: KeyboardEvent) {
-        // event.preventDefault();
+    const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'ArrowLeft') {
             handlePreviousQuestion();
         } else if (event.key === 'ArrowRight') {
             handleNextQuestion();
         }
-    }
-
-    // useEffect(() => {
-    //     // this is to get the first question everytime previewing questions before serving it
-    //     // as backend will check if the question is asked or not
-    //     navigateToQuestion(0);
-    // }, []);
+    };
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyDown);
@@ -57,19 +50,29 @@ export default function HostQuestionReviewFooter() {
     }
 
     async function navigateToQuestion(targetIndex: number) {
+        console.log("Quiz questions are ---->", quiz?.questions);
+        console.log("Target index inside nav is:", targetIndex);
+
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
         if (loading) return;
 
-        // to avoid duplicacy
-        const targetQuestion = quiz.questions[targetIndex];
+        const availableQuestions = quiz.questions
+            .filter(q => q && !q.isAsked)
+            .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0));
 
-        // checking for complete data for a question
+        console.log("Available questions:", availableQuestions);
+
+        const targetQuestion = availableQuestions.find(q => q && q.orderIndex === targetIndex);
+
         if (isQuestionDataComplete(targetQuestion)) {
             updateCurrentQuestion(targetQuestion!);
+            console.log('Updated to existing question:', targetQuestion);
             return;
         }
+
         if (!quiz?.id || !session?.user.token) return;
         setLoading(true);
+
         try {
             const question: QuestionType = await LiveQuizBackendActions.getQuestionDetailByIndex(
                 quiz.id,
@@ -77,51 +80,105 @@ export default function HostQuestionReviewFooter() {
                 session.user.token,
             );
 
-            if (question) {
-                const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
+            console.log("Fetched question from backend:", question);
 
-                if (!isQuestionExists) {
+            if (question && !question.isAsked) {
+                const existingQuestionIndex = quiz.questions.findIndex(q => q && q.id === question.id);
+
+                if (existingQuestionIndex !== -1) {
                     const updatedQuestions = [...quiz.questions];
-                    updatedQuestions.push(question);
+                    updatedQuestions[existingQuestionIndex] = question;
+                    updateQuiz({
+                        questions: updatedQuestions,
+                    });
+                } else {
+                    const updatedQuestions = [...quiz.questions, question];
                     updateQuiz({
                         questions: updatedQuestions,
                     });
                 }
+
                 updateCurrentQuestion(question);
+            } else if (question?.isAsked) {
+                console.log("Fetched question is already asked, finding next available");
+                const nextAvailableIndex = findNextAvailableQuestionIndex(targetIndex);
+                if (nextAvailableIndex !== -1 && nextAvailableIndex !== targetIndex) {
+                    navigateToQuestion(nextAvailableIndex);
+                }
             }
         } catch (error) {
             console.error('Failed to fetch question data:', error);
         } finally {
             setLoading(false);
-            // console.log('[NAVIGATION] quiz: ', quiz);
         }
+    }
+
+    function findNextAvailableQuestionIndex(fromIndex: number): number {
+        console.log("incoming index for next question------> ", fromIndex);
+        if (!quiz?.questions) return -1;
+
+        for (let i = fromIndex + 1; i < totalQuestions; i++) {
+            const question = quiz.questions.find(q => q && q.orderIndex === i);
+            if (!question || !question.isAsked) {
+                console.log("returning index from next question: ", i);
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    function findPreviousAvailableQuestionIndex(fromIndex: number): number {
+        console.log("from index inside prev is: ", fromIndex);
+        if (!quiz?.questions) return -1;
+
+        for (let i = fromIndex - 1; i >= 0; i--) {
+            const question = quiz.questions.find(q => q && q.orderIndex === i);
+            if (!question || !question.isAsked) {
+                console.log("returning index:", i);
+                return i;
+            }
+        }
+        return -1;
     }
 
     function handlePreviousQuestion() {
-        if (!quiz?.questions || !currentQuestion || currentQuestion.orderIndex <= 0) {
-            // console.log('left click failed');
+        if (loading) return;
+        console.log("Questions in quiz are:", quiz?.questions);
+        if (!quiz?.questions || !currentQuestion) {
             return;
         }
-        // console.log('left clicked');
-        navigateToQuestion(currentQuestion.orderIndex - 1);
+
+        const prevIndex = findPreviousAvailableQuestionIndex(currentQuestion.orderIndex);
+        if (prevIndex !== -1) {
+            console.log('Navigating to previous available question at index:', prevIndex);
+            navigateToQuestion(prevIndex);
+        }
+        return -1;
     }
 
     function handleNextQuestion() {
+        if (loading) return;
         if (!currentQuestion || !quiz?.questions) {
             return;
         }
-        if (currentQuestion.orderIndex >= totalQuestions - 1) {
-            return;
+
+        const nextIndex = findNextAvailableQuestionIndex(currentQuestion.orderIndex);
+        if (nextIndex !== -1) {
+            console.log('Navigating to next available question at index:', nextIndex);
+            navigateToQuestion(nextIndex);
         }
-        navigateToQuestion(currentQuestion.orderIndex + 1);
+        return -1;
     }
 
-    const isPrevDisabled = !currentQuestion || currentQuestion.orderIndex <= 0 || loading;
-    const isNextDisabled =
-        !currentQuestion ||
-        !quiz?.questions ||
-        currentQuestion.orderIndex >= totalQuestions - 1 ||
-        loading;
+    const hasPreviousAvailable = currentQuestion ?
+        findPreviousAvailableQuestionIndex(currentQuestion.orderIndex) !== -1 : false;
+
+    const hasNextAvailable = currentQuestion ?
+        findNextAvailableQuestionIndex(currentQuestion.orderIndex) !== -1 : false;
+
+    const isPrevDisabled = !currentQuestion || !hasPreviousAvailable || loading;
+    const isNextDisabled = !currentQuestion || !hasNextAvailable || loading;
 
     const [platform, setPlatform] = useState<'mac' | 'windows' | 'other'>('other');
     useEffect(() => {
