@@ -55,22 +55,23 @@ export default function ParticipantQuestionResultsRenderer() {
         return colorMapRef.current.get(id)!;
     });
 
-    let currentUser: any;
-    let yourIndex: any;
-    let yourRank: any;
-    let yourStreak: any;
-    let yourAnswer: number | undefined;
+    const [currentUser, setCurrentUser] = useState<any>(null);
+    const [yourRank, setYourRank] = useState<number>(1);
+    const [yourStreak, setYourStreak] = useState<number>(0);
+    const [yourAnswer, setYourAnswer] = useState<number | undefined>();
 
     useEffect(() => {
-        console.log("responses: ", responses);
-        currentUser = participantData;
-        console.log("current user: ", currentUser);
-        yourIndex = sortedParticipants.findIndex((p) => p.id === currentUser?.id);
-        yourRank = yourIndex + 1;
-        yourStreak = currentUser?.longestStreak ?? 0;
-        yourAnswer = getResponse(currentUser?.id!)?.selectedAnswer;
-        console.log("yout asn", yourAnswer);
-    }, [participantData]);
+        if (!participantData) return;
+
+        const user = participantData;
+        setCurrentUser(user);
+
+        const index = sortedParticipants.findIndex((p) => p.id === user.id);
+        setYourRank(index >= 0 ? index + 1 : 1);
+
+        setYourStreak(user?.longestStreak ?? 0);
+        setYourAnswer(getResponse(user?.id)?.selectedAnswer);
+    }, [participantData, sortedParticipants, responses, getResponse]);
 
     if (!currentQuestion) {
         return (

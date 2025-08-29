@@ -2,7 +2,6 @@
 import { cn } from '@/lib/utils';
 import { ParticipantType, QuestionType } from '@/types/prisma-types';
 import Image from 'next/image';
-import { useEffect } from 'react';
 
 export default function LeaderboardResultCard({
     participant,
@@ -18,13 +17,7 @@ export default function LeaderboardResultCard({
     streak: number;
 }) {
 
-    let isCorrect: any;
-    useEffect(() => {
-        isCorrect = userAnswer && userAnswer === currentQuestion?.correctAnswer;
-        console.log("user answer is: ", userAnswer);
-        console.log('current question: ', currentQuestion);
-        console.log("correct answert: ", currentQuestion?.correctAnswer);
-    }, [userAnswer, currentQuestion]);
+    const isCorrect = userAnswer != null && userAnswer === currentQuestion?.correctAnswer;
 
     return (
         <div className="w-full max-w-[37rem] mx-auto flex flex-col gap-y-3">
@@ -84,7 +77,7 @@ export default function LeaderboardResultCard({
                                 <div className="flex items-center justify-between text-neutral-300 text-sm sm:text-base">
                                     <span className="font-medium">Correct Answer</span>
                                     <span className="truncate ml-2">
-                                        {currentQuestion?.correctAnswer || ''}
+                                        {currentQuestion?.options[currentQuestion?.correctAnswer] || ''}
                                     </span>
                                 </div>
                             </div>
@@ -104,7 +97,7 @@ export default function LeaderboardResultCard({
                                             Your Answer
                                         </span>
                                         <span className="truncate ml-2">
-                                            {userAnswer} {isCorrect ? '✓' : '✗'}
+                                            {currentQuestion?.options[userAnswer]} {isCorrect ? '✓' : '✗'}
                                         </span>
                                     </div>
                                 ) : (

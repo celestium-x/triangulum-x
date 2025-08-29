@@ -19,6 +19,7 @@ import getSelectedQuestionDetails from '../controllers/live-quiz-controller/getS
 import getSpectatorOnCall from '../controllers/live-quiz-controller/getSpectatorOnCall';
 import getParticipantsOnCall from '../controllers/live-quiz-controller/getParticipantsOnCall';
 import verifyQuizOwnershipMiddleware from '../middlewares/verifyQuizOwnershipMiddleware';
+import getQuestionResults from '../controllers/live-quiz-controller/getQuestionResults';
 
 const router = Router();
 
@@ -57,6 +58,6 @@ router.get(
 );
 router.get('/quiz/spectators/:quizId', authMiddleware, getSpectatorOnCall);
 router.get('/quiz/participants/:quizId', authMiddleware, getParticipantsOnCall);
-router.get('/quiz/get-question-results', );
+router.get('/quiz/get-question-results', getQuestionResults);
 
 export default router;
