@@ -48,14 +48,10 @@ export default function HostQuestionPreviewRenderer() {
                         session?.user.token,
                     );
 
-                console.log('received question at start: ', question);
-
                 if (question) {
-                    console.log('checking if question exists in state');
                     const isQuestionExists = quiz?.questions.find((q) => q && q.id === question.id);
 
                     if (!isQuestionExists) {
-                        console.log("question doesn't exist in the state");
                         updateQuiz({
                             questions: [question],
                         });
@@ -65,7 +61,8 @@ export default function HostQuestionPreviewRenderer() {
             }
             fetchQuestion();
         }
-    }, [quiz]);
+        // only keep quiz here
+    }, [quiz, session?.user.token, updateCurrentQuestion, updateQuiz]);
 
     if (!currentQuestion) {
         return (
@@ -84,9 +81,12 @@ export default function HostQuestionPreviewRenderer() {
             )}
         >
             <div className="min-h-[32rem] w-[90%] flex flex-col justify-between">
-                <div className='w-full flex gap-x-2'>
+                <div className="w-full flex gap-x-2">
                     <div className="text-3xl text-center w-full">
-                        <span className='text-[31px] h-full pt-[2px]'>{currentQuestion.orderIndex + 1}.</span> {currentQuestion.question}
+                        <span className="text-[31px] h-full pt-[2px]">
+                            {currentQuestion.orderIndex + 1}.
+                        </span>{' '}
+                        {currentQuestion.question}
                     </div>
                     {/* <div
                         className={cn('w-full text-3xl text-center')}

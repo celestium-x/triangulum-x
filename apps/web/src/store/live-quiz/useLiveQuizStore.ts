@@ -25,13 +25,14 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             } as QuizType;
 
             let currentQuestion = state.currentQuestion;
-            if (updatedFields.questions &&
+            if (
+                updatedFields.questions &&
                 updatedFields.questions.length > 0 &&
-                !state.currentQuestion) {
-                    
+                !state.currentQuestion
+            ) {
                 // Find the first non-asked question
                 const firstAvailableQuestion = updatedFields.questions
-                    .filter(q => q && !q.isAsked)
+                    .filter((q) => q && !q.isAsked)
                     .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0))[0];
 
                 currentQuestion = firstAvailableQuestion ?? updatedFields.questions[0];

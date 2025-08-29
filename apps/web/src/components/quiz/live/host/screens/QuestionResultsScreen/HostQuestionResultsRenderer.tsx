@@ -27,8 +27,6 @@ export default function HostQuestionResultsRenderer() {
         updateGameSession?.({ hostScreen: HostScreenEnum.QUESTION_PREVIEW });
     }
 
-
-
     // useEffect(() => {
     //     const availableQuestions = quiz?.questions
     //         .filter(q => q && !q.isAsked)

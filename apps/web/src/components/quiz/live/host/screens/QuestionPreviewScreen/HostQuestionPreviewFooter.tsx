@@ -3,7 +3,7 @@ import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { BsArrowLeft, BsArrowRight } from 'react-icons/bs';
 import { IoIosReturnLeft } from 'react-icons/io';
 import { FaLightbulb } from 'react-icons/fa';
@@ -50,23 +50,17 @@ export default function HostQuestionReviewFooter() {
     }
 
     async function navigateToQuestion(targetIndex: number) {
-        console.log("Quiz questions are ---->", quiz?.questions);
-        console.log("Target index inside nav is:", targetIndex);
-
         if (!quiz?.questions || targetIndex < 0 || targetIndex >= totalQuestions) return;
         if (loading) return;
 
         const availableQuestions = quiz.questions
-            .filter(q => q && !q.isAsked)
+            .filter((q) => q && !q.isAsked)
             .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0));
 
-        console.log("Available questions:", availableQuestions);
-
-        const targetQuestion = availableQuestions.find(q => q && q.orderIndex === targetIndex);
+        const targetQuestion = availableQuestions.find((q) => q && q.orderIndex === targetIndex);
 
         if (isQuestionDataComplete(targetQuestion)) {
             updateCurrentQuestion(targetQuestion!);
-            console.log('Updated to existing question:', targetQuestion);
             return;
         }
 
@@ -80,10 +74,10 @@ export default function HostQuestionReviewFooter() {
                 session.user.token,
             );
 
-            console.log("Fetched question from backend:", question);
-
             if (question && !question.isAsked) {
-                const existingQuestionIndex = quiz.questions.findIndex(q => q && q.id === question.id);
+                const existingQuestionIndex = quiz.questions.findIndex(
+                    (q) => q && q.id === question.id,
+                );
 
                 if (existingQuestionIndex !== -1) {
                     const updatedQuestions = [...quiz.questions];
@@ -100,7 +94,6 @@ export default function HostQuestionReviewFooter() {
 
                 updateCurrentQuestion(question);
             } else if (question?.isAsked) {
-                console.log("Fetched question is already asked, finding next available");
                 const nextAvailableIndex = findNextAvailableQuestionIndex(targetIndex);
                 if (nextAvailableIndex !== -1 && nextAvailableIndex !== targetIndex) {
                     navigateToQuestion(nextAvailableIndex);
@@ -114,13 +107,11 @@ export default function HostQuestionReviewFooter() {
     }
 
     function findNextAvailableQuestionIndex(fromIndex: number): number {
-        console.log("incoming index for next question------> ", fromIndex);
         if (!quiz?.questions) return -1;
 
         for (let i = fromIndex + 1; i < totalQuestions; i++) {
-            const question = quiz.questions.find(q => q && q.orderIndex === i);
+            const question = quiz.questions.find((q) => q && q.orderIndex === i);
             if (!question || !question.isAsked) {
-                console.log("returning index from next question: ", i);
                 return i;
             }
         }
@@ -129,13 +120,11 @@ export default function HostQuestionReviewFooter() {
     }
 
     function findPreviousAvailableQuestionIndex(fromIndex: number): number {
-        console.log("from index inside prev is: ", fromIndex);
         if (!quiz?.questions) return -1;
 
         for (let i = fromIndex - 1; i >= 0; i--) {
-            const question = quiz.questions.find(q => q && q.orderIndex === i);
+            const question = quiz.questions.find((q) => q && q.orderIndex === i);
             if (!question || !question.isAsked) {
-                console.log("returning index:", i);
                 return i;
             }
         }
@@ -144,14 +133,12 @@ export default function HostQuestionReviewFooter() {
 
     function handlePreviousQuestion() {
         if (loading) return;
-        console.log("Questions in quiz are:", quiz?.questions);
         if (!quiz?.questions || !currentQuestion) {
             return;
         }
 
         const prevIndex = findPreviousAvailableQuestionIndex(currentQuestion.orderIndex);
         if (prevIndex !== -1) {
-            console.log('Navigating to previous available question at index:', prevIndex);
             navigateToQuestion(prevIndex);
         }
         return -1;
@@ -165,17 +152,18 @@ export default function HostQuestionReviewFooter() {
 
         const nextIndex = findNextAvailableQuestionIndex(currentQuestion.orderIndex);
         if (nextIndex !== -1) {
-            console.log('Navigating to next available question at index:', nextIndex);
             navigateToQuestion(nextIndex);
         }
         return -1;
     }
 
-    const hasPreviousAvailable = currentQuestion ?
-        findPreviousAvailableQuestionIndex(currentQuestion.orderIndex) !== -1 : false;
+    const hasPreviousAvailable = currentQuestion
+        ? findPreviousAvailableQuestionIndex(currentQuestion.orderIndex) !== -1
+        : false;
 
-    const hasNextAvailable = currentQuestion ?
-        findNextAvailableQuestionIndex(currentQuestion.orderIndex) !== -1 : false;
+    const hasNextAvailable = currentQuestion
+        ? findNextAvailableQuestionIndex(currentQuestion.orderIndex) !== -1
+        : false;
 
     const isPrevDisabled = !currentQuestion || !hasPreviousAvailable || loading;
     const isNextDisabled = !currentQuestion || !hasNextAvailable || loading;

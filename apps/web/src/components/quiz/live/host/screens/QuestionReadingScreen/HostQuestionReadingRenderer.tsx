@@ -14,25 +14,19 @@ export default function HostQuestionReadingRenderer() {
     useEffect(() => {
         if (!currentQuestion || !quiz || !gameSession) return;
 
-        console.log('Current question being launched:', currentQuestion);
-        console.log('Quiz questions before filtering:', quiz.questions);
-
         // Only filter out the current question after it's been launched
         // Use a more robust filtering approach that maintains array structure
-        const updatedQuestions = quiz.questions.map(q => {
+        const updatedQuestions = quiz.questions.map((q) => {
             if (q && q.id === currentQuestion.id) {
                 return { ...q, isAsked: true }; // Mark as asked instead of removing
             }
             return q;
         });
 
-        console.log("Updated questions after marking as asked:", updatedQuestions);
-
         updateQuiz({
             questions: updatedQuestions,
         });
-
-    }, [currentQuestion?.id]); // Only trigger when current question ID changes
+    }, [currentQuestion?.id, gameSession, quiz, updateQuiz, currentQuestion]);
 
     if (!currentQuestion || !gameSession) {
         return (
