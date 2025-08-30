@@ -3,16 +3,22 @@ import CountDownClock from '@/components/ui/CountDownClock';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
+import { useLiveQuizHostStore } from '@/store/live-quiz/useLiveQuizHostStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { HostScreenEnum } from '@/types/prisma-types';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function HostQuestionResultsRenderer() {
     const { handleHostQuestionPreviewPageChange } = useWebSocket();
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession, updateGameSession } = useLiveQuizStore();
+    const { emptyLiveResponses } = useLiveQuizHostStore();
+
+    useEffect(() => {
+        emptyLiveResponses();
+    }, [])
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -26,12 +32,6 @@ export default function HostQuestionResultsRenderer() {
         handleHostQuestionPreviewPageChange(HostScreenEnum.QUESTION_PREVIEW);
         updateGameSession?.({ hostScreen: HostScreenEnum.QUESTION_PREVIEW });
     }
-
-    // useEffect(() => {
-    //     const availableQuestions = quiz?.questions
-    //         .filter(q => q && !q.isAsked)
-    //         .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0));
-    // }, [quiz, gameSession]);
 
     return (
         <div

@@ -26,7 +26,6 @@ export default function HostQuestionReadingRenderer() {
             return q;
         });
         currentQuestion.isAsked = true;
-        console.log("current question with updated asking state", currentQuestion);
         updateQuiz({
             questions: updatedQuestions,
         });

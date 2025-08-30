@@ -7,12 +7,12 @@ import { useLiveQuizHostStore } from '@/store/live-quiz/useLiveQuizHostStore';
 
 export default function HostQuestionActiveOptions() {
     const { currentQuestion, quiz: liveQuiz } = useLiveQuizStore();
-    const { liveOptions } = useLiveQuizHostStore();
+    const { liveResponses } = useLiveQuizHostStore();
 
     const template = templates.find((t) => t.id === liveQuiz?.theme);
     if (!currentQuestion?.options) return null;
 
-    const maxVotes = Math.max(...liveOptions, 1);
+    const maxVotes = Math.max(...liveResponses, 1);
     const maxHeight = 120;
 
     return (
@@ -24,7 +24,7 @@ export default function HostQuestionActiveOptions() {
                 )}
             >
                 {currentQuestion.options.map((option, idx) => {
-                    const votes = liveOptions[idx] ?? 0;
+                    const votes = liveResponses[idx] ?? 0;
                     const height = (votes / maxVotes) * maxHeight;
 
                     return (

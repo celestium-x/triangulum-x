@@ -94,6 +94,11 @@ export function useSubscribeEventHandlers() {
         );
 
         subscribeToHandler(
+            MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
+            SubscribeEventHandlers.handleHostIncomingResponseMessage,
+        );
+
+        subscribeToHandler(
             MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,
             SubscribeEventHandlers.handleParticipantIncomingRespondedMessage,
         );
@@ -176,6 +181,10 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.QUESTION_ALREADY_ASKED,
                 SubscribeEventHandlers.handleIncomingQuestionAlreadyAskedEvent,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE,
+                SubscribeEventHandlers.handleHostIncomingResponseMessage,
             );
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,

@@ -69,7 +69,6 @@ export default function HostQuestionPreviewRenderer() {
         if(!nextQuestion) {
             // this should not be hit by our frontend
             // this will only hit if the quiz ends
-            console.log("no next question found");
             return;
         }
         updateCurrentQuestion(nextQuestion);

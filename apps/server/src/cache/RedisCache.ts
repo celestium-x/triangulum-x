@@ -150,7 +150,6 @@ export default class RedisCache {
         response: Partial<Response>,
     ) {
         try {
-            console.log("response setted in cache");
             const key = this.get_participant_response_key(game_session_id);
             const unique_key = this.get_unique_key_to_response(question_id, participant_id);
 
@@ -171,7 +170,6 @@ export default class RedisCache {
             const unique_key = this.get_unique_key_to_response(question_id, participant_id);
 
             const data = await this.redis_cache.hget(key, unique_key);
-            console.log("found response in cache: ", data ? JSON.parse(data) : null);
             return data ? JSON.parse(data) : null;
         } catch (error) {
             console.error('Error while getting participant response from cache: ', error);
@@ -216,7 +214,6 @@ export default class RedisCache {
             return [];
         }
     }
-
 
     private get_unique_key_to_response(question_id: string, participant_id: string) {
         return `${question_id}_${participant_id}`;

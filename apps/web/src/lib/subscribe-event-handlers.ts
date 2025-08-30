@@ -70,7 +70,6 @@ export class SubscribeEventHandlers {
             questionIndex: number;
         };
         // toast should appear, currenlty not working
-        console.log("message from already asked payload: ", message);
         toast.error(message.error);
     }
 
@@ -320,8 +319,6 @@ export class SubscribeEventHandlers {
             startTime: number;
         };
 
-        console.log("results payload data: ", resultsPhasePayload);
-
         const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
         const { updateParticipants, setResponses } = useLiveParticipantsStore.getState();
 
@@ -347,7 +344,6 @@ export class SubscribeEventHandlers {
         const message = payload as {
             error: string;
         };
-        console.log("received payload from reponded message: ", message);
         toast.warning(message.error);
     }
 
@@ -356,7 +352,7 @@ export class SubscribeEventHandlers {
             selectedAnswer: number;
         };
 
-        const { updateLiveOptions } = useLiveQuizHostStore.getState();
-        updateLiveOptions(message.selectedAnswer);
+        const { updateLiveResponses } = useLiveQuizHostStore.getState();
+        updateLiveResponses(message.selectedAnswer);
     }
 }

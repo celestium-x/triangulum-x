@@ -37,7 +37,6 @@ export default function HostQuestionActiveRenderer() {
 
                 if (!question) {
                     // end of the quiz and show button to show final leaderboards
-                    console.log("question not found");
                     return;
                 }
                 updateNextQuestion(question);

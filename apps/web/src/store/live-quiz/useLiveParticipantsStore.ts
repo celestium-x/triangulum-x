@@ -77,11 +77,7 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
 
     getResponse: (participantId: string) => {
 
-        console.log("participantId: ", participantId);
-
         const data = get().responses.find((r) => r.participantId === participantId);
-        console.log("all responses: ", get().responses);
-        console.log("found response: ", data);
         return data;
     },
 
