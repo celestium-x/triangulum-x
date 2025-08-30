@@ -9,6 +9,7 @@ interface FeatureBoxComponentProps {
     buttonText: string;
     buttonIcon: React.ReactNode;
     backgroundSvg: (hovered: boolean) => React.ReactNode;
+    buttonOnClick?: () => void;
 }
 
 export default function FeatureBoxComponent({
@@ -17,6 +18,7 @@ export default function FeatureBoxComponent({
     buttonText,
     buttonIcon,
     backgroundSvg,
+    buttonOnClick,
 }: FeatureBoxComponentProps) {
     const [hovered, setHovered] = useState(false);
 
@@ -53,7 +55,10 @@ export default function FeatureBoxComponent({
             </div>
 
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-                <Button className="dark:bg-transparent border border-neutral-700 flex bg-neutral-500 text-light-base dark:text-light-base rounded-full !px-4 !py-2.5 group-hover:dark:bg-neutral-900 text-md">
+                <Button
+                    onClick={buttonOnClick}
+                    className="dark:bg-transparent border border-neutral-700 flex bg-neutral-500 text-light-base dark:text-light-base rounded-full !px-4 !py-2.5 group-hover:dark:bg-neutral-900 text-md"
+                >
                     {buttonText}
                     {buttonIcon}
                 </Button>

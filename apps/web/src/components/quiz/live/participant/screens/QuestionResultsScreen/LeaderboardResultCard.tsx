@@ -102,7 +102,7 @@ export default function LeaderboardResultCard({
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center text-neutral-300 text-sm sm:text-base">
-                                        {'You didn\'t respond'}
+                                        {"You didn't respond"}
                                     </div>
                                 )}
                             </div>

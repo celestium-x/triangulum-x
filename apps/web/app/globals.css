@@ -191,3 +191,9 @@
     mask-size: 100% 100%;
     pointer-events: none;
 }
+
+.outlined-text {
+    color: transparent;
+    -webkit-text-stroke: 1px #c4c4c4;
+    text-stroke: 2px #c4c4c4;
+}
