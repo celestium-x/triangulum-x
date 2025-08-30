@@ -4,6 +4,8 @@ import { Request, Response } from 'express';
 export default async function getSelectedQuestionDetails(req: Request, res: Response) {
     const { quizId, questionIndex } = req.params;
 
+    console.log("backend call received for index: ", questionIndex);
+
     if (!quizId || questionIndex === undefined || questionIndex === null) {
         res.status(400).json({
             success: false,
@@ -43,6 +45,9 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
                         imageUrl: true,
                         isAsked: true,
                     },
+                    orderBy: {
+                        orderIndex: 'asc',
+                    },
                 },
             },
         });
@@ -56,45 +61,37 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             return;
         }
 
-        const questionWithTargetedIndex = quiz.questions.find(
-            (q) => q.orderIndex === targetOrderIndex,
-        );
+        // Start from requested index
+        let currentIndex = targetOrderIndex % quiz.questions.length;
+        let attempts = 0;
+        const maxAttempts = quiz.questions.length;
 
-        if (!questionWithTargetedIndex) {
+        let currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
+
+        // Loop until we find an unasked question or exhaust all
+        while (currentQuestion && currentQuestion.isAsked && attempts < maxAttempts) {
+            console.log("Skipping asked question at index:", currentIndex);
+
+            currentIndex = (currentIndex + 1) % quiz.questions.length;
+            currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
+
+            attempts++;
+        }
+
+        if (!currentQuestion || currentQuestion.isAsked) {
             res.status(404).json({
                 success: false,
-                message: `Question not found at index ${targetOrderIndex}`,
-                value: 'QUESTION_NOT_FOUND',
+                message: 'No unasked questions available',
+                value: 'NO_AVAILABLE_QUESTION',
             });
             return;
         }
 
-        const currentQuestionValue: {
-            isAsked: boolean;
-            orderIndex: number;
-        } = {
-            isAsked: questionWithTargetedIndex.isAsked,
-            orderIndex: questionWithTargetedIndex.orderIndex,
-        };
-
-        // check it once for infinite loop
-        while (currentQuestionValue.isAsked) {
-            if (currentQuestionValue.orderIndex >= quiz.questions.length && quiz.questions[0]) {
-                currentQuestionValue.orderIndex = 0;
-                currentQuestionValue.isAsked = quiz.questions[0].isAsked;
-                continue;
-            }
-
-            if (currentQuestionValue.orderIndex < quiz.questions.length) {
-                const nextQuestion = quiz.questions[currentQuestionValue.orderIndex];
-                currentQuestionValue.isAsked = nextQuestion ? nextQuestion.isAsked : false;
-                currentQuestionValue.orderIndex++;
-            }
-        }
+        console.log("returning question order index: ", currentIndex);
 
         res.status(200).json({
             success: true,
-            question: quiz.questions.find((q) => q.orderIndex === currentQuestionValue.orderIndex),
+            question: currentQuestion,
         });
         return;
     } catch (error) {

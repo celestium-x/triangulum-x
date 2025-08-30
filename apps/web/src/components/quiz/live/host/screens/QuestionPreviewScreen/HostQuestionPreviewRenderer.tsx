@@ -64,6 +64,48 @@ export default function HostQuestionPreviewRenderer() {
         // only keep quiz here
     }, [quiz]);
 
+    useEffect(() => {
+
+        console.log("[ 1 ]log of changing quesion");
+
+        if(!quiz || !currentQuestion) return;
+
+        console.log("[ 2 ]log of changing quesion");
+        console.log(currentQuestion);
+
+        if(currentQuestion.isAsked === false) return;
+
+        console.log("[ 3 ]log of changing quesion");
+
+        // find any other quetion which is not asked
+        let question = quiz.questions.find(q => !q.isAsked);
+
+        if(!question) {
+            // fetch from backend
+            console.log("fetch from backend");
+            const fetchQuestion = async () => {
+                if(!quiz) return;
+                console.log("question should be undefined here: ", question);
+                question = await LiveQuizBackendActions.getQuestionDetailByIndex(
+                    quiz.id,
+                    0,
+                    session?.user.token,
+                );
+                if(!question) {
+                    console.log("quiz ended");
+                    return;
+                }
+                updateCurrentQuestion(question);
+            }
+            fetchQuestion();
+            return;
+        }
+
+        console.log("next not asked question found: ", question);
+        updateCurrentQuestion(question!);
+
+    }, [quiz]);
+
     if (!currentQuestion) {
         return (
             <div className="text-center text-neutral-700 dark:text-neutral-400 text-2xl h-full w-full ">
