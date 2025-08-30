@@ -59,7 +59,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
     updateCurrentQuestion: (updateFields: Partial<QuestionType>) => {
         set((state) => {
             // If we're passing a complete question object, replace entirely
-            if (updateFields.id && updateFields.question) {
+            if (updateFields && updateFields.question) {
                 return {
                     currentQuestion: updateFields as QuestionType,
                 };

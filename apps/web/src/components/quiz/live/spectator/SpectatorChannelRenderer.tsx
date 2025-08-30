@@ -5,8 +5,9 @@ import SpectatorChatPanel from './SpectatorChatPanel';
 import SpectatorPeoplePanel from './SpectatorPeoplePanel';
 import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
 import SpectatorSettingsPanel from './SpectatorSettingsPanel';
+import SpectatorLeaderboardPanel from './SpectatorLeaderboardPanel';
 
-export default function SpectatorPanelRenderer() {
+export default function SpectatorChannelRenderer() {
     const expandableCardRef = useRef<HTMLDivElement>(null);
     const { type, setType, setIsExpanded, isExpanded } =
         useLiveQuizExpandableCardForSpectatorStore();
@@ -17,6 +18,8 @@ export default function SpectatorPanelRenderer() {
 
     function renderer() {
         switch (type) {
+            case 'LEADERBOARD':
+                return <SpectatorLeaderboardPanel />;
             case 'CHAT':
                 return <SpectatorChatPanel />;
             case 'PEOPLE':

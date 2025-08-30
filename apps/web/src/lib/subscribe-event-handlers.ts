@@ -92,13 +92,65 @@ export class SubscribeEventHandlers {
         } as SpectatorType);
     }
 
-    static handleSpectatorIncomingResultsPhase() {
-        // const resultsPhasePayload = payload as {
-        //     scores: { participantId: string; score: number }[];
-        //     correctAnswer: number;
-        //     spectatorScreen: SpectatorScreenEnum;
-        //     startTime: number;
-        // };
+    // static handleSpectatorIncomingResultsPhase(payload: unknown) {
+    //     const resultsPhasePayload = payload as {
+    //         scores: { participantId: string; score: number }[];
+    //         correctAnswer: number;
+    //         spectatorScreen: SpectatorScreenEnum;
+    //         startTime: number;
+    //     };
+
+    //     const { updateCurrentQuestion, updateGameSession } = useLiveQuizStore.getState();
+
+    // }
+
+    static handleSpectatorIncomingReadingPhase(payload: unknown) {
+        const readingPhasePayload = payload as {
+            spectatorScreen: SpectatorScreenEnum;
+            currentQuestionIndex: number;
+            currentQuestionId: string;
+            questionTitle: string;
+            startTime: number;
+            endTime: number;
+            currentPhase: QuizPhaseEnum;
+        };
+
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
+
+        updateCurrentQuestion({
+            question: readingPhasePayload.questionTitle,
+        });
+
+        updateGameSession({
+            spectatorScreen: readingPhasePayload.spectatorScreen,
+            currentQuestionId: readingPhasePayload.currentQuestionId,
+            currentQuestionIndex: readingPhasePayload.currentQuestionIndex,
+            phaseStartTime: readingPhasePayload.startTime,
+            phaseEndTime: readingPhasePayload.endTime,
+            currentPhase: readingPhasePayload.currentPhase,
+        });
+    }
+
+    static handleSpectatorIncomingActivePhase(payload: unknown) {
+        const activePhasePayload = payload as {
+            spectatorScreen: SpectatorScreenEnum;
+            startTime: number;
+            endTime: number;
+            questionOptions: string[];
+        };
+
+        const { updateCurrentQuestion, updateGameSession } = useLiveQuizStore.getState();
+
+        updateCurrentQuestion({
+            options: activePhasePayload.questionOptions,
+        });
+
+        updateGameSession({
+            spectatorScreen: SpectatorScreenEnum.QUESTION_ACTIVE,
+            currentPhase: QuizPhaseEnum.QUESTION_ACTIVE,
+            phaseStartTime: activePhasePayload.startTime,
+            phaseEndTime: activePhasePayload.endTime,
+        });
     }
 
     static handleIncomingNewSpectator(payload: unknown) {

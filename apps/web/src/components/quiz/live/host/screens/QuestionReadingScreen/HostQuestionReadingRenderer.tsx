@@ -26,7 +26,8 @@ export default function HostQuestionReadingRenderer() {
         updateQuiz({
             questions: updatedQuestions,
         });
-    }, [currentQuestion?.id, gameSession, quiz, updateQuiz, currentQuestion]);
+        // only keep currentQuestion?.id here
+    }, [currentQuestion?.id, gameSession, currentQuestion, quiz, updateQuiz]);
 
     if (!currentQuestion || !gameSession) {
         return (

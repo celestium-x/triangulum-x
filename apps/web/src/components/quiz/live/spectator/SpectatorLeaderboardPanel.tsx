@@ -1,27 +1,31 @@
-import { Button } from '@/components/ui/button';
-import ToolTipComponent from '@/components/utility/TooltipComponent';
-import { useLiveQuizExpandableCardForSpectatorStore } from '@/store/live-quiz/useLiveQuizExpandableCardForSpectatorStore';
-import { BiExpandAlt } from 'react-icons/bi';
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
+import LeaderboardPanelComponent, { Player } from '../common/LeaderboardPanelComponent';
 
 export default function SpectatorLeaderboardPanel() {
-    const { isExpanded, setIsExpanded } = useLiveQuizExpandableCardForSpectatorStore();
-    function handleToggleExpand() {
-        setIsExpanded(!isExpanded);
-    }
+    const { participants } = useLiveParticipantsStore();
+
+    const sortedParticipants = [...participants].sort((p1, p2) => p2.totalScore - p1.totalScore);
+
+    const emptyScoreBoard =
+        sortedParticipants.length > 0 && sortedParticipants[0]?.totalScore === 0;
+
+    const players: Player[] = sortedParticipants.map((p, index) => ({
+        id: p.id,
+        imageUrl: p.avatar!,
+        name: p.nickname,
+        rank: index + 1,
+        score: p.totalScore,
+    }));
+
     return (
-        <div className="flex justify-between items-center px-7 py-4 border-b">
-            <span className="text-sm dark:text-light-base text-dark-primary">Leaderboard</span>
-            <ToolTipComponent content="Click to expand">
-                <div>
-                    <Button
-                        className="text-dark-base dark:text-light-base cursor-pointer dark:bg-neutral-600/30 "
-                        variant={'ghost'}
-                        onClick={handleToggleExpand}
-                    >
-                        <BiExpandAlt className="dark:text-light-base" strokeWidth={0.5} />
-                    </Button>
+        <>
+            {emptyScoreBoard ? (
+                <div className="h-full w-full flex justify-center items-center dark:text-neutral-500 text-sm">
+                    No one has attempted the question yet
                 </div>
-            </ToolTipComponent>
-        </div>
+            ) : (
+                <LeaderboardPanelComponent players={players} />
+            )}
+        </>
     );
 }

@@ -1,18 +1,16 @@
 'use client';
+
 import CountDownClock from '@/components/ui/CountDownClock';
-import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
-import { HostScreenEnum } from '@/types/prisma-types';
 import Image from 'next/image';
 import { useRef } from 'react';
 
-export default function HostQuestionResultsRenderer() {
-    const { handleHostQuestionPreviewPageChange } = useWebSocket();
+export default function SpectatorQuestionReadingScreen() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession, updateGameSession } = useLiveQuizStore();
+    const { currentQuestion, gameSession } = useLiveQuizStore();
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -22,21 +20,10 @@ export default function HostQuestionResultsRenderer() {
         );
     }
 
-    function handleOnClick() {
-        handleHostQuestionPreviewPageChange(HostScreenEnum.QUESTION_PREVIEW);
-        updateGameSession?.({ hostScreen: HostScreenEnum.QUESTION_PREVIEW });
-    }
-
-    // useEffect(() => {
-    //     const availableQuestions = quiz?.questions
-    //         .filter(q => q && !q.isAsked)
-    //         .sort((a, b) => (a?.orderIndex || 0) - (b?.orderIndex || 0));
-    // }, [quiz, gameSession]);
-
     return (
         <div
             className={cn(
-                'w-full h-full overflow-hidden flex flex-col items-center justify-center ',
+                'w-full h-full overflow-hidden flex flex-col items-center justify-center',
                 'relative',
             )}
         >
@@ -67,22 +54,10 @@ export default function HostQuestionResultsRenderer() {
                     )}
                 </div>
                 <div className="flex flex-col items-center gap-y-3">
-                    <div className="flex">
-                        <CountDownClock
-                            startTime={gameSession.phaseStartTime!}
-                            endTime={gameSession.phaseEndTime!}
-                        />
-                        <div
-                            className={cn(
-                                'flex items-center space-x-2 text-4xl font-bold text-white rounded-xl px-4 py-3',
-                                'bg-light-base dark:bg-dark-primary dark:text-light-base text-dark-primary',
-                            )}
-                            onClick={handleOnClick}
-                        >
-                            Next Question
-                        </div>
-                    </div>
-                    <div>Participants and Spectators are now seeing results of this question</div>
+                    <CountDownClock
+                        startTime={gameSession.phaseStartTime!}
+                        endTime={gameSession.phaseEndTime!}
+                    />
                 </div>
             </div>
         </div>
