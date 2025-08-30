@@ -4,13 +4,49 @@ import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import HostQuestionActiveOptions from './HostQuestionActiveOptions';
+import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
+import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 
 export default function HostQuestionActiveRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession } = useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateNextQuestion } = useLiveQuizStore();
+    const { session } = useUserSessionStore();
+
+
+    useEffect(() => {
+
+        if (!quiz || !currentQuestion) return;
+
+        if (!currentQuestion.isAsked) return;
+
+        // find any other quetion which is not asked
+        const question = quiz.questions.find(q => !q.isAsked);
+
+        if (!question) {
+            // fetch from backend
+            const fetchQuestion = async () => {
+                if (!quiz) return;
+                const question = await LiveQuizBackendActions.getQuestionDetailByIndex(
+                    quiz.id,
+                    0,
+                    session?.user.token,
+                );
+
+                if (!question) {
+                    // end of the quiz and show button to show final leaderboards
+                    console.log("question not found");
+                    return;
+                }
+                updateNextQuestion(question);
+            }
+            fetchQuestion();
+            return;
+        }
+        updateNextQuestion(question);
+    }, [quiz]);
 
     if (!currentQuestion || !gameSession) {
         return (

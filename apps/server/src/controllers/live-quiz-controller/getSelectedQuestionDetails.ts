@@ -4,8 +4,6 @@ import { Request, Response } from 'express';
 export default async function getSelectedQuestionDetails(req: Request, res: Response) {
     const { quizId, questionIndex } = req.params;
 
-    console.log("backend call received for index: ", questionIndex);
-
     if (!quizId || questionIndex === undefined || questionIndex === null) {
         res.status(400).json({
             success: false,
@@ -61,21 +59,17 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             return;
         }
 
-        // Start from requested index
         let currentIndex = targetOrderIndex % quiz.questions.length;
         let attempts = 0;
         const maxAttempts = quiz.questions.length;
 
         let currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
 
-        // Loop until we find an unasked question or exhaust all
         while (currentQuestion && currentQuestion.isAsked && attempts < maxAttempts) {
-            console.log("Skipping asked question at index:", currentIndex);
 
             currentIndex = (currentIndex + 1) % quiz.questions.length;
             currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
-
-            attempts++;
+            attempts++;            
         }
 
         if (!currentQuestion || currentQuestion.isAsked) {
@@ -86,8 +80,6 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
             });
             return;
         }
-
-        console.log("returning question order index: ", currentIndex);
 
         res.status(200).json({
             success: true,
