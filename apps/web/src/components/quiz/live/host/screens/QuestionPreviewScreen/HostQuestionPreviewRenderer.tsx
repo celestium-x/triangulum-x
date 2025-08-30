@@ -36,7 +36,8 @@ export default function HostQuestionPreviewRenderer() {
 
     useEffect(() => {
         if (!quiz) return;
-
+        
+        // if no questions present, fetch it from backend
         if (quiz.questions === undefined || quiz.questions.length === 0) {
             async function fetchQuestion() {
                 if (!quiz) return;
@@ -65,13 +66,12 @@ export default function HostQuestionPreviewRenderer() {
     }, [quiz]);
 
     useEffect(() => {
-
         if(!nextQuestion) {
             // this should not be hit by our frontend
+            // this will only hit if the quiz ends
             console.log("no next question found");
             return;
         }
-
         updateCurrentQuestion(nextQuestion);
     }, [quiz]);
 
@@ -99,10 +99,6 @@ export default function HostQuestionPreviewRenderer() {
                         </span>{' '}
                         {currentQuestion.question}
                     </div>
-                    {/* <div
-                        className={cn('w-full text-3xl text-center')}
-                        dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
-                    /> */}
                 </div>
                 <div className="flex flex-row items-center justify-center">
                     {currentQuestion.imageUrl && (

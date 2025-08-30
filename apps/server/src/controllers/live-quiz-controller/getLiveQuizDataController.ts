@@ -89,6 +89,9 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                 },
             });
 
+            // currentQuestion might be null if all the questions are asked
+            const currentQ = quiz?.questions;
+
             const gameSession = await tx.gameSession.findUnique({
                 where: { id: gameSessionId },
                 select: {
@@ -134,35 +137,6 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     avatar: true,
                 },
             });
-
-            let currentQ;
-            const currentQuestionId = gameSession?.currentQuestionId;
-            const currentQuestionIndex = gameSession?.currentQuestionIndex;
-            if (gameSession && currentQuestionIndex !== null && currentQuestionId !== null) {
-                const isQuestionActive = gameSession.currentPhase === QuizPhase.QUESTION_ACTIVE;
-
-                const questionId = gameSession?.currentQuestionId;
-                if (questionId) {
-                    currentQ = await prisma.question.findUnique({
-                        where: {
-                            id: currentQuestionId,
-                        },
-                        select: {
-                            id: true,
-                            question: true,
-                            explanation: true,
-                            difficulty: true,
-                            basePoints: true,
-                            timeLimit: true,
-                            orderIndex: true,
-                            imageUrl: true,
-                            ...(isQuestionActive && {
-                                options: true,
-                            }),
-                        },
-                    });
-                }
-            }
 
             // Role-specific data
             let userData = null;

@@ -70,6 +70,7 @@ export class SubscribeEventHandlers {
             questionIndex: number;
         };
         // toast should appear, currenlty not working
+        console.log("message from already asked payload: ", message);
         toast.error(message.error);
     }
 
