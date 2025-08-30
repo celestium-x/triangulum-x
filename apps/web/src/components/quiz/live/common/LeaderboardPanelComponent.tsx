@@ -148,7 +148,7 @@ export default function LeaderboardPanelComponent({
     };
 
     return (
-        <div className="h-full w-full pt-12 p-6 pb-8 overflow-hidden space-y-3 relative">
+        <div className="h-full w-full pt-12 p-6 pb-8 overflow-hidden space-y-3 absolute z-80">
             <div className="w-full h-[28%] flex justify-between items-end gap-6">
                 <ToolTipComponent content={second?.score}>
                     <div className="flex-1 flex justify-center items-end">

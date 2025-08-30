@@ -57,10 +57,10 @@ export default function ParticipantQuestionResultsRenderer() {
     const yourStreak = currentUser?.longestStreak ?? 0;
 
     if (!currentQuestion) {
-        return <div className='text-center text-neutral-400 w-full'>
-            Error in fetching question
-        </div>
-    };
+        return (
+            <div className="text-center text-neutral-400 w-full">Error in fetching question</div>
+        );
+    }
 
     // change this
     const yourAnswer = 2;

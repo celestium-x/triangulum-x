@@ -26,6 +26,21 @@ export function useSubscribeEventHandlers() {
         );
 
         subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR,
+            SubscribeEventHandlers.handleSpectatorIncomingReadingPhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR,
+            SubscribeEventHandlers.handleSpectatorIncomingActivePhase,
+        );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
+            SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+        );
+
+        subscribeToHandler(
             MESSAGE_TYPES.CHAT_REACTION_EVENT,
             SubscribeEventHandlers.handleIncomingChatReactionMessage,
         );
@@ -95,6 +110,21 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.SPECTATOR_JOIN_GAME_SESSION,
                 SubscribeEventHandlers.handleIncomingNewSpectator,
+            );
+
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR,
+                SubscribeEventHandlers.handleSpectatorIncomingReadingPhase,
+            );
+
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_ACTIVE_PHASE_TO_SPECTATOR,
+                SubscribeEventHandlers.handleSpectatorIncomingActivePhase,
+            );
+
+            unsubscribeToHandler(
+                MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
+                SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
             );
 
             unsubscribeToHandler(
