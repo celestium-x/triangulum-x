@@ -31,7 +31,6 @@ export default function ParticipantQuestionActiveOptions() {
     function handleSelectOption(index: number) {
         if (selected !== null) return;
         if (alreadyResponded) return;
-
         setSelected(index);
         setAlreadyResponded(true);
         handleParticipantResponseMessage({ selectedAnswer: index });

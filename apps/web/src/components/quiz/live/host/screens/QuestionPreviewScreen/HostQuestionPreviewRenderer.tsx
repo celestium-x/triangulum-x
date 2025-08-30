@@ -13,7 +13,8 @@ import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 export default function HostQuestionPreviewRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, quiz, updateCurrentQuestion, updateQuiz } = useLiveQuizStore();
+    const { currentQuestion, nextQuestion, quiz, updateCurrentQuestion, updateQuiz } =
+        useLiveQuizStore();
     const { handleSendHostLaunchQuestion } = useWebSocket();
     const { session } = useUserSessionStore();
 
@@ -37,6 +38,7 @@ export default function HostQuestionPreviewRenderer() {
     useEffect(() => {
         if (!quiz) return;
 
+        // if no questions present, fetch it from backend
         if (quiz.questions === undefined || quiz.questions.length === 0) {
             async function fetchQuestion() {
                 if (!quiz) return;
@@ -62,7 +64,16 @@ export default function HostQuestionPreviewRenderer() {
             fetchQuestion();
         }
         // only keep quiz here
-    }, [quiz, session?.user.token, updateCurrentQuestion, updateQuiz]);
+    }, [quiz]);
+
+    useEffect(() => {
+        if (!nextQuestion) {
+            // this should not be hit by our frontend
+            // this will only hit if the quiz ends
+            return;
+        }
+        updateCurrentQuestion(nextQuestion);
+    }, [quiz]);
 
     if (!currentQuestion) {
         return (
@@ -88,10 +99,6 @@ export default function HostQuestionPreviewRenderer() {
                         </span>{' '}
                         {currentQuestion.question}
                     </div>
-                    {/* <div
-                        className={cn('w-full text-3xl text-center')}
-                        dangerouslySetInnerHTML={{ __html: currentQuestion.question }}
-                    /> */}
                 </div>
                 <div className="flex flex-row items-center justify-center">
                     {currentQuestion.imageUrl && (

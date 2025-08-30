@@ -11,6 +11,9 @@ interface LiveQuizStore {
     currentQuestion: QuestionType | null | undefined;
     updateCurrentQuestion: (updatedFields: Partial<QuestionType>) => void;
 
+    nextQuestion: QuestionType | null | undefined;
+    updateNextQuestion: (updateFields: Partial<QuestionType>) => void;
+
     alreadyResponded: boolean;
     setAlreadyResponded: (value: boolean) => void;
 }
@@ -69,6 +72,24 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
             return {
                 currentQuestion: {
                     ...state.currentQuestion,
+                    ...updateFields,
+                } as QuestionType,
+            };
+        });
+    },
+
+    nextQuestion: null,
+    updateNextQuestion: (updateFields: Partial<QuestionType>) => {
+        set((state) => {
+            if (updateFields.id && updateFields.question) {
+                return {
+                    nextQuestion: updateFields as QuestionType,
+                };
+            }
+
+            return {
+                nextQuestion: {
+                    ...state.nextQuestion,
                     ...updateFields,
                 } as QuestionType,
             };

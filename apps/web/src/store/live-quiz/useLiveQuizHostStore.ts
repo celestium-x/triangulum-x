@@ -5,8 +5,9 @@ interface LiveQuizHostStoreProps {
     currentScreen: HostScreenEnum | null;
     setCurrentScreen: (currentScreen: HostScreenEnum) => void;
 
-    liveOptions: number[];
-    updateLiveOptions: (option: number) => void;
+    liveResponses: number[];
+    updateLiveResponses: (option: number) => void;
+    emptyLiveResponses: () => void;
 }
 
 export const useLiveQuizHostStore = create<LiveQuizHostStoreProps>((set) => ({
@@ -15,12 +16,18 @@ export const useLiveQuizHostStore = create<LiveQuizHostStoreProps>((set) => ({
         set({ currentScreen });
     },
 
-    liveOptions: [],
-    updateLiveOptions: (option: number) => {
+    liveResponses: [0, 0, 0, 0],
+    updateLiveResponses: (option: number) => {
         set((state) => {
-            const liveOptions = [...state.liveOptions];
-            liveOptions[option] = (liveOptions[option] ?? 0) + 1;
-            return { liveOptions: liveOptions };
+            const liveResponses = [...state.liveResponses];
+
+            while (liveResponses.length <= option) {
+                liveResponses.push(0);
+            }
+
+            liveResponses[option] = (liveResponses[option] ?? 0) + 1;
+            return { liveResponses: liveResponses };
         });
     },
+    emptyLiveResponses: () => set({ liveResponses: [0, 0, 0, 0] }),
 }));

@@ -185,6 +185,7 @@ export default class ParticipantManager {
         }
 
         if (game_session.currentPhase !== QuizPhase.QUESTION_ACTIVE) {
+            console.error('quiz is not in active phase');
             return;
         }
 
@@ -230,7 +231,7 @@ export default class ParticipantManager {
             selectedAnswer: selectedAnswer,
             isCorrect: isCorrectAnswer,
             timeToAnswer: question_active_time - answeredAt,
-            pointsEarned: question.basePoints,
+            pointsEarned: isCorrectAnswer ? question.basePoints : 0,
             timeBonus: 0,
             streakBonus: 0,
             answeredAt: new Date(answeredAt),
@@ -243,6 +244,11 @@ export default class ParticipantManager {
                 totalScore: isCorrectAnswer
                     ? participant.totalScore + question.basePoints
                     : participant.totalScore,
+                longestStreak: isCorrectAnswer
+                    ? participant.longestStreak
+                        ? participant.longestStreak + 1
+                        : 1
+                    : 0,
             },
             game_session_id,
         );
@@ -253,7 +259,6 @@ export default class ParticipantManager {
                 selectedAnswer: selectedAnswer,
             },
         };
-
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 

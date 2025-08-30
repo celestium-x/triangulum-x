@@ -3,13 +3,15 @@ import CountDownClock from '@/components/ui/CountDownClock';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession, quiz, updateQuiz } = useLiveQuizStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz } =
+        useLiveQuizStore();
 
     useEffect(() => {
         if (!currentQuestion || !quiz || !gameSession) return;
@@ -22,12 +24,11 @@ export default function HostQuestionReadingRenderer() {
             }
             return q;
         });
-
+        currentQuestion.isAsked = true;
         updateQuiz({
             questions: updatedQuestions,
         });
-        // only keep currentQuestion?.id here
-    }, [currentQuestion?.id, gameSession, currentQuestion, quiz, updateQuiz]);
+    }, [currentQuestion?.id]);
 
     if (!currentQuestion || !gameSession) {
         return (

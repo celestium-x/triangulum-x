@@ -36,7 +36,7 @@ export default async function getParticipantsOnCall(req: Request, res: Response)
             success: true,
             participants,
             hasMore,
-            message: 'Participants feetched successfully',
+            message: 'Participants fetched successfully',
         });
         return;
     } catch (error) {

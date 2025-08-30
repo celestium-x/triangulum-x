@@ -249,18 +249,27 @@ export default class QuizManager {
 
         const score_of_all_participants = await this.redis_cache.get_all_participants(
             data.gameSessionId,
-            ['totalScore'],
+            ['totalScore', 'finalRank', 'longestStreak'],
+        );
+
+        const response_of_all_participants = await this.redis_cache.get_all_question_responses(
+            data.gameSessionId,
+            data.questionId,
+            ['isCorrect', 'selectedAnswer', 'pointsEarned'],
         );
 
         const pub_sub_message_to_participant: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,
             payload: {
                 scores: score_of_all_participants,
+                responses: response_of_all_participants,
                 correctAnswer: question.correctAnswer,
+                explanation: question.explanation,
                 participantScreen: ParticipantScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
         };
+
         this.publish_event_to_redis(data.gameSessionId, pub_sub_message_to_participant);
 
         const pub_sub_message_to_host: PubSubMessageTypes = {
@@ -268,6 +277,7 @@ export default class QuizManager {
             payload: {
                 scores: score_of_all_participants,
                 correctAnswer: question.correctAnswer,
+                explanation: question.explanation,
                 hostScreen: HostScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
@@ -279,6 +289,7 @@ export default class QuizManager {
             payload: {
                 scores: score_of_all_participants,
                 correctAnswer: question.correctAnswer,
+                explanation: question.explanation,
                 spectatorScreen: SpectatorScreen.QUESTION_RESULTS,
                 startTime: start_time,
             },
