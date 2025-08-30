@@ -76,15 +76,14 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
     responses: [],
 
     getResponse: (participantId: string) => {
-
         const data = get().responses.find((r) => r.participantId === participantId);
         return data;
     },
 
     setResponses: (responses: Partial<ResponseType>[]) => {
         set({
-            responses: responses
-        })
+            responses: responses,
+        });
     },
 
     updateResponses: (responses: Partial<ResponseType>[]) => {
@@ -101,7 +100,6 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
                 return r;
             });
             return { responses: updated_responses };
-        })
-    }
-
+        });
+    },
 }));

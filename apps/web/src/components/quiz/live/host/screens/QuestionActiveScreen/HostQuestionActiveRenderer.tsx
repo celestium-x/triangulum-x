@@ -15,15 +15,13 @@ export default function HostQuestionActiveRenderer() {
     const { currentQuestion, gameSession, quiz, updateNextQuestion } = useLiveQuizStore();
     const { session } = useUserSessionStore();
 
-
     useEffect(() => {
-
         if (!quiz || !currentQuestion) return;
 
         if (!currentQuestion.isAsked) return;
 
         // find any other quetion which is not asked
-        const question = quiz.questions.find(q => !q.isAsked);
+        const question = quiz.questions.find((q) => !q.isAsked);
 
         if (!question) {
             // fetch from backend
@@ -40,7 +38,7 @@ export default function HostQuestionActiveRenderer() {
                     return;
                 }
                 updateNextQuestion(question);
-            }
+            };
             fetchQuestion();
             return;
         }

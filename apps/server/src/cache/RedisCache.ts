@@ -187,28 +187,37 @@ export default class RedisCache {
             const data = await this.redis_cache.hgetall(key);
             if (!data) return [];
 
-            return Object.entries(data)
+            return (
+                Object.entries(data)
 
-                // filter responses for this question
-                .filter(([unique_key]) => unique_key.startsWith(`${question_id}`) || unique_key.startsWith(`${question_id}_`) )
-                .map(([unique_key, value]) => {
-                    const response = JSON.parse(value);
-                    const participant_id = unique_key.split("_")[1]; 
+                    // filter responses for this question
+                    .filter(
+                        ([unique_key]) =>
+                            unique_key.startsWith(`${question_id}`) ||
+                            unique_key.startsWith(`${question_id}_`),
+                    )
+                    .map(([unique_key, value]) => {
+                        const response = JSON.parse(value);
+                        const participant_id = unique_key.split('_')[1];
 
-                    // this will always includeresponseId and participantId
-                    if (fields && fields.length > 0) {
-                        const filtered: any = { id: response.id, participantId: participant_id };
-                        for (const field of fields) {
-                            if (response[field] !== undefined) {
-                                filtered[field] = response[field];
+                        // this will always includeresponseId and participantId
+                        if (fields && fields.length > 0) {
+                            const filtered: any = {
+                                id: response.id,
+                                participantId: participant_id,
+                            };
+                            for (const field of fields) {
+                                if (response[field] !== undefined) {
+                                    filtered[field] = response[field];
+                                }
                             }
+                            return filtered;
                         }
-                        return filtered;
-                    }
 
-                    // if no field specified return complete response
-                    return { id: response.id, participantId: participant_id, ...response };
-                });
+                        // if no field specified return complete response
+                        return { id: response.id, participantId: participant_id, ...response };
+                    })
+            );
         } catch (err) {
             console.error('Error in get_all_question_responses:', err);
             return [];

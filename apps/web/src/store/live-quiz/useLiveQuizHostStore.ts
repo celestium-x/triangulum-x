@@ -21,7 +21,7 @@ export const useLiveQuizHostStore = create<LiveQuizHostStoreProps>((set) => ({
         set((state) => {
             const liveResponses = [...state.liveResponses];
 
-            while(liveResponses.length <= option) {
+            while (liveResponses.length <= option) {
                 liveResponses.push(0);
             }
 

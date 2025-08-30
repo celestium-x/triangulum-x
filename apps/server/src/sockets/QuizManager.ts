@@ -255,8 +255,8 @@ export default class QuizManager {
         const response_of_all_participants = await this.redis_cache.get_all_question_responses(
             data.gameSessionId,
             data.questionId,
-            ['isCorrect', 'selectedAnswer', 'pointsEarned']
-        )
+            ['isCorrect', 'selectedAnswer', 'pointsEarned'],
+        );
 
         const pub_sub_message_to_participant: PubSubMessageTypes = {
             type: MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_PARTICIPANT,

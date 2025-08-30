@@ -81,7 +81,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
     nextQuestion: null,
     updateNextQuestion: (updateFields: Partial<QuestionType>) => {
         set((state) => {
-            if(updateFields.id && updateFields.question) {
+            if (updateFields.id && updateFields.question) {
                 return {
                     nextQuestion: updateFields as QuestionType,
                 };
@@ -92,7 +92,7 @@ export const useLiveQuizStore = create<LiveQuizStore>((set) => ({
                     ...state.nextQuestion,
                     ...updateFields,
                 } as QuestionType,
-            }
+            };
         });
     },
 

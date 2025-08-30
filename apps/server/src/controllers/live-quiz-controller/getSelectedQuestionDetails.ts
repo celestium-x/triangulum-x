@@ -63,13 +63,12 @@ export default async function getSelectedQuestionDetails(req: Request, res: Resp
         let attempts = 0;
         const maxAttempts = quiz.questions.length;
 
-        let currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
+        let currentQuestion = quiz.questions.find((q) => q.orderIndex === currentIndex);
 
         while (currentQuestion && currentQuestion.isAsked && attempts < maxAttempts) {
-
             currentIndex = (currentIndex + 1) % quiz.questions.length;
-            currentQuestion = quiz.questions.find(q => q.orderIndex === currentIndex);
-            attempts++;            
+            currentQuestion = quiz.questions.find((q) => q.orderIndex === currentIndex);
+            attempts++;
         }
 
         if (!currentQuestion || currentQuestion.isAsked) {

@@ -18,7 +18,7 @@ export default function HostQuestionResultsRenderer() {
 
     useEffect(() => {
         emptyLiveResponses();
-    }, [])
+    }, []);
 
     if (!currentQuestion || !gameSession) {
         return (

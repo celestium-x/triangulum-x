@@ -13,7 +13,8 @@ import { useUserSessionStore } from '@/store/user/useUserSessionStore';
 export default function HostQuestionPreviewRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, nextQuestion, quiz, updateCurrentQuestion, updateQuiz } = useLiveQuizStore();
+    const { currentQuestion, nextQuestion, quiz, updateCurrentQuestion, updateQuiz } =
+        useLiveQuizStore();
     const { handleSendHostLaunchQuestion } = useWebSocket();
     const { session } = useUserSessionStore();
 
@@ -36,7 +37,7 @@ export default function HostQuestionPreviewRenderer() {
 
     useEffect(() => {
         if (!quiz) return;
-        
+
         // if no questions present, fetch it from backend
         if (quiz.questions === undefined || quiz.questions.length === 0) {
             async function fetchQuestion() {
@@ -66,7 +67,7 @@ export default function HostQuestionPreviewRenderer() {
     }, [quiz]);
 
     useEffect(() => {
-        if(!nextQuestion) {
+        if (!nextQuestion) {
             // this should not be hit by our frontend
             // this will only hit if the quiz ends
             return;

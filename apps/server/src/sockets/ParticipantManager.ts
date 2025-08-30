@@ -168,7 +168,6 @@ export default class ParticipantManager {
     }
 
     private async handle_participant_response(payload: any, ws: CustomWebSocket) {
-
         const { userId: participant_id, gameSessionId: game_session_id } = ws.user;
 
         const { selectedAnswer } = payload;
@@ -246,8 +245,10 @@ export default class ParticipantManager {
                     ? participant.totalScore + question.basePoints
                     : participant.totalScore,
                 longestStreak: isCorrectAnswer
-                    ? participant.longestStreak ? participant.longestStreak + 1 : 1
-                    : 0
+                    ? participant.longestStreak
+                        ? participant.longestStreak + 1
+                        : 1
+                    : 0,
             },
             game_session_id,
         );

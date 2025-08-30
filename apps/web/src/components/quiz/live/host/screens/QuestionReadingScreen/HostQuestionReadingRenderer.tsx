@@ -1,7 +1,6 @@
 'use client';
 import CountDownClock from '@/components/ui/CountDownClock';
 import { getImageContainerWidth, useWidth } from '@/hooks/useWidth';
-import LiveQuizBackendActions from '@/lib/backend/live-quiz-backend-actions';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { useUserSessionStore } from '@/store/user/useUserSessionStore';
@@ -11,8 +10,8 @@ import { useEffect, useRef } from 'react';
 export default function HostQuestionReadingRenderer() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
-    const { currentQuestion, gameSession, quiz, updateQuiz, updateNextQuestion } = useLiveQuizStore();
-    const { session } = useUserSessionStore();
+    const { currentQuestion, gameSession, quiz, updateQuiz } =
+        useLiveQuizStore();
 
     useEffect(() => {
         if (!currentQuestion || !quiz || !gameSession) return;

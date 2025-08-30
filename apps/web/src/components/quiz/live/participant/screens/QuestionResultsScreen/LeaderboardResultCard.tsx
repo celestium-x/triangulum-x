@@ -16,12 +16,11 @@ export default function LeaderboardResultCard({
     rank: number;
     streak: number;
 }) {
-
     const isCorrect = userAnswer != null && userAnswer === currentQuestion?.correctAnswer;
 
     return (
         <div className="w-full max-w-[37rem] mx-auto flex flex-col gap-y-3">
-            <div className='w-full' >
+            <div className="w-full">
                 <div className="bg-white/7 backdrop-blur-3xl border border-slate-700/40 rounded-lg sm:rounded-xl shadow-2xl overflow-hidden">
                     <div className="relative p-3 sm:p-4 lg:p-5 border-b">
                         <div className="flex items-center justify-between">
@@ -48,9 +47,7 @@ export default function LeaderboardResultCard({
                                         >
                                             <span className="font-semibold">#{rank}</span>
                                         </div>
-                                        <div>
-                                            {participant?.nickname.split(' ')[0]}
-                                        </div>
+                                        <div>{participant?.nickname.split(' ')[0]}</div>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-300">
                                         <div className="flex items-center gap-1">
@@ -77,15 +74,17 @@ export default function LeaderboardResultCard({
                                 <div className="flex items-center justify-between text-neutral-300 text-sm sm:text-base">
                                     <span className="font-medium">Correct Answer</span>
                                     <span className="truncate ml-2">
-                                        {currentQuestion?.options[currentQuestion?.correctAnswer] || ''}
+                                        {currentQuestion?.options[currentQuestion?.correctAnswer] ||
+                                            ''}
                                     </span>
                                 </div>
                             </div>
 
                             <div
                                 className={cn(
-                                    isCorrect ?
-                                        'bg-teal-500/15 border-green-400/30' : 'bg-red-500/5 border-red-400/30',
+                                    isCorrect
+                                        ? 'bg-teal-500/15 border-green-400/30'
+                                        : 'bg-red-500/5 border-red-400/30',
                                     'border rounded-lg sm:rounded-xl p-3 sm:p-4',
                                 )}
                             >
@@ -97,12 +96,13 @@ export default function LeaderboardResultCard({
                                             Your Answer
                                         </span>
                                         <span className="truncate ml-2">
-                                            {currentQuestion?.options[userAnswer]} {isCorrect ? '✓' : '✗'}
+                                            {currentQuestion?.options[userAnswer]}{' '}
+                                            {isCorrect ? '✓' : '✗'}
                                         </span>
                                     </div>
                                 ) : (
                                     <div className="flex items-center justify-center text-neutral-300 text-sm sm:text-base">
-                                        You didn't respond
+                                        {'You didn\'t respond'}
                                     </div>
                                 )}
                             </div>
@@ -113,16 +113,13 @@ export default function LeaderboardResultCard({
             <div
                 className={cn(
                     'w-full bg-white/7 backdrop-blur-3xl border border-slate-700/40 rounded-lg sm:rounded-xl shadow-2xl overflow-hidden p-3 sm:p-4 lg:p-5 ',
-                    'text-neutral-300'
-                )}>
+                    'text-neutral-300',
+                )}
+            >
                 {currentQuestion?.explanation ? (
-                    <div>
-                        {currentQuestion?.explanation}
-                    </div>
+                    <div>{currentQuestion?.explanation}</div>
                 ) : (
-                    <div>
-                        No explanation provided
-                    </div>
+                    <div>No explanation provided</div>
                 )}
             </div>
         </div>

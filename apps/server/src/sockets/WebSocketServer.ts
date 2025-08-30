@@ -198,6 +198,7 @@ export default class WebsocketServer {
                     message.exclude_socket_id,
                     message.only_socket_id,
                 );
+                break;
 
             case MESSAGE_TYPES.QUESTION_ALREADY_ASKED:
                 this.broadcast_to_session(
@@ -206,7 +207,7 @@ export default class WebsocketServer {
                     [USER_TYPE.HOST],
                     message.exclude_socket_id,
                     message.only_socket_id,
-                )
+                );
                 break;
         }
     }

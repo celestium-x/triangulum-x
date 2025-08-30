@@ -1,22 +1,20 @@
-import { Request, Response } from "express";
-import prisma, { ParticipantScreen } from "@repo/db/client";
+import { Request, Response } from 'express';
+import prisma, { ParticipantScreen } from '@repo/db/client';
 
 export default async function getQuestionResults(req: Request, res: Response) {
     try {
-
         const { quizId, questionId } = req.body;
 
         if (!quizId || !questionId) {
             res.status(401).json({
                 success: false,
                 message: 'Incomplete request data',
-                value: "INCOMPLETE_REQUEST_DATA",
+                value: 'INCOMPLETE_REQUEST_DATA',
             });
             return;
         }
 
         const data = await prisma.$transaction(async (tx) => {
-
             const startTime = await tx.gameSession.findUnique({
                 where: {
                     quizId: quizId,
@@ -24,7 +22,7 @@ export default async function getQuestionResults(req: Request, res: Response) {
                 select: {
                     phaseStartTime: true,
                 },
-            })
+            });
 
             const question = await tx.question.findUnique({
                 where: {
@@ -34,7 +32,7 @@ export default async function getQuestionResults(req: Request, res: Response) {
                     correctAnswer: true,
                     explanation: true,
                 },
-            })
+            });
 
             const responses = await tx.response.findMany({
                 where: {
@@ -51,7 +49,7 @@ export default async function getQuestionResults(req: Request, res: Response) {
 
             const scores = await tx.participant.findMany({
                 where: {
-                    quizId: quizId
+                    quizId: quizId,
                 },
                 select: {
                     id: true,
@@ -72,18 +70,17 @@ export default async function getQuestionResults(req: Request, res: Response) {
         });
 
         res.status(200).json({
-            message: "Fetched question results successfully",
+            message: 'Fetched question results successfully',
             data: data,
             value: 'FETCHED_DATA',
         });
         return;
-
     } catch (error) {
         console.error('Failed to fetch question results: ', error);
         res.status(500).json({
             success: false,
             message: 'failed to fetch question results',
-            value: 'INTERNAL_SERVER_ERROR'
+            value: 'INTERNAL_SERVER_ERROR',
         });
         return;
     }
