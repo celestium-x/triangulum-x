@@ -9,6 +9,7 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { DotPattern } from '@/components/magicui/dot-pattern';
 import LeaderboardResultCard from './LeaderboardResultCard';
 import LeaderboardParticipantBar from './LeaderboardParticipantBars';
+import { ParticipantType } from '@/types/prisma-types';
 
 export default function ParticipantQuestionResultsRenderer() {
     const { participants, responses, getResponse } = useLiveParticipantsStore();
@@ -55,7 +56,7 @@ export default function ParticipantQuestionResultsRenderer() {
         return colorMapRef.current.get(id)!;
     });
 
-    const [currentUser, setCurrentUser] = useState<any>(null);
+    const [currentUser, setCurrentUser] = useState<ParticipantType | null>(null);
     const [yourRank, setYourRank] = useState<number>(1);
     const [yourStreak, setYourStreak] = useState<number>(0);
     const [yourAnswer, setYourAnswer] = useState<number | undefined>();

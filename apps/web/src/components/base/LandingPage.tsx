@@ -6,7 +6,7 @@ import { Highlighter } from '../ui/Highlighter';
 
 export default function LandingPage() {
     return (
-        <div>
+        <div className="w-full">
             <div className="flex flex-col mx-auto items-center justify-center gap-y-4 w-full max-w-4xl px-4 py-8 text-center mt-4 relative z-50 select-none">
                 <div className="absolute bottom-0 -z-10">
                     <AnimatedSvgCircles />
@@ -54,10 +54,11 @@ export default function LandingPage() {
                     .
                 </div>
             </div>
+
             <SafariBrowser
                 url="https://triangulum.com"
                 imageSrc="/images/dashboard-ui2.png"
-                className="relative mx-auto flex items-center justify-center mt-8 z-50"
+                className="w-[100px] h-auto mx-auto mt-8 z-80 relative"
             />
         </div>
     );
