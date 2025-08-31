@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';
 import { Spotlight } from '@/components/ui/Spotlight';
 import Beam from '@/components/ui/svg/Beam';
-import FeatureArcComponent from '@/components/base/FeatureArcComponent';
 import FeatureBoxComponent from '@/components/base/FeatureBox';
 import HomeScreenJoinQuizButton from '@/components/base/HomeScreenJoinQuizButton';
-import WhatsNewComponent from '@/components/base/WhatsNewComponent';
+import CustomFeatureComponent from '@/components/base/CustomFeatureComponent';
+import HomeScreenFooter from '@/components/base/HomeScreenFooter';
 
 export default function Home() {
     return (
@@ -20,19 +20,20 @@ export default function Home() {
             <Navbar />
             <div className="w-full max-w-7xl mx-auto">
                 <div className="pt-28 h-full relative">
-                    <Beam className="absolute top-30 left-60" />
-                    <Beam className="absolute top-[40%] right-40 rotate-180" />
+                    <Beam className="absolute top-40 left-10" />
+                    <Beam className="absolute top-90 right-10 rotate-180" />
                     <LandingPage />
                 </div>
             </div>
             <div className="max-w-7xl mx-auto">
                 <FeatureBoxComponent />
-                <WhatsNewComponent />
-                <FeatureArcComponent />
+                <CustomFeatureComponent />
+                {/* <FeatureArcComponent /> */}
             </div>
             <div className="fixed bottom-6 right-8 z-90">
                 <HomeScreenJoinQuizButton />
             </div>
+            <HomeScreenFooter />
         </div>
     );
 }

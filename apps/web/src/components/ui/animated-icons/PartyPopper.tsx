@@ -117,7 +117,7 @@ const PartyPopper = ({
                     d="m14 10 1.21-1.06c0.16-0.84 0.9-1.44 1.76-1.44h0.38c0.88 0 1.55-0.77 1.45-1.63a2.9 2.9 0 0 1 1.96-3.12L22 2"
                     variants={linesVariants}
                     animate={animateState}
-                    stroke="#FF6B6B"
+                    stroke="#4A7EBE"
                 />
                 <motion.path
                     d="M17 15h0.77c0.71 0 1.32-0.52 1.43-1.22c0.16-0.91 1.12-1.45 1.98-1.11L22 13"

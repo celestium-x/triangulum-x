@@ -197,3 +197,22 @@
     -webkit-text-stroke: 1px #c4c4c4;
     text-stroke: 2px #c4c4c4;
 }
+
+@layer utilities {
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+            /* Adjust the float height here */
+        }
+    }
+
+    .animate-float {
+        animation: float 2s ease-in-out infinite;
+    }
+}
