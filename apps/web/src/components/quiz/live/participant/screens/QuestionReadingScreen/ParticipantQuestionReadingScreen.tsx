@@ -11,6 +11,7 @@ export default function ParticipantQuestionReadingScreen() {
     const canvasRef = useRef<HTMLDivElement>(null);
     const canvasWidth = useWidth(canvasRef);
     const { currentQuestion, gameSession } = useLiveQuizStore();
+    // const { resetResponse } = useLiveParticipantsStore();
 
     if (!currentQuestion || !gameSession) {
         return (
@@ -19,6 +20,10 @@ export default function ParticipantQuestionReadingScreen() {
             </div>
         );
     }
+
+    // useEffect(() => {
+    //     resetResponse();
+    // }, [currentQuestion.id])
 
     return (
         <div

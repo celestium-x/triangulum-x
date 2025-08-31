@@ -50,7 +50,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
         liveChat: false,
         spectatorMode: false,
         questions: generateDefaultQuestions(),
-        interactions: [],
+        interactions: Object.values(InteractionEnum),
     },
 
     currentQuestionIndex: 0,
@@ -180,7 +180,7 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
                 liveChat: false,
                 spectatorMode: false,
                 questions: generateDefaultQuestions(),
-                interactions: [],
+                interactions: Object.values(InteractionEnum),
             },
         });
     },

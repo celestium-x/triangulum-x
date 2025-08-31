@@ -16,6 +16,7 @@ const config = [
                     argsIgnorePattern: '^_',
                 },
             ],
+            'react/no-unknown-property': ['error', { ignore: ['jsx', 'global'] }],
         },
     },
     prettierConfig,

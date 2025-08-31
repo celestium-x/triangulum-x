@@ -10,96 +10,99 @@ interface LiveParticipantsStoreProps {
     updateParticipants: (participants: Partial<ParticipantType>[]) => void;
 
     responses: Partial<ResponseType>[];
-    getResponse: (participantId: string) => Partial<ResponseType> | undefined;
     setResponses: (responses: Partial<ResponseType>[]) => void;
+    getResponse: (participantId: string) => Partial<ResponseType> | undefined;
+    upsertResponse: (response: Partial<ResponseType>) => void;
     updateResponses: (responses: Partial<ResponseType>[]) => void;
+    removeResponse: (participantId: string) => void;
+
+    response: Partial<ResponseType> | null;
+    setResponse: (response: Partial<ResponseType>) => void;
+    updateResponse: (response: Partial<ResponseType>) => void;
+    resetResponse: () => void;
 }
 
 export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set, get) => ({
+    // ----------------- Participants -----------------
     participants: [],
 
-    setParticipants: (participantsData: ParticipantType[]) => {
-        set({
-            participants: participantsData,
-        });
-    },
+    setParticipants: (participantsData) => set({ participants: participantsData }),
 
-    upsertParticipant: (participant: ParticipantType) => {
+    upsertParticipant: (participant) => {
         set((state) => {
             const existingIndex = state.participants.findIndex((p) => p.id === participant.id);
             if (existingIndex !== -1) {
-                const updatedParticipants = [...state.participants];
-                const existingParticipant = updatedParticipants[existingIndex];
-                if (existingParticipant) {
-                    updatedParticipants[existingIndex] = {
-                        ...existingParticipant,
-                        ...participant,
-                        id: existingParticipant.id,
-                    };
-                }
-                return { participants: updatedParticipants };
-            } else {
-                return { participants: [...state.participants, participant] };
+                const updated = [...state.participants];
+                updated[existingIndex] = {
+                    ...updated[existingIndex],
+                    ...participant,
+                    id: updated[existingIndex]!.id,
+                };
+                return { participants: updated };
             }
+            return { participants: [...state.participants, participant] };
         });
     },
 
-    // Helper method to remove a participant
-    removeParticipant: (participantId: string) => {
+    removeParticipant: (participantId) =>
         set((state) => ({
             participants: state.participants.filter((p) => p.id !== participantId),
-        }));
-    },
+        })),
 
-    // Helper method to get a specific participant
-    getParticipant: (participantId: string) => {
-        return get().participants.find((p) => p.id === participantId);
-    },
+    getParticipant: (participantId) => get().participants.find((p) => p.id === participantId),
 
-    updateParticipants: (participants: Partial<ParticipantType>[]) => {
+    updateParticipants: (participants) =>
         set((state) => {
-            const updated_participant = state.participants.map((p) => {
+            const updated = state.participants.map((p) => {
                 const incoming = participants.find((up) => up.id === p.id);
-                if (incoming) {
-                    return {
-                        ...p,
-                        ...incoming,
-                        id: p.id,
-                    };
-                }
-                return p;
+                return incoming ? { ...p, ...incoming, id: p.id } : p;
             });
-            return { participants: updated_participant };
-        });
-    },
+            return { participants: updated };
+        }),
 
+    // ----------------- Responses -----------------
     responses: [],
 
-    getResponse: (participantId: string) => {
-        const data = get().responses.find((r) => r.participantId === participantId);
-        return data;
-    },
+    setResponses: (responses) => set({ responses }),
 
-    setResponses: (responses: Partial<ResponseType>[]) => {
-        set({
-            responses: responses,
-        });
-    },
+    getResponse: (participantId) => get().responses.find((r) => r.participantId === participantId),
 
-    updateResponses: (responses: Partial<ResponseType>[]) => {
+    upsertResponse: (response) =>
         set((state) => {
-            const updated_responses = state.responses.map((r) => {
+            const existingIndex = state.responses.findIndex(
+                (r) => r.participantId === response.participantId,
+            );
+            if (existingIndex !== -1) {
+                const updated = [...state.responses];
+                updated[existingIndex] = { ...updated[existingIndex], ...response };
+                return { responses: updated };
+            }
+            return { responses: [...state.responses, response] };
+        }),
+
+    updateResponses: (responses) =>
+        set((state) => {
+            const updated = state.responses.map((r) => {
                 const incoming = responses.find((up) => up.id === r.id);
-                if (incoming) {
-                    return {
-                        ...r,
-                        ...incoming,
-                        id: r.id,
-                    };
-                }
-                return r;
+                return incoming ? { ...r, ...incoming, id: r.id } : r;
             });
-            return { responses: updated_responses };
-        });
-    },
+            return { responses: updated };
+        }),
+
+    removeResponse: (participantId) =>
+        set((state) => ({
+            responses: state.responses.filter((r) => r.participantId !== participantId),
+        })),
+
+    // ----------------- Single Response -----------------
+    response: null,
+
+    setResponse: (response) => set({ response }),
+
+    updateResponse: (response) =>
+        set((state) => ({
+            response: state.response ? { ...state.response, ...response } : response,
+        })),
+
+    resetResponse: () => set({ response: null }),
 }));

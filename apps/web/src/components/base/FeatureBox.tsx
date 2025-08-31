@@ -38,7 +38,6 @@ export default function FeatureBox() {
 
     function handleCompeteClick() {
         useJoinQuizStore.getState().setShowJoinInput(!useJoinQuizStore.getState().showJoinInput);
-
         document.querySelector('#join-quiz-btn')?.scrollIntoView({ behavior: 'smooth' });
     }
 
@@ -57,6 +56,7 @@ export default function FeatureBox() {
                     scrollTrigger: {
                         trigger: containerRef.current,
                         start: 'top 80%',
+                        toggleActions: 'play none none reset', // 🔥 ensures replay on re-entry
                     },
                 },
             );
@@ -73,6 +73,7 @@ export default function FeatureBox() {
                     scrollTrigger: {
                         trigger: containerRef.current,
                         start: 'top 80%',
+                        toggleActions: 'play none none reset', // 🔥 replay when re-visible
                     },
                 },
             );

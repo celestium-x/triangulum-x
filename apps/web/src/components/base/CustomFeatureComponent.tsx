@@ -6,17 +6,106 @@ import { FaCommentAlt, FaGift, FaLocationArrow, FaQuestion, FaStar } from 'react
 import { AlarmClock } from '../ui/animated-icons/AlarmClock';
 import { BsTrophyFill } from 'react-icons/bs';
 import ToolTipComponent from '../utility/TooltipComponent';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 
 const boldonse = Boldonse({
     weight: '400',
     subsets: ['latin'],
 });
 
+type ZigzagLine = {
+    id: number;
+    path: string;
+    endX: number;
+    endY: number;
+    bubbleColor: string;
+    bubbleSize: number;
+    animationDelay: number;
+};
+
+const getStaticZigzagLines = () => {
+    return [
+        {
+            id: 0,
+            path: 'M 138 0 L 110 -45 L 150 -85 L 120 -125 L 160 -165',
+            endX: 160,
+            endY: -165,
+            bubbleColor: '#FF5C7D',
+            bubbleSize: 12,
+            animationDelay: 200,
+        },
+        {
+            id: 1,
+            path: 'M 412 0 L 440 -40 L 400 -80 L 430 -120 L 390 -160',
+            endX: 390,
+            endY: -160,
+            bubbleColor: '#03AAAA',
+            bubbleSize: 15,
+            animationDelay: 600,
+        },
+        {
+            id: 2,
+            path: 'M 550 87 L 590 60 L 630 100 L 670 75 L 710 115',
+            endX: 710,
+            endY: 115,
+            bubbleColor: '#9573E1',
+            bubbleSize: 10,
+            animationDelay: 1000,
+        },
+        {
+            id: 3,
+            path: 'M 550 263 L 595 280 L 635 240 L 675 265 L 715 225',
+            endX: 715,
+            endY: 225,
+            bubbleColor: '#FFE95C',
+            bubbleSize: 14,
+            animationDelay: 400,
+        },
+        {
+            id: 4,
+            path: 'M 412 350 L 440 390 L 400 430 L 430 470 L 390 510',
+            endX: 390,
+            endY: 510,
+            bubbleColor: '#BA832A',
+            bubbleSize: 11,
+            animationDelay: 800,
+        },
+        {
+            id: 5,
+            path: 'M 138 350 L 110 395 L 150 435 L 120 475 L 160 515',
+            endX: 160,
+            endY: 515,
+            bubbleColor: '#4A7EBE',
+            bubbleSize: 13,
+            animationDelay: 1200,
+        },
+        {
+            id: 6,
+            path: 'M 0 263 L -45 280 L -85 240 L -125 265 L -165 225',
+            endX: -165,
+            endY: 225,
+            bubbleColor: '#522B89',
+            bubbleSize: 16,
+            animationDelay: 1400,
+        },
+        {
+            id: 7,
+            path: 'M 0 87 L -40 60 L -80 100 L -120 75 L -160 115',
+            endX: -160,
+            endY: 115,
+            bubbleColor: '#FF5C7D',
+            bubbleSize: 9,
+            animationDelay: 1600,
+        },
+    ];
+};
+
 export default function CustomFeatureComponent() {
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
     const [startContinuousBounce, setStartContinuousBounce] = useState(false);
+
+    const zigzagLines = useMemo(() => getStaticZigzagLines(), []);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -41,46 +130,72 @@ export default function CustomFeatureComponent() {
     }, []);
 
     return (
-        <div ref={ref} className="w-full flex mt-50 select-none h-full justify-center gap-x-10">
-            <div className="flex justify-end select-none gap-x-15">
-                <div
-                    className={cn(
-                        'flex flex-col justify-start items-start gap-y-2 text-[#bdbdbd] ',
-                        'transition-all duration-1000 ease-out',
-                        isVisible
-                            ? 'transform translate-x-0 opacity-100'
-                            : 'transform translate-x-20 opacity-0',
-                    )}
+        <div ref={ref} className="w-full flex mt-80 select-none h-full justify-center gap-x-10">
+            <div className="flex justify-end select-none gap-x-15 p-2 rounded-3xl relative">
+                <svg
+                    className="absolute inset-0 w-full h-full pointer-events-none z-0"
+                    style={{ overflow: 'visible' }}
                 >
-                    <span
-                        className={cn(
-                            'tracking-widest transition-all duration-700 ease-out text-[40px] font-semibold',
-                            isVisible
-                                ? 'transform translate-x-0 opacity-100'
-                                : 'transform translate-x-16 opacity-0',
-                        )}
-                    >
-                        THINK • PLAY • WIN
-                    </span>
+                    {zigzagLines.map((line: ZigzagLine) => (
+                        <g key={line.id}>
+                            <path
+                                d={line.path}
+                                stroke="rgba(255, 255, 255, 0.15)"
+                                strokeWidth="1.5"
+                                fill="none"
+                                strokeDasharray="4 4"
+                                className={cn(
+                                    'transition-all duration-1000 ease-out',
+                                    isVisible ? 'opacity-100' : 'opacity-0',
+                                )}
+                                style={{
+                                    animationDelay: `${line.animationDelay}ms`,
+                                    strokeDashoffset: isVisible ? '0' : '100',
+                                    transition: `stroke-dashoffset 1.5s ease-out ${line.animationDelay}ms`,
+                                }}
+                            />
 
-                    <div className="w-full">
-                        <p className="text-[22px] dark:text-neutral-300 font-light tracking-wide leading-9 text-justify pr-6">
-                            Join the league of thinkers |{' '}
-                            <span className="text-[#03AAAA] font-light">Stake</span>,{' '}
-                            <span className="text-[#9573E1] font-light">Compete</span>, and{' '}
-                            <span className="text-[#FF5C7D] font-light">Rise</span> through the
-                            ranks of Solana’s fastest quiz arena. The future of quizzing: where
-                            curiosity meets crypto, and learning transforms into real rewards.
-                        </p>
-                    </div>
-                </div>
+                            <circle
+                                cx={line.endX}
+                                cy={line.endY}
+                                r={line.bubbleSize}
+                                fill={line.bubbleColor}
+                                className={cn(
+                                    'transition-all duration-800 ease-out',
+                                    isVisible ? 'opacity-80 animate-pulse' : 'opacity-0 scale-0',
+                                )}
+                                style={{
+                                    animationDelay: `${line.animationDelay + 500}ms`,
+                                    transformOrigin: `${line.endX}px ${line.endY}px`,
+                                    filter: 'blur(0.5px)',
+                                }}
+                            />
 
-                <div className="flex justify-center">
+                            {/* Inner glow for bubble */}
+                            <circle
+                                cx={line.endX}
+                                cy={line.endY}
+                                r={line.bubbleSize * 0.6}
+                                fill="rgba(255, 255, 255, 0.3)"
+                                className={cn(
+                                    'transition-all duration-800 ease-out',
+                                    isVisible ? 'opacity-60' : 'opacity-0 scale-0',
+                                )}
+                                style={{
+                                    animationDelay: `${line.animationDelay + 700}ms`,
+                                    transformOrigin: `${line.endX}px ${line.endY}px`,
+                                }}
+                            />
+                        </g>
+                    ))}
+                </svg>
+
+                <div className="flex justify-center relative z-10">
                     <div
                         className={cn(
                             'w-[550px] h-[350px] border rounded-3xl flex justify-center items-center',
                             'bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950',
-                            'relative shadow-2xl shadow-neutral-900/20 drop-shadow-2xl',
+                            'relative shadow-2xl shadow-neutral-800/20 drop-shadow-2xl',
                             'transition-all duration-800 ease-out',
                             isVisible
                                 ? 'transform scale-100 opacity-100 translate-y-0'
