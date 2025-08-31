@@ -3,7 +3,6 @@ import { HoverBorderGradient } from '../ui/HoverBorderGradient';
 import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
 import SafariBrowser from '../ui/SafariBrowser';
 import { Highlighter } from '../ui/Highlighter';
-import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
     return (

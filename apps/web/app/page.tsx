@@ -3,7 +3,6 @@ import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';
 import { Spotlight } from '@/components/ui/Spotlight';
 import Beam from '@/components/ui/svg/Beam';
-import FeatureArcComponent from '@/components/base/FeatureArcComponent';
 import FeatureBoxComponent from '@/components/base/FeatureBox';
 import HomeScreenJoinQuizButton from '@/components/base/HomeScreenJoinQuizButton';
 import CustomFeatureComponent from '@/components/base/CustomFeatureComponent';
@@ -34,7 +33,7 @@ export default function Home() {
             <div className="fixed bottom-6 right-8 z-90">
                 <HomeScreenJoinQuizButton />
             </div>
-            <HomeScreenFooter/>
+            <HomeScreenFooter />
         </div>
     );
 }
