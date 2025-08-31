@@ -21,7 +21,7 @@ interface InteractionIconProps {
 
 export default function InteractionsDraft() {
     const { setState } = useDraftRendererStore();
-    const [enabled, setEnabled] = useState(false);
+    const [enabled, setEnabled] = useState<boolean>(false);
     const { quiz, toggleInteraction } = useNewQuizStore();
     const [hoveredType, setHoveredType] = useState<InteractionEnum | null>(null);
 

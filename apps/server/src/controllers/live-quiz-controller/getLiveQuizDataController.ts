@@ -49,6 +49,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     pointsMultiplier: true,
                     prizePool: true,
                     currency: true,
+                    interactions: true,
                     _count: {
                         select: {
                             questions: true,

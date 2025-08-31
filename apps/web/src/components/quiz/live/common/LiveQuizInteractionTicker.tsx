@@ -3,12 +3,13 @@ import { BsFillHandThumbsUpFill } from 'react-icons/bs';
 import { MdEmojiEmotions } from 'react-icons/md';
 import { FaHeart, FaLightbulb } from 'react-icons/fa6';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { templates } from '@/lib/templates';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { MESSAGE_TYPES } from '@/types/web-socket-types';
+import { InteractionEnum } from '@/types/prisma-types';
 
 interface LiveQuizInteractionTickerProps {
     className?: string;
@@ -22,14 +23,6 @@ export enum Interactions {
     SMILE = 'SMILE',
 }
 
-const emojiTypes: Interactions[] = [
-    Interactions.HEART,
-    Interactions.DOLLAR,
-    Interactions.BULB,
-    Interactions.THUMBS_UP,
-    Interactions.SMILE,
-];
-
 interface AnimatingEmoji {
     id: number;
     type: Interactions;
@@ -42,6 +35,31 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
 
     const { subscribeToHandler, unsubscribeToHandler, handleSendInteractionMessage } =
         useWebSocket();
+
+    function toFrontendEnum(i: InteractionEnum): Interactions | null {
+        switch (i) {
+            case 'THUMBS_UP':
+                return Interactions.THUMBS_UP;
+            case 'DOLLAR':
+                return Interactions.DOLLAR;
+            case 'BULB':
+                return Interactions.BULB;
+            case 'HEART':
+                return Interactions.HEART;
+            case 'SMILE':
+                return Interactions.SMILE;
+            default:
+                return null;
+        }
+    }
+
+    const allowedEmojiTypes = useMemo(
+        () =>
+            (quiz?.interactions ?? [])
+                .map(toFrontendEnum)
+                .filter((i): i is Interactions => i !== null),
+        [quiz?.interactions],
+    );
 
     useEffect(() => {
         function handleIncomingReactionEvent(message: unknown) {
@@ -130,7 +148,7 @@ export default function LiveQuizInteractionTicker({ className }: LiveQuizInterac
             style={{ color: template?.text_color }}
             className={cn('flex items-center gap-x-2 z-[20] relative', className)}
         >
-            {emojiTypes.map((emojiType) => (
+            {allowedEmojiTypes.map((emojiType) => (
                 <div key={emojiType} className="relative">
                     <div onClick={() => handleClick(emojiType)}>{renderIcon(emojiType)}</div>
 

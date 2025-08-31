@@ -18,6 +18,7 @@ export default function ParticipantQuestionActiveOptions() {
     const { handleParticipantResponseMessage } = useWebSocket();
     const [selected, setSelected] = useState<number | null>(null);
     const template = templates.find((t) => t.id === liveQuiz?.theme);
+
     if (!currentQuestion) return null;
 
     const maxHeight = 12;
@@ -33,6 +34,7 @@ export default function ParticipantQuestionActiveOptions() {
         if (alreadyResponded) return;
         setSelected(index);
         setAlreadyResponded(true);
+
         handleParticipantResponseMessage({ selectedAnswer: index });
     }
 
