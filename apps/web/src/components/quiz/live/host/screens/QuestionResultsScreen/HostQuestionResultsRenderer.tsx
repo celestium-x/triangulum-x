@@ -18,6 +18,7 @@ export default function HostQuestionResultsRenderer() {
 
     useEffect(() => {
         emptyLiveResponses();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!currentQuestion || !gameSession) {

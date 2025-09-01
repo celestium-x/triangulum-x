@@ -23,7 +23,7 @@ interface LiveParticipantsStoreProps {
 }
 
 export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set, get) => ({
-    // ----------------- Participants -----------------
+    // <----------------- Participants ----------------->
     participants: [],
 
     setParticipants: (participantsData) => set({ participants: participantsData }),
@@ -60,7 +60,7 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
             return { participants: updated };
         }),
 
-    // ----------------- Responses -----------------
+    // <----------------- Responses ----------------->
     responses: [],
 
     setResponses: (responses) => set({ responses }),
@@ -94,7 +94,7 @@ export const useLiveParticipantsStore = create<LiveParticipantsStoreProps>((set,
             responses: state.responses.filter((r) => r.participantId !== participantId),
         })),
 
-    // ----------------- Single Response -----------------
+    // <----------------- Single Response ----------------->
     response: null,
 
     setResponse: (response) => set({ response }),

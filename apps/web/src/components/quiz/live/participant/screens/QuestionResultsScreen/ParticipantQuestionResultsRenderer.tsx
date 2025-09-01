@@ -43,6 +43,7 @@ export default function ParticipantQuestionResultsRenderer() {
 
     useEffect(() => {
         setAlreadyResponded(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const participantColors = sortedParticipants.map((participant, index) => {

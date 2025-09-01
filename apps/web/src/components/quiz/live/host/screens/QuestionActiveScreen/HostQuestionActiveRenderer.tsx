@@ -43,6 +43,7 @@ export default function HostQuestionActiveRenderer() {
             return;
         }
         updateNextQuestion(question);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quiz]);
 
     if (!currentQuestion || !gameSession) {

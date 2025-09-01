@@ -26,6 +26,7 @@ export default function HostQuestionReadingRenderer() {
         updateQuiz({
             questions: updatedQuestions,
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentQuestion?.id]);
 
     if (!currentQuestion || !gameSession) {
