@@ -13,6 +13,17 @@ type FooterSection = {
     delay: string;
 };
 
+const obj = [
+    {
+        icon: FaXTwitter,
+        url: 'https://x.com/triangulum-x',
+    },
+    {
+        icon: FaGithub,
+        url: 'https://github.com/celestium-x/triangulum-x',
+    },
+];
+
 const footerSections: FooterSection[] = [
     {
         title: 'Try Triangulum',
@@ -22,7 +33,7 @@ const footerSections: FooterSection[] = [
             { label: 'Quiz', href: '/quiz' },
             { label: 'Live polling', href: '/live-polling' },
         ],
-        delay: '700ms',
+        delay: '100ms',
     },
     {
         title: 'Company',
@@ -31,7 +42,7 @@ const footerSections: FooterSection[] = [
             { label: 'Founders', href: '/founders' },
             { label: 'Contact', href: '/contact' },
         ],
-        delay: '800ms',
+        delay: '200ms',
     },
     {
         title: 'Details',
@@ -42,7 +53,7 @@ const footerSections: FooterSection[] = [
             { label: 'Safety', href: '/safety' },
             { label: 'Legal', href: '/legal' },
         ],
-        delay: '900ms',
+        delay: '300ms',
     },
 ];
 
@@ -110,17 +121,18 @@ export default function HomeScreenFooter() {
                     >
                         <AppLogo />
                         <div className="w-full flex gap-x-2 px-2.5 pt-4">
-                            {[FaXTwitter, FaGithub].map((Icon, idx) => (
+                            {obj.map((item, idx) => (
                                 <span
                                     key={idx}
+                                    onClick={() => window.open(item.url, '_blank')}
                                     className={cn(
-                                        'h-10 w-10 rounded-full border p-2 flex justify-center items-center bg-neutral-900/70',
+                                        'h-10 w-10 rounded-full border p-2 flex justify-center items-center bg-neutral-900/70 cursor-pointer',
                                         'transition-all duration-700 ease-out hover:scale-110 hover:bg-neutral-800/80',
                                         isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
                                     )}
                                     style={{ transitionDelay: `${800 + idx * 100}ms` }}
                                 >
-                                    <Icon className="h-4.5 w-4.5" />
+                                    <item.icon className="h-4.5 w-4.5" />
                                 </span>
                             ))}
                         </div>

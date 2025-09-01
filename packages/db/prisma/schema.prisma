@@ -39,6 +39,7 @@ model Quiz {
     theme           Template @default(CLASSIC)
     participantCode String?  @unique
     spectatorCode   String?  @unique
+    spectatorLink   String?
 
     prizePool Float // Maybe in lamports -> then Number
     currency  String @default("SOL")
@@ -69,6 +70,7 @@ model Quiz {
     questions     Question[]
     GameSession   GameSession?
     chatMessage   ChatMessage[]
+    
 
     @@map("quizzes")
 }

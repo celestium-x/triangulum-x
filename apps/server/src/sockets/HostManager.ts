@@ -130,7 +130,7 @@ export default class HostManager {
         }
 
         const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
-
+        //check this line proeprly
         if (!question) throw new Error("Questions doesn't exist in quiz");
 
         if (question.isAsked) {

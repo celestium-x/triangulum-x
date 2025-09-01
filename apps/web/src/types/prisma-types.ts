@@ -33,6 +33,7 @@ export interface QuizType {
 
     participantCode?: string;
     spectatorCode?: string;
+    spectatorLink?: string;
 
     createdAt: Date;
     updatedAt: Date;

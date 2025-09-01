@@ -20,6 +20,7 @@ import getSpectatorOnCall from '../controllers/live-quiz-controller/getSpectator
 import getParticipantsOnCall from '../controllers/live-quiz-controller/getParticipantsOnCall';
 import verifyQuizOwnershipMiddleware from '../middlewares/verifyQuizOwnershipMiddleware';
 import getQuestionResults from '../controllers/live-quiz-controller/getQuestionResults';
+import spectatorJoinQuizViaURLController from '../controllers/live-quiz-controller/spectatorJoinQuizViaURLController';
 
 const router = Router();
 
@@ -47,6 +48,7 @@ router.post(
 );
 router.post('/quiz/participant-join-quiz', participantJoinController);
 router.post('/quiz/spectator-join-quiz', spectatorJoinController);
+router.get('/quiz/spectator-join-quiz-via-link', spectatorJoinQuizViaURLController);
 router.get('/quiz/get-live-quiz-data/:quizId', getLiveQuizDataController);
 
 router.get('/quiz/get-sumarized-quiz/:quizId', authMiddleware, getLiveQuizSummarizedData);

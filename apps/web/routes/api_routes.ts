@@ -16,6 +16,7 @@ export const CREATE_REVIEW_URL = API_URL + '/user/create-review';
 export const GET_REVIEW_URL = API_URL + '/user/get-review';
 export const DELETE_QUIZ_URL = API_URL + '/quiz/delete-quiz';
 export const GET_SELECTED_QUESTION_DATA = API_URL + '/quiz/get-selected-question-data';
+export const SPECTATOR_JOIN_QUIZ_URL_VIA_LINK = QUIZ_URL + '/spectator-join-quiz-via-link';
 
 export const SPECTATOR_URL = QUIZ_URL + '/spectators';
 export const PARTICIPANT_URL = QUIZ_URL + '/participants';

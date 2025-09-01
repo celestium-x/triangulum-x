@@ -105,6 +105,14 @@ export default class QuizAction {
         }
     }
 
+    public static createSpectatorLink(quizId: string): string {
+        const payload = {
+            quizId,
+        };
+        const token = jwt.sign(payload, JWT_SECRET!);
+        return `http://localhost:3000/join/${quizId}?spectator_token=${token}`;
+    }
+
     public static verifyCookie(token: string): CookiePayload | null {
         try {
             return jwt.verify(token, JWT_SECRET!) as CookiePayload;

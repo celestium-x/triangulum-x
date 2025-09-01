@@ -21,7 +21,7 @@ const animations = `
 
 export default function FounderBase() {
     return (
-        <div className="relative w-full min-h-screen flex flex-col items-center text-white overflow-hidden bg-[#101214] select-none">
+        <div className="relative w-full min-h-screen flex flex-col items-center text-white overflow-y-auto bg-[#101214] select-none custom-scrollbar overflow-x-hidden">
             <style>{animations}</style>
             <div
                 className="absolute top-0 left-0 w-[400vw] h-[120vh] pointer-events-none"
@@ -45,9 +45,7 @@ export default function FounderBase() {
                     className="h-16 sm:h-20 w-full border-b flex p-3 sm:p-6 text-sm sm:text-md items-center justify-between font-light"
                     style={{ animation: 'slideDownFade 1.2s ease-out forwards' }}
                 >
-                    <div className="text-xs sm:text-sm md:text-base">
-                        MEET THE FOUNDERS OF TRIANGULUM
-                    </div>
+                    <div className="text-xs sm:text-sm md:text-base">MEET THE FOUNDERS</div>
                     <div className="flex gap-x-0.5">
                         <span
                             className={cn(
