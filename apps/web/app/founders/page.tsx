@@ -1,11 +1,9 @@
-import HomeScreenFooter from '@/components/base/HomeScreenFooter';
-import FounderBase from '@/components/developers/FounderBase';
+import FounderBase from '@/components/founders/FounderBase';
 
 export default function Founders() {
     return (
-        <div className="relative w-screen h-screen">
+        <div className="max-w-screen h-screen custom-scrollbar">
             <FounderBase />
-            <HomeScreenFooter />
         </div>
     );
 }

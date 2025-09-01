@@ -9,6 +9,7 @@ interface DeveloperCardProps {
     githubUrl: string;
     image: string;
     githubUsername: string;
+    className?: string;
 }
 
 const cardAnimations = `
@@ -31,9 +32,10 @@ export default function DeveloperCard({
     githubUrl,
     image,
     githubUsername,
+    className,
 }: DeveloperCardProps) {
     return (
-        <div className="w-full select-none flex justify-center border-b">
+        <div className={`w-full select-none flex justify-center ${className}`}>
             <style>{cardAnimations}</style>
 
             <div

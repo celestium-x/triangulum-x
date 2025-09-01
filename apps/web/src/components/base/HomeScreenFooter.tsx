@@ -81,7 +81,7 @@ export default function HomeScreenFooter() {
     return (
         <footer
             id="animated-footer"
-            className="relative w-full min-h-5xl mt-60 pb-50 text-white overflow-hidden select-none"
+            className="relative w-full min-h-5xl mt-80 pb-50 text-white overflow-hidden select-none"
         >
             <div
                 className={cn(
@@ -90,7 +90,7 @@ export default function HomeScreenFooter() {
                 )}
                 style={{
                     background: `
-                        radial-gradient(ellipse at center bottom, 
+                            radial-gradient(ellipse at center bottom, 
                             rgba(255, 165, 80, 0.3) 0%, 
                             rgba(255, 140, 60, 0.25) 15%, 
                             rgba(220, 100, 40, 0.2) 25%, 

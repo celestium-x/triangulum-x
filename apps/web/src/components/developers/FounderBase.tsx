@@ -1,8 +1,8 @@
 import AppLogo from '@/components/app/AppLogo';
-import DeveloperCard from '@/components/developers/DeveloperCard';
 import { cn } from '@/lib/utils';
 import { FaGithub } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import DeveloperCard from '../founders/DeveloperCard';
 
 const animations = `
   @keyframes fadeInLight {
