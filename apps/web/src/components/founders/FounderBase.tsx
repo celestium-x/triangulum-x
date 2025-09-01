@@ -142,7 +142,7 @@ export default function FounderBase() {
                     linkedinUrl="https://www.linkedin.com/in/kant-linked/"
                     githubUrl="https://github.com/kant-github"
                     githubUsername="kant-github"
-                    className='border-b'
+                    className="border-b"
                 />
                 <DeveloperCard
                     name="Anjan Suman"
@@ -152,7 +152,7 @@ export default function FounderBase() {
                     linkedinUrl="https://www.linkedin.com/in/anjansuman/"
                     githubUrl="https://github.com/Anjansuman"
                     githubUsername="Anjansuman"
-                    className='border-b'
+                    className="border-b"
                 />
                 <DeveloperCard
                     name="Piyush Raj"
@@ -162,7 +162,7 @@ export default function FounderBase() {
                     linkedinUrl="https://www.linkedin.com/in/piyush-raj-07a318260/"
                     githubUrl="https://github.com/piyush-rj"
                     githubUsername="piyush-rj"
-                    className='border-b'
+                    className="border-b"
                 />
                 <DeveloperCard
                     name="Dipanshu Raj"
@@ -175,17 +175,17 @@ export default function FounderBase() {
                 />
             </div>
 
-                <footer
-                    id="animated-footer"
-                    className="relative w-full text-white overflow-hidden select-none border-t"
-                >
-                    <div
-                        className={cn(
-                            'absolute inset-0 transition-all duration-[1500ms] ease-out',
-                            isVisible ? 'opacity-100' : 'opacity-0',
-                        )}
-                        style={{
-                            background: `
+            <footer
+                id="animated-footer"
+                className="relative w-full text-white overflow-hidden select-none border-t"
+            >
+                <div
+                    className={cn(
+                        'absolute inset-0 transition-all duration-[1500ms] ease-out',
+                        isVisible ? 'opacity-100' : 'opacity-0',
+                    )}
+                    style={{
+                        background: `
                                 radial-gradient(ellipse at center bottom, 
                                     rgba(120, 80, 200, 0.3) 0%, 
                                     rgba(100, 70, 180, 0.25) 15%, 
@@ -197,94 +197,88 @@ export default function FounderBase() {
                                     #101214 90%
                                 )
                             `,
-                        }}
-                    />
+                    }}
+                />
 
-                    <div
-                        className={cn(
-                            'relative z-10 max-w-7xl mx-auto pt-20 pb-32',
-                            'transition-all duration-[1200ms] ease-out delay-200',
-                            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
-                        )}
-                    >
-                        <div className="grid grid-cols-4 gap-x-45"> 
+                <div
+                    className={cn(
+                        'relative z-10 max-w-7xl mx-auto pt-20 pb-32',
+                        'transition-all duration-[1200ms] ease-out delay-200',
+                        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+                    )}
+                >
+                    <div className="grid grid-cols-4 gap-x-45">
+                        <div
+                            className={cn(
+                                'flex-col transition-all duration-1000 ease-out',
+                                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
+                            )}
+                            style={{ transitionDelay: '600ms' }}
+                        >
+                            <AppLogo />
+                            <div className="w-full flex gap-x-2 px-2.5 pt-4">
+                                {[FaXTwitter, FaGithub].map((Icon, idx) => (
+                                    <span
+                                        key={idx}
+                                        className={cn(
+                                            'h-10 w-10 rounded-full border p-2 flex justify-center items-center bg-neutral-900/70',
+                                            'transition-all duration-700 ease-out hover:scale-110 hover:bg-neutral-800/80',
+                                            isVisible
+                                                ? 'opacity-100 scale-100'
+                                                : 'opacity-0 scale-95',
+                                        )}
+                                        style={{
+                                            transitionDelay: `${800 + idx * 100}ms`,
+                                        }}
+                                    >
+                                        <Icon className="h-4.5 w-4.5" />
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
 
+                        {footerSections.map((section) => (
                             <div
+                                key={section.title}
                                 className={cn(
-                                    'flex-col transition-all duration-1000 ease-out',
+                                    'space-y-6 transition-all duration-1000 ease-out',
                                     isVisible
                                         ? 'opacity-100 translate-y-0'
                                         : 'opacity-0 translate-y-6',
                                 )}
-                                style={{ transitionDelay: '600ms' }}
+                                style={{ transitionDelay: section.delay }}
                             >
-                                <AppLogo />
-                                <div className="w-full flex gap-x-2 px-2.5 pt-4">
-                                    {[FaXTwitter, FaGithub].map((Icon, idx) => (
-                                        <span
-                                            key={idx}
+                                <h4 className="uppercase text-[13px] tracking-[0.15em] text-gray-400 font-medium">
+                                    {section.title}
+                                </h4>
+                                <ul className="space-y-4">
+                                    {section.items.map((item, itemIndex) => (
+                                        <li
+                                            key={item.label}
                                             className={cn(
-                                                'h-10 w-10 rounded-full border p-2 flex justify-center items-center bg-neutral-900/70',
-                                                'transition-all duration-700 ease-out hover:scale-110 hover:bg-neutral-800/80',
+                                                'transition-all duration-700 ease-out cursor-pointer',
                                                 isVisible
-                                                    ? 'opacity-100 scale-100'
-                                                    : 'opacity-0 scale-95',
+                                                    ? 'opacity-100 translate-x-0'
+                                                    : 'opacity-0 translate-x-2',
                                             )}
                                             style={{
-                                                transitionDelay: `${800 + idx * 100}ms`,
+                                                transitionDelay: `${
+                                                    parseInt(section.delay) + itemIndex * 100
+                                                }ms`,
                                             }}
+                                            onClick={() => router.push(item.href)}
                                         >
-                                            <Icon className="h-4.5 w-4.5" />
-                                        </span>
+                                            <span className="text-gray-200 hover:text-[#9573E1] transition-colors duration-300 text-sm">
+                                                {item.label}
+                                            </span>
+                                        </li>
                                     ))}
-                                </div>
+                                </ul>
                             </div>
-
-                            {footerSections.map((section) => (
-                                <div
-                                    key={section.title}
-                                    className={cn(
-                                        'space-y-6 transition-all duration-1000 ease-out',
-                                        isVisible
-                                            ? 'opacity-100 translate-y-0'
-                                            : 'opacity-0 translate-y-6',
-                                    )}
-                                    style={{ transitionDelay: section.delay }}
-                                >
-                                    <h4 className="uppercase text-[13px] tracking-[0.15em] text-gray-400 font-medium">
-                                        {section.title}
-                                    </h4>
-                                    <ul className="space-y-4">
-                                        {section.items.map((item, itemIndex) => (
-                                            <li
-                                                key={item.label}
-                                                className={cn(
-                                                    'transition-all duration-700 ease-out cursor-pointer',
-                                                    isVisible
-                                                        ? 'opacity-100 translate-x-0'
-                                                        : 'opacity-0 translate-x-2',
-                                                )}
-                                                style={{
-                                                    transitionDelay: `${parseInt(
-                                                        section.delay,
-                                                    ) + itemIndex * 100}ms`,
-                                                }}
-                                                onClick={() =>
-                                                    router.push(item.href)
-                                                }
-                                            >
-                                                <span className="text-gray-200 hover:text-[#9573E1] transition-colors duration-300 text-sm">
-                                                    {item.label}
-                                                </span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
+                        ))}
                     </div>
-                </footer>
-
+                </div>
+            </footer>
         </div>
     );
 }

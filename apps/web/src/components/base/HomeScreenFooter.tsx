@@ -161,8 +161,9 @@ export default function HomeScreenFooter() {
                                                 : 'opacity-0 translate-x-2',
                                         )}
                                         style={{
-                                            transitionDelay: `${parseInt(section.delay) + itemIndex * 100
-                                                }ms`,
+                                            transitionDelay: `${
+                                                parseInt(section.delay) + itemIndex * 100
+                                            }ms`,
                                         }}
                                         onClick={() => router.push(item.href)}
                                     >
