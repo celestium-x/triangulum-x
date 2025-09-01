@@ -2,7 +2,9 @@ import { getResponsiveGap } from '@/components/canvas/CanvasOptions';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { templates } from '@/lib/templates';
 import { cn } from '@/lib/utils';
+import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { useLiveParticipantStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { useState } from 'react';
 import { FaDotCircle, FaRegCircle } from 'react-icons/fa';
 
@@ -19,6 +21,9 @@ export default function ParticipantQuestionActiveOptions() {
     const [selected, setSelected] = useState<number | null>(null);
     const template = templates.find((t) => t.id === liveQuiz?.theme);
 
+    const { setResponse } = useLiveParticipantsStore();
+    const { participantData } = useLiveParticipantStore();
+
     if (!currentQuestion) return null;
 
     const maxHeight = 12;
@@ -34,6 +39,11 @@ export default function ParticipantQuestionActiveOptions() {
         if (alreadyResponded) return;
         setSelected(index);
         setAlreadyResponded(true);
+        setResponse({
+            participantId: participantData?.id,
+            selectedAnswer: index,
+            questionId: currentQuestion?.id,
+        });
 
         handleParticipantResponseMessage({ selectedAnswer: index });
     }

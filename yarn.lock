@@ -5213,6 +5213,13 @@ raw-body@^3.0.0:
     iconv-lite "0.6.3"
     unpipe "1.0.0"
 
+react-activity-calendar@^2.7.13:
+  version "2.7.13"
+  resolved "https://registry.yarnpkg.com/react-activity-calendar/-/react-activity-calendar-2.7.13.tgz#776a4fa9552e83c2f6b46555e89aee14d9391823"
+  integrity sha512-1ZHVgK8QJxtwG52EmcQrxhUQyN1Bv+819IPTTDAGp7Hme3h9IX2thDZJG+KnVbNQ3cjh8DQdfX4wWsTHIw75ug==
+  dependencies:
+    date-fns "^4.1.0"
+
 react-dom@^19.1.0:
   version "19.1.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.0.tgz"
@@ -5226,6 +5233,13 @@ react-dom@^19.1.1:
   integrity sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==
   dependencies:
     scheduler "^0.26.0"
+
+react-github-calendar@^4.5.9:
+  version "4.5.9"
+  resolved "https://registry.yarnpkg.com/react-github-calendar/-/react-github-calendar-4.5.9.tgz#8103e627ab11882e4a6887baaa36417abc7931ff"
+  integrity sha512-5Ks2vGbR4KieM0vO49hJKy6hLKpFo7kbtOg+Z67qz83VeJy094okTGLt9+k2oryN5PKfjn5sJr0UObXSvNgcNw==
+  dependencies:
+    react-activity-calendar "^2.7.13"
 
 react-icons@^5.5.0:
   version "5.5.0"

@@ -63,7 +63,7 @@ export default function HostQuestionPreviewRenderer() {
             }
             fetchQuestion();
         }
-        // only keep quiz here
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quiz]);
 
     useEffect(() => {
@@ -73,6 +73,7 @@ export default function HostQuestionPreviewRenderer() {
             return;
         }
         updateCurrentQuestion(nextQuestion);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quiz]);
 
     if (!currentQuestion) {
