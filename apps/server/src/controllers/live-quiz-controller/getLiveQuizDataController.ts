@@ -4,6 +4,7 @@ import prisma from '@repo/db/client';
 import { CookiePayload } from '../../types/web-socket-types';
 import QuizAction from '../../class/quizAction';
 import getChatsController from '../chat-controller/getChatsController';
+import { QuizPhase } from '.prisma/client';
 
 function unauthorized(res: Response) {
     return res.status(401).json({ success: false, message: 'Unauthorized user' });
@@ -50,6 +51,10 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     prizePool: true,
                     currency: true,
                     interactions: true,
+                    ...(role === 'HOST' && {
+                        spectatorCode: true,
+                        participantCode: true,
+                    }),
                     _count: {
                         select: {
                             questions: true,
@@ -127,6 +132,26 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                 take: 20,
             });
 
+            let question;
+            const questionId: string | null | undefined = gameSession?.currentQuestionId;
+
+            if (questionId) {
+                question = await tx.question.findUnique({
+                    where: {
+                        id: questionId,
+                    },
+                    select: {
+                        id: true,
+                        question: true,
+                        ...(questionId &&
+                            (gameSession?.currentPhase === QuizPhase.QUESTION_ACTIVE ||
+                                gameSession?.currentPhase === QuizPhase.SHOW_RESULTS) && {
+                                options: true,
+                            }),
+                    },
+                });
+            }
+
             const spectators = await tx.spectator.findMany({
                 where: {
                     quizId: quizId,
@@ -195,7 +220,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     break;
             }
 
-            return { quiz, gameSession, userData, participants, spectators, currentQ };
+            return { quiz, gameSession, userData, participants, spectators, currentQ, question };
         });
 
         if (!result.quiz || !result.gameSession) {
@@ -215,17 +240,19 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
         }
 
         const sanitizedGameSession = QuizAction.sanitizeGameSession(result.gameSession, role);
+        const spectatorLink = QuizAction.createSpectatorLink(quizId);
 
         const data = await getChatsController(role, gameSessionId, quizId);
         const responseData: any = {
             success: true,
-            quiz: result.quiz,
+            quiz: { ...result.quiz, spectatorLink },
             gameSession: sanitizedGameSession,
             userData: result.userData,
             participants: result.participants,
             spectators: result.spectators,
             currentQ: result.currentQ,
             role,
+            question: result.question,
         };
 
         if (!data.success || !data.messages || data.error) {

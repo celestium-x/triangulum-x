@@ -44,7 +44,8 @@ export default function New({ params }: NewProps) {
                     setParticipants(data.participants);
                     setSpectators(data.spectators);
                     setChatMessages(data.messages || []);
-                    updateCurrentQuestion(data.currentQ);
+                    // updateCurrentQuestion(data.currentQ);
+                    updateCurrentQuestion(data.question);
                     switch (data.role) {
                         case 'HOST':
                             setHostData(data.userData);
