@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import { RxCross2 } from "react-icons/rx";
-import { createPortal } from "react-dom";
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { Roboto } from "next/font/google";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { cn } from "@/lib/utils";
-import { ConnectedWalletInfoCard } from "../ui/ConnectedWalletInfoCard";
+import { RxCross2 } from 'react-icons/rx';
+import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { Roboto } from 'next/font/google';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { cn } from '@/lib/utils';
+import { ConnectedWalletInfoCard } from '../ui/ConnectedWalletInfoCard';
+import Image from 'next/image';
 
 const roboto = Roboto({
-    subsets: ["latin"]
+    subsets: ['latin'],
 });
 
 interface WalletPanelProps {
@@ -27,17 +28,14 @@ export const WalletPanel = ({ close }: WalletPanelProps) => {
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
-            if (
-                walletPanelRef.current &&
-                !walletPanelRef.current.contains(event.target as Node)
-            ) {
+            if (walletPanelRef.current && !walletPanelRef.current.contains(event.target as Node)) {
                 close(); // Call the close function when clicked outside
             }
         };
 
-        document.addEventListener("mousedown", handleOutsideClick);
+        document.addEventListener('mousedown', handleOutsideClick);
         return () => {
-            document.removeEventListener("mousedown", handleOutsideClick);
+            document.removeEventListener('mousedown', handleOutsideClick);
         };
     }, [close]);
 
@@ -58,7 +56,7 @@ export const WalletPanel = ({ close }: WalletPanelProps) => {
                 y: 0,
                 opacity: 1,
                 duration: 0.4,
-                ease: "power2.out",
+                ease: 'power2.out',
             });
         });
 
@@ -71,34 +69,34 @@ export const WalletPanel = ({ close }: WalletPanelProps) => {
 
         // Close on Esc key press
         const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === "Escape") {
+            if (event.key === 'Escape') {
                 close();
             }
         };
 
-        document.addEventListener("mousedown", handleOutsideClick);
-        document.addEventListener("keydown", handleEsc);
+        document.addEventListener('mousedown', handleOutsideClick);
+        document.addEventListener('keydown', handleEsc);
 
         return () => {
-            document.removeEventListener("mousedown", handleOutsideClick);
-            document.removeEventListener("keydown", handleEsc);
+            document.removeEventListener('mousedown', handleOutsideClick);
+            document.removeEventListener('keydown', handleEsc);
         };
     }, [mounted, close]);
-
 
     if (!mounted) return null;
 
     return createPortal(
-        <div className={cn(
-            'fixed inset-0 z-50 flex items-center justify-center bg-black/40 text-[#D8CFBC] select-none',
-            roboto.className
-        )}>
+        <div
+            className={cn(
+                'fixed inset-0 z-50 flex items-center justify-center bg-black/40 text-[#D8CFBC] select-none',
+                roboto.className,
+            )}
+        >
             <div
                 ref={walletPanelRef}
                 className="w-[700px] h-[500px] bg-[#0f0f0f] rounded-3xl overflow-hidden shadow-2xl flex border border-[#565449] opacity-0 "
             >
                 <div className="w-[240px] h-full border-r border-[#3d3932] p-5 flex flex-col gap-4">
-
                     <div className="w-full text-left px-3 flex justify-start items-start text-lg font-semibold ">
                         Connect a Wallet
                     </div>
@@ -116,42 +114,33 @@ export const WalletPanel = ({ close }: WalletPanelProps) => {
                     {<ConnectedWalletInfoCard />}
                 </div>
             </div>
-        </div>
-        ,
-        document.body
+        </div>,
+        document.body,
     );
 };
 
 function WalletOptions() {
-
     const { wallets, select, connect, wallet } = useWallet();
 
     return (
         <>
-            {
-                wallets.map((w, index) => (
-                    <button
-                        key={index}
-                        onClick={() => {
-                            select(w.adapter.name);
-                            connect();
-                        }}
-                        className={cn(
-                            'w-full text-left py-2 px-3 rounded-md hover:bg-[#1c1c1c] transition duration-200 ease-in-out cursor-pointer',
-                            'flex justify-start items-center gap-x-2 ',
-                            (w.adapter.name === wallet?.adapter.name) ? "bg-[#2c2c2c] " : ""
-                        )}
-                    >
-                        <img
-                            src={w.adapter.icon}
-                            alt={w.adapter.name}
-                            className="w-5 h-5"
-                        />
-                        <span>{w.adapter.name}</span>
-                    </button >
-                ))
-            }
+            {wallets.map((w, index) => (
+                <button
+                    key={index}
+                    onClick={() => {
+                        select(w.adapter.name);
+                        connect();
+                    }}
+                    className={cn(
+                        'w-full text-left py-2 px-3 rounded-md hover:bg-[#1c1c1c] transition duration-200 ease-in-out cursor-pointer',
+                        'flex justify-start items-center gap-x-2 ',
+                        w.adapter.name === wallet?.adapter.name ? 'bg-[#2c2c2c] ' : '',
+                    )}
+                >
+                    <Image src={w.adapter.icon} alt={w.adapter.name} className="w-5 h-5" />
+                    <span>{w.adapter.name}</span>
+                </button>
+            ))}
         </>
     );
 }
-

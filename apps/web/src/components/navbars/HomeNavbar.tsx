@@ -37,7 +37,7 @@ export default function HomeNavbar() {
         },
     ];
 
-    function truncateAddress(address: string) {
+    function truncateAddress(address: string | undefined) {
         if (!address) return '';
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
@@ -53,23 +53,19 @@ export default function HomeNavbar() {
         <>
             <BigHomeNavbar
                 isWalletConnected={!!wallet}
-                walletAddress={truncateAddress(publicKey?.toString()!)}
+                walletAddress={truncateAddress(publicKey?.toString())}
                 navItems={navItems}
                 createNewQuizHandler={createNewQuizHandler}
-                onWalletClick={() => setWalletPanel(prev => !prev)}
+                onWalletClick={() => setWalletPanel((prev) => !prev)}
             />
             <SmallHomeNavbar
                 isWalletConnected={!!wallet}
-                walletAddress={truncateAddress(publicKey?.toString()!)}
+                walletAddress={truncateAddress(publicKey?.toString())}
                 navItems={navItems}
                 createNewQuizHandler={createNewQuizHandler}
-                onWalletClick={() => setWalletPanel(prev => !prev)}
+                onWalletClick={() => setWalletPanel((prev) => !prev)}
             />
-            {walletPanel && (
-                <WalletPanel
-                    close={() => setWalletPanel(false)}
-                />
-            )}
+            {walletPanel && <WalletPanel close={() => setWalletPanel(false)} />}
         </>
     );
 }
@@ -179,9 +175,6 @@ function SmallHomeNavbar({
                         <Wallet className="w-4 h-4" />
                         <div className="hidden md:flex items-center gap-x-2">
                             {isWalletConnected ? walletAddress : 'Connect Wallet'}
-                            {isWalletConnected && (
-                                <Circle className="w-2 h-2 fill-green-500 text-green-500" />
-                            )}
                         </div>
                     </Button>
 
