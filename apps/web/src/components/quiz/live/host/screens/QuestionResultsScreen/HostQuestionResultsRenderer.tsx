@@ -73,17 +73,20 @@ export default function HostQuestionResultsRenderer() {
                             startTime={gameSession.phaseStartTime!}
                             endTime={gameSession.phaseEndTime!}
                         />
-                        <div
-                            className={cn(
-                                'flex items-center space-x-2 text-4xl font-bold text-white rounded-xl px-4 py-3',
-                                'bg-light-base dark:bg-dark-primary dark:text-light-base text-dark-primary',
-                            )}
-                            onClick={handleOnClick}
-                        >
-                            Next Question
-                        </div>
                     </div>
                     <div>Participants and Spectators are now seeing results of this question</div>
+                </div>
+
+                <div
+                    className={cn(
+                        'absolute bottom-4 left-5',
+                        'bg-light-base dark:bg-dark-primary dark:text-light-base text-dark-primary',
+                        'px-3.5 py-1.5 text-[18px] rounded-md',
+                        'hover:-translate-y-0.5 transition-all transform duration-150',
+                    )}
+                    onClick={handleOnClick}
+                >
+                    Next Question
                 </div>
             </div>
         </div>

@@ -216,3 +216,9 @@
         animation: float 2s ease-in-out infinite;
     }
 }
+
+.safe-colors * {
+    background-color: #000 !important;
+    /* example */
+    color: #fff !important;
+}

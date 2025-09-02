@@ -153,6 +153,44 @@ export class SubscribeEventHandlers {
         });
     }
 
+    static handleSpectatorIncomingResultsPhase(payload: unknown) {
+        const resultsPhasePayload = payload as {
+            scores: {
+                id: string;
+                totalScore: number;
+                finalRank: number;
+                longestStreak: number;
+            }[];
+            responses: {
+                id: string;
+                participantId: string;
+                isCorrect: boolean;
+                selectedAnswer: number;
+                pointsEarned: number;
+            }[];
+            correctAnswer: number;
+            explanation: string;
+            spectatorScreen: SpectatorScreenEnum;
+            startTime: number;
+        };
+
+        const { updateGameSession, updateCurrentQuestion } = useLiveQuizStore.getState();
+        const { updateParticipants, setResponses } = useLiveParticipantsStore.getState();
+
+        updateParticipants(resultsPhasePayload.scores);
+        setResponses(resultsPhasePayload.responses);
+        updateCurrentQuestion({
+            correctAnswer: resultsPhasePayload.correctAnswer,
+            explanation: resultsPhasePayload.explanation,
+        });
+
+        updateGameSession({
+            spectatorScreen: resultsPhasePayload.spectatorScreen,
+            currentPhase: QuizPhaseEnum.SHOW_RESULTS,
+            phaseStartTime: resultsPhasePayload.startTime,
+        });
+    }
+
     static handleIncomingNewSpectator(payload: unknown) {
         const { upsertSpectator } = useLiveSpectatorsStore.getState();
         upsertSpectator(payload as SpectatorType);

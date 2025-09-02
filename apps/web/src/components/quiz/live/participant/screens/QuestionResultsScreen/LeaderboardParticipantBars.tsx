@@ -3,6 +3,7 @@ import ToolTipComponent from '@/components/utility/TooltipComponent';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 export default function LeaderboardParticipantBar({
     baseHeight,
@@ -60,6 +61,7 @@ export default function LeaderboardParticipantBar({
                     <Image
                         src={avatar}
                         alt={nickname}
+                        crossOrigin="anonymous"
                         className={cn(
                             'w-full h-full object-cover rounded-full z-[200]',
                             rank === 1

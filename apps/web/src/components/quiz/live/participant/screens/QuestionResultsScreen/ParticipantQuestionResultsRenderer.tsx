@@ -65,14 +65,17 @@ export default function ParticipantQuestionResultsRenderer() {
     useEffect(() => {
         if (!participantData) return;
 
-        const user = participantData;
-        setCurrentUser(user);
+        const user = sortedParticipants.find((p) => p.id === participantData.id);
+        // take participant data if not found
+        setCurrentUser(user ?? participantData);
+
+        if (!user) return;
 
         const index = sortedParticipants.findIndex((p) => p.id === user.id);
         setYourRank(index >= 0 ? index + 1 : 1);
 
         setYourStreak(user?.longestStreak ?? 0);
-        setYourAnswer(getResponse(user?.id)?.selectedAnswer);
+        setYourAnswer(getResponse(user.id)?.selectedAnswer);
     }, [participantData, sortedParticipants, responses, getResponse]);
 
     if (!currentQuestion) {
@@ -84,7 +87,7 @@ export default function ParticipantQuestionResultsRenderer() {
     const visibleBars = sortedParticipants.slice(0, 6);
 
     return (
-        <div className="w-full h-full bg-black/20 overflow-hidden flex justify-center items-center relative z-[200] p-2 sm:p-4">
+        <div className="w-full h-full bg-black/20 overflow-hidden flex justify-center items-center relative z-80 p-2 sm:p-4">
             <div className="w-full max-w-7xl h-[95vh] sm:h-[90vh] md:h-[85vh] lg:h-[80%] flex flex-col justify-between rounded-xl sm:rounded-2xl bg-black border relative shadow-lg overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none z-0 fade-dots opacity-35">
                     <DotPattern />

@@ -1,8 +1,11 @@
 import { useLiveParticipantsStore } from '@/store/live-quiz/useLiveParticipantsStore';
 import LeaderboardPanelComponent, { Player } from '../common/LeaderboardPanelComponent';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
+import { QuizPhaseEnum } from '@/types/prisma-types';
 
 export default function HostLeaderboardPanel() {
     const { participants } = useLiveParticipantsStore();
+    const { gameSession } = useLiveQuizStore();
 
     const sortedParticipants = [...participants].sort((p1, p2) => p2.totalScore - p1.totalScore);
 
@@ -19,7 +22,7 @@ export default function HostLeaderboardPanel() {
 
     return (
         <>
-            {emptyScoreBoard ? (
+            {emptyScoreBoard || gameSession?.currentPhase !== QuizPhaseEnum.SHOW_RESULTS ? (
                 <div className="h-full w-full flex justify-center items-center dark:text-neutral-500 text-sm">
                     No one has attempted the question yet
                 </div>
