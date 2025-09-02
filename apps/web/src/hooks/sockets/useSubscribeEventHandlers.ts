@@ -37,7 +37,7 @@ export function useSubscribeEventHandlers() {
 
         subscribeToHandler(
             MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
-            SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+            SubscribeEventHandlers.handleSpectatorIncomingResultsPhase,
         );
 
         subscribeToHandler(
@@ -134,7 +134,7 @@ export function useSubscribeEventHandlers() {
 
             unsubscribeToHandler(
                 MESSAGE_TYPES.QUESTION_RESULTS_PHASE_TO_SPECTATOR,
-                SubscribeEventHandlers.handleParticipantIncomingResultsPhase,
+                SubscribeEventHandlers.handleSpectatorIncomingResultsPhase,
             );
 
             unsubscribeToHandler(

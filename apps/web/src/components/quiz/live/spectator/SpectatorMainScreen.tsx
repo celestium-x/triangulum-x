@@ -26,12 +26,11 @@ export default function SpectatorMainScreen() {
                 return <SpectatorQuestionActiveScreen />;
 
             case SpectatorScreenEnum.QUESTION_RESULTS:
-                // return <SpectatorQuestionActiveScreen />;
                 return <SpectatorQuestionResultsScreen />;
         }
     }
     return (
-        <div className="h-full relative w-full flex">
+        <div className="h-full relative w-full flex z-100">
             {renderHostScreenPanels()}
             <SpectatorMainFooter />
             <SpectatorPanelRenderer />

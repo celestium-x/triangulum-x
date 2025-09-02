@@ -31,7 +31,7 @@ export default function ParticipantSettingPanel() {
     }
 
     return (
-        <div className="flex flex-col h-full justify-between">
+        <div className="flex flex-col h-full justify-between relative z-[200]">
             <section className="px-4">
                 <div className="w-full px-2 mt-6">
                     <div className="flex items-center justify-start gap-x-1">
