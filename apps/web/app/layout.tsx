@@ -30,9 +30,7 @@ export default async function RootLayout({
             <body className={`${poppins.className}`}>
                 <ThemeProvider attribute="class" defaultTheme="system">
                     <Toaster theme="dark" />
-                    <Provider>
-                        {children}
-                    </Provider>
+                    <Provider>{children}</Provider>
                     <SessionSetter session={session} />
                 </ThemeProvider>
             </body>

@@ -1,12 +1,11 @@
-"use client";
+'use client';
 
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { clusterApiUrl, PublicKey } from "@solana/web3.js";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import Image from "next/image";
-import { useUserSessionStore } from "@/store/user/useUserSessionStore";
-import AppLogo from "../app/AppLogo";
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import Image from 'next/image';
+import { useUserSessionStore } from '@/store/user/useUserSessionStore';
+import AppLogo from '../app/AppLogo';
 
 export function ConnectedWalletInfoCard() {
     const { publicKey, wallet, connected, disconnect } = useWallet();
@@ -19,7 +18,7 @@ export function ConnectedWalletInfoCard() {
 
     const [showAccountInfo, setShowAccountInfo] = useState<boolean>(false);
     const [prevShowAccountInfo, setPrevShowAccountInfo] = useState<boolean>(false);
-    const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const [_isAnimating, setIsAnimating] = useState<boolean>(false);
     const [balance, setBalance] = useState<number | null>(null);
 
     // Fetch SOL balance
@@ -50,7 +49,7 @@ export function ConnectedWalletInfoCard() {
 
                     const tl = gsap.timeline({
                         onComplete: () => {
-                            gsap.set(container, { height: "auto" });
+                            gsap.set(container, { height: 'auto' });
                             setIsAnimating(false);
                         },
                     });
@@ -58,8 +57,12 @@ export function ConnectedWalletInfoCard() {
                     gsap.set(accountInfo, { opacity: 0, y: 20 });
                     gsap.set(container, { height: container.offsetHeight });
 
-                    tl.to(container, { height: targetHeight, duration: 0.4, ease: "power2.out" });
-                    tl.to(accountInfo, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, "-=0.2");
+                    tl.to(container, { height: targetHeight, duration: 0.4, ease: 'power2.out' });
+                    tl.to(
+                        accountInfo,
+                        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' },
+                        '-=0.2',
+                    );
                 });
             } else {
                 setIsAnimating(true);
@@ -71,14 +74,22 @@ export function ConnectedWalletInfoCard() {
 
                     const tl = gsap.timeline({
                         onComplete: () => {
-                            gsap.set(container, { height: "auto" });
+                            gsap.set(container, { height: 'auto' });
                             setIsAnimating(false);
                         },
                     });
 
                     gsap.set(connecting, { opacity: 0, scale: 0.8 });
-                    tl.fromTo(container, { height: container.offsetHeight }, { height: targetHeight, duration: 0.4, ease: "power2.out" });
-                    tl.to(connecting, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.7)" }, "-=0.2");
+                    tl.fromTo(
+                        container,
+                        { height: container.offsetHeight },
+                        { height: targetHeight, duration: 0.4, ease: 'power2.out' },
+                    );
+                    tl.to(
+                        connecting,
+                        { opacity: 1, scale: 1, duration: 0.3, ease: 'back.out(1.7)' },
+                        '-=0.2',
+                    );
                 });
             }
         }, ContainerRef);
@@ -93,9 +104,9 @@ export function ConnectedWalletInfoCard() {
     }, [publicKey, connected, balance, showAccountInfo]);
 
     const buyCoffee = async () => {
-        if (!publicKey) return alert("Wallet not connected!");
-        const recipient = new PublicKey("ENTER_SOL_ADDRESS_HERE");
-        const lamports = 0.01 * 1e9; // example 0.01 SOL
+        if (!publicKey) return alert('Wallet not connected!');
+        // const recipient = new PublicKey("ENTER_SOL_ADDRESS_HERE");
+        // const lamports = 0.01 * 1e9; // example 0.01 SOL
 
         try {
             //   const tx = await connection.sendRawTransaction(
@@ -127,47 +138,44 @@ export function ConnectedWalletInfoCard() {
                 <>
                     <div className="w-full flex flex-col justify-center items-center">
                         <div>
-                            {
-                                wallet && <img
+                            {wallet && (
+                                <Image
                                     src={wallet.adapter.icon}
                                     alt={wallet.adapter.name}
                                     className="size-12"
                                 />
-                            }
+                            )}
                         </div>
-                        <div className="text-sm tracking-wider">
-                            {wallet?.adapter.name}
-                        </div>
+                        <div className="text-sm tracking-wider">{wallet?.adapter.name}</div>
                     </div>
                     <div
                         ref={ContainerRef}
                         className="w-full rounded-2xl bg-[#1c1c1c] border border-[#3d3932] overflow-hidden"
                     >
-                        <div ref={TransitionWrapperRef} className="p-5 flex justify-center items-center relative">
-                            {
-                                showAccountInfo ? (
-                                    <AccountInfo
-                                        onClick={buyCoffee}
-                                        ref={AccountInfoRef}
-                                        address={publicKey!.toBase58()}
-                                        balance={balance || 0}
-                                        walletName={wallet?.adapter.name || ""}
-                                        walletIcon={wallet?.adapter.icon}
-                                        disconnect={disconnect}
-                                    />
-                                ) : (
-                                    <Connecting ref={ConnectingRef} />
-                                )
-                            }
+                        <div
+                            ref={TransitionWrapperRef}
+                            className="p-5 flex justify-center items-center relative"
+                        >
+                            {showAccountInfo ? (
+                                <AccountInfo
+                                    onClick={buyCoffee}
+                                    ref={AccountInfoRef}
+                                    address={publicKey!.toBase58()}
+                                    balance={balance || 0}
+                                    walletName={wallet?.adapter.name || ''}
+                                    walletIcon={wallet?.adapter.icon}
+                                    disconnect={disconnect}
+                                />
+                            ) : (
+                                <Connecting ref={ConnectingRef} />
+                            )}
                         </div>
                     </div>
                 </>
             ) : (
                 <div className="w-full flex flex-col justify-center items-center gap-y-2 ">
                     <AppLogo />
-                    <span className="text-sm">
-                        Power the chain, unlock the experience.
-                    </span>
+                    <span className="text-sm">Power the chain, unlock the experience.</span>
                 </div>
             )}
         </div>
@@ -184,8 +192,14 @@ interface AccountInfoProps {
     disconnect: () => void;
 }
 
-const AccountInfo = ({ onClick, ref, address, balance, walletName, walletIcon, disconnect }: AccountInfoProps) => {
-
+const AccountInfo = ({
+    ref,
+    address,
+    balance,
+    walletName,
+    walletIcon,
+    disconnect,
+}: AccountInfoProps) => {
     const { session } = useUserSessionStore();
 
     return (
@@ -251,9 +265,25 @@ interface ConnectingProps {
 export const Connecting = ({ ref }: ConnectingProps) => {
     return (
         <div ref={ref} className="flex justify-center items-center py-4">
-            <svg className="animate-spin h-6 w-6 text-[#D8CFBC]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+            <svg
+                className="animate-spin h-6 w-6 text-[#D8CFBC]"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+            >
+                <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                />
+                <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                />
             </svg>
         </div>
     );
