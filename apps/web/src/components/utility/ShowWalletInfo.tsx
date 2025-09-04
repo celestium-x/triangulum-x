@@ -7,12 +7,15 @@ import { MdOutlineKey } from 'react-icons/md';
 import { PiCurrencyDollar } from 'react-icons/pi';
 import { LuCopy } from 'react-icons/lu';
 import { gsap } from 'gsap';
+import { WalletPanel } from './WalletPanel';
 
 export default function ShowInfoToggle() {
     const [showInfo, setShowInfo] = useState(false);
     const [showBalance, setShowBalance] = useState(false);
     const [showPublicKey, setShowPublicKey] = useState(false);
     const [walletConnected, _setWalletConnected] = useState<boolean>(false);
+    // const { connect, wallet, publicKey } = useWallet();
+    const [walletPanel, setWalletPanel] = useState<boolean>(false);
 
     const infoContainerRef = useRef<HTMLDivElement>(null);
     const balanceRef = useRef<HTMLDivElement>(null);
@@ -95,7 +98,10 @@ export default function ShowInfoToggle() {
     return (
         <div className="w-full mt-4">
             <Button
-                onClick={() => walletConnected && setShowInfo(!showInfo)}
+                onClick={() => {
+                    setWalletPanel((prev) => !prev);
+                    if (walletConnected) setShowInfo(!showInfo);
+                }}
                 className="flex items-center justify-center h-10 rounded-lg hover:-translate-y-0.5 hover:shadow-sm transition-all duration-200 ease-in-out bg-light-base hover:bg-light-base dark:bg-dark-base/30 dark:text-neutral-300 text-neutral-700 border border-neutral-600 dark:border-neutral-500 w-full"
             >
                 <IoWalletOutline className="mr-1" />
@@ -166,6 +172,7 @@ export default function ShowInfoToggle() {
                     </div>
                 </div>
             )}
+            {walletPanel && <WalletPanel close={() => setWalletPanel(false)} />}
         </div>
     );
 }

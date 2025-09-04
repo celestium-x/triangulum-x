@@ -10,6 +10,9 @@ import { useRouter } from 'next/navigation';
 import { v4 as uuid } from 'uuid';
 import { useSideBarStore } from '@/store/home/useSideBar';
 import { RiMenu2Fill } from 'react-icons/ri';
+import { useState } from 'react';
+import { WalletPanel } from '../utility/WalletPanel';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 interface NavItems {
     name: string;
@@ -18,9 +21,8 @@ interface NavItems {
 }
 
 export default function HomeNavbar() {
-    const isWalletConnected = false;
-    const walletAddress = '';
     const router = useRouter();
+    const { wallet, publicKey } = useWallet();
 
     const navItems: NavItems[] = [
         {
@@ -35,7 +37,7 @@ export default function HomeNavbar() {
         },
     ];
 
-    function truncateAddress(address: string) {
+    function truncateAddress(address: string | undefined) {
         if (!address) return '';
         return `${address.slice(0, 4)}...${address.slice(-4)}`;
     }
@@ -45,22 +47,25 @@ export default function HomeNavbar() {
         router.push(`new/${newQuizUuid}`);
     }
 
+    const [walletPanel, setWalletPanel] = useState<boolean>(false);
+
     return (
         <>
             <BigHomeNavbar
-                isWalletConnected={isWalletConnected}
-                walletAddress={walletAddress}
+                isWalletConnected={!!wallet}
+                walletAddress={truncateAddress(publicKey?.toString())}
                 navItems={navItems}
-                truncateAddress={truncateAddress}
                 createNewQuizHandler={createNewQuizHandler}
+                onWalletClick={() => setWalletPanel((prev) => !prev)}
             />
             <SmallHomeNavbar
-                isWalletConnected={isWalletConnected}
-                walletAddress={walletAddress}
+                isWalletConnected={!!wallet}
+                walletAddress={truncateAddress(publicKey?.toString())}
                 navItems={navItems}
-                truncateAddress={truncateAddress}
                 createNewQuizHandler={createNewQuizHandler}
+                onWalletClick={() => setWalletPanel((prev) => !prev)}
             />
+            {walletPanel && <WalletPanel close={() => setWalletPanel(false)} />}
         </>
     );
 }
@@ -69,16 +74,16 @@ interface HomeNavbar {
     isWalletConnected: boolean;
     walletAddress: string;
     navItems: NavItems[];
-    truncateAddress: (address: string) => string;
     createNewQuizHandler: () => void;
+    onWalletClick: () => void;
 }
 
 function BigHomeNavbar({
     isWalletConnected,
     walletAddress,
     navItems,
-    truncateAddress,
     createNewQuizHandler,
+    onWalletClick,
 }: HomeNavbar) {
     return (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 w-full max-w-5xl px-4 py-4 rounded-2xl shadow-lg border bg-gradient-to-b dark:from-[#1c1c1c] dark:via-neutral-900 dark:to-[#1c1c1c] from-neutral-200 via-neutral-100 to-neutral-200 hidden xl:flex">
@@ -100,9 +105,10 @@ function BigHomeNavbar({
                                 ? 'text-green-600 border-green-600/30 dark:border-green-600/30 bg-green-50 dark:bg-green-950/10 hover:!text-green-600 hover:!border-green-600/30 hover:!bg-green-50 dark:hover:!bg-green-950/10'
                                 : 'text-primary border-primary hover:!text-primary ',
                         )}
+                        onClick={onWalletClick}
                     >
                         <Wallet className="w-4 h-4" />
-                        {isWalletConnected ? truncateAddress(walletAddress) : 'Connect Wallet'}
+                        {isWalletConnected ? walletAddress : 'Connect Wallet'}
                         {isWalletConnected && (
                             <Circle className="w-2 h-2 fill-green-500 text-green-500" />
                         )}
@@ -129,8 +135,8 @@ function SmallHomeNavbar({
     isWalletConnected,
     walletAddress,
     navItems,
-    truncateAddress,
     createNewQuizHandler,
+    onWalletClick,
 }: HomeNavbar) {
     const { appearing, setAppearing } = useSideBarStore();
 
@@ -164,13 +170,11 @@ function SmallHomeNavbar({
                                 ? 'text-green-600 border-green-600/30 dark:border-green-600/30 bg-green-50 dark:bg-green-950/10 hover:!text-green-600 hover:!border-green-600/30 hover:!bg-green-50 dark:hover:!bg-green-950/10'
                                 : 'text-primary border-primary hover:!text-primary ',
                         )}
+                        onClick={onWalletClick}
                     >
                         <Wallet className="w-4 h-4" />
                         <div className="hidden md:flex items-center gap-x-2">
-                            {isWalletConnected ? truncateAddress(walletAddress) : 'Connect Wallet'}
-                            {isWalletConnected && (
-                                <Circle className="w-2 h-2 fill-green-500 text-green-500" />
-                            )}
+                            {isWalletConnected ? walletAddress : 'Connect Wallet'}
                         </div>
                     </Button>
 
