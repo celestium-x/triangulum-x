@@ -88,7 +88,7 @@ export default function FeatureBox() {
                 className={`${boldonse.className} text-[100px] tracking-wider relative text-[#e4e4e4] leading-24 flex flex-col`}
             >
                 <span ref={triangulumRef} className="outlined-text w-full flex justify-end">
-                    TRIANGULUM
+                    NOCTURN
                 </span>
                 <span
                     ref={featuresRef}

@@ -81,7 +81,7 @@ export default function HomeScreenFooter() {
     return (
         <footer
             id="animated-footer"
-            className="relative w-full min-h-5xl mt-80 pb-50 text-white overflow-hidden select-none"
+            className="relative w-full min-h-5xl pb-50 text-white overflow-hidden select-none"
         >
             <div
                 className={cn(
@@ -103,10 +103,9 @@ export default function HomeScreenFooter() {
                     `,
                 }}
             />
-
             <div
                 className={cn(
-                    'relative z-10 max-w-7xl mx-auto px-8 pt-20 pb-20',
+                    'relative z-10 max-w-7xl mx-auto px-8',
                     'transition-all duration-[1200ms] ease-out delay-200',
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
                 )}

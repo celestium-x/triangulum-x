@@ -22,7 +22,7 @@ const footerSections: FooterSection[] = [
             { label: 'Quiz', href: '/quiz' },
             { label: 'Live polling', href: '/live-polling' },
         ],
-        delay: '700ms',
+        delay: '100ms',
     },
     {
         title: 'Company',
@@ -31,7 +31,7 @@ const footerSections: FooterSection[] = [
             { label: 'Founders', href: '/founders' },
             { label: 'Contact', href: '/contact' },
         ],
-        delay: '800ms',
+        delay: '200ms',
     },
     {
         title: 'Details',
@@ -42,7 +42,7 @@ const footerSections: FooterSection[] = [
             { label: 'Safety', href: '/safety' },
             { label: 'Legal', href: '/legal' },
         ],
-        delay: '900ms',
+        delay: '300ms',
     },
 ];
 const animations = `
@@ -82,7 +82,7 @@ export default function FounderBase() {
     }, []);
 
     return (
-        <div className="relative w-full flex flex-col items-center justify-between text-white bg-[#101214] select-none overflow-x-hidden">
+        <div className="relative w-full flex flex-col items-center justify-between text-white bg-gradient-to-b from-[#20163560] to-black select-none overflow-x-hidden">
             <style>{animations}</style>
 
             <div className="absolute top-0 left-0 w-[140vh] h-[120vh] pointer-events-none overflow-hidden">
@@ -174,10 +174,15 @@ export default function FounderBase() {
                     githubUsername="DipTheBeginner"
                 />
             </div>
+            <div className="w-full flex items-center justify-center mt-40">
+                <div className="text-[14rem] font-medium text-center bg-gradient-to-b from-[rgba(116,74,199,0.3)] via-[rgba(116,74,199,0.1)] to-[#00000018] bg-clip-text text-transparent">
+                    NOCTURN
+                </div>
+            </div>
 
             <footer
                 id="animated-footer"
-                className="relative w-full text-white overflow-hidden select-none border-t"
+                className="relative w-full text-white overflow-hidden select-none"
             >
                 <div
                     className={cn(
@@ -193,8 +198,8 @@ export default function FounderBase() {
                                     rgba(60, 50, 140, 0.15) 35%, 
                                     rgba(40, 40, 120, 0.12) 45%, 
                                     rgba(30, 30, 100, 0.1) 55%, 
-                                    #101214 65%, 
-                                    #101214 90%
+                                    #000000 65%, 
+                                    #000000
                                 )
                             `,
                     }}
@@ -210,7 +215,7 @@ export default function FounderBase() {
                     <div className="grid grid-cols-4 gap-x-45">
                         <div
                             className={cn(
-                                'flex-col transition-all duration-1000 ease-out',
+                                'flex-col items-start transition-all duration-1000 ease-out',
                                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
                             )}
                             style={{ transitionDelay: '600ms' }}
