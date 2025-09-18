@@ -1,12 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import { authOption } from './api/auth/[...nextauth]/options';
 import SessionSetter from '@/components/utility/SessionSetter';
 import { Toaster } from 'sonner';
 import { ThemeProvider } from 'next-themes';
 import Provider from './providers';
+import { Poppins } from 'next/font/google';
 
 const poppins = Poppins({
     subsets: ['latin'],

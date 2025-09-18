@@ -23,7 +23,6 @@ export default function LeaderboardParticipantBar({
     you: boolean;
 }) {
     const barRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         const interval = setInterval(() => {
             const variation = Math.floor(Math.random() * 11) - 5;
@@ -74,7 +73,6 @@ export default function LeaderboardParticipantBar({
                         )}
                         width={60}
                         height={60}
-                        unoptimized
                     />
                 </div>
             </ToolTipComponent>

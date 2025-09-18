@@ -1,0 +1,17 @@
+**/node_modules
+**/.git
+**/.turbo
+**/dist
+**/build
+**/.next
+**/.vercel
+**/.env*
+**/.DS_Store
+**/*.log
+.gitignore
+README.md
+.nyc_output
+.coverage
+.dockerignore
+Dockerfile*
+get-docker.sh
