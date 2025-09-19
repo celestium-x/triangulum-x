@@ -34,7 +34,7 @@ export default function Home() {
                 <HomeScreenJoinQuizButton />
             </div>
             <div className="w-full flex items-center justify-center mt-40">
-                <div className="text-[14rem] font-medium text-center bg-gradient-to-b from-[rgba(255,165,80,0.8)] via-[rgba(255,165,80,0.8) 50%] to-black bg-clip-text text-transparent">
+                <div className="text-[14rem] font-medium text-center bg-gradient-to-b from-[rgba(255,165,80,0.49)] via-[rgba(34, 20, 8, 0.8) 50%] to-black bg-clip-text text-transparent">
                     NOCTURN
                 </div>
             </div>
