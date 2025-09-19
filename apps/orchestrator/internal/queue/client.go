@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"log"
+	"os"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -11,8 +12,8 @@ var Ctx = context.Background()
 
 func NewRedisClient() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "docker.host.internal:6379",
-		Password: "",
+		Addr:     os.Getenv("REDIS_ADDR"),
+		Password: os.Getenv("REDIS_PASSWORD"),
 		DB:       0,
 	})
 
@@ -21,6 +22,6 @@ func NewRedisClient() *redis.Client {
 	if err != nil {
 		log.Fatalf("Failed to connect to Redis: %v", err)
 	}
-	log.Println("REdis connected :) ")
+	log.Println("Redis connected :) ")
 	return rdb
 }
