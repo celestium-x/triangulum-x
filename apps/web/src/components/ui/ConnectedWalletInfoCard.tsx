@@ -142,7 +142,8 @@ export function ConnectedWalletInfoCard() {
                                 <Image
                                     src={wallet.adapter.icon}
                                     alt={wallet.adapter.name}
-                                    className="size-12"
+                                    width={36}
+                                    height={36}
                                 />
                             )}
                         </div>
