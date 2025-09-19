@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { parse } from 'cookie';
 import prisma from '@repo/db/client';
-import { CookiePayload } from '../../types/web-socket-types';
+import { CookiePayload, USER_TYPE } from '../../types/web-socket-types';
 import QuizAction from '../../class/quizAction';
 import getChatsController from '../chat-controller/getChatsController';
 import { QuizPhase } from '.prisma/client';
@@ -51,7 +51,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     prizePool: true,
                     currency: true,
                     interactions: true,
-                    ...(role === 'HOST' && {
+                    ...(role === USER_TYPE.HOST && {
                         spectatorCode: true,
                         participantCode: true,
                     }),
@@ -68,7 +68,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                             email: true,
                         },
                     },
-                    ...(role === 'HOST' && {
+                    ...(role === USER_TYPE.HOST && {
                         questions: {
                             select: {
                                 id: true,
@@ -143,6 +143,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     select: {
                         id: true,
                         question: true,
+                        orderIndex: role === USER_TYPE.HOST,
                         ...(questionId &&
                             (gameSession?.currentPhase === QuizPhase.QUESTION_ACTIVE ||
                                 gameSession?.currentPhase === QuizPhase.SHOW_RESULTS) && {
@@ -167,7 +168,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
             let userData = null;
 
             switch (role) {
-                case 'HOST':
+                case USER_TYPE.HOST:
                     userData = await tx.user.findUnique({
                         where: { id: userId },
                         select: {
@@ -181,7 +182,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     });
                     break;
 
-                case 'PARTICIPANT':
+                case USER_TYPE.PARTICIPANT:
                     userData = await tx.participant.findFirst({
                         where: {
                             quizId: quizId,
@@ -204,7 +205,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     });
                     break;
 
-                case 'SPECTATOR':
+                case USER_TYPE.SPECTATOR:
                     userData = await tx.spectator.findFirst({
                         where: {
                             quizId: quizId,
