@@ -16,7 +16,8 @@ export default function LeaderboardResultCard({
     rank: number;
     streak: number;
 }) {
-    const isCorrect = userAnswer != null && userAnswer === currentQuestion?.correctAnswer;
+    const hasAnswered = userAnswer !== undefined;
+    const isCorrect = hasAnswered && userAnswer === currentQuestion?.correctAnswer;
 
     return (
         <div className="w-full max-w-[37rem] mx-auto flex flex-col gap-y-3">
@@ -88,7 +89,7 @@ export default function LeaderboardResultCard({
                                     'border rounded-lg sm:rounded-xl p-3 sm:p-4',
                                 )}
                             >
-                                {userAnswer ? (
+                                {hasAnswered ? (
                                     <div className="flex items-center justify-between text-neutral-300 text-sm sm:text-base">
                                         <span
                                             className={`font-medium ${isCorrect ? 'text-teal-300' : 'text-rose-300'}`}
@@ -96,7 +97,7 @@ export default function LeaderboardResultCard({
                                             Your Answer
                                         </span>
                                         <span className="truncate ml-2">
-                                            {currentQuestion?.options[userAnswer]}{' '}
+                                            {currentQuestion?.options[userAnswer!]}{' '}
                                             {isCorrect ? '✓' : '✗'}
                                         </span>
                                     </div>
