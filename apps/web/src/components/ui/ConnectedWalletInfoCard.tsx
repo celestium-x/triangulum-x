@@ -139,7 +139,7 @@ export function ConnectedWalletInfoCard() {
                     <div className="w-full flex flex-col justify-center items-center">
                         <div>
                             {wallet && (
-                                <Image
+                                <img
                                     src={wallet.adapter.icon}
                                     alt={wallet.adapter.name}
                                     className="size-12"
@@ -206,7 +206,7 @@ const AccountInfo = ({
         <div ref={ref} className="w-full flex flex-col justify-center items-center gap-y-3">
             <div className="flex justify-center items-center gap-x-3 overflow-hidden">
                 {walletIcon && (
-                    <Image
+                    <img
                         src={session?.user.image}
                         alt={walletName}
                         width={40}

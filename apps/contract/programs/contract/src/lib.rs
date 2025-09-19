@@ -6,11 +6,15 @@ declare_id!("DmzXrTkrEZMubw5Sv1SjbR9bPJVp1qY2QKbLn31TE3JT");
 pub mod contract {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
+    // create-quiz -> staking is true
+    // transfer-prize-to-winner
+
+    pub fn create_quiz(ctx: Context<CreateQuiz>, id: String) -> Result<()> {
         Ok(())
     }
-}
 
-#[derive(Accounts)]
-pub struct Initialize {}
+    pub fn transfer_prize(ctx: Context<TransferPrize>, account: String) -> Result<()> {
+        Ok(())
+    }
+
+}

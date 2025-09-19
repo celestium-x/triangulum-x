@@ -137,7 +137,7 @@ function WalletOptions() {
                         w.adapter.name === wallet?.adapter.name ? 'bg-[#2c2c2c] ' : '',
                     )}
                 >
-                    <Image src={w.adapter.icon} alt={w.adapter.name} className="w-5 h-5" />
+                    <img src={w.adapter.icon} alt={w.adapter.name} className="w-5 h-5" />
                     <span>{w.adapter.name}</span>
                 </button>
             ))}
