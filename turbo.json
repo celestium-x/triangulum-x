@@ -4,7 +4,8 @@
   "globalEnv": [
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET",
-    "NODE_ENV"
+    "NODE_ENV",
+    "GITHUB_TOKEN"
   ],
   "tasks": {
     "build": {
