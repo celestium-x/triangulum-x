@@ -88,7 +88,7 @@ export default async function Page() {
                                             rounded-2xl transition-transform duration-200 overflow-hidden 
                                             border-2 border-neutral-300 dark:border-neutral-900 
                                             bg-white/70 dark:bg-white/10 
-                                            group hover:shadow-[-6px_6px_0_0_#222] dark:hover:shadow-[-6px_6px_0_0_#0a0a0a]"
+                                            group hover:shadow-[-6px_6px_0_0_#222] dark:hover:shadow-[-6px_6px_0_0_#d9d8d8]"
                                     >
                                         <Image
                                             src={contributor.avatar_url}
