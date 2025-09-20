@@ -80,31 +80,37 @@ export default async function Page() {
                                     key={contributor.id}
                                     content={`${contributor.contributions} commits`}
                                 >
-                                    <a
-                                        href={contributor.html_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="relative w-32 h-32 flex flex-col items-center 
-                                            rounded-2xl transition-transform duration-200 overflow-hidden 
+                                    <div className="relative group">
+                                        {/* Shadow/background div */}
+                                        <div className='absolute w-32 h-32 dark:bg-neutral-800 bg-neutral-900 rounded-2xl transition-transform duration-200 ease-in-out group-hover:translate-y-2 group-hover:-translate-x-2' />
+
+                                        {/* Main card container with overflow hidden to clip contents */}
+                                        <a
+                                            href={contributor.html_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="relative w-32 h-32 flex flex-col items-center 
+                                            rounded-2xl transition-transform duration-200 
                                             border-2 border-neutral-300 dark:border-neutral-900 
-                                            bg-white/70 dark:bg-white/10 
-                                            group hover:shadow-[-6px_6px_0_0_#222] dark:hover:shadow-[-6px_6px_0_0_#0a0a0a]"
-                                    >
-                                        <Image
-                                            src={contributor.avatar_url}
-                                            alt="user"
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        <div
-                                            className="z-50 absolute bottom-0 w-full px-2 py-1 text-center text-xs 
-                                                bg-neutral-200 text-neutral-900 
-                                                dark:bg-neutral-950 dark:text-white 
-                                                opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in"
+                                        bg-white/70 dark:bg-white/10 z-10 overflow-hidden"
                                         >
-                                            {contributor.login}
-                                        </div>
-                                    </a>
+                                            <Image
+                                                src={contributor.avatar_url}
+                                                alt="user"
+                                                fill
+                                                className="object-cover"
+                                            />
+
+                                            <div className="absolute inset-x-0 bottom-0 px-2 py-1 text-center text-xs 
+      bg-neutral-200 text-neutral-900 
+      dark:bg-neutral-950 dark:text-white 
+      opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out
+      translate-y-full group-hover:translate-y-0"
+                                            >
+                                                {contributor.login}
+                                            </div>
+                                        </a>
+                                    </div>
                                 </ToolTipComponent>
                             ))}
                         </div>
