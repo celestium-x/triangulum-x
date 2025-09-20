@@ -12,7 +12,6 @@ export async function getAllContributors() {
                 }),
             },
         });
-        return data
 
         const botPatterns = [
             /bot$/i, // ends with 'bot'

@@ -3,6 +3,7 @@ import DarkModeToggle from '@/components/base/DarkModeToggle';
 import PurpleFooter from '@/components/base/PurpleFooter';
 import { animations } from '@/components/founders/FounderBase';
 import ToolTipComponent from '@/components/utility/TooltipComponent';
+import { cn } from '@/lib/utils';
 import { getAllContributors } from '@/server/get_contributors';
 import Image from 'next/image';
 
@@ -52,7 +53,7 @@ export default async function Page() {
             <div className="w-full h-full max-w-4xl xl:max-w-5xl 2xl:max-w-5xl border-l border-r border-neutral-200 dark:border-neutral-800 pt-[80px] flex flex-col mx-auto px-2 sm:px-0">
                 <div
                     className="h-16 sm:h-20 w-full border-b border-neutral-200 dark:border-neutral-800 
-                    flex p-3 sm:p-6 text-sm sm:text-md items-center justify-between font-light"
+                    flex p-3 sm:p-6 text-sm sm:text-md items-center justify-between font-light "
                     style={{ animation: 'slideDownFade 1.2s ease-out forwards' }}
                 >
                     <div className="text-xs sm:text-sm md:text-[18px] tracking-wider">
@@ -63,7 +64,18 @@ export default async function Page() {
                     </div>
                 </div>
 
-                <div className="px-20 py-16">
+                <div className="px-20 py-16 relative">
+                    <div
+                        className={cn(
+                            "absolute inset-0",
+                            "[background-size:20px_20px]",
+                            "[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]",
+                            "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]",
+                        )}
+                    />
+                    <div
+                        className="absolute inset-0 bg-gradient-to-br dark:from-black/30 dark:via-black/50 dark:to-black/70 from-transparent to-[#f7f7fa] z-10 pointer-events-none"
+                    />
                     {contributors.length === 0 ? (
                         <div className="flex flex-col items-center justify-center flex-1">
                             <p className="text-gray-500 dark:text-gray-400 text-lg">
@@ -81,10 +93,8 @@ export default async function Page() {
                                     content={`${contributor.contributions} commits`}
                                 >
                                     <div className="relative group">
-                                        {/* Shadow/background div */}
-                                        <div className='absolute w-32 h-32 dark:bg-neutral-800 bg-neutral-900 rounded-2xl transition-transform duration-200 ease-in-out group-hover:translate-y-2 group-hover:-translate-x-2' />
+                                        <div className='absolute w-32 h-32 dark:bg-white bg-neutral-900 rounded-2xl transition-transform duration-200 ease-in-out group-hover:translate-y-2 group-hover:-translate-x-2' />
 
-                                        {/* Main card container with overflow hidden to clip contents */}
                                         <a
                                             href={contributor.html_url}
                                             target="_blank"
