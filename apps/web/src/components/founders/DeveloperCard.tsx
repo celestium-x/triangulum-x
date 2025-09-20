@@ -65,8 +65,12 @@ export default function DeveloperCard({
                         </div>
 
                         <div className="flex flex-col text-[14px] px-3 justify-center gap-y-0.5">
-                            <span className="text-[16px] font-normal dark:text-white text-gray-900">{name}</span>
-                            <span className="text-[14px] dark:text-gray-300 text-gray-600">{role}</span>
+                            <span className="text-[16px] font-normal dark:text-white text-gray-900">
+                                {name}
+                            </span>
+                            <span className="text-[14px] dark:text-gray-300 text-gray-600">
+                                {role}
+                            </span>
                         </div>
                     </div>
 
@@ -107,20 +111,8 @@ export default function DeveloperCard({
                             fontSize={10}
                             colorScheme={theme === 'dark' ? 'dark' : 'light'}
                             theme={{
-                                light: [
-                                    '#ebedf0',
-                                    '#9be9a8',
-                                    '#40c463',
-                                    '#30a14e',
-                                    '#216e39'
-                                ],
-                                dark: [
-                                    '#161b22',
-                                    '#0e4429',
-                                    '#006d32',
-                                    '#26a641',
-                                    '#39d353'
-                                ],
+                                light: ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'],
+                                dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
                             }}
                             style={{
                                 width: '100%',

@@ -19,7 +19,7 @@ export default class PhaseQueue {
             redis: REDIS_URL,
         });
         this.setup_queue_events();
-        this.elect_queue_processor();
+        // this.elect_queue_processor();
         this.setup_shutdown_hooks();
     }
 

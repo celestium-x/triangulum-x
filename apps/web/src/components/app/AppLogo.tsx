@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Major_Mono_Display } from 'next/font/google';
+import NocturnLogo from '../ui/svg/NocturnLogo';
 
 const major_mono_display = Major_Mono_Display({
     subsets: ['latin'],
@@ -16,9 +17,15 @@ export default function AppLogo({ className }: { className?: string }) {
             )}
         >
             <span
-                className={`text-[22px] text-neutral-900 dark:text-light-base font-medium tracking-wide ${major_mono_display.className}`}
+                className={`text-[22px] text-neutral-900 dark:text-light-base font-medium tracking-wide flex items-center justify-center ${major_mono_display.className}`}
             >
-                Nocturn
+                N
+                {
+                    <span className="translate-y-[7px]">
+                        <NocturnLogo />
+                    </span>
+                }
+                turn
             </span>
         </div>
     );
