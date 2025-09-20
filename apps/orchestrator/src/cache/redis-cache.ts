@@ -1,6 +1,8 @@
 import { GameSession, Question, Response, Spectator } from "@repo/db/client";
 import Redis from "ioredis";
 import { Participant, Quiz } from "@repo/db/client";
+import dotenv from "dotenv";
+dotenv.config();
 
 const SECONDS = 60;
 const MINUTES = 60;

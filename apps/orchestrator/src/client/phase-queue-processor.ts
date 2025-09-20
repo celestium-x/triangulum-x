@@ -2,7 +2,8 @@ import Bull from "bull";
 import TransitionWorker from "../job/transition-worker";
 import { transitionWorkerInstance } from "../services/init-services";
 import { PhaseTransitionJob } from "../types/types";
-
+import dotenv from "dotenv";
+dotenv.config();
 const REDIS_URL = process.env.REDIS_URL;
 
 export default class PhaseQueueProcessor {
@@ -10,6 +11,7 @@ export default class PhaseQueueProcessor {
   private transition_worker: TransitionWorker;
 
   constructor() {
+    console.log("url is : ", REDIS_URL);
     this.phase_queue = new Bull("phase-transitions", {
       redis: REDIS_URL,
     });
@@ -20,6 +22,7 @@ export default class PhaseQueueProcessor {
   private start_consuming() {
     console.log("started consuming the events");
     this.phase_queue.process("phase_transition", async (job) => {
+      console.log("job data is : ", job.data);
       this.transition_worker.handle_transition_phase(job.data);
     });
   }
@@ -37,5 +40,9 @@ export default class PhaseQueueProcessor {
     } catch (error) {
       console.error(`Failed to schedule phase transition:`, error);
     }
+  }
+
+  public set_transition_worker (transition_worker: TransitionWorker) {
+    this.transition_worker = transition_worker
   }
 }

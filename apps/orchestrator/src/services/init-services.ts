@@ -19,9 +19,12 @@ const REDIS_URL = process.env.REDIS_URL;
 
 export default function initServices() {
   redisPublisherInstance = new Redis(REDIS_URL!);
+  publisherInstnace = new Publisher();
+  redisCacheInstance = new RedisCache();
+  databaseQueueInstance = new DatabaseQueue();
   phaseQueueProcessorInstance = new PhaseQueueProcessor();
   transitionWorkerInstance = new TransitionWorker();
-  redisCacheInstance = new RedisCache();
-  publisherInstnace = new Publisher();
-  databaseQueueInstance = new DatabaseQueue();
+
+  transitionWorkerInstance.setPhaseQueueProcessor(phaseQueueProcessorInstance)
+  phaseQueueProcessorInstance.set_transition_worker(transitionWorkerInstance)
 }

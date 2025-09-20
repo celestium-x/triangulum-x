@@ -32,8 +32,10 @@ export default class TransitionWorker {
     this.database_queue = databaseQueueInstance;
     this.publisher = publisherInstnace;
     this.phase_queue_processor = phaseQueueProcessorInstance;
+    console.log("called transiiton worker");
   }
   public async handle_transition_phase(data: PhaseQueueJobDataType) {
+    console.log("reached here");
     if (
       data.fromPhase === QuizPhase.QUESTION_READING &&
       data.toPhase === QuizPhase.QUESTION_ACTIVE
@@ -51,6 +53,7 @@ export default class TransitionWorker {
     data: PhaseQueueJobDataType,
   ) {
     const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
+    console.log("quiz is : ", quiz);
     if (!quiz) {
       // send websocket message for error
       console.error("Quiz not found");
@@ -240,4 +243,9 @@ export default class TransitionWorker {
       pub_sub_message_to_spectator,
     );
   }
+
+  public setPhaseQueueProcessor(phase_queue_processor: PhaseQueueProcessor) {
+    this.phase_queue_processor = phase_queue_processor;
+  }
+
 }
