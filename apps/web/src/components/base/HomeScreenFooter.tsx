@@ -13,17 +13,6 @@ type FooterSection = {
     delay: string;
 };
 
-const obj = [
-    {
-        icon: FaXTwitter,
-        url: 'https://x.com/triangulum-x',
-    },
-    {
-        icon: FaGithub,
-        url: 'https://github.com/celestium-x/triangulum-x',
-    },
-];
-
 const footerSections: FooterSection[] = [
     {
         title: 'Try Triangulum',
@@ -186,8 +175,9 @@ export default function HomeScreenFooter() {
                                                 : 'opacity-0 translate-x-2',
                                         )}
                                         style={{
-                                            transitionDelay: `${parseInt(section.delay) + itemIndex * 100
-                                                }ms`,
+                                            transitionDelay: `${
+                                                parseInt(section.delay) + itemIndex * 100
+                                            }ms`,
                                         }}
                                         onClick={() => router.push(item.href)}
                                     >

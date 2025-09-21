@@ -25,6 +25,6 @@ export default function initServices() {
   phaseQueueProcessorInstance = new PhaseQueueProcessor();
   transitionWorkerInstance = new TransitionWorker();
 
-  transitionWorkerInstance.setPhaseQueueProcessor(phaseQueueProcessorInstance)
-  phaseQueueProcessorInstance.set_transition_worker(transitionWorkerInstance)
+  transitionWorkerInstance.setPhaseQueueProcessor(phaseQueueProcessorInstance);
+  phaseQueueProcessorInstance.set_transition_worker(transitionWorkerInstance);
 }

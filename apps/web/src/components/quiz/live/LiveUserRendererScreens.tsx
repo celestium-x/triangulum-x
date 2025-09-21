@@ -36,7 +36,7 @@ export default function LiveUserRendererScreens() {
                 color: template?.text_color,
             }}
         >
-            <AppLogo className='absolute top-4 left-4' />
+            <AppLogo className="absolute top-4 left-4" />
             <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
             {renderCurrentUserScreen()}
         </div>

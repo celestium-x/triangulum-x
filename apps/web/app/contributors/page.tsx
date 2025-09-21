@@ -67,15 +67,13 @@ export default async function Page() {
                 <div className="px-20 py-16 relative">
                     <div
                         className={cn(
-                            "absolute inset-0",
-                            "[background-size:20px_20px]",
-                            "[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]",
-                            "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]",
+                            'absolute inset-0',
+                            '[background-size:20px_20px]',
+                            '[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]',
+                            'dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]',
                         )}
                     />
-                    <div
-                        className="absolute inset-0 bg-gradient-to-br dark:from-black/30 dark:via-black/50 dark:to-black/70 from-transparent to-[#f7f7fa] z-10 pointer-events-none"
-                    />
+                    <div className="absolute inset-0 bg-gradient-to-br dark:from-black/30 dark:via-black/50 dark:to-black/70 from-transparent to-[#f7f7fa] z-10 pointer-events-none" />
                     {contributors.length === 0 ? (
                         <div className="flex flex-col items-center justify-center flex-1">
                             <p className="text-gray-500 dark:text-gray-400 text-lg">
@@ -93,7 +91,7 @@ export default async function Page() {
                                     content={`${contributor.contributions} commits`}
                                 >
                                     <div className="relative group">
-                                        <div className='absolute w-32 h-32 dark:bg-white bg-neutral-900 rounded-2xl transition-transform duration-200 ease-in-out group-hover:translate-y-2 group-hover:-translate-x-2' />
+                                        <div className="absolute w-32 h-32 dark:bg-white bg-neutral-900 rounded-2xl transition-transform duration-200 ease-in-out group-hover:translate-y-2 group-hover:-translate-x-2" />
 
                                         <a
                                             href={contributor.html_url}
@@ -111,7 +109,8 @@ export default async function Page() {
                                                 className="object-cover"
                                             />
 
-                                            <div className="absolute inset-x-0 bottom-0 px-2 py-1 text-center text-xs 
+                                            <div
+                                                className="absolute inset-x-0 bottom-0 px-2 py-1 text-center text-xs 
       bg-neutral-200 text-neutral-900 
       dark:bg-neutral-950 dark:text-white 
       opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out

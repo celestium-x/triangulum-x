@@ -3,13 +3,12 @@ import { HoverBorderGradient } from '../ui/HoverBorderGradient';
 import AnimatedSvgCircles from '../ui/AnimatedSvgCircles';
 import SafariBrowser from '../ui/SafariBrowser';
 import { Highlighter } from '../ui/Highlighter';
-import { DiOpensource } from "react-icons/di";
-import { MdOutlineArrowRightAlt } from "react-icons/md";
+import { DiOpensource } from 'react-icons/di';
+import { MdOutlineArrowRightAlt } from 'react-icons/md';
 import { ShinyButton } from '../magicui/shiny-button';
 import Link from 'next/link';
 
 export default function LandingPage() {
-
     return (
         <div className="w-full relative">
             <div className="flex flex-col mx-auto items-center justify-center w-full max-w-4xl px-4 py-8 text-center relative z-50 select-none">
@@ -56,33 +55,30 @@ export default function LandingPage() {
                     </Highlighter>{' '}
                     .
                 </div>
-                <div className='flex items-center justify-center gap-x-4 mt-8'>
+                <div className="flex items-center justify-center gap-x-4 mt-8">
                     <Link
-                        href={"https://github.com/celestium-x/triangulum-x/"}
+                        href={'https://github.com/celestium-x/triangulum-x/'}
                         target="_blank"
-                        rel="noopener noreferrer">
-                        <ShinyButton
-                            className='text-[13px] bg-[#4f2b82] rounded-full px-4 py-[7px] flex items-center justify-center gap-x-1 cursor-pointer !text-light-base dark'
-                        >
-                            <DiOpensource className='size-5' />
+                        rel="noopener noreferrer"
+                    >
+                        <ShinyButton className="text-[13px] bg-[#4f2b82] rounded-full px-4 py-[7px] flex items-center justify-center gap-x-1 cursor-pointer !text-light-base dark">
+                            <DiOpensource className="size-5" />
                             we are open source
                         </ShinyButton>
                     </Link>
                     <div
-                        className='text-[13px] 
+                        className="text-[13px] 
                         border border-neutral-700 dark:border-neutral-400
                       dark:bg-neutral-200 bg-neutral-900 
                         rounded-full px-4 py-[7px] 
                         flex items-center justify-center gap-x-1 
                       dark:text-dark-primary text-light-base 
                         group cursor-pointer
-                        shadow-[inset_0_2px_4px_rgba(255,255,255,0.25)] dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.35)]'
+                        shadow-[inset_0_2px_4px_rgba(255,255,255,0.25)] dark:shadow-[inset_0_2px_4px_rgba(0,0,0,0.35)]"
                     >
                         start creating quiz
-                        <MdOutlineArrowRightAlt className='group-hover:translate-x-1 transform transition-transform ease-in' />
+                        <MdOutlineArrowRightAlt className="group-hover:translate-x-1 transform transition-transform ease-in" />
                     </div>
-
-
                 </div>
             </div>
 

@@ -114,11 +114,8 @@ export default function QuestionsDraft() {
                 <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                     Explanation helps users understand the answer and key concepts
                 </div>
-                <div className='w-full mt-1'>
-                    <Textarea
-                        className={cn(
-                        )}
-                    />
+                <div className="w-full mt-1">
+                    <Textarea className={cn()} />
                 </div>
             </div>
             <UploadQuizImage />
@@ -134,11 +131,8 @@ export default function QuestionsDraft() {
                 <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                     upto 120 characters
                 </div>
-                <div className='w-full mt-1'>
-                    <Textarea
-                        className={cn(
-                        )}
-                    />
+                <div className="w-full mt-1">
+                    <Textarea className={cn()} />
                 </div>
             </div>
         </div>
