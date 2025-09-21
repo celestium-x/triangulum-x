@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Major_Mono_Display } from 'next/font/google';
 import NocturnLogo from '../ui/svg/NocturnLogo';
+import Link from 'next/link';
 
 const major_mono_display = Major_Mono_Display({
     subsets: ['latin'],
@@ -10,9 +11,10 @@ const major_mono_display = Major_Mono_Display({
 
 export default function AppLogo({ className }: { className?: string }) {
     return (
-        <div
+        <Link
+            href={'/'}
             className={cn(
-                'flex items-center justify-start gap-x-4 cursor-pointer group',
+                'flex items-center justify-start gap-x-4 cursor-pointer group z-20',
                 className,
             )}
         >
@@ -27,6 +29,6 @@ export default function AppLogo({ className }: { className?: string }) {
                 }
                 turn
             </span>
-        </div>
+        </Link>
     );
 }
