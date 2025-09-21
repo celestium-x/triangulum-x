@@ -74,7 +74,7 @@ export default function ParticipantQuestionResultsRenderer() {
     }
 
     return (
-        <div className="w-full h-full bg-black/20 overflow-hidden flex justify-center items-center relative z-80 p-2 sm:p-4">
+        <div className="w-full h-full bg-black/20 overflow-hidden flex justify-center items-center relative z-0 p-2 sm:p-4">
             <div className="w-full max-w-7xl h-[95vh] sm:h-[90vh] md:h-[85vh] lg:h-[80%] flex flex-col justify-between rounded-xl sm:rounded-2xl bg-neutral-950 border relative shadow-lg overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none z-0 fade-dots opacity-35">
                     <DotPattern />

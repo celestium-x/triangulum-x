@@ -86,7 +86,7 @@ function BigQuizRight({ state, setState }: QuizRight): JSX.Element {
                                         type="button"
                                         onClick={() => setState(option.type)}
                                         className={cn(
-                                            'w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10',
+                                            'w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10 cursor-pointer',
                                             `${state === option.type && 'hover:bg-purple-700/10 bg-primary/10 border border-purple-800'}`,
                                         )}
                                     >
@@ -109,7 +109,7 @@ function BigQuizRight({ state, setState }: QuizRight): JSX.Element {
                                         type="button"
                                         onClick={() => setState(option.type)}
                                         className={cn(
-                                            'w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10',
+                                            'w-full shadow-none h-20 flex items-center justify-center rounded-xl bg-light-base dark:bg-dark-base hover:bg-primary/10 cursor-pointer',
                                             `${state === option.type && 'hover:bg-purple-700/10 bg-primary/10 border border-purple-800'}`,
                                         )}
                                     >

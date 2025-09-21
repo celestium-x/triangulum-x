@@ -57,7 +57,7 @@ export default function HomeScreenJoinQuizButton() {
 
             <ShinyButton
                 onClick={joinQuizHandler}
-                className={cn(`border rounded-2xl !text-xl dark:bg-[#4f2b82] px-6 py-2`)}
+                className={cn(`border rounded-2xl !text-xl dark:bg-[#4f2b82] px-6 py-2 uppercase`)}
             >
                 Join Quiz
             </ShinyButton>

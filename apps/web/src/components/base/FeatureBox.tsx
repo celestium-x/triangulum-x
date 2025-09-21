@@ -83,7 +83,7 @@ export default function FeatureBox() {
     }, []);
 
     return (
-        <div ref={containerRef} className="flex flex-col w-full mt-40 select-none">
+        <div ref={containerRef} className="flex flex-col w-full mt-40 select-none px-20">
             <div
                 className={`${boldonse.className} text-[100px] tracking-wider relative text-[#e4e4e4] leading-24 flex flex-col`}
             >

@@ -11,31 +11,31 @@ import ParticipantQuestionActiveScreen from './screens/QuestionActiveScreen/Part
 import ParticipantQuestionResultsScreen from './screens/QuestionResultsScreen/ParticipantQuestionResultsScreen';
 
 export default function ParticipantMainScreen() {
-    const { gameSession } = useLiveQuizStore();
+  const { gameSession } = useLiveQuizStore();
 
-    function renderHostScreenPanels() {
-        switch (gameSession?.participantScreen) {
-            case ParticipantScreenEnum.LOBBY:
-                return <ParticipantLobbyScreen />;
+  function renderHostScreenPanels() {
+    switch (gameSession?.participantScreen) {
+      case ParticipantScreenEnum.LOBBY:
+        return <ParticipantLobbyScreen />;
 
-            case ParticipantScreenEnum.QUESTION_MOTIVATION:
-                return <ParticipantMotivationScreen />;
+      case ParticipantScreenEnum.QUESTION_MOTIVATION:
+        return <ParticipantMotivationScreen />;
 
-            case ParticipantScreenEnum.QUESTION_READING:
-                return <ParticipantQuestionReadingScreen />;
+      case ParticipantScreenEnum.QUESTION_READING:
+        return <ParticipantQuestionReadingScreen />;
 
-            case ParticipantScreenEnum.QUESTION_ACTIVE:
-                return <ParticipantQuestionActiveScreen />;
+      case ParticipantScreenEnum.QUESTION_ACTIVE:
+        return <ParticipantQuestionActiveScreen />;
 
-            case ParticipantScreenEnum.QUESTION_RESULTS:
-                return <ParticipantQuestionResultsScreen />;
-        }
+      case ParticipantScreenEnum.QUESTION_RESULTS:
+        return <ParticipantQuestionResultsScreen />;
     }
-    return (
-        <div className="h-full relative w-full flex">
-            {renderHostScreenPanels()}
-            <ParticipantMainFooter />
-            <ParticipantPanelRenderer />
-        </div>
-    );
+  }
+  return (
+    <div className="h-full relative w-full flex z-20">
+      {renderHostScreenPanels()}
+      <ParticipantMainFooter />
+      <ParticipantPanelRenderer />
+    </div>
+  );
 }
