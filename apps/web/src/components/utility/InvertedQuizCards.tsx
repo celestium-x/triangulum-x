@@ -55,7 +55,7 @@ export default function InvertedQuizCards() {
             setOpenQuizOptionId(null);
         } catch (err) {
             console.error('Quiz deletion failed: ', err);
-            toast.error('Failed to delted quiz');
+            toast.error('Failed to delete the quiz');
         }
     }
 

@@ -49,7 +49,7 @@ export default function ParticipantQuestionActiveOptions() {
     }
 
     return (
-        <div className="w-full flex flex-col items-center justify-center gap-y-5 p-8 rounded-xl z-50">
+        <div className="w-full flex flex-col items-center justify-center gap-y-5 p-8 rounded-xl z-20">
             <div
                 className={cn(
                     'w-full h-full flex items-end justify-center',

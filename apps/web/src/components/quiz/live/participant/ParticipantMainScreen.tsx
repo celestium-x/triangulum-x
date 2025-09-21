@@ -32,7 +32,7 @@ export default function ParticipantMainScreen() {
         }
     }
     return (
-        <div className="h-full relative w-full flex">
+        <div className="h-full relative w-full flex z-20">
             {renderHostScreenPanels()}
             <ParticipantMainFooter />
             <ParticipantPanelRenderer />

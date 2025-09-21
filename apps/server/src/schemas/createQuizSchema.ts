@@ -11,7 +11,7 @@ export enum TemplateEnum {
 }
 
 export enum Interactions {
-    THUMBS_UP = 'THUMBS_UP',
+    TUMBS_UP = 'THUMBS_UP',
     DOLLAR = 'DOLLAR',
     BULB = 'BULB',
     HEART = 'HEART',

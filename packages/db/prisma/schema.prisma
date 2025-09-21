@@ -70,7 +70,6 @@ model Quiz {
     questions     Question[]
     GameSession   GameSession?
     chatMessage   ChatMessage[]
-    
 
     @@map("quizzes")
 }
@@ -81,6 +80,7 @@ model Question {
     options       String[]
     correctAnswer Int
     explanation   String?
+    hint          String?
 
     difficulty  Int @default(1)
     readingTime Int @default(7) // these will be in seconds
@@ -89,7 +89,7 @@ model Question {
 
     orderIndex Int
     imageUrl   String?
-    isAsked    Boolean  @default(false)
+    isAsked    Boolean @default(false)
 
     quizId   String
     quiz     Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)

@@ -42,7 +42,7 @@ export default class PhaseQueueProcessor {
     }
   }
 
-  public set_transition_worker (transition_worker: TransitionWorker) {
-    this.transition_worker = transition_worker
+  public set_transition_worker(transition_worker: TransitionWorker) {
+    this.transition_worker = transition_worker;
   }
 }

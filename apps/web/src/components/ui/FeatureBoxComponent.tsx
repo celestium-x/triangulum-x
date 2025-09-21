@@ -28,7 +28,7 @@ export default function FeatureBoxComponent({
           relative h-[550px] w-[440px] 
           border-l border-r 
           transition-all
-          group py-6 hover:bg-gradient-to-b from-[#121212] via-transparent to-transparent 
+          group py-6 hover:bg-gradient-to-b dark:from-[#121212] from-neutral-200 via-transparent to-transparent 
           flex flex-col
         `}
             onMouseEnter={() => setHovered(true)}
@@ -46,7 +46,7 @@ export default function FeatureBoxComponent({
                 {title}
             </div>
 
-            <div className="h-[20%] text-start text-[#7D8187] group-hover:text-light-base px-7">
+            <div className="h-[20%] text-start text-[#7D8187] group-hover:text-dark-base group-hover:dark:text-light-base px-7">
                 {description}
             </div>
 

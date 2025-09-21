@@ -11,6 +11,8 @@ import { useEffect, useRef, useState } from 'react';
 import { getSingletonPointsCalculator } from '@/lib/singleton-points-calculator';
 import { IoIosInfinite } from 'react-icons/io';
 import UploadQuizImage from './UploadQuizImage';
+import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/text-area';
 
 export default function QuestionsDraft() {
     const { setState } = useDraftRendererStore();
@@ -70,7 +72,7 @@ export default function QuestionsDraft() {
     }, [currentQ?.basePoints]);
 
     return (
-        <div className="text-neutral-900 dark:text-neutral-100 flex flex-col justify-start items-start gap-y-4">
+        <div className="text-neutral-900 dark:text-neutral-100 flex flex-col justify-start items-start gap-y-4 overflow-y-auto custom-scrollbar">
             <div className="w-full flex items-center justify-between border-b border-neutral-300 dark:border-neutral-700 pb-2">
                 <div className="text-lg font-medium">Questions</div>
                 <RxCross2 onClick={() => setState(DraftRenderer.NONE)} className="cursor-pointer" />
@@ -99,7 +101,40 @@ export default function QuestionsDraft() {
                     onChange={handleBasePointsChange}
                 />
             </div>
+
+            <div className="w-full px-2 mt-3">
+                <div className="flex items-center justify-start gap-x-1">
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">
+                        Add Explanation
+                    </span>
+                    <ToolTipComponent content="Provide a clear explanation visible after the question ends">
+                        <AiOutlineQuestionCircle size={15} />
+                    </ToolTipComponent>
+                </div>
+                <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    Explanation helps users understand the answer and key concepts
+                </div>
+                <div className="w-full mt-1">
+                    <Textarea className={cn()} />
+                </div>
+            </div>
             <UploadQuizImage />
+            <div className="w-full px-2 mt-3">
+                <div className="flex items-center justify-start gap-x-1">
+                    <span className="text-sm font-normal text-dark-primary dark:text-light-base">
+                        Add hint
+                    </span>
+                    <ToolTipComponent content="Provide a short hint to help users answer this question effectively">
+                        <AiOutlineQuestionCircle size={15} />
+                    </ToolTipComponent>
+                </div>
+                <div className="flex w-full items-center gap-x-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    upto 120 characters
+                </div>
+                <div className="w-full mt-1">
+                    <Textarea className={cn()} />
+                </div>
+            </div>
         </div>
     );
 }
