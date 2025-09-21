@@ -79,7 +79,7 @@ export default function HostQuestionResultsRenderer() {
 
                 <div
                     className={cn(
-                        'absolute bottom-4 left-5',
+                        'absolute bottom-4 left-5 cursor-pointer',
                         'bg-light-base dark:bg-dark-primary dark:text-light-base text-dark-primary',
                         'px-3.5 py-1.5 text-[18px] rounded-md',
                         'hover:-translate-y-0.5 transition-all transform duration-150',

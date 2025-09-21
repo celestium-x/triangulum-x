@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Major_Mono_Display } from 'next/font/google';
 import NocturnLogo from '../ui/svg/NocturnLogo';
+import { useRouter } from 'next/navigation';
 
 const major_mono_display = Major_Mono_Display({
     subsets: ['latin'],
@@ -9,10 +10,12 @@ const major_mono_display = Major_Mono_Display({
 });
 
 export default function AppLogo({ className }: { className?: string }) {
+    const router = useRouter();
     return (
         <div
+            onClick={() => router.push('/')}
             className={cn(
-                'flex items-center justify-start gap-x-4 cursor-pointer group',
+                'flex items-center justify-start gap-x-4 cursor-pointer group z-20',
                 className,
             )}
         >
