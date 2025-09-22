@@ -10,7 +10,8 @@
         "lint": "eslint . --config eslint.config.ts --max-warnings 0",
         "format": "prettier . --write",
         "format:check": "prettier . --check",
-        "check-types": "tsc --noEmit"
+        "check-types": "tsc --noEmit",
+        "remove-logs": "npx ts-node scripts/remove-logs.ts"
     },
     "dependencies": {
         "@next-auth/prisma-adapter": "^1.0.7",

@@ -39,6 +39,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "remove-logs": {
+      "cache": false,
+      "inputs": [
+        "src/**/*.{ts,tsx,js,jsx}",
+        "**/*.{ts,tsx,js,jsx}"
+      ]
     }
   }
 }
