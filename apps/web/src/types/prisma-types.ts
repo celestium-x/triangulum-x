@@ -62,6 +62,7 @@ export interface QuestionType {
     difficulty: number;
     basePoints: number;
     timeLimit: number;
+    readingTime: number;
     orderIndex: number;
     imageUrl?: string;
     quizId: string;

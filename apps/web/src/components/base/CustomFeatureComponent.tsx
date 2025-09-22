@@ -97,9 +97,7 @@ const getStaticZigzagLines = () => {
             bubbleSize: 9,
             animationDelay: 1600,
         },
-    ];
-};
-
+    ]; };
 export default function CustomFeatureComponent() {
     const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);

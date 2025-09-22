@@ -25,7 +25,8 @@ const questionSchema = z.object({
     explanation: z.string().optional(),
     difficulty: z.number(),
     basePoints: z.number(),
-    timeLimit: z.number(),
+    timeLimit: z.number().min(1).max(600),
+    readingTime: z.number().min(1).max(600),
     orderIndex: z.number(),
     imageUrl: z.string().optional(),
 });
