@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import UtilityCard from '@/components/utility/UtilityCard';
 import { useWebSocket } from '@/hooks/sockets/useWebSocket';
 import { templates } from '@/lib/templates';
@@ -12,7 +11,7 @@ export default function HostQuestionActiveFooter(): JSX.Element {
 
     const { handleLaunchHintEvent } = useWebSocket();
     const { currentQuestion, quiz } = useLiveQuizStore();
-    const template = templates.find(t => t.id === quiz?.theme);
+    const template = templates.find((t) => t.id === quiz?.theme);
 
     useEffect(() => {
         setHintLaunched(false);
@@ -29,10 +28,13 @@ export default function HostQuestionActiveFooter(): JSX.Element {
     }
 
     return (
-        <div style={{
-            zIndex: 100,
-            color: template?.text_color
-        }} className="absolute bottom-4 left-4 flex items-center justify-start gap-x-4 w-fit">
+        <div
+            style={{
+                zIndex: 100,
+                color: template?.text_color,
+            }}
+            className="absolute bottom-4 left-4 flex items-center justify-start gap-x-4 w-fit"
+        >
             <div className="relative">
                 {openExplanation && currentQuestion?.explanation && (
                     <UtilityCard className="absolute bottom-11 min-w-[16rem] w-fit px-4 py-2 text-wrap">
@@ -49,9 +51,10 @@ export default function HostQuestionActiveFooter(): JSX.Element {
                     disabled={!currentQuestion?.hint || hintLaunched}
                     className={`dark:bg-dark-base dark:text-neutral-100 bg-neutral-300 text-black 
                         px-4 py-1.5 rounded-md border text-xs
-                        ${hintLaunched
-                            ? 'opacity-50 cursor-not-allowed'
-                            : 'dark:hover:-translate-y-0.5 cursor-pointer'
+                        ${
+                            hintLaunched
+                                ? 'opacity-50 cursor-not-allowed'
+                                : 'dark:hover:-translate-y-0.5 cursor-pointer'
                         }
                     `}
                     onClick={emitHintsHandler}

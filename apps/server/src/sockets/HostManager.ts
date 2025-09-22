@@ -114,7 +114,6 @@ export default class HostManager {
     }
 
     private async handle_host_emits_hint(payload: any, ws: CustomWebSocket) {
-        console.log("payload is : ", payload);
         const { questionId: question_id } = payload;
         if (ws.user.role !== USER_TYPE.HOST) {
             return;

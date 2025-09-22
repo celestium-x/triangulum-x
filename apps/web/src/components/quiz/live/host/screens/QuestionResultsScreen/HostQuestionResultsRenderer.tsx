@@ -9,8 +9,7 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { HostScreenEnum } from '@/types/prisma-types';
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
-import { MdNavigateNext } from "react-icons/md";
-
+import { MdNavigateNext } from 'react-icons/md';
 
 export default function HostQuestionResultsRenderer() {
     const { handleHostQuestionPreviewPageChange } = useWebSocket();
@@ -90,7 +89,7 @@ export default function HostQuestionResultsRenderer() {
                     onClick={handleOnClick}
                 >
                     Next Question
-                    <MdNavigateNext className='group-hover:translate-x-0.5 transform ease-in duration-150' />
+                    <MdNavigateNext className="group-hover:translate-x-0.5 transform ease-in duration-150" />
                 </Button>
             </div>
         </div>

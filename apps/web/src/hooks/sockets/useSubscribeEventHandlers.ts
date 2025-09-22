@@ -27,8 +27,8 @@ export function useSubscribeEventHandlers() {
 
         subscribeToHandler(
             MESSAGE_TYPES.HOST_EMITS_HINT,
-            SubscribeEventHandlers.handleIncomingHintEvents
-        )
+            SubscribeEventHandlers.handleIncomingHintEvents,
+        );
 
         subscribeToHandler(
             MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR,
@@ -197,8 +197,8 @@ export function useSubscribeEventHandlers() {
             );
             unsubscribeToHandler(
                 MESSAGE_TYPES.HOST_EMITS_HINT,
-                SubscribeEventHandlers.handleIncomingHintEvents
-            )
+                SubscribeEventHandlers.handleIncomingHintEvents,
+            );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);
 }

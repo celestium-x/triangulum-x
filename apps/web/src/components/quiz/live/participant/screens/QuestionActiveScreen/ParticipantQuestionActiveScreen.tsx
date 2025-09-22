@@ -5,7 +5,7 @@ export default function ParticipantQuestionActiveScreen() {
     return (
         <div className="flex h-full w-full">
             <ParticipantQuestionActiveRenderer />
-            <ParticipantQuestionActiveFooter/>
+            <ParticipantQuestionActiveFooter />
         </div>
     );
 }

@@ -5,7 +5,6 @@ import { env } from '../../configs/env';
 
 export default async function signInController(req: Request, res: Response) {
     const { user } = req.body;
-    console.log('user is : ', user);
     try {
         const existingUser = await prisma.user.findUnique({
             where: {
