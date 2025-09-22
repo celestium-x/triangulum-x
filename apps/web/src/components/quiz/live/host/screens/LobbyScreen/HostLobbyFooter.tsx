@@ -32,7 +32,7 @@ export default function HostLobbyFooter() {
                                 <Image
                                     src={participant.avatar}
                                     alt={'participant'}
-                                     width={32}
+                                    width={32}
                                     height={32}
                                     className="object-cover w-full h-full"
                                 />

@@ -59,6 +59,7 @@ export interface QuestionType {
     options: string[];
     correctAnswer: number;
     explanation?: string;
+    hint?: string;
     difficulty: number;
     basePoints: number;
     timeLimit: number;

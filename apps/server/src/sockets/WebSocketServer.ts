@@ -26,9 +26,10 @@ import {
 } from '../services/init-services';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import PhaseQueue from '../queue/PhaseQueue';
+import { env } from '../configs/env';
 
 dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = env.SERVER_JWT_SECRET;
 
 export default class WebsocketServer {
     private wss: WebSocketServer;
@@ -209,6 +210,11 @@ export default class WebsocketServer {
                     message.only_socket_id,
                 );
                 break;
+            case MESSAGE_TYPES.HOST_EMITS_HINT:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.PARTICIPANT,
+                    USER_TYPE.SPECTATOR,
+                ]);
         }
     }
 

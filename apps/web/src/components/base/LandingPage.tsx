@@ -11,7 +11,7 @@ import Link from 'next/link';
 export default function LandingPage() {
     return (
         <div className="w-full relative">
-            <div className="flex flex-col mx-auto items-center justify-center w-full max-w-4xl px-4 py-8 text-center relative z-50 select-none">
+            <div className="flex flex-col mx-auto items-center justify-center w-full max-w-4xl px-4 py-8 text-center relative z-10 select-none">
                 <div className="absolute bottom-0 -z-10">
                     <AnimatedSvgCircles />
                 </div>
@@ -85,7 +85,7 @@ export default function LandingPage() {
             <SafariBrowser
                 url="https://triangulum.com"
                 imageSrc="/images/dashboard-ui2.png"
-                className="w-[100px] h-auto mx-auto z-80 relative"
+                className="w-[100px] h-auto mx-auto z-40 relative"
             />
         </div>
     );

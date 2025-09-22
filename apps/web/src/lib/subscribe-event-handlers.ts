@@ -190,6 +190,16 @@ export class SubscribeEventHandlers {
             phaseStartTime: resultsPhasePayload.startTime,
         });
     }
+    static handleIncomingHintEvents(payload: unknown) {
+        console.log("hint came is : ", payload);
+        const { hint } = payload as {
+            hint: string
+        };
+        const { updateCurrentQuestion } = useLiveQuizStore.getState();
+        updateCurrentQuestion({
+            hint: hint
+        })
+    }
 
     static handleIncomingNewSpectator(payload: unknown) {
         const { upsertSpectator } = useLiveSpectatorsStore.getState();
@@ -374,7 +384,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 

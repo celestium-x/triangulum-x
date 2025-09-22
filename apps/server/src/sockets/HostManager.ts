@@ -7,6 +7,7 @@ import {
     MESSAGE_TYPES,
     PubSubMessageTypes,
     SECONDS,
+    USER_TYPE,
 } from '../types/web-socket-types';
 import QuizManager from './QuizManager';
 import prisma, { HostScreen, ParticipantScreen, SpectatorScreen } from '@repo/db/client';
@@ -102,10 +103,36 @@ export default class HostManager {
                 this.handle_incoming_chat_reaction_event(payload, ws);
                 break;
 
+            case MESSAGE_TYPES.HOST_EMITS_HINT:
+                this.handle_host_emits_hint(payload, ws);
+                break;
+
             default:
                 console.error('Unknown message type', type);
                 break;
         }
+    }
+
+    private async handle_host_emits_hint(payload: any, ws: CustomWebSocket) {
+        console.log("payload is : ", payload);
+        const { questionId: question_id } = payload;
+        if (ws.user.role !== USER_TYPE.HOST) {
+            return;
+        }
+        const quiz = await this.redis_cache.get_quiz(ws.user.gameSessionId);
+        const question = quiz?.questions?.find((q) => q.id === question_id);
+        if (!question || !question.hint) {
+            return;
+        }
+
+        const hint = question.hint;
+        const hintPayload: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.HOST_EMITS_HINT,
+            payload: {
+                hint,
+            },
+        };
+        this.quizManager.publish_event_to_redis(ws.user.gameSessionId, hintPayload);
     }
 
     private handle_incoming_interaction_event(payload: any, ws: CustomWebSocket) {

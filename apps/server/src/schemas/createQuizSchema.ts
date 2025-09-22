@@ -23,6 +23,7 @@ const questionSchema = z.object({
     options: z.array(z.string().min(1)).min(4),
     correctAnswer: z.number(),
     explanation: z.string().optional(),
+    hint: z.string().optional(),
     difficulty: z.number(),
     basePoints: z.number(),
     timeLimit: z.number().min(1).max(600),

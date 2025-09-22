@@ -15,7 +15,8 @@ import { redisCacheInstance } from "../services/init-services";
 import { ReactorType } from "../types/types";
 import RedisCache from "../cache/redis-cache";
 import { JobOption, QueueJobTypes } from "../types/database-queue-types";
-const REDIS_URL = process.env.REDIS_URL;
+import { Env } from "../configs/env";
+const REDIS_URL = Env.ORCH_REDIS_URL;
 
 interface UpdateGameSessionJobtype {
   id: string;

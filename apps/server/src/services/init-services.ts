@@ -5,6 +5,7 @@ import PhaseQueue from '../queue/PhaseQueue';
 import QuizManager from '../sockets/QuizManager';
 import dotenv from 'dotenv';
 import Redis from 'ioredis';
+import { env } from '../configs/env';
 
 dotenv.config();
 
@@ -17,7 +18,7 @@ export let quizManagerInstance: QuizManager;
 export let publisherInstance: Redis;
 export let subscriberInstance: Redis;
 
-const REDIS_URL = process.env.REDIS_URL;
+const REDIS_URL = env.SERVER_REDIS_URL;
 
 export default function initServices() {
     publisherInstance = new Redis(REDIS_URL!);

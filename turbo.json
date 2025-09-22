@@ -3,9 +3,10 @@
   "ui": "tui",
   "globalEnv": [
     "GOOGLE_CLIENT_ID",
+    "SERVER_NODE_ENV",
+    "GITHUB_TOKEN",
     "GOOGLE_CLIENT_SECRET",
-    "NODE_ENV",
-    "GITHUB_TOKEN"
+    "NEXTAUTH_URL"
   ],
   "tasks": {
     "build": {

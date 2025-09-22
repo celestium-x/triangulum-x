@@ -2,12 +2,13 @@ import { GameSession, Question, Response, Spectator } from "@repo/db/client";
 import Redis from "ioredis";
 import { Participant, Quiz } from "@repo/db/client";
 import dotenv from "dotenv";
+import { Env } from "../configs/env";
 dotenv.config();
 
 const SECONDS = 60;
 const MINUTES = 60;
 const HOURS = 24;
-const REDIS_URL = process.env.REDIS_URL;
+const REDIS_URL = Env.ORCH_REDIS_URL;
 
 type QuizWithQuestions = Quiz & {
   questions: Question[];

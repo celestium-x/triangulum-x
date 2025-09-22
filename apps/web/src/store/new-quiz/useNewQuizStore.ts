@@ -70,6 +70,8 @@ export const useNewQuizStore = create<NewQuizStoreTypes>((set, get) => ({
             explanation: "Oxygen is represented by the symbol 'O' in the periodic table.",
             difficulty: 1,
             basePoints: 100,
+            readingTime: 4,
+            hint: 'no hint',
             timeLimit: 30,
             orderIndex: get().quiz.questions.length,
             imageUrl: '',
