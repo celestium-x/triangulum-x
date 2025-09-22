@@ -99,7 +99,6 @@ const getStaticZigzagLines = () => {
         },
     ];
 };
-
 export default function CustomFeatureComponent() {
     const ref = useRef(null);
     const [isVisible, setIsVisible] = useState(false);

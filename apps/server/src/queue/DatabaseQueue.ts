@@ -14,7 +14,8 @@ import prisma, {
 import RedisCache from '../cache/RedisCache';
 import { redisCacheInstance } from '../services/init-services';
 import { ReactorType } from '../types/web-socket-types';
-const REDIS_URL = process.env.REDIS_URL;
+import { env } from '../configs/env';
+const REDIS_URL = env.SERVER_REDIS_URL;
 
 interface UpdateGameSessionJobtype {
     id: string;

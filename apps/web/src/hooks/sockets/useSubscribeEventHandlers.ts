@@ -26,6 +26,11 @@ export function useSubscribeEventHandlers() {
         );
 
         subscribeToHandler(
+            MESSAGE_TYPES.HOST_EMITS_HINT,
+            SubscribeEventHandlers.handleIncomingHintEvents,
+        );
+
+        subscribeToHandler(
             MESSAGE_TYPES.QUESTION_READING_PHASE_TO_SPECTATOR,
             SubscribeEventHandlers.handleSpectatorIncomingReadingPhase,
         );
@@ -189,6 +194,10 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_RESPONDED_MESSAGE,
                 SubscribeEventHandlers.handleParticipantIncomingRespondedMessage,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.HOST_EMITS_HINT,
+                SubscribeEventHandlers.handleIncomingHintEvents,
             );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);

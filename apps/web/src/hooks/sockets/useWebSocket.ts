@@ -118,6 +118,15 @@ export const useWebSocket = () => {
             socket.current.send_message(message);
         }
     }
+    function handleLaunchHintEvent(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.HOST_EMITS_HINT,
+            payload,
+        };
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
 
     function handleParticipantResponseMessage(payload: unknown) {
         const message: MessagePayload = {
@@ -143,5 +152,6 @@ export const useWebSocket = () => {
         handleSendChatReactionMessage,
         handleSendHostLaunchQuestion,
         handleParticipantResponseMessage,
+        handleLaunchHintEvent,
     };
 };

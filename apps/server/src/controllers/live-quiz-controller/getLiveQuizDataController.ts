@@ -75,6 +75,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                                 question: true,
                                 options: true,
                                 explanation: true,
+                                hint: true,
                                 difficulty: true,
                                 basePoints: true,
                                 timeLimit: true,

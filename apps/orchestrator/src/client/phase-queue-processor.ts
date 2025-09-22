@@ -3,17 +3,15 @@ import TransitionWorker from "../job/transition-worker";
 import { transitionWorkerInstance } from "../services/init-services";
 import { PhaseTransitionJob } from "../types/types";
 import dotenv from "dotenv";
-dotenv.config();
-const REDIS_URL = process.env.REDIS_URL;
+import { Env } from "../configs/env";
 
 export default class PhaseQueueProcessor {
   private phase_queue: Bull.Queue;
   private transition_worker: TransitionWorker;
 
   constructor() {
-    console.log("url is : ", REDIS_URL);
     this.phase_queue = new Bull("phase-transitions", {
-      redis: REDIS_URL,
+      redis: Env.ORCH_REDIS_URL,
     });
     this.transition_worker = transitionWorkerInstance;
     this.start_consuming();
