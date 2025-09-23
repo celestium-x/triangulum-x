@@ -7,7 +7,8 @@ import { FaLightbulb } from 'react-icons/fa6';
 export default function ParticipantQuestionActiveFooter(): JSX.Element {
     const { currentQuestion, quiz } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
-    
+    console.log("template color is : ", template);
+    console.log("current question is : ", currentQuestion);
     return (
         <div
             style={{
@@ -16,23 +17,9 @@ export default function ParticipantQuestionActiveFooter(): JSX.Element {
             className="absolute bottom-4 left-4 z-100 flex items-center justify-start gap-x-4 w-fit"
         >
             {currentQuestion?.hint && (
-                <UtilityCard className="flex items-center justify-center gap-x-2">
-                    <FaLightbulb
-                        strokeWidth={0.8}
-                        style={{
-                            border: `1px solid ${template?.border_color}50`,
-                            backgroundColor: `${template?.text_color}20`,
-                        }}
-                        size={26}
-                        className="rounded-full p-1.5 cursor-pointer"
-                    />
-                    <div
-                        style={{
-                            color: template?.text_color,
-                        }}
-                        className="text-xs"
-                    >
-                        {currentQuestion.hint}
+                <UtilityCard className="min-w-[16rem] max-w-[20rem] w-fit px-4 py-2 text-wrap">
+                    <div className="text-sm tracking-wide dark:text-light-base text-dark-primary font-light">
+                        {currentQuestion?.hint}
                     </div>
                 </UtilityCard>
             )}

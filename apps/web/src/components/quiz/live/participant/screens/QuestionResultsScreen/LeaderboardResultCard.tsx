@@ -113,12 +113,12 @@ export default function LeaderboardResultCard({
             </div>
             <div
                 className={cn(
-                    'w-full bg-white/7 backdrop-blur-3xl border border-slate-700/40 rounded-lg sm:rounded-xl shadow-2xl overflow-hidden p-3 sm:p-4 lg:p-5 ',
-                    'text-neutral-300',
+                    'w-full bg-white/7 backdrop-blur-3xl border border-slate-700/40 rounded-lg sm:rounded-xl shadow-2xl overflow-hidden p-3 sm:p-4 lg:px-5 lg:py-4 ',
+                    'text-neutral-300 text-left',
                 )}
             >
                 {currentQuestion?.explanation ? (
-                    <div>{currentQuestion?.explanation}</div>
+                    <div className='text-sm'>{currentQuestion?.explanation}</div>
                 ) : (
                     <div>No explanation provided</div>
                 )}
