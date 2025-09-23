@@ -1,5 +1,5 @@
 {
-  "name": "triangulum-x",
+  "name": "nocturn",
   "private": true,
   "scripts": {
     "build": "turbo run build",

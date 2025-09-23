@@ -15,7 +15,7 @@ type FooterSection = {
 
 const footerSections: FooterSection[] = [
     {
-        title: 'Try Triangulum',
+        title: 'Try Nocturn',
         items: [
             { label: 'Overview', href: '/overview' },
             { label: 'Features', href: '/features' },
