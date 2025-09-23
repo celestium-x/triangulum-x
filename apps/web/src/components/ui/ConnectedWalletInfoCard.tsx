@@ -126,7 +126,7 @@ export function ConnectedWalletInfoCard() {
             //     },
             //     wallet ? [wallet.signTransaction] : []
             //   );
-            //   console.log("Transaction sent:", tx);
+            //
         } catch (err) {
             console.error(err);
         }
