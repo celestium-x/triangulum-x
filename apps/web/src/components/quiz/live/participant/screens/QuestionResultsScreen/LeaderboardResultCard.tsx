@@ -118,7 +118,7 @@ export default function LeaderboardResultCard({
                 )}
             >
                 {currentQuestion?.explanation ? (
-                    <div className='text-sm'>{currentQuestion?.explanation}</div>
+                    <div className="text-sm">{currentQuestion?.explanation}</div>
                 ) : (
                     <div>No explanation provided</div>
                 )}
