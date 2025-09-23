@@ -2,13 +2,10 @@ import UtilityCard from '@/components/utility/UtilityCard';
 import { templates } from '@/lib/templates';
 import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { JSX } from 'react';
-import { FaLightbulb } from 'react-icons/fa6';
 
 export default function ParticipantQuestionActiveFooter(): JSX.Element {
     const { currentQuestion, quiz } = useLiveQuizStore();
     const template = templates.find((t) => t.id === quiz?.theme);
-    console.log("template color is : ", template);
-    console.log("current question is : ", currentQuestion);
     return (
         <div
             style={{
