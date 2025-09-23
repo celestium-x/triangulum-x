@@ -9,7 +9,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: kantdocker1/orchestrator
   DOCKERFILE_PATH: ./apps/orchestrator/Dockerfile
-  BUILD_CONTEXT: ./apps/orchestrator
+  BUILD_CONTEXT: .
 
 jobs:
   build-and-push:
