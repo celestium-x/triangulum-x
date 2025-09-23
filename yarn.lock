@@ -1275,6 +1275,18 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.4.0"
 
+"@lottiefiles/dotlottie-react@^0.17.1":
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-react/-/dotlottie-react-0.17.1.tgz#f1daccc90e0b9ef9b4b919274485fc400b9e949e"
+  integrity sha512-n31+90TrG40/n6tNaF8l3uFvDqsFHtNPqlk+OyKrtOoM7Bb7jooe+KXp62gK5vObH/JqVGYQdWDeE/i49zXQcQ==
+  dependencies:
+    "@lottiefiles/dotlottie-web" "0.52.2"
+
+"@lottiefiles/dotlottie-web@0.52.2":
+  version "0.52.2"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-web/-/dotlottie-web-0.52.2.tgz#683673e075fcf81e8d1b0151ec1309e03c12afb1"
+  integrity sha512-aeXCMUB5RdusHrvZ3Py2KaMgQ0w7SdA8NFbPK+SpwqC1UW1CDFZl5vPLueZHju7vLhB1rpPvpQ5fQ0L/KEZt7w==
+
 "@mobily/ts-belt@^3.13.1":
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/@mobily/ts-belt/-/ts-belt-3.13.1.tgz#8f8ce2a2eca41d88c2ca70c84d0f47d0f7f5cd5f"
