@@ -52,6 +52,9 @@ export default function HostQuestionPreviewRenderer() {
             // this will only hit if the quiz ends
             return;
         }
+
+        console.log({ currentQuestion, nextQuestion });
+
         updateCurrentQuestion(nextQuestion);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quiz]);

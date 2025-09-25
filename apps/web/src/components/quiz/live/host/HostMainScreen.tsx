@@ -8,6 +8,7 @@ import HostPanelRenderer from './controls/HostPanelRenderer';
 import HostQuestionResultsScreen from './screens/QuestionResultsScreen/HostQuestionResultsScreen';
 import HostQuestionActiveScreen from './screens/QuestionActiveScreen/HostQuestionActiveScreen';
 import HostQuestionReadingScreen from './screens/QuestionReadingScreen/HostQuestionReadingScreen';
+import FinalResultsScreen from '../common/FinalResultsScreen';
 
 export default function HostMainScreen() {
     const { gameSession } = useLiveQuizStore();
@@ -28,6 +29,9 @@ export default function HostMainScreen() {
 
             case HostScreenEnum.QUESTION_RESULTS:
                 return <HostQuestionResultsScreen />;
+            
+            case HostScreenEnum.FINAL_RESULTS:
+                return <FinalResultsScreen />;
         }
     }
 
