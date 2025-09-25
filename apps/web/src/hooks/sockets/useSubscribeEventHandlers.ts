@@ -11,6 +11,12 @@ export function useSubscribeEventHandlers() {
             MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
             SubscribeEventHandlers.handleIncomingMessage,
         );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
+            SubscribeEventHandlers.handleParticipantLeaveGameSession,
+        );
+
         subscribeToHandler(
             MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
             SubscribeEventHandlers.handleIncomingNameChangeMessage,
@@ -113,6 +119,10 @@ export function useSubscribeEventHandlers() {
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
                 SubscribeEventHandlers.handleIncomingMessage,
             );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
+                SubscribeEventHandlers.handleParticipantLeaveGameSession,
+            )
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
                 SubscribeEventHandlers.handleIncomingNameChangeMessage,
