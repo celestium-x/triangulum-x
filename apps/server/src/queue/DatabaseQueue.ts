@@ -82,6 +82,11 @@ interface CreateParticipantResponseJobType {
     };
 }
 
+interface DeleteParticipantJobType {
+    id: string;
+    game_session_id: string;
+}
+
 export default class DatabaseQueue {
     private database_queue: Bull.Queue;
     private redis_cache: RedisCache;
@@ -128,6 +133,10 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
             this.create_participant_response_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.DELETE_PARTICIPANT,
+            this.delete_participant_processor.bind(this),
         );
     }
 
@@ -181,6 +190,35 @@ export default class DatabaseQueue {
             return {
                 success: false,
                 error: error instanceof Error ? error.message : 'Unknown error',
+            };
+        }
+    }
+
+    private async delete_participant_processor(
+        job: Bull.Job,
+    ): Promise<
+        { succcess: boolean; participant: Participant } | { success: boolean; error: string }
+    > {
+        const { id, game_session_id }: DeleteParticipantJobType = job.data;
+
+        try {
+            const participant = await prisma.participant.delete({
+                where: {
+                    id: id,
+                },
+            });
+
+            await this.redis_cache.delete_participant(game_session_id, id);
+
+            return {
+                succcess: true,
+                participant: participant,
+            };
+        } catch (err) {
+            console.error('Error while processing delete in participants: ', err);
+            return {
+                success: false,
+                error: err instanceof Error ? err.message : 'Unknown error',
             };
         }
     }
@@ -456,6 +494,20 @@ export default class DatabaseQueue {
             .add(
                 QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
                 { id, game_session_id, response },
+                { ...this.default_job_options, ...options },
+            )
+            .catch((err) => console.error('Failed to enqueue participant response: ', err));
+    }
+
+    public async delete_participant(
+        id: string,
+        game_session_id: string,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue
+            .add(
+                QueueJobTypes.DELETE_PARTICIPANT,
+                { id, game_session_id },
                 { ...this.default_job_options, ...options },
             )
             .catch((err) => console.error('Failed to enqueue participant response: ', err));
