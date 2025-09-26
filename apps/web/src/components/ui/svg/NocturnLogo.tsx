@@ -1,8 +1,13 @@
-export default function NocturnLogo() {
+interface NocturnLogoProps {
+    width?: number | string;
+    height?: number | string;
+}
+
+export default function NocturnLogo({ width = 50, height = 28 }: NocturnLogoProps) {
     return (
         <svg
-            width="50"
-            height="28"
+            width={width}
+            height={height}
             viewBox="0 0 250 138"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

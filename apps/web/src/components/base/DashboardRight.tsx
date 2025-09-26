@@ -45,12 +45,12 @@ export default function DashboardRight(): JSX.Element {
 
     return (
         <motion.div
-            className="flex-1 h-full overflow-hidden bg-neutral-50 dark:bg-dark-primary/30 border-l-[1px]  border-neutral-300 dark:border-neutral-700 rounded-tl-xl"
+            className="flex-1 h-full overflow-hidden bg-neutral-50 dark:bg-dark-primary/30 rounded-tl-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
         >
-            <div className="mt-[5rem] flex flex-col gap-y-4">{renderDashboard()}</div>
+            <div className="pt-[4rem] h-full flex flex-col gap-y-4">{renderDashboard()}</div>
         </motion.div>
     );
 }
