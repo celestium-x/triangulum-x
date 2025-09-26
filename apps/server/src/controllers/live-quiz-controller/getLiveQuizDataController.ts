@@ -45,6 +45,7 @@ export default async function getLiveQuizDataController(req: Request, res: Respo
                     eliminationThreshold: true,
                     timeBonus: true,
                     liveChat: true,
+                    allowNewSpectator: true,
                     spectatorMode: true,
                     basePointsPerQuestion: true,
                     pointsMultiplier: true,

@@ -58,7 +58,7 @@ export default function LiveUserRendererScreens() {
 
     function requestFullscreen() {
         if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => {});
+            document.documentElement.requestFullscreen().catch(() => { });
         }
     }
 
@@ -86,7 +86,6 @@ export default function LiveUserRendererScreens() {
     }
 
     function deny() {
-        // make a ws call to remove participant/spectator from quiz
         handleParticipantLeaveGameSession({});
         cleanWebSocketClient();
         router.back();
@@ -105,7 +104,8 @@ export default function LiveUserRendererScreens() {
 
             {(currentUserType === USER_TYPE.PARTICIPANT ||
                 currentUserType === USER_TYPE.SPECTATOR) &&
-                !allowed && <FullScreenWarningPanel accept={accept} deny={deny} />}
+                !allowed && <FullScreenWarningPanel accept={accept} deny={deny} />
+            }
 
             {renderCurrentUserScreen()}
         </div>

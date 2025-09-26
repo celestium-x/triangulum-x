@@ -18,9 +18,7 @@ export default class PhaseQueueProcessor {
   }
 
   private start_consuming() {
-    
     this.phase_queue.process("phase_transition", async (job) => {
-      
       this.transition_worker.handle_transition_phase(job.data);
     });
   }
@@ -34,7 +32,6 @@ export default class PhaseQueueProcessor {
         delay,
         jobId: `${data.gameSessionId}_${data.questionIndex}_${data.fromPhase}_${data.toPhase}`,
       });
-      
     } catch (error) {
       console.error(`Failed to schedule phase transition:`, error);
     }

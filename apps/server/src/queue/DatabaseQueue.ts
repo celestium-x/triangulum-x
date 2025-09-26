@@ -106,6 +106,18 @@ export default class DatabaseQueue {
     }
 
     private setupProcessors() {
+        this.database_queue.on('completed', (job) => {
+            console.warn(`Job ${job.id} completed`);
+        });
+
+        this.database_queue.on('failed', (job, err) => {
+            console.error(`Job ${job.id} failed:`, err);
+        });
+
+        this.database_queue.on('stalled', (job) => {
+            console.warn(`Job ${job.id} stalled and will be retried`);
+        });
+
         this.database_queue.process(
             QueueJobTypes.UPDATE_GAME_SESSION,
             this.update_game_session_processor.bind(this),
@@ -252,13 +264,16 @@ export default class DatabaseQueue {
         job: Bull.Job,
     ): Promise<{ success: boolean; quiz: Quiz } | { success: boolean; error: string }> {
         try {
-            const { id, quiz }: UpdateQuizJobType = job.data;
+            const { id, quiz, game_session_id }: UpdateQuizJobType = job.data;
+
             const updateQuiz = await prisma.quiz.update({
                 where: {
                     id,
                 },
                 data: quiz,
             });
+
+            this.redis_cache.set_quiz(game_session_id, updateQuiz);
             return { success: true, quiz: updateQuiz };
         } catch (err) {
             console.error('Error while processing quiz update', err);
@@ -400,7 +415,7 @@ export default class DatabaseQueue {
         game_session_id: string,
         options?: Partial<JobOption>,
     ) {
-        return await this.database_queue.add(
+        await this.database_queue.add(
             QueueJobTypes.UPDATE_QUIZ,
             { id, quiz, game_session_id },
             { ...this.default_job_options, ...options },

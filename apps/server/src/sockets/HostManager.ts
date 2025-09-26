@@ -17,6 +17,8 @@ import DatabaseQueue from '../queue/DatabaseQueue';
 import RedisCache from '../cache/RedisCache';
 import PhaseQueue from '../queue/PhaseQueue';
 import { QuizPhase } from '.prisma/client';
+import QuizSettings from '../class/quizSettings';
+import { quizSettingInstance } from '../services/init-services';
 
 export interface HostManagerDependencies {
     publisher: Redis;
@@ -36,6 +38,7 @@ export default class HostManager {
     private database_queue: DatabaseQueue;
     private redis_cache: RedisCache;
     private phase_queue: PhaseQueue;
+    private quiz_settings: QuizSettings;
 
     constructor(dependencies: HostManagerDependencies) {
         this.socketMapping = dependencies.socketMapping;
@@ -44,6 +47,7 @@ export default class HostManager {
         this.database_queue = dependencies.databaseQueue;
         this.redis_cache = dependencies.redis_cache;
         this.phase_queue = dependencies.phase_queue;
+        this.quiz_settings = quizSettingInstance;
     }
 
     public async handle_connection(ws: CustomWebSocket, payload: CookiePayload): Promise<void> {
@@ -107,6 +111,10 @@ export default class HostManager {
                 this.handle_host_emits_hint(payload, ws);
                 break;
 
+            case MESSAGE_TYPES.SETTINGS_CHANGE:
+                this.handle_settings_change(ws, payload);
+                break;
+
             default:
                 console.error('Unknown message type', type);
                 break;
@@ -134,7 +142,15 @@ export default class HostManager {
         this.quizManager.publish_event_to_redis(ws.user.gameSessionId, hintPayload);
     }
 
-    private handle_incoming_interaction_event(payload: any, ws: CustomWebSocket) {
+    private handle_settings_change(ws: CustomWebSocket, payload: any): void {
+        this.quiz_settings.update_quiz_settings_on_db_and_cache(
+            ws.user.gameSessionId,
+            ws.user.quizId,
+            payload,
+        );
+    }
+
+    private handle_incoming_interaction_event(payload: any, ws: CustomWebSocket): void {
         const { reactionType } = payload;
         const published_message: PubSubMessageTypes = {
             type: MESSAGE_TYPES.INTERACTION_EVENT,
@@ -148,6 +164,7 @@ export default class HostManager {
 
     private async handle_question_launch(payload: any, ws: CustomWebSocket) {
         const { questionId, questionIndex } = payload;
+
         const { gameSessionId: game_session_id } = ws.user;
         const quiz = await this.redis_cache.get_quiz(game_session_id);
 
@@ -156,6 +173,7 @@ export default class HostManager {
         }
 
         const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
+
         //check this line proeprly
         if (!question) throw new Error("Questions doesn't exist in quiz");
 
@@ -300,6 +318,11 @@ export default class HostManager {
         const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
         const { senderName, message, repliedToId, senderAvatar } = payload;
 
+        const is_chat_allowed = this.quiz_settings.quiz_settings_mapping.get(
+            ws.user.gameSessionId,
+        )?.liveChat;
+        if (!is_chat_allowed) return;
+
         if (!quizId || !sender_id || !message) {
             console.error('Missing required fields in chat message payload:', {
                 quizId,
@@ -342,6 +365,11 @@ export default class HostManager {
         const { userId, gameSessionId: game_session_id } = ws.user;
         const { chatMessageId, reactedAt, reaction, reactorAvatar, reactorName, reactorType } =
             payload;
+
+        const is_chat_allowed = this.quiz_settings.quiz_settings_mapping.get(
+            ws.user.gameSessionId,
+        )?.liveChat;
+        if (!is_chat_allowed) return;
 
         if (!chatMessageId) {
             console.error('Missing required fields in chat reactuon payload:', {

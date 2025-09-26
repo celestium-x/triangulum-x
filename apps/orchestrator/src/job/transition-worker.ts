@@ -32,10 +32,8 @@ export default class TransitionWorker {
     this.database_queue = databaseQueueInstance;
     this.publisher = publisherInstnace;
     this.phase_queue_processor = phaseQueueProcessorInstance;
-    
   }
   public async handle_transition_phase(data: PhaseQueueJobDataType) {
-    
     if (
       data.fromPhase === QuizPhase.QUESTION_READING &&
       data.toPhase === QuizPhase.QUESTION_ACTIVE
@@ -53,7 +51,7 @@ export default class TransitionWorker {
     data: PhaseQueueJobDataType,
   ) {
     const quiz = await this.redis_cache.get_quiz(data.gameSessionId);
-    
+
     if (!quiz) {
       // send websocket message for error
       console.error("Quiz not found");
