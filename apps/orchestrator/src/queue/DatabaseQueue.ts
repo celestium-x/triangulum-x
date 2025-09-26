@@ -384,18 +384,18 @@ export default class DatabaseQueue {
     );
   }
 
-  public async update_quiz(
-    id: string,
-    quiz: Prisma.QuizUpdateInput,
-    game_session_id: string,
-    options?: Partial<JobOption>,
-  ) {
-    return await this.database_queue.add(
-      QueueJobTypes.UPDATE_QUIZ,
-      { id, quiz, game_session_id },
-      { ...this.default_job_options, ...options },
-    );
-  }
+  // public async update_quiz(
+  //   id: string,
+  //   quiz: Prisma.QuizUpdateInput,
+  //   game_session_id: string,
+  //   options?: Partial<JobOption>,
+  // ) {
+  //   return await this.database_queue.add(
+  //     QueueJobTypes.UPDATE_QUIZ,
+  //     { id, quiz, game_session_id },
+  //     { ...this.default_job_options, ...options },
+  //   );
+  // }
 
   public async update_participant(
     id: string,

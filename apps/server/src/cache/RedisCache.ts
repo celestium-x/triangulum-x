@@ -275,7 +275,7 @@ export default class RedisCache {
 
     //  <------------------ QUIZ ------------------>
 
-    public async set_quiz(game_session_id: string, quiz_id: string, quiz: Partial<Quiz>) {
+    public async set_quiz(game_session_id: string, quiz: Partial<Quiz>) {
         try {
             const key = this.get_quiz_key(game_session_id);
 

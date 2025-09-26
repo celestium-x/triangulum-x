@@ -13,6 +13,7 @@ import {
     ParticipantScreenEnum,
     ParticipantType,
     QuizPhaseEnum,
+    QuizType,
     SpectatorScreenEnum,
     SpectatorType,
 } from '@/types/prisma-types';
@@ -391,7 +392,7 @@ export class SubscribeEventHandlers {
         });
     }
 
-    static handleHostLaunchQuestion() {}
+    static handleHostLaunchQuestion() { }
 
     // <---------------------- RESPONSE-EVENTS ---------------------->
 
@@ -409,5 +410,11 @@ export class SubscribeEventHandlers {
 
         const { updateLiveResponses } = useLiveQuizHostStore.getState();
         updateLiveResponses(message.selectedAnswer);
+    }
+
+    static handleSettingschange(payload: unknown) {
+        const message = payload as QuizType;
+        const { updateQuiz } = useLiveQuizStore.getState();
+        updateQuiz(message);
     }
 }

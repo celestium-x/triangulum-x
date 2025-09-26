@@ -15,6 +15,7 @@ import { useLiveHostStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import { IoClose } from 'react-icons/io5';
 import MessagesRenderer from '../../common/MessageRenderer';
 import { InteractionEnum } from '@/types/prisma-types';
+import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 
 const emojiList = [
     '😀',
@@ -43,6 +44,7 @@ export default function HostChatsPanel() {
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [selectedReply, setSelectedReply] = useState<ChatMessageType | null>(null);
     const { chatMessages, addChatMessage, addChatReaction } = useLiveQuizGlobalChatStore();
+    const { quiz } = useLiveQuizStore();
 
     useEffect(() => {
         if (selectedReply) {
@@ -139,6 +141,7 @@ export default function HostChatsPanel() {
                         'focus-within:ring-1 focus-within:border-ring focus-within:ring-ring/50 rounded-xl ',
                         'dark:bg-input/30',
                         'relative',
+                        !quiz.liveChat && 'border border-red-500'
                     )}
                 >
                     {selectedReply && (
@@ -181,6 +184,7 @@ export default function HostChatsPanel() {
                         </span>
 
                         <TextArea
+                            disabled={!quiz.liveChat}
                             autogrow
                             ref={inputRef}
                             className={cn(

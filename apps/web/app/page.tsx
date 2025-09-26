@@ -26,7 +26,7 @@ export default function Home() {
                     <LandingPage />
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto">
+            <div className="relative">
                 <FeatureBox />
                 <CustomFeatureComponent />
                 <FeatureArcComponent />

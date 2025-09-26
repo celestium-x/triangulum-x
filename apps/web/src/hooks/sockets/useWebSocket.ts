@@ -148,6 +148,16 @@ export const useWebSocket = () => {
             socket.current.send_message(message);
         }
     }
+    function handleSettingsChangeEvent(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.SETTINGS_CHANGE,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
 
     return {
         subscribeToHandler,
@@ -164,5 +174,6 @@ export const useWebSocket = () => {
         handleParticipantResponseMessage,
         handleLaunchHintEvent,
         handleParticipantLeaveGameSession,
+        handleSettingsChangeEvent
     };
 };
