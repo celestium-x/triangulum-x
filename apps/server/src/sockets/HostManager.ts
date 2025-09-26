@@ -318,11 +318,6 @@ export default class HostManager {
         const { gameSessionId, quizId, userId: sender_id, role: sender_role } = ws.user;
         const { senderName, message, repliedToId, senderAvatar } = payload;
 
-        const is_chat_allowed = this.quiz_settings.quiz_settings_mapping.get(
-            ws.user.gameSessionId,
-        )?.liveChat;
-        if (!is_chat_allowed) return;
-
         if (!quizId || !sender_id || !message) {
             console.error('Missing required fields in chat message payload:', {
                 quizId,

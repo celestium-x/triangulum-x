@@ -97,6 +97,7 @@ export default class ParticipantManager {
         });
 
         ws.on('close', () => {
+            this.handle_participant_leave_gamesession(ws);
             this.cleanup_participant_socket(ws);
         });
 
@@ -122,7 +123,7 @@ export default class ParticipantManager {
                 break;
 
             case MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION:
-                this.handle_participant_leave_gamesession(payload, ws);
+                this.handle_participant_leave_gamesession(ws);
                 break;
 
             default:
@@ -150,7 +151,7 @@ export default class ParticipantManager {
         const { gameSessionId: game_session_id } = ws.user;
         const { choosenNickname } = payload;
         const participant = await this.redis_cache.get_participant(game_session_id, ws.user.userId);
-        if (participant.isNameChanged) {
+        if (participant?.isNameChanged) {
             return;
         }
 
@@ -266,7 +267,7 @@ export default class ParticipantManager {
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
     }
 
-    private async handle_participant_leave_gamesession(payload: any, ws: CustomWebSocket) {
+    private async handle_participant_leave_gamesession(ws: CustomWebSocket) {
         const { gameSessionId: game_session_id } = ws.user;
         const user_id = ws.user.userId;
 

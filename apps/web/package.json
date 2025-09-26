@@ -8,7 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "eslint . --config eslint.config.ts --max-warnings 0",
-        "format": "prettier . --write",
+        "format": "yarn remove-logs && prettier . --write",
         "format:check": "prettier . --check",
         "check-types": "tsc --noEmit",
         "remove-logs": "npx ts-node scripts/remove-logs.ts"

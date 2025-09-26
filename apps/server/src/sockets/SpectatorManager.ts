@@ -106,12 +106,12 @@ export default class SpectatorManager {
         });
 
         ws.on('close', () => {
+            // this.handle_spectator_leave_gamesession(ws);
             this.cleanup_spectator_socket(ws);
         });
 
         ws.on('error', (error) => {
             console.error('WebSocket error:', error);
-            this.cleanup_spectator_socket(ws);
         });
     }
 
@@ -133,6 +133,10 @@ export default class SpectatorManager {
 
             case MESSAGE_TYPES.CHAT_REACTION_EVENT:
                 this.handle_incoming_chat_reaction_event(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION:
+                this.handle_spectator_leave_gamesession(ws);
                 break;
 
             default:
@@ -211,7 +215,7 @@ export default class SpectatorManager {
             type: MESSAGE_TYPES.SPECTATOR_NAME_CHANGE,
             payload: {
                 id: ws.user.userId,
-                nickname: data.nickname,
+                nickname: data.spectator.nickname,
             },
         };
 
@@ -309,5 +313,30 @@ export default class SpectatorManager {
 
     private generateSocketId(): string {
         return uuid();
+    }
+
+    private async handle_spectator_leave_gamesession(ws: CustomWebSocket) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const user_id = ws.user.userId;
+
+        const spectator_cache = await this.redis_cache.get_spectator(game_session_id, user_id);
+
+        if (!spectator_cache) {
+            return;
+        }
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION,
+            payload: {
+                userId: user_id,
+            },
+            exclude_socket_id: ws.id,
+        };
+
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+
+        // delete the user from the database
+        // either do this or add another schema for showing this user was removed
+        this.database_queue.delete_spectator(user_id, game_session_id);
     }
 }
