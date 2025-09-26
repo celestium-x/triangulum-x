@@ -118,6 +118,11 @@ export function useSubscribeEventHandlers() {
             MESSAGE_TYPES.SETTINGS_CHANGE,
             SubscribeEventHandlers.handleSettingschange,
         );
+
+        subscribeToHandler(
+            MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION,
+            SubscribeEventHandlers.handleSpectatorLeaveGameSession,
+        );
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -216,6 +221,10 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.SETTINGS_CHANGE,
                 SubscribeEventHandlers.handleSettingschange,
+            );
+            unsubscribeToHandler(
+                MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION,
+                SubscribeEventHandlers.handleSpectatorLeaveGameSession,
             );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);

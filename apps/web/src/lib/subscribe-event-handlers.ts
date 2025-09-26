@@ -101,6 +101,14 @@ export class SubscribeEventHandlers {
         } as SpectatorType);
     }
 
+    static handleSpectatorLeaveGameSession(payload: unknown) {
+        const { userId } = payload as {
+            userId: string;
+        };
+        const { removeSpectator } = useLiveSpectatorsStore.getState();
+        removeSpectator(userId);
+    }
+
     // static handleSpectatorIncomingResultsPhase(payload: unknown) {
     //     const resultsPhasePayload = payload as {
     //         scores: { participantId: string; score: number }[];

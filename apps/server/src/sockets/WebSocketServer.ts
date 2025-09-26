@@ -239,6 +239,14 @@ export default class WebsocketServer {
                     USER_TYPE.PARTICIPANT,
                 ]);
                 break;
+
+            case MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                    USER_TYPE.PARTICIPANT,
+                ]);
+                break;
         }
     }
 
