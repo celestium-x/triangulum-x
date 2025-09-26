@@ -6,7 +6,7 @@ import QuizManager from '../sockets/QuizManager';
 import { MESSAGE_TYPES, PubSubMessageTypes } from '../types/web-socket-types';
 
 export default class QuizSettings {
-    public quiz_settings_mapping: Map<string, QuizSetting> = new Map(); // game_session_id, setting_object
+    public quiz_settings_mapping: Map<string, QuizSetting> = new Map();
     private database_queue: DatabaseQueue;
     private quiz_manager: QuizManager;
     constructor() {
@@ -32,7 +32,6 @@ export default class QuizSettings {
 
         try {
             this.database_queue.update_quiz(quiz_id, quiz, game_session_id);
-
             const pubsubEvent: PubSubMessageTypes = {
                 type: MESSAGE_TYPES.SETTINGS_CHANGE,
                 payload: { ...parsed_payload.data, game_session_id },
