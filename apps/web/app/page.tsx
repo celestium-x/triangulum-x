@@ -1,3 +1,4 @@
+'use client';
 import Navbar from '../src/components/navbars/Navbar';
 import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';

@@ -9,7 +9,7 @@
     "dev": "yarn build && yarn start",
     "lint": "eslint './src/**/*.{ts,js}'",
     "remove-logs": "npx ts-node src/scripts/remove-logs",
-    "format": "yarn remove-logs && prettier --write './src/**/*.{ts,tsx,js,jsx,json,md}'"
+    "format": "prettier --write './src/**/*.{ts,tsx,js,jsx,json,md}'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.850.0",
