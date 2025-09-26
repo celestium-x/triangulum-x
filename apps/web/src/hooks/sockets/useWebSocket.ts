@@ -174,6 +174,6 @@ export const useWebSocket = () => {
         handleParticipantResponseMessage,
         handleLaunchHintEvent,
         handleParticipantLeaveGameSession,
-        handleSettingsChangeEvent
+        handleSettingsChangeEvent,
     };
 };

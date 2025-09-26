@@ -141,7 +141,7 @@ export default function HostChatsPanel() {
                         'focus-within:ring-1 focus-within:border-ring focus-within:ring-ring/50 rounded-xl ',
                         'dark:bg-input/30',
                         'relative',
-                        !quiz.liveChat && 'border border-red-500'
+                        !quiz.liveChat && 'border border-red-500',
                     )}
                 >
                     {selectedReply && (

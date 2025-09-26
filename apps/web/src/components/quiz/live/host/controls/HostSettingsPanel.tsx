@@ -16,10 +16,10 @@ enum SettingsView {
 }
 
 interface QuizSetting {
-    liveChat: boolean,
-    interactionMode: boolean,
-    watchLeaderBoard: boolean,
-    allowNewSpectator: boolean,
+    liveChat: boolean;
+    interactionMode: boolean;
+    watchLeaderBoard: boolean;
+    allowNewSpectator: boolean;
 }
 
 export default function HostSettingsPanel() {
@@ -37,10 +37,9 @@ export default function HostSettingsPanel() {
         allowNewSpectator: quiz.allowNewSpectator,
     });
 
-
     function handleSettingsChange<K extends keyof QuizSetting>(key: K, value: QuizSetting[K]) {
         setSettings((prev: QuizSetting) => {
-            const newSettings = { ...prev, [key]: value }
+            const newSettings = { ...prev, [key]: value };
             handleSettingsChangeEvent({
                 liveChat: newSettings.liveChat,
                 allowNewSpectator: newSettings.allowNewSpectator,
@@ -49,9 +48,8 @@ export default function HostSettingsPanel() {
         });
 
         updateQuiz({
-            [key]: value
-        })
-
+            [key]: value,
+        });
     }
 
     return (
@@ -137,7 +135,7 @@ interface SettingsRowProps {
     description: string;
     tooltip: string;
     value?: boolean;
-    onChange: (val: boolean) => void
+    onChange: (val: boolean) => void;
 }
 
 export function SettingRow({

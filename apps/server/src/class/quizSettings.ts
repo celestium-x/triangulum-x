@@ -30,8 +30,6 @@ export default class QuizSettings {
             allowNewSpectator: parsed_payload.data.allowNewSpectator,
         };
 
-        console.log('quiz to be updated with these data is :', quiz);
-
         try {
             this.database_queue.update_quiz(quiz_id, quiz, game_session_id);
 
@@ -49,7 +47,6 @@ export default class QuizSettings {
 
     public update_memory_settings_state(game_session_id: string, data: QuizSetting) {
         this.quiz_settings_mapping.set(game_session_id, data);
-        console.log('in memory settings is : ', this.quiz_settings_mapping.get(game_session_id));
     }
 
     private fill_settings_on_boot() {}

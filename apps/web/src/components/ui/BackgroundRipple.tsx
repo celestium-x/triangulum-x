@@ -16,7 +16,7 @@ export default function BackgroundRipple({
         col: number;
     } | null>(null);
     const [rippleKey, setRippleKey] = useState(0);
-    const ref = useRef<any>(null);
+    const ref = useRef(null);
 
     return (
         <div

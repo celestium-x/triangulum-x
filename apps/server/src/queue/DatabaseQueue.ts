@@ -272,7 +272,7 @@ export default class DatabaseQueue {
                 },
                 data: quiz,
             });
-            console.log('updated quiz is : ', quiz);
+
             this.redis_cache.set_quiz(game_session_id, updateQuiz);
             return { success: true, quiz: updateQuiz };
         } catch (err) {

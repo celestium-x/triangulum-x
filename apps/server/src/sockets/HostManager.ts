@@ -164,7 +164,7 @@ export default class HostManager {
 
     private async handle_question_launch(payload: any, ws: CustomWebSocket) {
         const { questionId, questionIndex } = payload;
-        console.log('paylaod is : ', payload);
+
         const { gameSessionId: game_session_id } = ws.user;
         const quiz = await this.redis_cache.get_quiz(game_session_id);
 
@@ -172,10 +172,8 @@ export default class HostManager {
             throw new Error("Quiz doesn't exist in game_session");
         }
 
-        console.log('quiz is : ', quiz);
-
         const question = quiz.questions?.find((q) => q && q.orderIndex === questionIndex);
-        console.log('quesiton is : ', question);
+
         //check this line proeprly
         if (!question) throw new Error("Questions doesn't exist in quiz");
 

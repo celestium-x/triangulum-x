@@ -117,7 +117,7 @@ export function useSubscribeEventHandlers() {
         subscribeToHandler(
             MESSAGE_TYPES.SETTINGS_CHANGE,
             SubscribeEventHandlers.handleSettingschange,
-        )
+        );
         return () => {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_JOIN_GAME_SESSION,
@@ -216,7 +216,7 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.SETTINGS_CHANGE,
                 SubscribeEventHandlers.handleSettingschange,
-            )
+            );
         };
     }, [subscribeToHandler, unsubscribeToHandler]);
 }
