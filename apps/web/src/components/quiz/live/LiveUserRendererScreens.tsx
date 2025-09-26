@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useUserRoleStore } from '@/store/live-quiz/useLiveQuizUserStore';
 import HostMainScreen from './host/HostMainScreen';
@@ -14,6 +14,7 @@ import { USER_TYPE } from '@/types/prisma-types';
 import FullScreenWarningPanel from './common/FullScreenWarningPanel';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { cleanWebSocketClient } from '@/lib/singleton-socket';
 
 export default function LiveUserRendererScreens() {
     const { currentUserType } = useUserRoleStore();
@@ -23,9 +24,7 @@ export default function LiveUserRendererScreens() {
     const [fullscreenAccepted, setFullscreenAccepted] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    const template = quiz?.theme
-        ? templates.find((template) => template.id === quiz.theme)
-        : null;
+    const template = quiz?.theme ? templates.find((template) => template.id === quiz.theme) : null;
 
     useWebSocket();
     useSubscribeEventHandlers();
@@ -36,8 +35,8 @@ export default function LiveUserRendererScreens() {
         function handleChange() {
             setIsFullscreen(!!document.fullscreenElement);
         }
-        document.addEventListener("fullscreenchange", handleChange);
-        return () => document.removeEventListener("fullscreenchange", handleChange);
+        document.addEventListener('fullscreenchange', handleChange);
+        return () => document.removeEventListener('fullscreenchange', handleChange);
     }, []);
 
     const [allowed, setAllowed] = useState(false);
@@ -59,7 +58,7 @@ export default function LiveUserRendererScreens() {
 
     function requestFullscreen() {
         if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(() => { });
+            document.documentElement.requestFullscreen().catch(() => {});
         }
     }
 
@@ -69,10 +68,13 @@ export default function LiveUserRendererScreens() {
         switch (currentUserType) {
             case USER_TYPE.HOST:
                 return <HostMainScreen />;
+
             case USER_TYPE.PARTICIPANT:
                 return <ParticipantMainScreen />;
+
             case USER_TYPE.SPECTATOR:
                 return <SpectatorMainScreen />;
+
             default:
                 return <div>Unknown</div>;
         }
@@ -86,6 +88,7 @@ export default function LiveUserRendererScreens() {
     function deny() {
         // make a ws call to remove participant/spectator from quiz
         handleParticipantLeaveGameSession({});
+        cleanWebSocketClient();
         router.back();
     }
 
@@ -98,16 +101,11 @@ export default function LiveUserRendererScreens() {
             }}
         >
             <AppLogo className="absolute top-4 left-4" />
-            <CanvasAccents
-                design={template?.accent_type}
-                accentColor={template?.accent_color}
-            />
+            <CanvasAccents design={template?.accent_type} accentColor={template?.accent_color} />
 
             {(currentUserType === USER_TYPE.PARTICIPANT ||
                 currentUserType === USER_TYPE.SPECTATOR) &&
-                !allowed && (
-                    <FullScreenWarningPanel accept={accept} deny={deny} />
-                )}
+                !allowed && <FullScreenWarningPanel accept={accept} deny={deny} />}
 
             {renderCurrentUserScreen()}
         </div>

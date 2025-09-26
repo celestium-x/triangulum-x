@@ -137,7 +137,7 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.DELETE_PARTICIPANT,
             this.delete_participant_processor.bind(this),
-        )
+        );
     }
 
     private async update_spectator_processor(
@@ -202,7 +202,6 @@ export default class DatabaseQueue {
         const { id, game_session_id }: DeleteParticipantJobType = job.data;
 
         try {
-
             const participant = await prisma.participant.delete({
                 where: {
                     id: id,
@@ -214,8 +213,7 @@ export default class DatabaseQueue {
             return {
                 succcess: true,
                 participant: participant,
-            }
-
+            };
         } catch (err) {
             console.error('Error while processing delete in participants: ', err);
             return {
@@ -512,6 +510,6 @@ export default class DatabaseQueue {
                 { id, game_session_id },
                 { ...this.default_job_options, ...options },
             )
-            .catch(err => console.error('Failed to enqueue participant response: ', err));
+            .catch((err) => console.error('Failed to enqueue participant response: ', err));
     }
 }

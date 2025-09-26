@@ -7,7 +7,6 @@ import { useLiveQuizStore } from '@/store/live-quiz/useLiveQuizStore';
 import { USER_TYPE } from '@/types/prisma-types';
 
 export default function HostLobbyScreen() {
-
     const { quiz } = useLiveQuizStore();
 
     return (
@@ -16,7 +15,7 @@ export default function HostLobbyScreen() {
             <HostLobbyFooter />
             {/* <WaitingLobbyHostRight /> */}
             <JoinQuizCodeTicker
-                position='b'
+                position="b"
                 copyCode={quiz?.participantCode}
                 user={USER_TYPE.PARTICIPANT}
             />

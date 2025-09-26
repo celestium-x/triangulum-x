@@ -272,7 +272,7 @@ export default class ParticipantManager {
 
         const participant_cache = await this.redis_cache.get_participant(game_session_id, user_id);
 
-        if(!participant_cache) {
+        if (!participant_cache) {
             return;
         }
 
@@ -284,8 +284,6 @@ export default class ParticipantManager {
             exclude_socket_id: ws.id,
         };
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
-
-        console.log('participant removed from the database');
 
         // delete the user from the database
         // either do this or add another schema for showing this user was removed

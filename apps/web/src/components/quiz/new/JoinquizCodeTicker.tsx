@@ -33,7 +33,7 @@ export default function JoinQuizCodeTicker({
         if (code) {
             navigator.clipboard.writeText(addHyphen(code));
             setCopied(true);
-        } else if(copyCode) {
+        } else if (copyCode) {
             navigator.clipboard.writeText(addHyphen(copyCode));
             setCopied(true);
         }
@@ -79,7 +79,7 @@ export default function JoinQuizCodeTicker({
                 'flex items-center justify-center gap-x-2 cursor-pointer',
                 'max-w-[90vw] flex-wrap text-center',
                 'absolute',
-                getPosition()
+                getPosition(),
             )}
         >
             {user === USER_TYPE.SPECTATOR ? (
@@ -87,7 +87,9 @@ export default function JoinQuizCodeTicker({
             ) : (
                 <span className="text-sm text-dark-base">Copy it to join participants</span>
             )}
-            <ToolTipComponent content={`The code lets your ${user === USER_TYPE.SPECTATOR ? 'audience join the presentation' : 'participants join the quiz'} and expires in 2 days`}>
+            <ToolTipComponent
+                content={`The code lets your ${user === USER_TYPE.SPECTATOR ? 'audience join the presentation' : 'participants join the quiz'} and expires in 2 days`}
+            >
                 <div
                     onClick={copyCodeHandler}
                     className="bg-dark-base text-light-base py-0.5 px-2 rounded-sm tracking-widest flex items-center justify-center gap-x-1 group"

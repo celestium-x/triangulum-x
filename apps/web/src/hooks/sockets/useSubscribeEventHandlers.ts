@@ -122,7 +122,7 @@ export function useSubscribeEventHandlers() {
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
                 SubscribeEventHandlers.handleParticipantLeaveGameSession,
-            )
+            );
             unsubscribeToHandler(
                 MESSAGE_TYPES.PARTICIPANT_NAME_CHANGE,
                 SubscribeEventHandlers.handleIncomingNameChangeMessage,

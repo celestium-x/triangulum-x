@@ -144,7 +144,7 @@ export const useWebSocket = () => {
             type: MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
             payload: payload,
         };
-        if(socket.current) {
+        if (socket.current) {
             socket.current.send_message(message);
         }
     }

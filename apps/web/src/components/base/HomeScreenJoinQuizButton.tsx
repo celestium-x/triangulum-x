@@ -27,7 +27,7 @@ export default function HomeScreenJoinQuizButton() {
         }
     }
 
-    function removeHyphen(str: string): string{
+    function removeHyphen(str: string): string {
         const code = str.split('-').join('');
         return code;
     }

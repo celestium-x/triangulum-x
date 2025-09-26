@@ -29,7 +29,7 @@ export default function HostMainScreen() {
 
             case HostScreenEnum.QUESTION_RESULTS:
                 return <HostQuestionResultsScreen />;
-            
+
             case HostScreenEnum.FINAL_RESULTS:
                 return <FinalResultsScreen />;
         }

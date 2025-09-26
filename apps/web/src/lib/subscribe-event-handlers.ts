@@ -45,9 +45,8 @@ export class SubscribeEventHandlers {
     }
 
     static handleParticipantLeaveGameSession(payload: unknown) {
-        const message = payload as { userId: string }
+        const message = payload as { userId: string };
 
-        const {  } = useLiveParticipantStore.getState();
         const { removeParticipant } = useLiveParticipantsStore.getState();
 
         removeParticipant(message.userId);

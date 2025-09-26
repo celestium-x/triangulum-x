@@ -1,9 +1,3 @@
-
-
 export default function FinalResultsScreen() {
-    return (
-        <div>
-            
-        </div>
-    );
+    return <div></div>;
 }

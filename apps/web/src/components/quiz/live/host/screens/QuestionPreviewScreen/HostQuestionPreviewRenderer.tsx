@@ -53,8 +53,6 @@ export default function HostQuestionPreviewRenderer() {
             return;
         }
 
-        console.log({ currentQuestion, nextQuestion });
-
         updateCurrentQuestion(nextQuestion);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [quiz]);
