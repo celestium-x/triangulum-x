@@ -42,12 +42,12 @@ function BigDashboardLeft({
     return (
         <div
             className={cn(
-                'h-full bg-light-base dark:bg-dark-base/10 shrink-0 w-[300px]',
-                'hidden lg:flex flex-col items-start py-6',
+                'h-full bg-light-base dark:bg-dark-primary/30 shrink-0 w-[300px]',
+                'hidden lg:flex flex-col items-start py-6 pt-[3rem]',
                 '',
             )}
         >
-            <AppLogo className="px-4" />
+            {/* <AppLogo className="px-4" /> */}
             <DashboardOptions value={value} setValue={setValue} />
         </div>
     );
