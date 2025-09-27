@@ -97,6 +97,7 @@ export default class ParticipantManager {
         });
 
         ws.on('close', () => {
+            this.handle_participant_leave_gamesession(ws);
             this.cleanup_participant_socket(ws);
         });
 
@@ -119,6 +120,10 @@ export default class ParticipantManager {
 
             case MESSAGE_TYPES.PARTICIPANT_RESPONSE_MESSAGE:
                 this.handle_participant_response(payload, ws);
+                break;
+
+            case MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION:
+                this.handle_participant_leave_gamesession(ws);
                 break;
 
             default:
@@ -146,7 +151,7 @@ export default class ParticipantManager {
         const { gameSessionId: game_session_id } = ws.user;
         const { choosenNickname } = payload;
         const participant = await this.redis_cache.get_participant(game_session_id, ws.user.userId);
-        if (participant.isNameChanged) {
+        if (participant?.isNameChanged) {
             return;
         }
 
@@ -260,6 +265,30 @@ export default class ParticipantManager {
             },
         };
         this.quizManager.publish_event_to_redis(game_session_id, event_data);
+    }
+
+    private async handle_participant_leave_gamesession(ws: CustomWebSocket) {
+        const { gameSessionId: game_session_id } = ws.user;
+        const user_id = ws.user.userId;
+
+        const participant_cache = await this.redis_cache.get_participant(game_session_id, user_id);
+
+        if (!participant_cache) {
+            return;
+        }
+
+        const event_data: PubSubMessageTypes = {
+            type: MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
+            payload: {
+                userId: user_id,
+            },
+            exclude_socket_id: ws.id,
+        };
+        this.quizManager.publish_event_to_redis(game_session_id, event_data);
+
+        // delete the user from the database
+        // either do this or add another schema for showing this user was removed
+        this.database_queue.delete_participant(user_id, game_session_id);
     }
 
     private cleanup_existing_partiicpant_socket(

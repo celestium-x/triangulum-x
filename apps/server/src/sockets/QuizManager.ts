@@ -58,7 +58,7 @@ export default class QuizManager {
         }
 
         await this.redis_cache.set_game_session(game_session_id, game_session);
-        await this.redis_cache.set_quiz(game_session_id, quiz_id, quiz);
+        await this.redis_cache.set_quiz(game_session_id, quiz);
     }
 
     public async onParticipantConnect(decoded_cookie_payload: CookiePayload) {

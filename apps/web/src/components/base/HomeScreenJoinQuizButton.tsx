@@ -15,7 +15,7 @@ export default function HomeScreenJoinQuizButton() {
     const { showJoinInput } = useJoinQuizStore();
 
     async function joinQuizHandler() {
-        const quizId = await userQuizAction.joinQuiz(code);
+        const quizId = await userQuizAction.joinQuiz(removeHyphen(code));
         if (!quizId) return;
         router.push(`/live/${quizId}`);
     }
@@ -25,6 +25,11 @@ export default function HomeScreenJoinQuizButton() {
             e.preventDefault();
             joinQuizHandler();
         }
+    }
+
+    function removeHyphen(str: string): string {
+        const code = str.split('-').join('');
+        return code;
     }
 
     const shouldShowInput = showJoinInput || hovered;

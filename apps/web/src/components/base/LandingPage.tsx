@@ -84,7 +84,7 @@ export default function LandingPage() {
 
             <SafariBrowser
                 url="https://triangulum.com"
-                imageSrc="/images/dashboard-ui2.png"
+                videoSrc="/videos/sample.mov"
                 className="w-[100px] h-auto mx-auto z-40 relative"
             />
         </div>

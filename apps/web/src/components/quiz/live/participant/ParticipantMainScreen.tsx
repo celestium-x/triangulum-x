@@ -9,9 +9,44 @@ import ParticipantMainFooter from './ParticipantMainFooter';
 import ParticipantPanelRenderer from './ParticipantChannelRenderer';
 import ParticipantQuestionActiveScreen from './screens/QuestionActiveScreen/ParticipantQuestionActiveScreen';
 import ParticipantQuestionResultsScreen from './screens/QuestionResultsScreen/ParticipantQuestionResultsScreen';
+import { useEffect } from 'react';
+import { toast } from 'sonner';
 
 export default function ParticipantMainScreen() {
     const { gameSession } = useLiveQuizStore();
+
+    useEffect(() => {
+        function checkKeyPress(e: KeyboardEvent) {
+            if (
+                e.key === 'Escape' ||
+                e.key === 'Tab' ||
+                e.key === 'Shift' ||
+                e.key === 'Control' ||
+                e.key === 'Meta'
+            ) {
+                e.preventDefault();
+                toast.error(`Key press: ${e.key}`);
+            }
+        }
+
+        document.addEventListener('keydown', checkKeyPress);
+        return () => {
+            document.removeEventListener('keydown', checkKeyPress);
+        };
+    }, []);
+
+    useEffect(() => {
+        function handleChange() {
+            if (!document.fullscreenElement) {
+                // user escaped fullscreen
+                toast.error('You exited fullscreen!');
+                // optional: force leave the quiz
+                // router.back();
+            }
+        }
+        document.addEventListener('fullscreenchange', handleChange);
+        return () => document.removeEventListener('fullscreenchange', handleChange);
+    }, []);
 
     function renderHostScreenPanels() {
         switch (gameSession?.participantScreen) {

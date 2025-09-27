@@ -1,3 +1,4 @@
+'use client';
 import Navbar from '../src/components/navbars/Navbar';
 import { cn } from '@/lib/utils';
 import LandingPage from '@/components/base/LandingPage';
@@ -26,7 +27,7 @@ export default function Home() {
                     <LandingPage />
                 </div>
             </div>
-            <div className="max-w-7xl mx-auto">
+            <div className="relative">
                 <FeatureBox />
                 <CustomFeatureComponent />
                 <FeatureArcComponent />

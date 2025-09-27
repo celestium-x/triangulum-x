@@ -1,20 +1,15 @@
-use anchor_lang::prelude::*;
+pub mod data;
+pub mod func;
 
-declare_id!("DmzXrTkrEZMubw5Sv1SjbR9bPJVp1qY2QKbLn31TE3JT");
+use anchor_lang::prelude::*;
+use func::*;
+
+declare_id!("3ULNo29njjmDEyLr8DSyyJUDgnZW5BqPGrHFXVP2fjKL");
 
 #[program]
 pub mod contract {
     use super::*;
-
-    // create-quiz -> staking is true
-    // transfer-prize-to-winner
-
-    pub fn create_quiz(ctx: Context<CreateQuiz>, id: String) -> Result<()> {
-        Ok(())
+    pub fn create_quiz(ctx: Context<CreateQuiz>) -> Result<()> {
+        func::create_quiz::create_quiz(ctx)
     }
-
-    pub fn transfer_prize(ctx: Context<TransferPrize>, account: String) -> Result<()> {
-        Ok(())
-    }
-
 }

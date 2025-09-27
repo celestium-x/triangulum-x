@@ -55,21 +55,24 @@ model Quiz {
   status                QuizStatus     @default(CREATED)
   interactions          Interactions[]
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  scheduledAt   DateTime?
-  startedAt     DateTime?
-  endedAt       DateTime?
-  hostId        String
-  host          User          @relation(fields: [hostId], references: [id], onDelete: Cascade)
-  autoSave      Boolean       @default(true)
-  liveChat      Boolean       @default(false)
-  spectatorMode Boolean       @default(false)
-  participants  Participant[]
-  spectators    Spectator[]
-  questions     Question[]
-  GameSession   GameSession?
-  chatMessage   ChatMessage[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  scheduledAt DateTime?
+  startedAt   DateTime?
+  endedAt     DateTime?
+  hostId      String
+  host        User      @relation(fields: [hostId], references: [id], onDelete: Cascade)
+
+  autoSave          Boolean @default(true)
+  liveChat          Boolean @default(false)
+  spectatorMode     Boolean @default(false)
+  allowNewSpectator Boolean @default(true)
+
+  participants Participant[]
+  spectators   Spectator[]
+  questions    Question[]
+  GameSession  GameSession?
+  chatMessage  ChatMessage[]
 
   @@map("quizzes")
 }

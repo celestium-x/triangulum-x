@@ -13,6 +13,7 @@ import {
     ParticipantScreenEnum,
     ParticipantType,
     QuizPhaseEnum,
+    QuizType,
     SpectatorScreenEnum,
     SpectatorType,
 } from '@/types/prisma-types';
@@ -42,6 +43,14 @@ export class SubscribeEventHandlers {
             nickname: message.nickname,
             isNameChanged: true,
         } as ParticipantType);
+    }
+
+    static handleParticipantLeaveGameSession(payload: unknown) {
+        const message = payload as { userId: string };
+
+        const { removeParticipant } = useLiveParticipantsStore.getState();
+
+        removeParticipant(message.userId);
     }
 
     // <---------------------- GAME-SESSION-EVENTS ---------------------->
@@ -90,6 +99,14 @@ export class SubscribeEventHandlers {
             nickname: message.nickname,
             isNameChanged: true,
         } as SpectatorType);
+    }
+
+    static handleSpectatorLeaveGameSession(payload: unknown) {
+        const { userId } = payload as {
+            userId: string;
+        };
+        const { removeSpectator } = useLiveSpectatorsStore.getState();
+        removeSpectator(userId);
     }
 
     // static handleSpectatorIncomingResultsPhase(payload: unknown) {
@@ -401,5 +418,11 @@ export class SubscribeEventHandlers {
 
         const { updateLiveResponses } = useLiveQuizHostStore.getState();
         updateLiveResponses(message.selectedAnswer);
+    }
+
+    static handleSettingschange(payload: unknown) {
+        const message = payload as QuizType;
+        const { updateQuiz } = useLiveQuizStore.getState();
+        updateQuiz(message);
     }
 }

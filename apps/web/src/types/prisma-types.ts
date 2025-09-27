@@ -47,6 +47,7 @@ export interface QuizType {
     autoSave: boolean;
     liveChat: boolean;
     spectatorMode: boolean;
+    allowNewSpectator: boolean;
 
     questions: QuestionType[];
     participants?: ParticipantType[];

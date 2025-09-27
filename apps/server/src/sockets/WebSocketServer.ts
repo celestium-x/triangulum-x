@@ -21,12 +21,14 @@ import {
     phaseQueueInstance,
     publisherInstance,
     quizManagerInstance,
+    quizSettingInstance,
     redisCacheInstance,
     subscriberInstance,
 } from '../services/init-services';
 import DatabaseQueue from '../queue/DatabaseQueue';
 import PhaseQueue from '../queue/PhaseQueue';
 import { env } from '../configs/env';
+import QuizSettings from '../class/quizSettings';
 
 dotenv.config();
 const JWT_SECRET = env.SERVER_JWT_SECRET;
@@ -48,6 +50,8 @@ export default class WebsocketServer {
     private participant_manager!: ParticipantManager;
     private spectator_manager!: SpectatorManager;
 
+    private quiz_settings: QuizSettings;
+
     constructor(server: Server) {
         this.wss = new WebSocketServer({ server });
         this.publisher = publisherInstance;
@@ -55,6 +59,7 @@ export default class WebsocketServer {
         this.redis_cache = redisCacheInstance;
         this.database_queue = databaseQueueInstance;
         this.phase_queue = phaseQueueInstance;
+        this.quiz_settings = quizSettingInstance;
         this.initialize_redis_subscribers();
         this.initialize_managers();
         this.initialize();
@@ -85,6 +90,16 @@ export default class WebsocketServer {
                     USER_TYPE.HOST,
                     USER_TYPE.SPECTATOR,
                 ]);
+                break;
+
+            case MESSAGE_TYPES.SETTINGS_CHANGE:
+                this.quiz_settings.update_memory_settings_state(game_session_id, message.payload);
+                this.broadcast_to_session(
+                    game_session_id,
+                    message,
+                    [USER_TYPE.PARTICIPANT, USER_TYPE.HOST, USER_TYPE.SPECTATOR],
+                    message.exclude_socket_id,
+                );
                 break;
 
             case MESSAGE_TYPES.INTERACTION_EVENT:
@@ -215,6 +230,23 @@ export default class WebsocketServer {
                     USER_TYPE.PARTICIPANT,
                     USER_TYPE.SPECTATOR,
                 ]);
+                break;
+
+            case MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                    USER_TYPE.PARTICIPANT,
+                ]);
+                break;
+
+            case MESSAGE_TYPES.SPECTATOR_LEAVE_GAME_SESSION:
+                this.broadcast_to_session(game_session_id, message, [
+                    USER_TYPE.HOST,
+                    USER_TYPE.SPECTATOR,
+                    USER_TYPE.PARTICIPANT,
+                ]);
+                break;
         }
     }
 

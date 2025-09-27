@@ -82,6 +82,16 @@ interface CreateParticipantResponseJobType {
     };
 }
 
+interface DeleteParticipantJobType {
+    id: string;
+    game_session_id: string;
+}
+
+interface DeleteSpectatorJobType {
+    id: string;
+    game_session_id: string;
+}
+
 export default class DatabaseQueue {
     private database_queue: Bull.Queue;
     private redis_cache: RedisCache;
@@ -101,6 +111,18 @@ export default class DatabaseQueue {
     }
 
     private setupProcessors() {
+        this.database_queue.on('completed', (job) => {
+            console.warn(`Job ${job.id} completed`);
+        });
+
+        this.database_queue.on('failed', (job, err) => {
+            console.error(`Job ${job.id} failed:`, err);
+        });
+
+        this.database_queue.on('stalled', (job) => {
+            console.warn(`Job ${job.id} stalled and will be retried`);
+        });
+
         this.database_queue.process(
             QueueJobTypes.UPDATE_GAME_SESSION,
             this.update_game_session_processor.bind(this),
@@ -128,6 +150,14 @@ export default class DatabaseQueue {
         this.database_queue.process(
             QueueJobTypes.CREATE_PARTICIPANT_RESPONSE,
             this.create_participant_response_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.DELETE_PARTICIPANT,
+            this.delete_participant_processor.bind(this),
+        );
+        this.database_queue.process(
+            QueueJobTypes.DELETE_SPECTATOR,
+            this.delete_spectator_processor.bind(this),
         );
     }
 
@@ -185,6 +215,59 @@ export default class DatabaseQueue {
         }
     }
 
+    private async delete_participant_processor(
+        job: Bull.Job,
+    ): Promise<
+        { success: boolean; participant: Participant } | { success: boolean; error: string }
+    > {
+        const { id, game_session_id }: DeleteParticipantJobType = job.data;
+
+        try {
+            const participant = await prisma.participant.delete({
+                where: {
+                    id: id,
+                },
+            });
+
+            await this.redis_cache.delete_participant(game_session_id, id);
+
+            return {
+                success: true,
+                participant: participant,
+            };
+        } catch (err) {
+            console.error('Error while processing delete in participants: ', err);
+            return {
+                success: false,
+                error: err instanceof Error ? err.message : 'Unknown error',
+            };
+        }
+    }
+
+    private async delete_spectator_processor(
+        job: Bull.Job,
+    ): Promise<{ success: boolean; spectator: Spectator } | { success: boolean; error: string }> {
+        try {
+            const { id, game_session_id }: DeleteSpectatorJobType = job.data;
+            const spectator = await prisma.spectator.delete({
+                where: {
+                    id: id,
+                },
+            });
+            await this.redis_cache.delete_spectator(game_session_id, id);
+            return {
+                success: true,
+                spectator: spectator,
+            };
+        } catch (err) {
+            console.error('Error while processing delete in spectator: ', err);
+            return {
+                success: false,
+                error: err instanceof Error ? err.message : 'Unknown error',
+            };
+        }
+    }
+
     private async update_game_session_processor(
         job: Bull.Job,
     ): Promise<
@@ -214,13 +297,16 @@ export default class DatabaseQueue {
         job: Bull.Job,
     ): Promise<{ success: boolean; quiz: Quiz } | { success: boolean; error: string }> {
         try {
-            const { id, quiz }: UpdateQuizJobType = job.data;
+            const { id, quiz, game_session_id }: UpdateQuizJobType = job.data;
+
             const updateQuiz = await prisma.quiz.update({
                 where: {
                     id,
                 },
                 data: quiz,
             });
+
+            this.redis_cache.set_quiz(game_session_id, updateQuiz);
             return { success: true, quiz: updateQuiz };
         } catch (err) {
             console.error('Error while processing quiz update', err);
@@ -362,7 +448,7 @@ export default class DatabaseQueue {
         game_session_id: string,
         options?: Partial<JobOption>,
     ) {
-        return await this.database_queue.add(
+        await this.database_queue.add(
             QueueJobTypes.UPDATE_QUIZ,
             { id, quiz, game_session_id },
             { ...this.default_job_options, ...options },
@@ -459,5 +545,33 @@ export default class DatabaseQueue {
                 { ...this.default_job_options, ...options },
             )
             .catch((err) => console.error('Failed to enqueue participant response: ', err));
+    }
+
+    public async delete_participant(
+        id: string,
+        game_session_id: string,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue
+            .add(
+                QueueJobTypes.DELETE_PARTICIPANT,
+                { id, game_session_id },
+                { ...this.default_job_options, ...options },
+            )
+            .catch((err) => console.error('Failed to enqueue participant response: ', err));
+    }
+
+    public async delete_spectator(
+        id: string,
+        game_session_id: string,
+        options?: Partial<JobOption>,
+    ) {
+        return await this.database_queue
+            .add(
+                QueueJobTypes.DELETE_SPECTATOR,
+                { id, game_session_id },
+                { ...this.default_job_options, ...options },
+            )
+            .catch((err) => console.error('Failed to enqueue spectator response: ', err));
     }
 }

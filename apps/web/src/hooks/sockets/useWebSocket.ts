@@ -139,6 +139,26 @@ export const useWebSocket = () => {
         }
     }
 
+    function handleParticipantLeaveGameSession(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.PARTICIPANT_LEAVE_GAME_SESSION,
+            payload: payload,
+        };
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+    function handleSettingsChangeEvent(payload: unknown) {
+        const message: MessagePayload = {
+            type: MESSAGE_TYPES.SETTINGS_CHANGE,
+            payload: payload,
+        };
+
+        if (socket.current) {
+            socket.current.send_message(message);
+        }
+    }
+
     return {
         subscribeToHandler,
         unsubscribeToHandler,
@@ -153,5 +173,7 @@ export const useWebSocket = () => {
         handleSendHostLaunchQuestion,
         handleParticipantResponseMessage,
         handleLaunchHintEvent,
+        handleParticipantLeaveGameSession,
+        handleSettingsChangeEvent,
     };
 };
